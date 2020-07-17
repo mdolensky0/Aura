@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  KeyController.swift
 //  Aura
 //
 //  Created by Max Dolensky on 7/6/20.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class KeyController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
 
+        view.backgroundColor = .white
+    }
+    
 
 }
-
