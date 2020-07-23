@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +16,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        FirebaseApp.configure()
+
+        let db = Firestore.firestore()
+        print(db, "\n")
+        print(Realm.Configuration.defaultConfiguration.fileURL, "\n")
+        
+        
+        do {
+            let realm = try Realm()
+        } catch {
+            print("Error initialising new real, \(error)")
+        }
+        
+        // Uncomment Below to Update Realm Database
+        //Realm.Configuration.defaultConfiguration.deleteRealmIfMigrationNeeded = true
+        //RealmPopulater.populateRealm()
+        //RealmPopulater.addWildcardsToRealm()
+        
         
         return true
     }

@@ -7,15 +7,18 @@
 //
 
 import UIKit
+import AVFoundation
+import AMPopTip
 
 class SoundItOutCell: UICollectionViewCell {
     
     static let identifier = "SoundItOutCell"
-    
-    var soundButton: UIButton = {
         
-        let button = UIButton()
-        button.backgroundColor = .purple
+    var soundButton: SoundButton = {
+        
+        let button = SoundButton()
+        button.clipsToBounds = true
+        button.setTitleColor( .clear, for: .normal)
         return button
         
     }()
@@ -43,12 +46,7 @@ class SoundItOutCell: UICollectionViewCell {
                            height: nil,
                            width: nil)
         
-        soundButton.addTarget(self, action: #selector(soundItOutButtonPressed), for: .touchUpInside)
         soundButton.roundCorners(cornerRadius: 6)
     }
     
-    @objc func soundItOutButtonPressed() {
-        print("Ah")
-    }
-
 }

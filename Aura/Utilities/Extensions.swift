@@ -8,6 +8,7 @@
 
 import UIKit
 
+//MARK:- UIView Extensions
 extension UIView {
     
     func anchor(top: NSLayoutYAxisAnchor?, bottom: NSLayoutYAxisAnchor?, leading: NSLayoutXAxisAnchor?, trailing: NSLayoutXAxisAnchor?, height: CGFloat?, width: CGFloat?, padding: UIEdgeInsets = .zero) {
@@ -94,6 +95,7 @@ extension UIView {
 
 }
 
+//MARK:- UIViewController Extensions
 extension UIViewController {
     
     func setupToHideKeyboardOnTapOnView() {
@@ -109,8 +111,65 @@ extension UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    func createButtons(_ attributedString: NSMutableAttributedString) -> [(color: UIColor, ID: String, range: NSRange)] {
+ 
+        // Otherwise Return an array of SoundButtons
+        var colors: [(color: UIColor, ID: String, range: NSRange)] = []
+        
+        attributedString.enumerateAttribute(.foregroundColor, in: NSRange(0..<attributedString.length)) { (color, range, stop) in
+            
+            if let color = color as? UIColor {
+                
+                attributedString.enumerateAttribute(.id, in: range) { (id, range, stop) in
+                    
+                    if let id = id as? String {
+                        if color != K.Colors.lightGrey {
+                            colors.append((color: color, ID: id, range: range))
+                        }
+                    }
+                }
+            }
+        }
+        return colors
+    }
+    
+    func getDeviceLanguageCode() -> String {
+        
+        guard let code = Locale.preferredLanguages.first else { return "en" }
+        
+        let codeAndRegion = code.split(separator: "-").map { String($0) }
+        
+        if codeAndRegion.count >= 3 {
+            
+            return "\(codeAndRegion[0])-\(codeAndRegion[1])"
+            
+        } else { return codeAndRegion[0] }
+    }
+    
+    func startLoadingScreen() {
+        loadingView = UIView(frame: self.view.bounds)
+        loadingView?.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = loadingView!.center
+        activityIndicator.startAnimating()
+        loadingView?.addSubview(activityIndicator)
+        self.view.addSubview(loadingView!)
+        
+        Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) { (t) in
+            self.endLoadingScreen()
+        }
+    }
+    
+    func endLoadingScreen() {
+        loadingView?.removeFromSuperview()
+        loadingView = nil
+    }
 }
 
+fileprivate var loadingView: UIView?
+
+//MARK:- UILabel Extensions
 extension UILabel {
     
     func configureBasedOnInput() {
@@ -129,22 +188,233 @@ extension UILabel {
         self.textAlignment = numberOfLines == 1 ? .center : .left
 
     }
+    
+    func configureBottomLabel() {
+        
+        guard let attributedString = self.attributedText else { return }
+        
+        let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
+        
+        mutableAttributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 40, weight: .regular), range: NSRange(location: 0, length: mutableAttributedString.length))
+        
+        self.attributedText = mutableAttributedString
+        self.numberOfLines = 0
+    }
+    
+    func boundingRect(forCharacterRange range: NSRange) -> CGRect? {
+
+        guard let attributedText = attributedText else { return nil }
+
+        let textStorage = NSTextStorage(attributedString: attributedText)
+        let layoutManager = NSLayoutManager()
+
+        textStorage.addLayoutManager(layoutManager)
+
+        let textContainer = NSTextContainer(size: bounds.size)
+        textContainer.lineFragmentPadding = 0.0
+
+        layoutManager.addTextContainer(textContainer)
+
+        var glyphRange = NSRange()
+
+        // Convert the range for glyphs.
+        layoutManager.characterRange(forGlyphRange: range, actualGlyphRange: &glyphRange)
+
+        return layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+    }
+    
 }
 
+//MARK:- NSMutableAttributedString Extensions
 extension NSMutableAttributedString {
     
     func configureBasedOnInput() -> Int {
         
         let text = self.string
         
-        if ( text.split(separator: " ").count == 1 ) || ( text.count <= 20 ) {
+        if ( text.split(separator: " ").count == 1 ) || ( text.count <= 16 ) {
             self.addAttribute(.font, value: UIFont.systemFont(ofSize: 60, weight: .bold), range: NSRange(location: 0, length: self.length))
             return 1
         }
         
         else {
-            self.addAttribute(.font, value: UIFont.systemFont(ofSize: 40, weight: .bold), range: NSRange(location: 0, length: self.length))
+            self.addAttribute(.font, value: UIFont.systemFont(ofSize: 50, weight: .bold), range: NSRange(location: 0, length: self.length))
             return 0
         }
+    }
+    
+    func capitalize(location: Int, length: Int) -> NSMutableAttributedString {
+
+        let result = NSMutableAttributedString(attributedString: self)
+
+        result.enumerateAttributes(in: NSRange(location: location, length: length), options: []) {_, range, _ in
+            result.replaceCharacters(in: range, with: (string as NSString).substring(with: range).uppercased())
+        }
+
+        return result
+    }
+    
+    func setCapitalLetters(from word: String) -> NSMutableAttributedString {
+        var indices = [Int]()
+        var result = NSMutableAttributedString(attributedString: self)
+        
+        for i in 0..<word.count {
+            if word[i].isUppercase {
+                indices.append(i)
+            }
+        }
+        
+        for indice in indices {
+            result = result.capitalize(location: indice, length: 1)
+        }
+        
+        return result
+    }
+}
+
+//MARK:- NSAttributedString.Key Extensions
+extension NSAttributedString.Key {
+    static let id = NSAttributedString.Key("id")
+    static let linkNumber = NSAttributedString.Key("linkNumber")
+}
+
+//MARK:- String Extensions
+
+// ==========================================================================================
+// This is an extension to the String class which takes as input a substring we are searching
+// for, and returns a list of all starting indices for the matches within the string
+// Use like this:
+//      let keyword = "a"
+//      let html = "aaaa"
+//      let indicies = html.indicesOf(string: keyword)
+//      print(indicies) // result --> [0, 1, 2, 3]
+// ===========================================================================================
+
+extension String {
+    func indicesOf(string: String) -> [Int] {
+        var indices = [Int]()
+        var searchStartIndex = self.startIndex
+
+        while searchStartIndex < self.endIndex,
+            // Finds and returns the range of the first occurrence of a given string within a
+            // given range of the String, subject to given options, using the specified locale, if any.
+            let range = self.range(of: string, range: searchStartIndex..<self.endIndex),
+            !range.isEmpty
+        {
+            // Runs this block of code only if searchStartIndex < last index of the word, and if range finds a match
+            let index = distance(from: self.startIndex, to: range.lowerBound)
+            indices.append(index)
+            searchStartIndex = range.upperBound
+        }
+        return indices
+    }
+}
+
+public extension String {
+  subscript(value: Int) -> Character {
+    self[index(at: value)]
+  }
+}
+
+public extension String {
+  subscript(value: NSRange) -> Substring {
+    self[value.lowerBound..<value.upperBound]
+  }
+}
+
+// =========================================================================
+// All of this allows me to access substrings in a cleaner way
+// Examples:
+//          let text = "Hello world"
+//          text[0] // H
+//          text[...3] // "Hell"
+//          text[6..<text.count] // world
+//          text[NSRange(location: 6, length: 3)] // wor
+// =========================================================================
+public extension String {
+  subscript(value: CountableClosedRange<Int>) -> Substring {
+    self[index(at: value.lowerBound)...index(at: value.upperBound)]
+  }
+
+  subscript(value: CountableRange<Int>) -> Substring {
+    self[index(at: value.lowerBound)..<index(at: value.upperBound)]
+  }
+
+  subscript(value: PartialRangeUpTo<Int>) -> Substring {
+    self[..<index(at: value.upperBound)]
+  }
+
+  subscript(value: PartialRangeThrough<Int>) -> Substring {
+    self[...index(at: value.upperBound)]
+  }
+
+  subscript(value: PartialRangeFrom<Int>) -> Substring {
+    self[index(at: value.lowerBound)...]
+  }
+}
+
+private extension String {
+  func index(at offset: Int) -> String.Index {
+    index(startIndex, offsetBy: offset)
+  }
+}
+
+//MARK:- UIColor Extensions
+extension UIColor {
+    var redValue: CGFloat{ return CIColor(color: self).red }
+    var greenValue: CGFloat{ return CIColor(color: self).green }
+    var blueValue: CGFloat{ return CIColor(color: self).blue }
+    var alphaValue: CGFloat{ return CIColor(color: self).alpha }
+}
+
+//MARK:- UIGestureRecognizer Extensions
+
+extension UITapGestureRecognizer {
+
+    func indexForTapAttributedTextInLabel(label: UILabel) -> Int? {
+        
+        // Configure NSTextContainer
+        let textContainer = NSTextContainer(size: label.bounds.size)
+        textContainer.lineFragmentPadding = 0.0
+        textContainer.lineBreakMode = label.lineBreakMode
+        textContainer.maximumNumberOfLines = label.numberOfLines
+        
+        // Configure NSLayoutManager and add the text container
+        let layoutManager = NSLayoutManager()
+        layoutManager.addTextContainer(textContainer)
+        
+        guard let attributedText = label.attributedText else {return nil}
+        
+        // Configure NSTextStorage and apply the layout manager
+        let textStorage = NSTextStorage(attributedString: attributedText)
+        textStorage.addAttribute(NSAttributedString.Key.font, value: label.font!, range: NSMakeRange(0, attributedText.length))
+        textStorage.addLayoutManager(layoutManager)
+
+        // get the tapped character location
+        let locationOfTouchInLabel = self.location(in: label)
+        
+        // account for text alignment and insets
+        let textBoundingBox = layoutManager.usedRect(for: textContainer)
+        
+        var alignmentOffset: CGFloat!
+        switch label.textAlignment {
+        case .left, .natural, .justified:
+            alignmentOffset = 0.0
+        case .center:
+            alignmentOffset = 0.5
+        case .right:
+            alignmentOffset = 1.0
+        @unknown default:
+            fatalError()
+        }
+        
+        let xOffset = ((label.bounds.size.width - textBoundingBox.size.width) * alignmentOffset) - textBoundingBox.origin.x
+        let yOffset = ((label.bounds.size.height - textBoundingBox.size.height) * alignmentOffset) - textBoundingBox.origin.y
+        let locationOfTouchInTextContainer = CGPoint(x: locationOfTouchInLabel.x - xOffset, y: locationOfTouchInLabel.y - yOffset)
+        
+        // work out which character was tapped
+        let characterIndex = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+
+        return characterIndex
     }
 }

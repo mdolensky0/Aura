@@ -44,6 +44,100 @@ struct K {
     
     struct Cells {
         static let prevSearchCell = "PrevSearchCell"
+        static let supportedLanguageCell = "SupportedLanguageCell"
     }
+    
+    struct LanguageCodes {
+        
+        static let languageDict =  ["en" : "English",     "en-GB" : "English",      "en-AU" : "English",
+                                    "en-CA" : "English",  "en-IN" : "English",      "fr" : "Français",
+                                    "fr-CA" : "Français",   "es" : "Español",           "es-MX" : "Español",
+                                    "pt" : "Português",     "pt-BR" : "Português",      "it" : "Italiano",
+                                    "de" : "Deutsch",      "zh-Hans" : "简体中文",        "zh-Hant" : "繁體中文",
+                                    "zh-HK" : "繁體中文",      "ja" : "日本語",                "nl" : "Nederlands",
+                                    "ko" : "한국어",           "vi" : "Tiếng Việt",       "ru" : "Pусский",
+                                    "sv" : "Svenska",       "da" : "Dansk",               "fi" : "Suomi",
+                                    "nb" : "Norsk",         "tr" : "Türkçe",                "el" : "Eλληνικά",
+                                    "id" : "Indonesia",    "ms" : "Melayu",             "th" : "ภาษาไทย",
+                                    "hi" : "हिंदी",              "hu" : "Magyar",             "pl" : "Polski",
+                                    "cs" : "čeština",       "sk" : "Slovenčina",         "uk" : "українська",
+                                    "ca" : "Català",      "ro" : "Română",             "hr" : "Hrvatski",
+                                    "he" : "עברית",           "ar" : "العربية"]
+        
+        static let iosToGoogleLangCode = ["en-GB" : "en", "en-AU" : "en", "en-CA" : "en",
+                                          "en-IN" : "en", "fr-CA" : "fr", "es-MX" : "es",
+                                          "pt-BR" : "pt","zh-Hans" : "zh-CN", "zh-Hant" : "zh-TW",
+                                          "zh-HK" : "zh_TW", "nb" : "no"]
+    }
+    
+    static let linkToWildCardDictionary: [String: NSMutableAttributedString] = {
+        
+        var dictionary = [String: NSMutableAttributedString]()
+        
+        let wild1 = NSMutableAttributedString(string: "z")
+        dictionary["1"] = wild1
+        
+        let wild2 = NSMutableAttributedString(string: "ya")
+        wild2.addAttribute(.foregroundColor, value: K.Colors.lightPink, range: NSRange(location: 1, length: 1))
+        dictionary["2"] = wild2
+        
+        let wild3 = NSMutableAttributedString(string: "yu")
+        wild3.addAttribute(.foregroundColor, value: K.Colors.lightPink, range: NSRange(location: 1, length: 1))
+        dictionary["3"] = wild3
+        
+        let wild4 = NSMutableAttributedString(string: "yew")
+        wild4.addAttribute(.foregroundColor, value: K.Colors.lightGreen, range: NSRange(location: 1, length: 2))
+        dictionary["4"] = wild4
+        
+        
+        let wild5 = NSMutableAttributedString(string: "yu")
+        wild5.addAttribute(.foregroundColor, value: K.Colors.lightGreen, range: NSRange(location: 1, length: 1))
+        dictionary["5"] = wild5
+        
+        let wild6 = NSMutableAttributedString(string: "ksh")
+        wild6.addAttribute(.foregroundColor, value: K.Colors.tan, range: NSRange(location: 1, length: 2))
+        dictionary["6"] = wild6
+        
+        let wild7 = NSMutableAttributedString(string: "wa")
+        wild7.addAttribute(.foregroundColor, value: K.Colors.pink, range: NSRange(location: 1, length: 1))
+        dictionary["7"] = wild7
+        
+        let wild8 = NSMutableAttributedString(string: "wo")
+        wild8.addAttribute(.foregroundColor, value: K.Colors.lightPink, range: NSRange(location: 1, length: 1))
+        dictionary["8"] = wild8
+        
+        let wild9 = NSMutableAttributedString(string: "wa")
+        wild9.addAttribute(.foregroundColor, value: K.Colors.orange, range: NSRange(location: 1, length: 1))
+        dictionary["9"] = wild9
+        
+
+        let wild10 = NSMutableAttributedString(string: "f")
+        dictionary["10"] = wild10
+        
+        let wild11 = NSMutableAttributedString(string: "h")
+        dictionary["11"] = wild11
+        
+        let wild12 = NSMutableAttributedString(string: "k")
+        dictionary["12"] = wild12
+        
+        let wild13 = NSMutableAttributedString(string: "w")
+        dictionary["13"] = wild13
+        
+        let wild14 = NSMutableAttributedString(string: "t")
+        dictionary["14"] = wild14
+        
+        let wild15 = NSMutableAttributedString(string: "v")
+        dictionary["15"] = wild15
+        
+        let wild16 = NSMutableAttributedString(string: "r")
+        wild16.addAttribute(.foregroundColor, value: K.Colors.darkGrey, range: NSRange(location: 0, length: 1))
+        dictionary["16"] = wild16
+        
+        let wild17 = NSMutableAttributedString(string: "g")
+        dictionary["17"] = wild17
+        
+        return dictionary
+        
+    }()
 }
 

@@ -7,27 +7,47 @@
 //
 
 import UIKit
+import AVFoundation
+import AMPopTip
+
+protocol ResultsControllerDelegate {
+    
+    func updateLanguageStackView(searchType: SearchType)
+    
+}
 
 class ResultsController: UIViewController {
     
 //MARK: - Data
     
-    var query = ""
-    var queryResult = ""
+    var searchType = SearchType.nativeToEnglish
+    var bottomLabelText = ""
+    var wordArray = [String]()
+    var wordModelArray = [WordModel?]()
+    var results = [ColorResultModel]()
+    var soundItOutColors = [(color: UIColor, ID: String, range: NSRange)]()
+    var alternateTranslations = [String]()
     
-    var button: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        button.roundCorners(cornerRadius: 8)
-        button.backgroundColor = .purple
-        return button
-    }()
-    
-    var soundItOutButtons = [UIButton]()
-    
-//MARK: - Info
+//MARK: - Utilities
     
     let cellID = "SoundItOutCell"
+    var delegate: ResultsControllerDelegate?
+    var player : AVPlayer?
+    var soundItOutPlayer: AVAudioPlayer?
     
+    let popTip: PopTip =  {
+        
+        let popTip = PopTip()
+        popTip.shouldDismissOnTap = true
+        popTip.bubbleColor = .white
+        popTip.borderColor = .black
+        popTip.borderWidth = 1.0
+        return popTip
+        
+    }()
+    
+    var prevRange: NSRange?
+        
 //MARK: - Views
     
     var centerTitle: UILabel = {
@@ -65,7 +85,6 @@ class ResultsController: UIViewController {
     var languageButton: UIButton = {
         
         let button = UIButton()
-        button.setTitle("Japanese", for: .normal)
         button.addTarget(self, action: #selector(languageButtonPressed), for: .touchUpInside)
         button.backgroundColor = .white
         button.setTitleColor(UIColor.systemBlue, for: .normal)
@@ -87,7 +106,7 @@ class ResultsController: UIViewController {
     var englishLabel: UILabel = {
         
         let label = UILabel()
-        label.text = "English"
+        label.text = "English HD"
         label.textColor = .black
         label.backgroundColor = .white
         label.textAlignment = .center
@@ -146,7 +165,16 @@ class ResultsController: UIViewController {
         
     }()
     
-    var topLabel = UILabel()
+    var topLabel: UILabel = {
+        
+        let label = UILabel()
+        label.clipsToBounds = false
+        label.isUserInteractionEnabled = true
+        label.lineBreakMode = .byWordWrapping
+        label.baselineAdjustment = .none
+        return label
+        
+    }()
     
     var bottomLabel = UILabel()
     
@@ -156,7 +184,7 @@ class ResultsController: UIViewController {
         button.setImage(UIImage(systemName: "speaker.3.fill"), for: .normal)
         button.backgroundColor = .white
         button.tintColor = .black
-        button.addTarget(self, action: #selector(soundButtonPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(soundButtonPressed(_:)), for: .touchUpInside)
         return button
         
     }()
@@ -164,10 +192,10 @@ class ResultsController: UIViewController {
     var loopButton: UIButton = {
         
         let button = UIButton()
-        button.setImage(UIImage(systemName: "repeat"), for: .normal)
+        button.setImage(UIImage(systemName: "arrow.3.trianglepath"), for: .normal)
         button.backgroundColor = .white
         button.tintColor = .black
-        button.addTarget(self, action: #selector(loopButtonPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(loopButtonPressed(_:)), for: .touchUpInside)
         return button
         
     }()
@@ -239,6 +267,47 @@ class ResultsController: UIViewController {
         
     }()
     
+    var learnMoreScrollView: UIScrollView = {
+        
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = K.Colors.lightGrey
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.layer.masksToBounds = false
+        return scrollView
+        
+    }()
+    
+    var learnMoreContentView: UIView = {
+        
+        let view = UIView()
+        view.backgroundColor = K.Colors.lightGrey
+        return view
+        
+    }()
+    
+    var learnMoreStackView: UIStackView = {
+       
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = 20
+        stackView.layer.masksToBounds = false
+        return stackView
+        
+    }()
+    
+    var learnMoreHeaderLabel: UILabel = {
+        
+        let label = UILabel()
+        label.backgroundColor = K.Colors.lightGrey
+        label.text = "Learn More"
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.textAlignment = .left
+        return label
+        
+    }()
+    
     var goToFlashcardsButton: UIButton = {
         
         let button = UIButton()
@@ -287,6 +356,10 @@ class ResultsController: UIViewController {
         
         setupShadows()
     }
+        
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate?.updateLanguageStackView(searchType: self.searchType)
+    }
 }
 
 extension ResultsController {
@@ -310,6 +383,10 @@ extension ResultsController {
         addFlashcardBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 2, cornerRadius: 15)
         
         for view in alternativesStackView.arrangedSubviews {
+            view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+        }
+        
+        for view in learnMoreStackView.arrangedSubviews {
             view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
         }
         
@@ -357,15 +434,22 @@ extension ResultsController {
                              height: nil,
                              width: nil,
                              padding: UIEdgeInsets(top: 0, left: 0, bottom: -2, right: 0))
-       
-        // Add Language Button
-        langStackView.addArrangedSubview(languageButton)
         
-        // Add Swap Button
-        langStackView.addArrangedSubview(swapButton)
+        // Add Subviews To StackView
+        switch searchType {
         
-        // Add English Label
-        langStackView.addArrangedSubview(englishLabel)
+        case.englishToNative:
+            languageButton.setTitle(TranslationManager.shared.targetLanguageName, for: .normal)
+            langStackView.addArrangedSubview(englishLabel)
+            langStackView.addArrangedSubview(swapButton)
+            langStackView.addArrangedSubview(languageButton)
+            
+        case.nativeToEnglish:
+            languageButton.setTitle(TranslationManager.shared.sourceLanguageName, for: .normal)
+            langStackView.addArrangedSubview(languageButton)
+            langStackView.addArrangedSubview(swapButton)
+            langStackView.addArrangedSubview(englishLabel)
+        }
     }
     
     func setupTextView() {
@@ -459,28 +543,39 @@ extension ResultsController {
         // Setup Alternative Translations Scroll View
         setupAlternativeTranslationScrollView()
         
+        // Setup Learn More Scroll View
+        setupLearnMoreScrollView()
+        
         // Setup FlashCard UpSaleButton
         setupGoToFlashcardsButton()
         
         // Setup Lessons UpSaleButton
         setupLessonsButton()
-        
+    
     }
     
     func setupResultsView(_ resultCardView: UIView) {
         
-        // Incoming search and result
-        let searchType = SearchType.nativeToEnglish
-        let searchInput = "こんにちは"
-        let searchOutput = "Hello"
-        
         // Configure Top Label
-        topLabel.attributedText = NSAttributedString(string: searchInput)
+        let topAttributedText = NSMutableAttributedString()
+        
+        for i in 0..<results.count {
+            
+            topAttributedText.append(results[i].attributedText)
+            
+            if i != results.count - 1 {
+                topAttributedText.append(NSAttributedString(string: " "))
+            }
+        }
+        
+        topLabel.attributedText = topAttributedText
         topLabel.configureBasedOnInput()
+        topLabel.addGestureRecognizer(UITapGestureRecognizer(target:self, action: #selector(wildCardTapped(_:))))
         
         // Configure Bottom Label
-        bottomLabel.attributedText = NSAttributedString(string: searchOutput)
-        bottomLabel.configureBasedOnInput()
+        
+        bottomLabel.attributedText = NSAttributedString(string: bottomLabelText)
+        bottomLabel.configureBottomLabel()
         
         // Add Flashcard Button to its Background View
         addFlashcardBackgroundView.addSubview(addFlashcardButton)
@@ -506,6 +601,9 @@ extension ResultsController {
         
         // Setup Result Card Layout Constraints for subviews
         setResultViewConstraints(for: searchType)
+        
+        // Hide Unecessary Views in Result Controller
+        updateResultSubviewVisibilities()
 
     }
     
@@ -518,113 +616,75 @@ extension ResultsController {
     }
     
     func setResultViewConstraints(for searchType: SearchType) {
-    
-        switch searchType {
+                
+        lineDividerView.translatesAutoresizingMaskIntoConstraints = false
+        lineDividerView.centerYAnchor.constraint(equalTo: resultCardView.centerYAnchor).isActive = true
+        lineDividerView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        lineDividerView.leadingAnchor.constraint(equalTo: resultCardView.leadingAnchor).isActive = true
+        lineDividerView.trailingAnchor.constraint(equalTo: resultCardView.trailingAnchor).isActive = true
         
-        case .nativeToEnglish:
-            
-            lineDividerView.translatesAutoresizingMaskIntoConstraints = false
-            lineDividerView.centerYAnchor.constraint(equalTo: resultCardView.centerYAnchor).isActive = true
-            lineDividerView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-            lineDividerView.leadingAnchor.constraint(equalTo: resultCardView.leadingAnchor).isActive = true
-            lineDividerView.trailingAnchor.constraint(equalTo: resultCardView.trailingAnchor).isActive = true
-            
-            topLabel.translatesAutoresizingMaskIntoConstraints = false
-            topLabel.topAnchor.constraint(equalTo: resultCardView.topAnchor, constant: 10).isActive = true
-            topLabel.centerXAnchor.constraint(equalTo: resultCardView.centerXAnchor, constant: 0).isActive = true
-            topLabel.leadingAnchor.constraint(greaterThanOrEqualTo: resultCardView.leadingAnchor, constant: 10).isActive = true
-            topLabel.trailingAnchor.constraint(lessThanOrEqualTo: resultCardView.trailingAnchor, constant: -10).isActive = true
-            topLabel.bottomAnchor.constraint(equalTo: lineDividerView.topAnchor, constant: -10).isActive = true
-            
-            loopButton.anchor(top: lineDividerView.bottomAnchor,
-                              bottom: nil,
-                              leading: nil,
-                              trailing: resultCardView.trailingAnchor,
-                              height: nil,
-                              width: nil,
-                              padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -10))
-            
-            soundButton.anchor(top: lineDividerView.bottomAnchor,
-                               bottom: nil,
-                               leading: nil,
-                               trailing: loopButton.leadingAnchor,
-                               height: nil,
-                               width: nil,
-                               padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -10))
-            
-            bottomLabel.translatesAutoresizingMaskIntoConstraints = false
-            bottomLabel.topAnchor.constraint(equalTo: soundButton.bottomAnchor, constant: 10).isActive = true
-            bottomLabel.centerXAnchor.constraint(equalTo: resultCardView.centerXAnchor, constant: 0).isActive = true
-            bottomLabel.leadingAnchor.constraint(greaterThanOrEqualTo: resultCardView.leadingAnchor, constant: 10).isActive = true
-            bottomLabel.trailingAnchor.constraint(lessThanOrEqualTo: resultCardView.trailingAnchor, constant: -10).isActive = true
-            
-            soundItOutCollectionView.anchor(top: bottomLabel.bottomAnchor,
-                                            bottom: nil,
-                                            leading: resultCardView.leadingAnchor,
-                                            trailing: resultCardView.trailingAnchor,
-                                            height: nil,
-                                            width: nil,
-                                            padding: UIEdgeInsets(top: 10, left: 20, bottom: 0, right: -20))
-            
-            
-            addFlashcardBackgroundView.anchor(top: soundItOutCollectionView.bottomAnchor,
-                                              bottom: resultCardView.bottomAnchor,
-                                              leading: nil,
-                                              trailing: resultCardView.trailingAnchor,
-                                              height: 30,
-                                              width: 30,
-                                              padding: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
-        case .englishToNative:
-            
-            lineDividerView.translatesAutoresizingMaskIntoConstraints = false
-            lineDividerView.centerYAnchor.constraint(equalTo: resultCardView.centerYAnchor).isActive = true
-            lineDividerView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-            lineDividerView.leadingAnchor.constraint(equalTo: resultCardView.leadingAnchor).isActive = true
-            lineDividerView.trailingAnchor.constraint(equalTo: resultCardView.trailingAnchor).isActive = true
-            
-            loopButton.anchor(top: resultCardView.topAnchor,
-                              bottom: nil,
-                              leading: nil,
-                              trailing: resultCardView.trailingAnchor,
-                              height: nil,
-                              width: nil,
-                              padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -10))
-            
-            soundButton.anchor(top: resultCardView.topAnchor,
-                               bottom: nil,
-                               leading: nil,
-                               trailing: loopButton.leadingAnchor,
-                               height: nil,
-                               width: nil,
-                               padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -10))
-            
-            topLabel.translatesAutoresizingMaskIntoConstraints = false
-            topLabel.topAnchor.constraint(equalTo: soundButton.bottomAnchor, constant: 10).isActive = true
-            topLabel.centerXAnchor.constraint(equalTo: resultCardView.centerXAnchor, constant: 0).isActive = true
-            topLabel.leadingAnchor.constraint(greaterThanOrEqualTo: resultCardView.leadingAnchor, constant: 10).isActive = true
-            topLabel.trailingAnchor.constraint(lessThanOrEqualTo: resultCardView.trailingAnchor, constant: -10).isActive = true
-            
-            soundItOutCollectionView.anchor(top: topLabel.bottomAnchor,
-                                            bottom: lineDividerView.topAnchor,
-                                            leading: resultCardView.leadingAnchor,
-                                            trailing: resultCardView.trailingAnchor,
-                                            height: nil,
-                                            width: nil,
-                                            padding: UIEdgeInsets(top: 10, left: 20, bottom: -10, right: -20))
+        loopButton.anchor(top: resultCardView.topAnchor,
+                          bottom: nil,
+                          leading: nil,
+                          trailing: resultCardView.trailingAnchor,
+                          height: nil,
+                          width: nil,
+                          padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -10))
+        
+        soundButton.anchor(top: resultCardView.topAnchor,
+                           bottom: nil,
+                           leading: nil,
+                           trailing: loopButton.leadingAnchor,
+                           height: nil,
+                           width: nil,
+                           padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -10))
+        
+        topLabel.translatesAutoresizingMaskIntoConstraints = false
+        topLabel.topAnchor.constraint(equalTo: soundButton.bottomAnchor, constant: 27).isActive = true
+        topLabel.centerXAnchor.constraint(equalTo: resultCardView.centerXAnchor, constant: 0).isActive = true
+        topLabel.leadingAnchor.constraint(greaterThanOrEqualTo: resultCardView.leadingAnchor, constant: 10).isActive = true
+        topLabel.trailingAnchor.constraint(lessThanOrEqualTo: resultCardView.trailingAnchor, constant: -10).isActive = true
+        
+        soundItOutCollectionView.anchor(top: topLabel.bottomAnchor,
+                                        bottom: lineDividerView.topAnchor,
+                                        leading: resultCardView.leadingAnchor,
+                                        trailing: resultCardView.trailingAnchor,
+                                        height: nil,
+                                        width: nil,
+                                        padding: UIEdgeInsets(top: 10, left: 20, bottom: -20, right: -20))
 
-            bottomLabel.translatesAutoresizingMaskIntoConstraints = false
-            bottomLabel.topAnchor.constraint(equalTo: lineDividerView.bottomAnchor, constant: 10).isActive = true
-            bottomLabel.centerXAnchor.constraint(equalTo: resultCardView.centerXAnchor, constant: 0).isActive = true
-            bottomLabel.leadingAnchor.constraint(greaterThanOrEqualTo: resultCardView.leadingAnchor, constant: 10).isActive = true
-            bottomLabel.trailingAnchor.constraint(lessThanOrEqualTo: resultCardView.trailingAnchor, constant: -10).isActive = true
+        bottomLabel.translatesAutoresizingMaskIntoConstraints = false
+        bottomLabel.topAnchor.constraint(equalTo: lineDividerView.bottomAnchor, constant: 20).isActive = true
+        bottomLabel.centerXAnchor.constraint(equalTo: resultCardView.centerXAnchor, constant: 0).isActive = true
+        bottomLabel.leadingAnchor.constraint(greaterThanOrEqualTo: resultCardView.leadingAnchor, constant: 10).isActive = true
+        bottomLabel.trailingAnchor.constraint(lessThanOrEqualTo: resultCardView.trailingAnchor, constant: -10).isActive = true
+        
+        addFlashcardBackgroundView.anchor(top: bottomLabel.bottomAnchor,
+                                          bottom: resultCardView.bottomAnchor,
+                                          leading: nil,
+                                          trailing: resultCardView.trailingAnchor,
+                                          height: 30,
+                                          width: 30,
+                                          padding: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
+        
+    }
+    
+    func updateResultSubviewVisibilities() {
+        
+        if results.count == 1 {
             
-            addFlashcardBackgroundView.anchor(top: bottomLabel.bottomAnchor,
-                                              bottom: resultCardView.bottomAnchor,
-                                              leading: nil,
-                                              trailing: resultCardView.trailingAnchor,
-                                              height: 30,
-                                              width: 30,
-                                              padding: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
+            soundButton.isHidden = false
+            loopButton.isHidden = false
+            soundItOutCollectionView.isHidden = false
+            
+        }
+        
+        else {
+            
+            soundButton.isHidden = true
+            loopButton.isHidden = true
+            soundItOutCollectionView.isHidden = true
+            
         }
         
     }
@@ -646,6 +706,8 @@ extension ResultsController {
                                        height: nil, width: nil,
                                        padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: -20))
         
+    
+        
         alternativesScrollView.anchor(top: alternativesHeaderLabel.bottomAnchor,
                                       bottom: nil,
                                       leading: mainContentView.leadingAnchor,
@@ -653,7 +715,8 @@ extension ResultsController {
                                       height: nil,
                                       width: nil,
                                       padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
-        
+
+        // Anchor StackView Within Scroll View
         alternativesStackView.anchor(top: alternativesScrollView.topAnchor,
                                      bottom: alternativesScrollView.bottomAnchor,
                                      leading: alternativesScrollView.leadingAnchor,
@@ -668,13 +731,13 @@ extension ResultsController {
         // Populate Alternative Translations Stack View
         populateAlternativeTranslationsStackView()
         
+        
+        
     }
     
     func populateAlternativeTranslationsStackView() {
         
-        let altTranslations = ["great job", "amazing", "you are an incredible person"]
-        
-        for alt in altTranslations {
+        for alt in alternateTranslations {
             
             // Create Background Shadow View
             let myView = UIView()
@@ -730,12 +793,113 @@ extension ResultsController {
         
     }
     
+    func setupLearnMoreScrollView() {
+        
+        // Add Header Label and Scroll View to the Main Content View
+        mainContentView.addSubview(learnMoreHeaderLabel)
+        mainContentView.addSubview(learnMoreScrollView)
+        
+        // Add Stack View to Scroll View
+        learnMoreScrollView.addSubview(learnMoreStackView)
+        
+        // Anchor Header, Scroll, and Stack  Views
+        learnMoreHeaderLabel.anchor(top: alternativesScrollView.bottomAnchor,
+                                       bottom: nil,
+                                       leading: mainContentView.leadingAnchor,
+                                       trailing: mainContentView.trailingAnchor,
+                                       height: nil, width: nil,
+                                       padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: -20))
+        
+       learnMoreScrollView.anchor(top: learnMoreHeaderLabel.bottomAnchor,
+                                      bottom: nil,
+                                      leading: mainContentView.leadingAnchor,
+                                      trailing: mainContentView.trailingAnchor,
+                                      height: nil,
+                                      width: nil,
+                                      padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
+        
+        learnMoreStackView.anchor(top: learnMoreScrollView.topAnchor,
+                                     bottom: learnMoreScrollView.bottomAnchor,
+                                     leading: learnMoreScrollView.leadingAnchor,
+                                     trailing: learnMoreScrollView.trailingAnchor,
+                                     height: nil,
+                                     width: nil)
+        
+        // Prevent Vertical Scrolling
+        learnMoreStackView.heightAnchor.constraint(equalTo: learnMoreScrollView.heightAnchor).isActive = true
+        
+        
+        // Populate Alternative Translations Stack View
+        populateLearnMoreStackView()
+        
+    }
+    
+    func populateLearnMoreStackView() {
+        
+        let words = ["great", "job", "that", "was", "congratulations"]
+        
+        for word in words {
+            
+            // Create Background Shadow View
+            let myView = UIView()
+            learnMoreStackView.addArrangedSubview(myView)
+            myView.widthAnchor.constraint(equalToConstant: 220).isActive = true
+            myView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+            
+            // Create Content View
+            let myContentView = UIView()
+            myContentView.backgroundColor = .white
+            myContentView.roundCorners(cornerRadius: 10)
+            myView.addSubview(myContentView)
+            myContentView.anchor(top: myView.topAnchor,
+                                 bottom: myView.bottomAnchor,
+                                 leading: myView.leadingAnchor,
+                                 trailing: myView.trailingAnchor,
+                                 height: nil,
+                                 width: nil)
+            
+            // Formate Atrributed Text
+            let attText = NSMutableAttributedString(string: word)
+            attText.addAttribute(.font, value: UIFont.systemFont(ofSize: 30), range: NSRange(location: 0, length: attText.length))
+            
+            // Create Label
+            let myLabel = UILabel()
+            myLabel.attributedText = attText
+            myLabel.numberOfLines = 1
+            myLabel.backgroundColor = .white
+            myLabel.textAlignment = .left
+            myContentView.addSubview(myLabel)
+            
+            // Anchor Label so its left aligned but stays in center if text doesn't fill the view
+            myLabel.translatesAutoresizingMaskIntoConstraints = false
+            myLabel.topAnchor.constraint(equalTo: myContentView.topAnchor, constant: 10).isActive = true
+            myLabel.bottomAnchor.constraint(equalTo: myContentView.bottomAnchor, constant: -10).isActive = true
+            myLabel.centerXAnchor.constraint(equalTo: myContentView.centerXAnchor).isActive = true
+            myLabel.widthAnchor.constraint(lessThanOrEqualTo: myContentView.widthAnchor, constant: -20).isActive = true
+            
+            // Create Clear button to overlay the label
+            let myButton = UIButton()
+            myButton.backgroundColor = .clear
+            myButton.addTarget(self, action: #selector(learnMoreButtonPressed), for: .touchUpInside)
+            
+            // Anchor Button
+            myContentView.addSubview(myButton)
+            myButton.anchor(top: myContentView.topAnchor,
+                            bottom: myContentView.bottomAnchor,
+                            leading: myContentView.leadingAnchor,
+                            trailing: myContentView.trailingAnchor,
+                            height: nil,
+                            width: nil)
+        }
+        
+    }
+    
     func setupGoToFlashcardsButton() {
         
         mainContentView.addSubview(goToFlashcardBackgroundView)
         goToFlashcardBackgroundView.addSubview(goToFlashcardsButton)
         
-        goToFlashcardBackgroundView.anchor(top: alternativesScrollView.bottomAnchor,
+        goToFlashcardBackgroundView.anchor(top: learnMoreScrollView.bottomAnchor,
                                            bottom: nil,
                                            leading: mainContentView.leadingAnchor,
                                            trailing: mainContentView.trailingAnchor,
@@ -773,18 +937,64 @@ extension ResultsController {
         
     }
     
-//MARK:- Selector Functions
+    //MARK:- Selector Functions
     
     @objc func profileButtonTapped() {
         print(0)
     }
     
     @objc func languageButtonPressed() {
-        print(1)
+        
+        let supportedLanguagesVC = SupportedLanguagesVC()
+        supportedLanguagesVC.delegate = self
+        supportedLanguagesVC.searchType = self.searchType
+        self.present(supportedLanguagesVC, animated: true, completion: nil)
+        
     }
     
     @objc func swapButtonPressed() {
-        print(2)
+        
+        DispatchQueue.main.async {
+            
+            // Retrieve Subviews
+            let subviews = self.langStackView.arrangedSubviews
+            
+            let sub0 = subviews[0]
+            let sub1 = subviews[1]
+            let sub2 = subviews[2]
+            
+            // Change Search Type and If Necessary, Change English HD to English
+            switch self.searchType {
+                
+            case .englishToNative:
+                self.searchType = .nativeToEnglish
+                
+            case .nativeToEnglish:
+                self.searchType = .englishToNative
+                
+            }
+            
+            // Clear Subviews
+            for subview in self.langStackView.arrangedSubviews {
+                self.langStackView.removeArrangedSubview(subview)
+            }
+            
+            // Add Subviews Flipped
+            self.langStackView.addArrangedSubview(sub2)
+            self.langStackView.addArrangedSubview(sub1)
+            self.langStackView.addArrangedSubview(sub0)
+            
+        }
+        
+        // Swap Source And Target Language Codes and Names
+        let tempSourceCode = TranslationManager.shared.sourceLanguageCode
+        TranslationManager.shared.sourceLanguageCode = TranslationManager.shared.targetLanguageCode
+        TranslationManager.shared.targetLanguageCode = tempSourceCode
+        
+        let tempSourceName = TranslationManager.shared.sourceLanguageName
+        TranslationManager.shared.sourceLanguageName = TranslationManager.shared.targetLanguageName
+        TranslationManager.shared.targetLanguageName = tempSourceName
+        
     }
     
     @objc func cancelButtonPressed() {
@@ -794,12 +1004,273 @@ extension ResultsController {
         cancelButton.isHidden = true
     }
     
-    @objc func soundButtonPressed() {
-        print("soundButton")
+    @objc func soundButtonPressed(_ sender: UIButton) {
+        
+        if let soundURL = results[sender.tag].audioString {
+            
+            playAudioFile(urlString: soundURL, loop: 0)
+            
+        }
+        
     }
     
-    @objc func loopButtonPressed() {
-        print("loopButton")
+    @objc func loopButtonPressed(_ sender: UIButton) {
+        
+        if let soundURL = results[sender.tag].audioString {
+            
+            playAudioFile(urlString: soundURL, loop: 5)
+            
+        }
+    }
+    
+    @objc func wildCardTapped(_ gesture: UITapGestureRecognizer) {
+        
+        guard let index = gesture.indexForTapAttributedTextInLabel(label: self.topLabel) else { return }
+        
+        guard let linkNumber = topLabel.attributedText?.attribute(.linkNumber, at: index, effectiveRange: nil) as? String else { return }
+        guard let color = topLabel.attributedText?.attribute(.foregroundColor, at: index, effectiveRange: nil) as? UIColor else { return }
+        
+        if color == K.Colors.yellow {
+            showPopTip(range: NSRange(location: index, length: 1), linkString: linkNumber)
+        }
+        
+    }
+    
+    @objc func soundItOutButtonPressed(_ sender: SoundButton) {
+        
+        switch sender.title(for: .normal) {
+        case "i":
+            playSound("BEAT")
+        case "ɪ":
+            playSound("BIT")
+        case "ɑ","ɔ":
+            playSound("BOT")
+        case "u":
+            playSound("BOOT")
+        case "ʊ":
+            playSound("BOOK")
+        case "p":
+            playSound("P")
+        case "v":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("V")
+        case "aɪ":
+            playSound("BITE")
+        case "əl","oʊl","ʊl":
+            playSound("DarkL")
+        case "ɪr" where sender.backgroundColor == K.Colors.seaBlue:
+            playSound("BEAT")
+        case "ɪr" where sender.backgroundColor == K.Colors.darkGrey:
+            playSound("DarkR")
+        case "ks":
+            playSound("KS")
+        case "ɔɪ":
+            playSound("BOYD")
+        case "weɪ":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("WEI")
+        case "j":
+            playSound("Y")
+        case "n":
+            playSound("N")
+        case "t":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("T")
+        case "æŋ" where sender.backgroundColor == K.Colors.pink:
+            playSound("BAIT")
+        case "æŋ" where sender.backgroundColor == K.Colors.darkGrey:
+            playSound("NSoft")
+        case "eɪ":
+            playSound("BAIT")
+        case "ər","ʊr":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("DarkR")
+        case "ɪŋ" where sender.backgroundColor == K.Colors.seaBlue:
+            playSound("BEAT")
+        case "ɪŋ" where sender.backgroundColor == K.Colors.darkGrey:
+            playSound("NSoft")
+        case "h":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("H")
+        case "m":
+            playSound("M")
+        case "ð":
+            playSound("TH")
+        case "b":
+            playSound("B")
+        case "dʒ":
+            playSound("JOKE")
+        case "ɡz":
+            playSound("GZ")
+        case "ju":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("YOU")
+        case "oʊ":
+            playSound("BOAT")
+        case "tʃ":
+            playSound("CHOKE")
+        case "f":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("F")
+        case "l":
+            playSound("L")
+        case "d":
+            playSound("D")
+        case "θ":
+            playSound("THunvoiced")
+        case "ɑr" where sender.backgroundColor == K.Colors.green:
+            playSound("BOT")
+        case "ɑr" where sender.backgroundColor == K.Colors.darkGrey:
+            playSound("DarkR")
+        case "ɛr" where sender.backgroundColor == K.Colors.darkGreen:
+            playSound("BET")
+        case "ɛr" where sender.backgroundColor == K.Colors.darkGrey:
+            playSound("DarkR")
+        case "kw":
+            playSound("Q")
+        case "ɔr" where sender.backgroundColor == K.Colors.purple:
+            playSound("BOAT")
+        case "ʔ":
+            break
+        case "ɡ":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("G")
+        case "r":
+            playSound("R")
+        case "z":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("Z")
+        case "aʊ":
+            playSound("BOUT")
+        case "ɛŋ" where sender.backgroundColor == K.Colors.pink:
+            playSound("BAIT")
+        case "ɛŋ" where sender.backgroundColor == K.Colors.darkGrey:
+            playSound("NSoft")
+        case "jə":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("YUH")
+        case "kʃ":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("KSH")
+        case "wə":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("WUH")
+        case "wɪ":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("WIH")
+        case "k":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("K")
+        case "ŋ":
+            playSound("NSoft")
+        case "s":
+            playSound("S")
+        case "ʃ":
+            playSound("MISSION")
+        case "w":
+            if sender.backgroundColor == K.Colors.yellow {
+                if let range = sender.wildRange,
+                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                {
+                    showPopTip(range: range, linkString: wildCardNumber)
+                }
+            }
+            playSound("W")
+        case "ʒ":
+            playSound("VISION")
+        case "æ":
+            playSound("BAT")
+        case "ə":
+            playSound("BUT")
+        case "ɛ":
+            playSound("BET")
+        default:
+            break
+        }
     }
     
     @objc func addFlashcardButtonPressed() {
@@ -810,6 +1281,10 @@ extension ResultsController {
         print("searching alternative")
     }
     
+    @objc func learnMoreButtonPressed() {
+        print("learn more")
+    }
+    
     @objc func goToFlashcardButtonPressed() {
         print("go to flashcards")
     }
@@ -817,7 +1292,6 @@ extension ResultsController {
     @objc func goToLessonButtonPressed() {
         print("going to lessons")
     }
-    
 }
 
 //MARK:- UITextView Delegate Methods
@@ -841,32 +1315,51 @@ extension ResultsController: UITextViewDelegate {
             cancelButton.isHidden = true
         }
         
-       
+        
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             print("search")
             // Dismiss Keyboard
+            textView.resignFirstResponder()
+            
             // Perform Search
+            startSearchSequence()
+            
             return false
         }
         return true
     }
+    
 }
 
 //MARK: - Collection View Data Source Methods
 extension ResultsController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        
+        return soundItOutColors.count
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = soundItOutCollectionView.dequeueReusableCell(withReuseIdentifier: SoundItOutCell.identifier, for: indexPath) as! SoundItOutCell
+        let colorInfo = soundItOutColors[indexPath.row]
+        
+        cell.soundButton.backgroundColor = colorInfo.color
+        cell.soundButton.setTitle(colorInfo.ID, for: .normal)
+        cell.soundButton.addTarget(self, action: #selector(soundItOutButtonPressed(_:)), for: .touchUpInside)
+        
+        if colorInfo.color == K.Colors.yellow {
+            
+            cell.soundButton.wildRange = colorInfo.range
+            
+        }
         
         return cell
+        
     }
     
 }
@@ -899,5 +1392,234 @@ extension ResultsController: UICollectionViewDelegateFlowLayout {
         }
         
         return UIEdgeInsets.zero
+    }
+}
+
+//MARK:- Language Selection Functions
+
+extension ResultsController: SupportedLanguagesDelegate  {
+    
+    func updateLanguageButton(selectedLanguage: TranslationLanguage) {
+        
+        languageButton.setTitle(selectedLanguage.name, for: .normal)
+        
+    }    
+}
+
+// MARK:- Search Sequence Functions
+
+extension ResultsController {
+    
+    func startSearchSequence() {
+        
+        // Clear Results Array
+        results = []
+        
+        // Make sure textView is not Empty
+        if textView.text != nil && textView.text.count > 0 {
+            
+            // Start Loading Screen
+            DispatchQueue.main.async {
+                self.startLoadingScreen()
+            }
+            
+            // translate and populate wordModelArray and alternatives array, then color words
+            runSearchsequence(searchText: textView.text!) { (success) in
+                
+                if success {
+                    
+                    // Populate Results Array
+                    for (word,wordModel) in zip(self.wordArray, self.wordModelArray) {
+                        
+                        // If  Word Model Exists, addg colored word and audio to result
+                        if let wordModel = wordModel {
+                            
+                            // Take only the first ipa spelling for now
+                            if let ipa = wordModel.ipa[0] {
+                                
+                                let audio = (0 < wordModel.audio.count ? wordModel.audio[0] : nil)
+                                var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
+                                text = text.setCapitalLetters(from: word)
+                                self.results.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
+                            }
+                        }
+                        
+                        // If Word Model doesn't exist, add plain text to result
+                        else {
+                            
+                            let text = NSMutableAttributedString(string: word)
+                            self.results.append(ColorResultModel(attributedText: text, audioString: nil, ipa: "", isColored: false))
+                        }
+                    }
+                    
+                    // End Loading Screen
+                    DispatchQueue.main.async {
+                        self.endLoadingScreen()
+                        self.updateResultsVC()
+                    }
+                }
+                
+                // If search sequence not successful (no words found in database) alert to check spelling and internet
+                else {
+                    let alert = UIAlertController(title: "oops! something went wrong", message: "Check spelling or internet connection", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
+                        return // do nothing
+                    }))
+                    DispatchQueue.main.async {
+                        self.endLoadingScreen()
+                        self.present(alert, animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    func runSearchsequence(searchText: String, completion: @escaping(_ success: Bool) -> Void) {
+        
+        // If source Lang is English, retrieve word models from database
+        if TranslationManager.shared.sourceLanguageCode == "en" {
+            
+            self.wordArray = searchText.replacingOccurrences(of: "’", with: "'").split(separator: " ").map {String($0)}
+           
+            FirebaseManager.shared.readEnglishDocumentByWord(words: wordArray) { (wordModelArray) in
+                
+                self.wordModelArray = wordModelArray
+                
+                let filteredArray = wordModelArray.filter { $0 != nil }
+                if wordModelArray.count > 0 && filteredArray.count > 0 {
+                    completion(true)
+                } else {completion(false)}
+            }
+        }
+            
+        // Otherwise get translations and then retrieve word models from database
+        else {
+            
+            TranslationManager.shared.textToTranslate = searchText
+            TranslationManager.shared.translate { (translation) in
+                
+                guard let translation = translation else {
+                    print("Translation is nil")
+                    completion(false)
+                    return
+                }
+                
+                if translation.count > 1 {
+                    self.alternateTranslations = translation[1..<translation.count].map { String($0) }
+                }
+                
+                self.wordArray = translation[0].split(separator: " ").map { String($0) }
+                
+                FirebaseManager.shared.readEnglishDocumentByWord(words: self.wordArray) { (wordModelArray) in
+
+                    self.wordModelArray = wordModelArray
+                    
+                    let filteredArray = wordModelArray.filter { $0 != nil }
+                    if wordModelArray.count > 0 && filteredArray.count > 0 {
+                        self.linkNativeToEnglish(self.wordModelArray)
+                        completion(true)
+                    } else {completion(false)}
+                }
+            }
+        }
+    }
+    
+    func linkNativeToEnglish(_ wordModelArray: [WordModel?]) {
+        if let searchedText = TranslationManager.shared.textToTranslate, let sourceLang = TranslationManager.shared.sourceLanguageCode {
+            var englishIDArray = [Int]()
+            for model in wordModelArray {
+                if let model = model {
+                    englishIDArray.append(model.number)
+                } else { englishIDArray.append(-1)} // -1 means missing english word
+            }
+            let newTranslationModel = TranslationModel(nativeText: searchedText, wordModelIDs: englishIDArray)
+            FirebaseManager.shared.writeNativeWordData(translationModel: newTranslationModel, to: sourceLang)
+        }
+    }
+    
+    func updateResultsVC() {
+        
+        // Update Views in Results VC
+        
+    }
+}
+
+//MARK:- Utility Functions
+
+extension ResultsController {
+    
+    func playAudioFile(urlString: String, loop: Int) {
+        
+        var count = 0
+        
+        guard let url = URL.init(string: urlString.trimmingCharacters(in: .whitespacesAndNewlines)) else { return }
+        
+        let playerItem = AVPlayerItem.init(url: url)
+        
+        player = AVPlayer.init(playerItem: playerItem)
+        player?.play()
+        
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
+                                               object: self.player?.currentItem,
+                                               queue: .main)
+        { [weak self] _ in
+            
+            if count < (loop - 1) {
+                
+                self?.player?.seek(to: CMTime.zero)
+                self?.player?.play()
+                count += 1
+                
+            }
+        }
+    }
+    
+    func playSound(_ soundFileName: String) {
+        guard let url = Bundle.main.url(forResource: soundFileName, withExtension: "wav") else { return }
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
+            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
+            soundItOutPlayer = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
+    
+            /* iOS 10 and earlier require the following line:
+             player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
+            
+            guard let player = soundItOutPlayer else { return }
+            
+            player.play()
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func showPopTip(range : NSRange, linkString: String) {
+        
+        guard let rectForRange = self.topLabel.boundingRect(forCharacterRange: range),
+              let actualPronunciation = K.linkToWildCardDictionary[linkString]
+              else { return }
+        
+        actualPronunciation.addAttribute(.font,
+                                         value: UIFont(name: "Arial-BoldMT", size: 30)!,
+                                         range: NSRange(location: 0, length: actualPronunciation.length))
+    
+        if range == prevRange && popTip.isVisible {
+            
+            popTip.hide()
+            
+            prevRange = nil
+            
+        }
+                    
+        else {
+            
+            popTip.show(attributedText: actualPronunciation, direction: .up, maxWidth: 400, in: self.topLabel, from: rectForRange)
+            
+            prevRange = range
+            
+        }
     }
 }

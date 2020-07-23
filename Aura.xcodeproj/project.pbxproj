@@ -3,10 +3,76 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39E1B2EBE1BEE7B06A549D59 /* Pods_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0687879DAA284F1027A6A628 /* Pods_Aura.framework */; };
+		7D15DB4D24C28860009ACDB4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB4C24C28860009ACDB4 /* GoogleService-Info.plist */; };
+		7D15DB4F24C29481009ACDB4 /* RealmPopulater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB4E24C29481009ACDB4 /* RealmPopulater.swift */; };
+		7D15DB5224C29517009ACDB4 /* MappingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB5024C29516009ACDB4 /* MappingModel.swift */; };
+		7D15DB5324C29517009ACDB4 /* WildCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB5124C29517009ACDB4 /* WildCardModel.swift */; };
+		7D15DB5B24C2A49F009ACDB4 /* TranslationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB5724C2A499009ACDB4 /* TranslationManager.swift */; };
+		7D15DB5C24C2A49F009ACDB4 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB5824C2A49B009ACDB4 /* RealmManager.swift */; };
+		7D15DB5D24C2A49F009ACDB4 /* WordColoringManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB5924C2A49D009ACDB4 /* WordColoringManager.swift */; };
+		7D15DB5E24C2A49F009ACDB4 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB5A24C2A49F009ACDB4 /* FirebaseManager.swift */; };
+		7D15DB6224C2A701009ACDB4 /* WordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB6024C2A700009ACDB4 /* WordModel.swift */; };
+		7D15DB6324C2A701009ACDB4 /* TranslationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB6124C2A701009ACDB4 /* TranslationModel.swift */; };
+		7D15DB6724C2A8A2009ACDB4 /* ColoringDataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB6524C2A8A0009ACDB4 /* ColoringDataStructures.swift */; };
+		7D15DB6824C2A8A2009ACDB4 /* ColorResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB6624C2A8A1009ACDB4 /* ColorResultModel.swift */; };
+		7D15DB6B24C2ABDB009ACDB4 /* SoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB6A24C2ABDB009ACDB4 /* SoundButton.swift */; };
+		7D15DB9D24C2AD5F009ACDB4 /* DarkL.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB6D24C2AD2C009ACDB4 /* DarkL.wav */; };
+		7D15DB9E24C2AD5F009ACDB4 /* GZ.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB6E24C2AD2D009ACDB4 /* GZ.wav */; };
+		7D15DB9F24C2AD5F009ACDB4 /* WUH.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB6F24C2AD2E009ACDB4 /* WUH.wav */; };
+		7D15DBA024C2AD5F009ACDB4 /* THunvoiced.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7024C2AD2F009ACDB4 /* THunvoiced.wav */; };
+		7D15DBA124C2AD5F009ACDB4 /* R.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7124C2AD30009ACDB4 /* R.wav */; };
+		7D15DBA224C2AD5F009ACDB4 /* K.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7224C2AD32009ACDB4 /* K.wav */; };
+		7D15DBA324C2AD5F009ACDB4 /* BET.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7324C2AD33009ACDB4 /* BET.wav */; };
+		7D15DBA424C2AD5F009ACDB4 /* L.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7424C2AD34009ACDB4 /* L.wav */; };
+		7D15DBA524C2AD5F009ACDB4 /* F.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7524C2AD35009ACDB4 /* F.wav */; };
+		7D15DBA624C2AD5F009ACDB4 /* B.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7624C2AD36009ACDB4 /* B.wav */; };
+		7D15DBA724C2AD5F009ACDB4 /* BAIT.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7724C2AD37009ACDB4 /* BAIT.wav */; };
+		7D15DBA824C2AD5F009ACDB4 /* KS.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7824C2AD38009ACDB4 /* KS.wav */; };
+		7D15DBA924C2AD5F009ACDB4 /* Q.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7924C2AD39009ACDB4 /* Q.wav */; };
+		7D15DBAA24C2AD5F009ACDB4 /* CHOKE.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7A24C2AD3A009ACDB4 /* CHOKE.wav */; };
+		7D15DBAB24C2AD5F009ACDB4 /* BOYD.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7B24C2AD3C009ACDB4 /* BOYD.wav */; };
+		7D15DBAC24C2AD5F009ACDB4 /* MISSION.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7C24C2AD3D009ACDB4 /* MISSION.wav */; };
+		7D15DBAD24C2AD5F009ACDB4 /* TH.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7D24C2AD3E009ACDB4 /* TH.wav */; };
+		7D15DBAE24C2AD5F009ACDB4 /* V.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7E24C2AD3F009ACDB4 /* V.wav */; };
+		7D15DBAF24C2AD5F009ACDB4 /* WEI.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB7F24C2AD40009ACDB4 /* WEI.wav */; };
+		7D15DBB024C2AD5F009ACDB4 /* BUT.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8024C2AD41009ACDB4 /* BUT.wav */; };
+		7D15DBB124C2AD5F009ACDB4 /* BOOT.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8124C2AD42009ACDB4 /* BOOT.wav */; };
+		7D15DBB224C2AD5F009ACDB4 /* KSH.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8224C2AD43009ACDB4 /* KSH.wav */; };
+		7D15DBB324C2AD5F009ACDB4 /* JOKE.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8324C2AD44009ACDB4 /* JOKE.wav */; };
+		7D15DBB424C2AD5F009ACDB4 /* BOUT.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8424C2AD45009ACDB4 /* BOUT.wav */; };
+		7D15DBB524C2AD5F009ACDB4 /* T.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8524C2AD46009ACDB4 /* T.wav */; };
+		7D15DBB624C2AD5F009ACDB4 /* W.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8624C2AD47009ACDB4 /* W.wav */; };
+		7D15DBB724C2AD5F009ACDB4 /* Y.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8724C2AD48009ACDB4 /* Y.wav */; };
+		7D15DBB824C2AD5F009ACDB4 /* YUH.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8824C2AD49009ACDB4 /* YUH.wav */; };
+		7D15DBB924C2AD5F009ACDB4 /* Z.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8924C2AD4A009ACDB4 /* Z.wav */; };
+		7D15DBBA24C2AD5F009ACDB4 /* BITE.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8A24C2AD4B009ACDB4 /* BITE.wav */; };
+		7D15DBBB24C2AD5F009ACDB4 /* DarkR.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8B24C2AD4C009ACDB4 /* DarkR.wav */; };
+		7D15DBBC24C2AD5F009ACDB4 /* BOOK.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8C24C2AD4D009ACDB4 /* BOOK.wav */; };
+		7D15DBBD24C2AD5F009ACDB4 /* G.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8D24C2AD4E009ACDB4 /* G.wav */; };
+		7D15DBBE24C2AD5F009ACDB4 /* BOAT.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8E24C2AD4F009ACDB4 /* BOAT.wav */; };
+		7D15DBBF24C2AD5F009ACDB4 /* BIT.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB8F24C2AD50009ACDB4 /* BIT.wav */; };
+		7D15DBC024C2AD5F009ACDB4 /* S.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9024C2AD51009ACDB4 /* S.wav */; };
+		7D15DBC124C2AD5F009ACDB4 /* H.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9124C2AD52009ACDB4 /* H.wav */; };
+		7D15DBC224C2AD5F009ACDB4 /* D.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9224C2AD53009ACDB4 /* D.wav */; };
+		7D15DBC324C2AD5F009ACDB4 /* M.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9324C2AD55009ACDB4 /* M.wav */; };
+		7D15DBC424C2AD5F009ACDB4 /* NSoft.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9424C2AD56009ACDB4 /* NSoft.wav */; };
+		7D15DBC524C2AD5F009ACDB4 /* WIH.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9524C2AD57009ACDB4 /* WIH.wav */; };
+		7D15DBC624C2AD5F009ACDB4 /* BEAT.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9624C2AD58009ACDB4 /* BEAT.wav */; };
+		7D15DBC724C2AD5F009ACDB4 /* BOT.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9724C2AD59009ACDB4 /* BOT.wav */; };
+		7D15DBC824C2AD5F009ACDB4 /* BAT.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9824C2AD5A009ACDB4 /* BAT.wav */; };
+		7D15DBC924C2AD5F009ACDB4 /* P.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9924C2AD5B009ACDB4 /* P.wav */; };
+		7D15DBCA24C2AD5F009ACDB4 /* VISION.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9A24C2AD5C009ACDB4 /* VISION.wav */; };
+		7D15DBCB24C2AD5F009ACDB4 /* N.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9B24C2AD5E009ACDB4 /* N.wav */; };
+		7D15DBCC24C2AD5F009ACDB4 /* YOU.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB9C24C2AD5F009ACDB4 /* YOU.wav */; };
+		7D15DBCE24C625FB009ACDB4 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBCD24C625FA009ACDB4 /* UserModel.swift */; };
+		7D15DBD024C62EEE009ACDB4 /* SupportedLanguagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBCF24C62EEE009ACDB4 /* SupportedLanguagesVC.swift */; };
+		7D15DBD224C631D9009ACDB4 /* SupportedLanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBD124C631D9009ACDB4 /* SupportedLanguageCell.swift */; };
+		7D15DBD624C8D629009ACDB4 /* TappableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */; };
 		7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89724B41EFB0019BFF0 /* Constants.swift */; };
 		7D66D89A24B424160019BFF0 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89924B424160019BFF0 /* HomeController.swift */; };
 		7D66D89C24B4244D0019BFF0 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89B24B4244D0019BFF0 /* SearchController.swift */; };
@@ -28,6 +94,73 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0687879DAA284F1027A6A628 /* Pods_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3098BAB89E76DCF1D2410AB1 /* Pods-Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.debug.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.debug.xcconfig"; sourceTree = "<group>"; };
+		7D15DB4C24C28860009ACDB4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7D15DB4E24C29481009ACDB4 /* RealmPopulater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmPopulater.swift; sourceTree = "<group>"; };
+		7D15DB5024C29516009ACDB4 /* MappingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingModel.swift; sourceTree = "<group>"; };
+		7D15DB5124C29517009ACDB4 /* WildCardModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WildCardModel.swift; sourceTree = "<group>"; };
+		7D15DB5724C2A499009ACDB4 /* TranslationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationManager.swift; sourceTree = "<group>"; };
+		7D15DB5824C2A49B009ACDB4 /* RealmManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		7D15DB5924C2A49D009ACDB4 /* WordColoringManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordColoringManager.swift; sourceTree = "<group>"; };
+		7D15DB5A24C2A49F009ACDB4 /* FirebaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		7D15DB6024C2A700009ACDB4 /* WordModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordModel.swift; sourceTree = "<group>"; };
+		7D15DB6124C2A701009ACDB4 /* TranslationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationModel.swift; sourceTree = "<group>"; };
+		7D15DB6524C2A8A0009ACDB4 /* ColoringDataStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColoringDataStructures.swift; sourceTree = "<group>"; };
+		7D15DB6624C2A8A1009ACDB4 /* ColorResultModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorResultModel.swift; sourceTree = "<group>"; };
+		7D15DB6A24C2ABDB009ACDB4 /* SoundButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundButton.swift; sourceTree = "<group>"; };
+		7D15DB6D24C2AD2C009ACDB4 /* DarkL.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = DarkL.wav; sourceTree = "<group>"; };
+		7D15DB6E24C2AD2D009ACDB4 /* GZ.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GZ.wav; sourceTree = "<group>"; };
+		7D15DB6F24C2AD2E009ACDB4 /* WUH.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = WUH.wav; sourceTree = "<group>"; };
+		7D15DB7024C2AD2F009ACDB4 /* THunvoiced.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = THunvoiced.wav; sourceTree = "<group>"; };
+		7D15DB7124C2AD30009ACDB4 /* R.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = R.wav; sourceTree = "<group>"; };
+		7D15DB7224C2AD32009ACDB4 /* K.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = K.wav; sourceTree = "<group>"; };
+		7D15DB7324C2AD33009ACDB4 /* BET.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BET.wav; sourceTree = "<group>"; };
+		7D15DB7424C2AD34009ACDB4 /* L.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = L.wav; sourceTree = "<group>"; };
+		7D15DB7524C2AD35009ACDB4 /* F.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = F.wav; sourceTree = "<group>"; };
+		7D15DB7624C2AD36009ACDB4 /* B.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = B.wav; sourceTree = "<group>"; };
+		7D15DB7724C2AD37009ACDB4 /* BAIT.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BAIT.wav; sourceTree = "<group>"; };
+		7D15DB7824C2AD38009ACDB4 /* KS.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = KS.wav; sourceTree = "<group>"; };
+		7D15DB7924C2AD39009ACDB4 /* Q.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Q.wav; sourceTree = "<group>"; };
+		7D15DB7A24C2AD3A009ACDB4 /* CHOKE.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = CHOKE.wav; sourceTree = "<group>"; };
+		7D15DB7B24C2AD3C009ACDB4 /* BOYD.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BOYD.wav; sourceTree = "<group>"; };
+		7D15DB7C24C2AD3D009ACDB4 /* MISSION.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MISSION.wav; sourceTree = "<group>"; };
+		7D15DB7D24C2AD3E009ACDB4 /* TH.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = TH.wav; sourceTree = "<group>"; };
+		7D15DB7E24C2AD3F009ACDB4 /* V.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = V.wav; sourceTree = "<group>"; };
+		7D15DB7F24C2AD40009ACDB4 /* WEI.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = WEI.wav; sourceTree = "<group>"; };
+		7D15DB8024C2AD41009ACDB4 /* BUT.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BUT.wav; sourceTree = "<group>"; };
+		7D15DB8124C2AD42009ACDB4 /* BOOT.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BOOT.wav; sourceTree = "<group>"; };
+		7D15DB8224C2AD43009ACDB4 /* KSH.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = KSH.wav; sourceTree = "<group>"; };
+		7D15DB8324C2AD44009ACDB4 /* JOKE.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = JOKE.wav; sourceTree = "<group>"; };
+		7D15DB8424C2AD45009ACDB4 /* BOUT.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BOUT.wav; sourceTree = "<group>"; };
+		7D15DB8524C2AD46009ACDB4 /* T.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = T.wav; sourceTree = "<group>"; };
+		7D15DB8624C2AD47009ACDB4 /* W.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = W.wav; sourceTree = "<group>"; };
+		7D15DB8724C2AD48009ACDB4 /* Y.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Y.wav; sourceTree = "<group>"; };
+		7D15DB8824C2AD49009ACDB4 /* YUH.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = YUH.wav; sourceTree = "<group>"; };
+		7D15DB8924C2AD4A009ACDB4 /* Z.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Z.wav; sourceTree = "<group>"; };
+		7D15DB8A24C2AD4B009ACDB4 /* BITE.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BITE.wav; sourceTree = "<group>"; };
+		7D15DB8B24C2AD4C009ACDB4 /* DarkR.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = DarkR.wav; sourceTree = "<group>"; };
+		7D15DB8C24C2AD4D009ACDB4 /* BOOK.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BOOK.wav; sourceTree = "<group>"; };
+		7D15DB8D24C2AD4E009ACDB4 /* G.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = G.wav; sourceTree = "<group>"; };
+		7D15DB8E24C2AD4F009ACDB4 /* BOAT.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BOAT.wav; sourceTree = "<group>"; };
+		7D15DB8F24C2AD50009ACDB4 /* BIT.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BIT.wav; sourceTree = "<group>"; };
+		7D15DB9024C2AD51009ACDB4 /* S.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = S.wav; sourceTree = "<group>"; };
+		7D15DB9124C2AD52009ACDB4 /* H.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = H.wav; sourceTree = "<group>"; };
+		7D15DB9224C2AD53009ACDB4 /* D.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = D.wav; sourceTree = "<group>"; };
+		7D15DB9324C2AD55009ACDB4 /* M.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = M.wav; sourceTree = "<group>"; };
+		7D15DB9424C2AD56009ACDB4 /* NSoft.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = NSoft.wav; sourceTree = "<group>"; };
+		7D15DB9524C2AD57009ACDB4 /* WIH.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = WIH.wav; sourceTree = "<group>"; };
+		7D15DB9624C2AD58009ACDB4 /* BEAT.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BEAT.wav; sourceTree = "<group>"; };
+		7D15DB9724C2AD59009ACDB4 /* BOT.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BOT.wav; sourceTree = "<group>"; };
+		7D15DB9824C2AD5A009ACDB4 /* BAT.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BAT.wav; sourceTree = "<group>"; };
+		7D15DB9924C2AD5B009ACDB4 /* P.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = P.wav; sourceTree = "<group>"; };
+		7D15DB9A24C2AD5C009ACDB4 /* VISION.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = VISION.wav; sourceTree = "<group>"; };
+		7D15DB9B24C2AD5E009ACDB4 /* N.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = N.wav; sourceTree = "<group>"; };
+		7D15DB9C24C2AD5F009ACDB4 /* YOU.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = YOU.wav; sourceTree = "<group>"; };
+		7D15DBCD24C625FA009ACDB4 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		7D15DBCF24C62EEE009ACDB4 /* SupportedLanguagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedLanguagesVC.swift; sourceTree = "<group>"; };
+		7D15DBD124C631D9009ACDB4 /* SupportedLanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedLanguageCell.swift; sourceTree = "<group>"; };
+		7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappableLabel.swift; sourceTree = "<group>"; };
 		7D66D89724B41EFB0019BFF0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7D66D89924B424160019BFF0 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		7D66D89B24B4244D0019BFF0 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
@@ -48,6 +181,7 @@
 		7DFBA8CE24B418A200618332 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7DFBA8D124B418A200618332 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7DFBA8D324B418A200618332 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7297326C784963B5DDBF4B4 /* Pods-Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.release.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,17 +189,129 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39E1B2EBE1BEE7B06A549D59 /* Pods_Aura.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4DB00D3AE7894B3D91C610EC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3098BAB89E76DCF1D2410AB1 /* Pods-Aura.debug.xcconfig */,
+				C7297326C784963B5DDBF4B4 /* Pods-Aura.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		605824D00F3EC70C1A73A213 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0687879DAA284F1027A6A628 /* Pods_Aura.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7D15DB5424C29520009ACDB4 /* Realm Models */ = {
+			isa = PBXGroup;
+			children = (
+				7D15DB5024C29516009ACDB4 /* MappingModel.swift */,
+				7D15DB5124C29517009ACDB4 /* WildCardModel.swift */,
+			);
+			path = "Realm Models";
+			sourceTree = "<group>";
+		};
+		7D15DB5F24C2A4A8009ACDB4 /* Object Managers */ = {
+			isa = PBXGroup;
+			children = (
+				7D15DB5A24C2A49F009ACDB4 /* FirebaseManager.swift */,
+				7D15DB5824C2A49B009ACDB4 /* RealmManager.swift */,
+				7D15DB5724C2A499009ACDB4 /* TranslationManager.swift */,
+				7D15DB5924C2A49D009ACDB4 /* WordColoringManager.swift */,
+			);
+			path = "Object Managers";
+			sourceTree = "<group>";
+		};
+		7D15DB6424C2A70A009ACDB4 /* Firebase Models */ = {
+			isa = PBXGroup;
+			children = (
+				7D15DB6124C2A701009ACDB4 /* TranslationModel.swift */,
+				7D15DB6024C2A700009ACDB4 /* WordModel.swift */,
+			);
+			path = "Firebase Models";
+			sourceTree = "<group>";
+		};
+		7D15DB6924C2A8A6009ACDB4 /* Coloring Models */ = {
+			isa = PBXGroup;
+			children = (
+				7D15DB6524C2A8A0009ACDB4 /* ColoringDataStructures.swift */,
+				7D15DB6624C2A8A1009ACDB4 /* ColorResultModel.swift */,
+			);
+			path = "Coloring Models";
+			sourceTree = "<group>";
+		};
+		7D15DB6C24C2ACF1009ACDB4 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				7D15DB7624C2AD36009ACDB4 /* B.wav */,
+				7D15DB7724C2AD37009ACDB4 /* BAIT.wav */,
+				7D15DB9824C2AD5A009ACDB4 /* BAT.wav */,
+				7D15DB9624C2AD58009ACDB4 /* BEAT.wav */,
+				7D15DB7324C2AD33009ACDB4 /* BET.wav */,
+				7D15DB8F24C2AD50009ACDB4 /* BIT.wav */,
+				7D15DB8A24C2AD4B009ACDB4 /* BITE.wav */,
+				7D15DB8E24C2AD4F009ACDB4 /* BOAT.wav */,
+				7D15DB8C24C2AD4D009ACDB4 /* BOOK.wav */,
+				7D15DB8124C2AD42009ACDB4 /* BOOT.wav */,
+				7D15DB9724C2AD59009ACDB4 /* BOT.wav */,
+				7D15DB8424C2AD45009ACDB4 /* BOUT.wav */,
+				7D15DB7B24C2AD3C009ACDB4 /* BOYD.wav */,
+				7D15DB8024C2AD41009ACDB4 /* BUT.wav */,
+				7D15DB7A24C2AD3A009ACDB4 /* CHOKE.wav */,
+				7D15DB9224C2AD53009ACDB4 /* D.wav */,
+				7D15DB6D24C2AD2C009ACDB4 /* DarkL.wav */,
+				7D15DB8B24C2AD4C009ACDB4 /* DarkR.wav */,
+				7D15DB7524C2AD35009ACDB4 /* F.wav */,
+				7D15DB8D24C2AD4E009ACDB4 /* G.wav */,
+				7D15DB6E24C2AD2D009ACDB4 /* GZ.wav */,
+				7D15DB9124C2AD52009ACDB4 /* H.wav */,
+				7D15DB8324C2AD44009ACDB4 /* JOKE.wav */,
+				7D15DB7224C2AD32009ACDB4 /* K.wav */,
+				7D15DB7824C2AD38009ACDB4 /* KS.wav */,
+				7D15DB8224C2AD43009ACDB4 /* KSH.wav */,
+				7D15DB7424C2AD34009ACDB4 /* L.wav */,
+				7D15DB9324C2AD55009ACDB4 /* M.wav */,
+				7D15DB7C24C2AD3D009ACDB4 /* MISSION.wav */,
+				7D15DB9B24C2AD5E009ACDB4 /* N.wav */,
+				7D15DB9424C2AD56009ACDB4 /* NSoft.wav */,
+				7D15DB9924C2AD5B009ACDB4 /* P.wav */,
+				7D15DB7924C2AD39009ACDB4 /* Q.wav */,
+				7D15DB7124C2AD30009ACDB4 /* R.wav */,
+				7D15DB9024C2AD51009ACDB4 /* S.wav */,
+				7D15DB8524C2AD46009ACDB4 /* T.wav */,
+				7D15DB7D24C2AD3E009ACDB4 /* TH.wav */,
+				7D15DB7024C2AD2F009ACDB4 /* THunvoiced.wav */,
+				7D15DB7E24C2AD3F009ACDB4 /* V.wav */,
+				7D15DB9A24C2AD5C009ACDB4 /* VISION.wav */,
+				7D15DB8624C2AD47009ACDB4 /* W.wav */,
+				7D15DB7F24C2AD40009ACDB4 /* WEI.wav */,
+				7D15DB9524C2AD57009ACDB4 /* WIH.wav */,
+				7D15DB6F24C2AD2E009ACDB4 /* WUH.wav */,
+				7D15DB8724C2AD48009ACDB4 /* Y.wav */,
+				7D15DB9C24C2AD5F009ACDB4 /* YOU.wav */,
+				7D15DB8824C2AD49009ACDB4 /* YUH.wav */,
+				7D15DB8924C2AD4A009ACDB4 /* Z.wav */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		7D66D89624B41EE20019BFF0 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				7D66D89724B41EFB0019BFF0 /* Constants.swift */,
 				7D77098424B5662F0009B93B /* Extensions.swift */,
+				7D15DB4E24C29481009ACDB4 /* RealmPopulater.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -80,6 +326,7 @@
 				7D66D89F24B4249B0019BFF0 /* LoginController.swift */,
 				7D66D8A124B424B20019BFF0 /* FlashCardController.swift */,
 				7D66D8A324B424C20019BFF0 /* LessonsController.swift */,
+				7D15DBCF24C62EEE009ACDB4 /* SupportedLanguagesVC.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -89,6 +336,7 @@
 			children = (
 				7D77098624B691DF0009B93B /* PrevSearchCell.swift */,
 				7DD1B09E24BD06AB0052BC7B /* SoundItOutCell.swift */,
+				7D15DBD124C631D9009ACDB4 /* SupportedLanguageCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -107,6 +355,8 @@
 			children = (
 				7DFBA8C424B4189500618332 /* Aura */,
 				7DFBA8C324B4189500618332 /* Products */,
+				4DB00D3AE7894B3D91C610EC /* Pods */,
+				605824D00F3EC70C1A73A213 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -125,11 +375,13 @@
 				7DFBA8DB24B41BA900618332 /* Model */,
 				7DFBA8DA24B41B9E00618332 /* View */,
 				7DFBA8D924B41B9700618332 /* Controller */,
+				7D15DB6C24C2ACF1009ACDB4 /* Sounds */,
 				7DFBA8C524B4189500618332 /* AppDelegate.swift */,
 				7DFBA8C724B4189500618332 /* SceneDelegate.swift */,
 				7DFBA8CE24B418A200618332 /* Assets.xcassets */,
 				7DFBA8D024B418A200618332 /* LaunchScreen.storyboard */,
 				7DFBA8D324B418A200618332 /* Info.plist */,
+				7D15DB4C24C28860009ACDB4 /* GoogleService-Info.plist */,
 			);
 			path = Aura;
 			sourceTree = "<group>";
@@ -155,6 +407,13 @@
 			children = (
 				7DD1B09C24B8F0BA0052BC7B /* SearchType.swift */,
 				7D907C4824C00958007D5894 /* DynamicCollectionView.swift */,
+				7D15DB6A24C2ABDB009ACDB4 /* SoundButton.swift */,
+				7D15DBCD24C625FA009ACDB4 /* UserModel.swift */,
+				7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */,
+				7D15DB5F24C2A4A8009ACDB4 /* Object Managers */,
+				7D15DB6424C2A70A009ACDB4 /* Firebase Models */,
+				7D15DB5424C29520009ACDB4 /* Realm Models */,
+				7D15DB6924C2A8A6009ACDB4 /* Coloring Models */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -166,9 +425,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DFBA8D624B418A200618332 /* Build configuration list for PBXNativeTarget "Aura" */;
 			buildPhases = (
+				660F8FB07D8F7FAC010B766E /* [CP] Check Pods Manifest.lock */,
 				7DFBA8BE24B4189500618332 /* Sources */,
 				7DFBA8BF24B4189500618332 /* Frameworks */,
 				7DFBA8C024B4189500618332 /* Resources */,
+				E8F1A03714DB546671374846 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -217,12 +478,103 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D15DBBD24C2AD5F009ACDB4 /* G.wav in Resources */,
+				7D15DBB724C2AD5F009ACDB4 /* Y.wav in Resources */,
+				7D15DBAE24C2AD5F009ACDB4 /* V.wav in Resources */,
+				7D15DBC524C2AD5F009ACDB4 /* WIH.wav in Resources */,
+				7D15DBB524C2AD5F009ACDB4 /* T.wav in Resources */,
+				7D15DBCA24C2AD5F009ACDB4 /* VISION.wav in Resources */,
+				7D15DBB824C2AD5F009ACDB4 /* YUH.wav in Resources */,
+				7D15DBBA24C2AD5F009ACDB4 /* BITE.wav in Resources */,
+				7D15DBA824C2AD5F009ACDB4 /* KS.wav in Resources */,
+				7D15DBBC24C2AD5F009ACDB4 /* BOOK.wav in Resources */,
+				7D15DBBF24C2AD5F009ACDB4 /* BIT.wav in Resources */,
+				7D15DBC124C2AD5F009ACDB4 /* H.wav in Resources */,
+				7D15DBA424C2AD5F009ACDB4 /* L.wav in Resources */,
+				7D15DBC424C2AD5F009ACDB4 /* NSoft.wav in Resources */,
+				7D15DBA924C2AD5F009ACDB4 /* Q.wav in Resources */,
+				7D15DB9E24C2AD5F009ACDB4 /* GZ.wav in Resources */,
+				7D15DBAB24C2AD5F009ACDB4 /* BOYD.wav in Resources */,
+				7D15DBB624C2AD5F009ACDB4 /* W.wav in Resources */,
+				7D15DBB224C2AD5F009ACDB4 /* KSH.wav in Resources */,
+				7D15DBAF24C2AD5F009ACDB4 /* WEI.wav in Resources */,
+				7D15DBB024C2AD5F009ACDB4 /* BUT.wav in Resources */,
+				7D15DBBE24C2AD5F009ACDB4 /* BOAT.wav in Resources */,
+				7D15DBB324C2AD5F009ACDB4 /* JOKE.wav in Resources */,
+				7D15DBC824C2AD5F009ACDB4 /* BAT.wav in Resources */,
+				7D15DBAC24C2AD5F009ACDB4 /* MISSION.wav in Resources */,
 				7DFBA8D224B418A200618332 /* LaunchScreen.storyboard in Resources */,
+				7D15DBA524C2AD5F009ACDB4 /* F.wav in Resources */,
 				7DFBA8CF24B418A200618332 /* Assets.xcassets in Resources */,
+				7D15DBA124C2AD5F009ACDB4 /* R.wav in Resources */,
+				7D15DBAD24C2AD5F009ACDB4 /* TH.wav in Resources */,
+				7D15DBCC24C2AD5F009ACDB4 /* YOU.wav in Resources */,
+				7D15DBA724C2AD5F009ACDB4 /* BAIT.wav in Resources */,
+				7D15DB9F24C2AD5F009ACDB4 /* WUH.wav in Resources */,
+				7D15DBB124C2AD5F009ACDB4 /* BOOT.wav in Resources */,
+				7D15DBC624C2AD5F009ACDB4 /* BEAT.wav in Resources */,
+				7D15DBC924C2AD5F009ACDB4 /* P.wav in Resources */,
+				7D15DBA024C2AD5F009ACDB4 /* THunvoiced.wav in Resources */,
+				7D15DBA224C2AD5F009ACDB4 /* K.wav in Resources */,
+				7D15DBC724C2AD5F009ACDB4 /* BOT.wav in Resources */,
+				7D15DBC224C2AD5F009ACDB4 /* D.wav in Resources */,
+				7D15DBC024C2AD5F009ACDB4 /* S.wav in Resources */,
+				7D15DB4D24C28860009ACDB4 /* GoogleService-Info.plist in Resources */,
+				7D15DBB424C2AD5F009ACDB4 /* BOUT.wav in Resources */,
+				7D15DBB924C2AD5F009ACDB4 /* Z.wav in Resources */,
+				7D15DBC324C2AD5F009ACDB4 /* M.wav in Resources */,
+				7D15DBBB24C2AD5F009ACDB4 /* DarkR.wav in Resources */,
+				7D15DBAA24C2AD5F009ACDB4 /* CHOKE.wav in Resources */,
+				7D15DBA324C2AD5F009ACDB4 /* BET.wav in Resources */,
+				7D15DBCB24C2AD5F009ACDB4 /* N.wav in Resources */,
+				7D15DBA624C2AD5F009ACDB4 /* B.wav in Resources */,
+				7D15DB9D24C2AD5F009ACDB4 /* DarkL.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		660F8FB07D8F7FAC010B766E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Aura-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E8F1A03714DB546671374846 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Aura/Pods-Aura-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Aura/Pods-Aura-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Aura/Pods-Aura-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7DFBA8BE24B4189500618332 /* Sources */ = {
@@ -230,20 +582,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D66D89A24B424160019BFF0 /* HomeController.swift in Sources */,
+				7D15DB6B24C2ABDB009ACDB4 /* SoundButton.swift in Sources */,
 				7D66D8A224B424B20019BFF0 /* FlashCardController.swift in Sources */,
+				7D15DBCE24C625FB009ACDB4 /* UserModel.swift in Sources */,
+				7D15DB5324C29517009ACDB4 /* WildCardModel.swift in Sources */,
 				7D66D89C24B4244D0019BFF0 /* SearchController.swift in Sources */,
+				7D15DB5D24C2A49F009ACDB4 /* WordColoringManager.swift in Sources */,
 				7DD1B09D24B8F0BE0052BC7B /* SearchType.swift in Sources */,
+				7D15DB6824C2A8A2009ACDB4 /* ColorResultModel.swift in Sources */,
+				7D15DBD224C631D9009ACDB4 /* SupportedLanguageCell.swift in Sources */,
+				7D15DB6724C2A8A2009ACDB4 /* ColoringDataStructures.swift in Sources */,
+				7D15DB5C24C2A49F009ACDB4 /* RealmManager.swift in Sources */,
+				7D15DB6224C2A701009ACDB4 /* WordModel.swift in Sources */,
 				7DFBA8CA24B4189500618332 /* TabBarController.swift in Sources */,
 				7DD1B09F24BD06AB0052BC7B /* SoundItOutCell.swift in Sources */,
 				7DFBA8C624B4189500618332 /* AppDelegate.swift in Sources */,
+				7D15DB4F24C29481009ACDB4 /* RealmPopulater.swift in Sources */,
 				7DFBA8C824B4189500618332 /* SceneDelegate.swift in Sources */,
 				7D907C4924C00958007D5894 /* DynamicCollectionView.swift in Sources */,
 				7D77098724B691DF0009B93B /* PrevSearchCell.swift in Sources */,
 				7D66D8A024B4249B0019BFF0 /* LoginController.swift in Sources */,
 				7D66D8A424B424C20019BFF0 /* LessonsController.swift in Sources */,
+				7D15DB6324C2A701009ACDB4 /* TranslationModel.swift in Sources */,
+				7D15DBD624C8D629009ACDB4 /* TappableLabel.swift in Sources */,
 				7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */,
 				7D77098524B566300009B93B /* Extensions.swift in Sources */,
 				7D77098C24B7A2B20009B93B /* ResultsController.swift in Sources */,
+				7D15DB5B24C2A49F009ACDB4 /* TranslationManager.swift in Sources */,
+				7D15DB5E24C2A49F009ACDB4 /* FirebaseManager.swift in Sources */,
+				7D15DBD024C62EEE009ACDB4 /* SupportedLanguagesVC.swift in Sources */,
+				7D15DB5224C29517009ACDB4 /* MappingModel.swift in Sources */,
 				7D66D89E24B424830019BFF0 /* KeyController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,6 +746,7 @@
 		};
 		7DFBA8D724B418A200618332 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3098BAB89E76DCF1D2410AB1 /* Pods-Aura.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -396,6 +765,7 @@
 		};
 		7DFBA8D824B418A200618332 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C7297326C784963B5DDBF4B4 /* Pods-Aura.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

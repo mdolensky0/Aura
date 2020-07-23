@@ -11,14 +11,111 @@ import UIKit
 class SearchController: UIViewController {
     
     // Data
-    var prevSearches = ["Hello", "Whats up", "Yo dog", "its been so long", "I hope we can hang soon", "you are so amazing", "I am obsessed with you"]
+    var prevSearches = ["Hello",
+                        "Whats up",
+                        "Yo dog",
+                        "its been so long",
+                        "I hope we can hang soon",
+                        "you are so amazing",
+                        "I am obsessed with you"]
+    
+    var searchType = SearchType.nativeToEnglish
+    var bottomLabelText = ""
+    var wordArray = [String]()
+    var wordModelArray = [WordModel?]()
+    var results = [ColorResultModel]()
+    var alternateTranslations = [String]()
     
     // Main Views and Buttons
-    var langStackView = UIStackView()
-    var languageButton = UIButton()
-    var swapButton = UIButton()
-    var textView = UITextView()
-    var cancelButton = UIButton()
+    
+    var titleLabel: UILabel = {
+        
+        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 40))
+        label.backgroundColor = K.Colors.purple
+        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.text = "Aura"
+        label.numberOfLines = 2
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+        
+    }()
+    
+    var languageBarView: UIView = {
+        
+        let view = UIView()
+        view.backgroundColor = .white
+        view.setUnderlineStyle(color: K.Colors.purple)
+        return view
+        
+    }()
+    
+    var langStackView: UIStackView = {
+        
+        let stackView = UIStackView()
+        stackView.backgroundColor = .white
+        stackView.alignment = .center
+        stackView.distribution = .fillEqually
+        return stackView
+        
+    }()
+    
+    var languageButton: UIButton = {
+        
+        let button = UIButton()
+        button.addTarget(self, action: #selector(languageButtonPressed), for: .touchUpInside)
+        button.backgroundColor = .white
+        button.setTitleColor(UIColor.systemBlue, for: .normal)
+        return button
+        
+    }()
+    
+    var swapButton: UIButton = {
+        
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "repeat"), for: .normal)
+        button.addTarget(self, action: #selector(swapButtonPressed), for: .touchUpInside)
+        button.tintColor = .black
+        button.backgroundColor = .white
+        return button
+        
+    }()
+    
+    var englishLabel: UILabel = {
+        
+        let label = UILabel()
+        label.text = "English HD"
+        label.textColor = .black
+        label.backgroundColor = .white
+        label.textAlignment = .center
+        return label
+        
+    }()
+    
+    var textView: UITextView = {
+        
+        let textView = UITextView()
+        textView.returnKeyType = .search
+        textView.text = "Enter text"
+        textView.textColor = .lightGray
+        textView.font = .systemFont(ofSize: 20)
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 50)
+        return textView
+    
+    }()
+    
+    var cancelButton: UIButton = {
+        
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "multiply"), for: .normal)
+        button.backgroundColor = .white
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
+        button.isHidden = true
+        return button
+        
+    }()
+    
     var tableView = UITableView()
     
     // Background Views
@@ -34,7 +131,7 @@ class SearchController: UIViewController {
            super.viewDidLayoutSubviews()
            
            setupShadows()
-       }
+    }
 }
 
 extension SearchController {
@@ -56,14 +153,7 @@ extension SearchController {
     func setupNavBar() {
         
         // Add Center Title
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 40))
-        label.backgroundColor = K.Colors.purple
-        label.font = UIFont.boldSystemFont(ofSize: 30)
-        label.text = "Aura"
-        label.numberOfLines = 2
-        label.textColor = .white
-        label.textAlignment = .center
-        self.navigationItem.titleView = label
+        self.navigationItem.titleView = titleLabel
         
         // Add user button
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person"), style: .plain,
@@ -78,51 +168,33 @@ extension SearchController {
     func setupLanguageSelectionView() {
         
         // Add Language Bar View
-        let langBarView = UIView()
-        view.addSubview(langBarView)
-        langBarView.backgroundColor = .white
-        langBarView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+        view.addSubview(languageBarView)
+        languageBarView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                            bottom: nil,
                            leading: view.leadingAnchor,
                            trailing: view.trailingAnchor,
                            height: 76,
                            width: nil)
-        langBarView.setUnderlineStyle(color: K.Colors.purple)
         
         // Add Stack View
-        langBarView.addSubview(langStackView)
-        langStackView.backgroundColor = .white
-        langStackView.anchor(top: langBarView.topAnchor,
-                             bottom: langBarView.bottomAnchor,
-                             leading: langBarView.leadingAnchor,
-                             trailing: langBarView.trailingAnchor,
+        languageBarView.addSubview(langStackView)
+        langStackView.anchor(top: languageBarView.topAnchor,
+                             bottom: languageBarView.bottomAnchor,
+                             leading: languageBarView.leadingAnchor,
+                             trailing: languageBarView.trailingAnchor,
                              height: nil,
                              width: nil,
                              padding: UIEdgeInsets(top: 0, left: 0, bottom: -2, right: 0))
-        langStackView.alignment = .center
-        langStackView.distribution = .fillEqually
 
         // Add Language Button
-        languageButton.setTitle("Japanese", for: .normal)
-        languageButton.addTarget(self, action: #selector(languageButtonPressed), for: .touchUpInside)
-        languageButton.backgroundColor = .white
-        languageButton.setTitleColor(UIColor.systemBlue, for: .normal)
         langStackView.addArrangedSubview(languageButton)
+        setupLangButtonWithDeviceLang()
         
         // Add Swap Button
-        swapButton.setImage(UIImage(systemName: "repeat"), for: .normal)
-        swapButton.addTarget(self, action: #selector(swapButtonPressed), for: .touchUpInside)
-        swapButton.tintColor = .black
-        swapButton.backgroundColor = .white
         langStackView.addArrangedSubview(swapButton)
         
         // Add English Label
-        let engLabel = UILabel()
-        engLabel.text = "English"
-        engLabel.textColor = .black
-        engLabel.backgroundColor = .white
-        engLabel.textAlignment = .center
-        langStackView.addArrangedSubview(engLabel)
+        langStackView.addArrangedSubview(englishLabel)
         
     }
     
@@ -140,7 +212,6 @@ extension SearchController {
         
         // Add TextView
         textView.delegate = self
-        textView.returnKeyType = .search
         view.addSubview(textView)
         textView.anchor(top: textViewBackgroundView.topAnchor,
                         bottom: textViewBackgroundView.bottomAnchor,
@@ -149,11 +220,7 @@ extension SearchController {
                         height: nil,
                         width: nil,
                         padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 4))
-        textView.text = "Enter text"
-        textView.textColor = .lightGray
-        textView.font = .systemFont(ofSize: 20)
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 50)
-        
+       
         // Add X Button
         view.addSubview(cancelButton)
         print(textView.superview!)
@@ -164,11 +231,6 @@ extension SearchController {
                             height: 40,
                             width: 40,
                             padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-        cancelButton.setImage(UIImage(systemName: "multiply"), for: .normal)
-        cancelButton.backgroundColor = .white
-        cancelButton.tintColor = .black
-        cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
-        cancelButton.isHidden = true
     }
     
     func setupTableView() {
@@ -225,11 +287,57 @@ extension SearchController {
     }
     
     @objc func languageButtonPressed() {
-        print(1)
+        
+        let supportedLanguagesVC = SupportedLanguagesVC()
+        supportedLanguagesVC.delegate = self
+        supportedLanguagesVC.searchType = self.searchType
+        self.present(supportedLanguagesVC, animated: true, completion: nil)
+        
     }
     
     @objc func swapButtonPressed() {
-        print(2)
+        
+        DispatchQueue.main.async {
+            
+            // Retrieve Subviews
+            let subviews = self.langStackView.arrangedSubviews
+            
+            let sub0 = subviews[0]
+            let sub1 = subviews[1]
+            let sub2 = subviews[2]
+            
+            // Change Search Type and If Necessary, Change English HD to English
+            switch self.searchType {
+            
+            case .englishToNative:
+                self.searchType = .nativeToEnglish
+                
+            case .nativeToEnglish:
+                self.searchType = .englishToNative
+
+            }
+            
+            // Clear Subviews
+            for subview in self.langStackView.arrangedSubviews {
+                self.langStackView.removeArrangedSubview(subview)
+            }
+            
+            // Add Subviews Flipped
+            self.langStackView.addArrangedSubview(sub2)
+            self.langStackView.addArrangedSubview(sub1)
+            self.langStackView.addArrangedSubview(sub0)
+            
+        }
+        
+        // Swap Source And Target Language Codes and Names
+        let tempSourceCode = TranslationManager.shared.sourceLanguageCode
+        TranslationManager.shared.sourceLanguageCode = TranslationManager.shared.targetLanguageCode
+        TranslationManager.shared.targetLanguageCode = tempSourceCode
+        
+        let tempSourceName = TranslationManager.shared.sourceLanguageName
+        TranslationManager.shared.sourceLanguageName = TranslationManager.shared.targetLanguageName
+        TranslationManager.shared.targetLanguageName = tempSourceName
+        
     }
     
     @objc func cancelButtonPressed() {
@@ -269,7 +377,12 @@ extension SearchController: UITextViewDelegate {
         if text == "\n" {
             print("search")
             // Dismiss Keyboard
+            textView.resignFirstResponder()
+            
             // Perform Search
+            startSearchSequence()
+            
+            
             return false
         }
         return true
@@ -303,8 +416,288 @@ extension SearchController: UITableViewDataSource {
 //MARK:- UITableView Delegate Methods
 
 extension SearchController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         tableView.deselectRow(at: indexPath, animated: true)
-        navigationController?.pushViewController(ResultsController(), animated: true)
+        
+    }
+    
+}
+
+//MARK:- Language Selection Functions
+
+extension SearchController: SupportedLanguagesDelegate, ResultsControllerDelegate {
+    
+    func updateLanguageStackView(searchType: SearchType) {
+        
+        self.searchType = searchType
+        
+        DispatchQueue.main.async {
+            
+            for view in self.langStackView.arrangedSubviews {
+                self.langStackView.removeArrangedSubview(view)
+            }
+            
+            switch searchType {
+            
+            case .englishToNative:
+                self.langStackView.addArrangedSubview(self.englishLabel)
+                self.englishLabel.text = "English HD"
+                
+                self.langStackView.addArrangedSubview(self.swapButton)
+                
+                self.langStackView.addArrangedSubview(self.languageButton)
+                self.languageButton.setTitle(TranslationManager.shared.targetLanguageName, for: .normal)
+                
+            case .nativeToEnglish:
+                self.langStackView.addArrangedSubview(self.languageButton)
+                self.languageButton.setTitle(TranslationManager.shared.sourceLanguageName, for: .normal)
+                
+                self.langStackView.addArrangedSubview(self.swapButton)
+                
+                self.langStackView.addArrangedSubview(self.englishLabel)
+                self.englishLabel.text = "English HD"
+            }
+            
+        }
+    }
+    
+    func updateLanguageButton(selectedLanguage: TranslationLanguage) {
+        
+        languageButton.setTitle(selectedLanguage.name, for: .normal)
+                
+    }
+    
+    func setupLangButtonWithDeviceLang() {
+        
+        var buttonLanguageCode = getDeviceLanguageCode()
+        let buttonLanguageName = K.LanguageCodes.languageDict[buttonLanguageCode]
+        
+        if let code = K.LanguageCodes.iosToGoogleLangCode[buttonLanguageCode] {
+            
+            buttonLanguageCode = code
+            
+        }
+        
+        languageButton.setTitle(buttonLanguageName, for: .normal)
+        TranslationManager.shared.sourceLanguageCode = buttonLanguageCode
+        TranslationManager.shared.sourceLanguageName = buttonLanguageName
+    
+    }
+    
+}
+
+// MARK:- Search Sequence Functions
+
+extension SearchController {
+    
+    func startSearchSequence() {
+        
+        // Clear Results Array
+        results = []
+        
+        // Make sure textView is not Empty
+        if textView.text != nil && textView.text.count > 0 {
+            
+            // Update Query Text
+            bottomLabelText = textView.text
+            
+            // Start Loading Screen
+            DispatchQueue.main.async {
+                self.startLoadingScreen()
+            }
+            
+            // translate and populate wordModelArray and alternatives array, then color words
+            runSearchsequence(searchText: textView.text!) { (success) in
+                
+                if success {
+                    
+                    // Populate Results Array
+                    for (word,wordModel) in zip(self.wordArray, self.wordModelArray) {
+                        
+                        // If  Word Model Exists, addg colored word and audio to result
+                        if let wordModel = wordModel {
+                            
+                            // Take only the first ipa spelling for now
+                            if let ipa = wordModel.ipa[0] {
+                                
+                                let audio = (0 < wordModel.audio.count ? wordModel.audio[0] : nil)
+                                var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
+                                text = text.setCapitalLetters(from: word)
+                                self.results.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
+                            }
+                            
+                        }
+                        
+                        // If Word Model doesn't exist, add plain text to result
+                        else {
+                            
+                            let text = NSMutableAttributedString(string: word)
+                            self.results.append(ColorResultModel(attributedText: text, audioString: nil, ipa: "", isColored: false))
+                        }
+                    }
+                    
+                    // End Loading Screen
+                    DispatchQueue.main.async {
+                        self.endLoadingScreen()
+                        self.goToResultsVC()
+                    }
+                }
+                
+                // If search sequence not successful (no words found in database) alert to check spelling and internet
+                else {
+                    let alert = UIAlertController(title: "oops! something went wrong", message: "Check spelling or internet connection", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
+                        return // do nothing
+                    }))
+                    DispatchQueue.main.async {
+                        self.endLoadingScreen()
+                        self.present(alert, animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    func runSearchsequence(searchText: String, completion: @escaping(_ success: Bool) -> Void) {
+        
+        switch searchType {
+        
+        case .nativeToEnglish:
+            
+            // If source Lang is English, retrieve word models from database
+            if TranslationManager.shared.sourceLanguageCode == "en" {
+                
+                self.wordArray = searchText.replacingOccurrences(of: "’", with: "'").split(separator: " ").map {String($0)}
+               
+                FirebaseManager.shared.readEnglishDocumentByWord(words: wordArray) { (wordModelArray) in
+                    
+                    self.wordModelArray = wordModelArray
+                    
+                    let filteredArray = wordModelArray.filter { $0 != nil }
+                    if wordModelArray.count > 0 && filteredArray.count > 0 {
+                        completion(true)
+                    } else {completion(false)}
+                }
+            }
+                
+            // Otherwise get translations and then retrieve word models from database
+            else {
+                
+                TranslationManager.shared.textToTranslate = searchText
+                TranslationManager.shared.translate { (translation) in
+                    
+                    guard let translation = translation else {
+                        print("Translation is nil")
+                        completion(false)
+                        return
+                    }
+                    
+                    if translation.count > 1 {
+                        self.alternateTranslations = translation[1..<translation.count].map { String($0) }
+                    }
+                    
+                    self.wordArray = translation[0].split(separator: " ").map { String($0) }
+                    
+                    FirebaseManager.shared.readEnglishDocumentByWord(words: self.wordArray) { (wordModelArray) in
+                        
+                        self.wordModelArray = wordModelArray
+                        
+                        let filteredArray = wordModelArray.filter { $0 != nil }
+                        if wordModelArray.count > 0 && filteredArray.count > 0 {
+                            self.linkNativeToEnglish(self.wordModelArray)
+                            completion(true)
+                        } else {completion(false)}
+                    }
+                }
+            }
+
+        case .englishToNative:
+            
+            // If Target Lang is English, retrieve word models from database
+            if TranslationManager.shared.targetLanguageCode == "en" {
+                
+                self.wordArray = searchText.replacingOccurrences(of: "’", with: "'").split(separator: " ").map {String($0)}
+               
+                FirebaseManager.shared.readEnglishDocumentByWord(words: wordArray) { (wordModelArray) in
+                    
+                    self.wordModelArray = wordModelArray
+                    
+                    let filteredArray = wordModelArray.filter { $0 != nil }
+                    if wordModelArray.count > 0 && filteredArray.count > 0 {
+                        completion(true)
+                    } else {completion(false)}
+                }
+            }
+            
+            // Otherwise get translations and then retrieve word models from database
+            else {
+                
+                TranslationManager.shared.textToTranslate = searchText
+                TranslationManager.shared.translate { (translation) in
+                    
+                    guard let translation = translation else {
+                        print("Translation is nil")
+                        completion(false)
+                        return
+                    }
+                    
+                    if translation.count > 1 {
+                        self.alternateTranslations = translation[1..<translation.count].map { String($0) }
+                    }
+                    
+                    self.bottomLabelText = translation[0]
+                    
+                    self.wordArray = searchText.split(separator: " ").map { String($0) }
+                    
+                    FirebaseManager.shared.readEnglishDocumentByWord(words: self.wordArray) { (wordModelArray) in
+                        
+                        self.wordModelArray = wordModelArray
+                        
+                        let filteredArray = wordModelArray.filter { $0 != nil }
+                        if wordModelArray.count > 0 && filteredArray.count > 0 {
+                            self.linkNativeToEnglish(self.wordModelArray)
+                            completion(true)
+                        } else {completion(false)}
+                    }
+                }
+            }
+        }
+    }
+    
+    func linkNativeToEnglish(_ wordModelArray: [WordModel?]) {
+        if let searchedText = TranslationManager.shared.textToTranslate, let sourceLang = TranslationManager.shared.sourceLanguageCode {
+            var englishIDArray = [Int]()
+            for model in wordModelArray {
+                if let model = model {
+                    englishIDArray.append(model.number)
+                } else { englishIDArray.append(-1)} // -1 means missing english word
+            }
+            let newTranslationModel = TranslationModel(nativeText: searchedText, wordModelIDs: englishIDArray)
+            FirebaseManager.shared.writeNativeWordData(translationModel: newTranslationModel, to: sourceLang)
+        }
+    }
+    
+    func goToResultsVC() {
+        
+        let resultsController = ResultsController()
+        
+        resultsController.delegate = self
+        resultsController.searchType = self.searchType
+        resultsController.bottomLabelText = self.bottomLabelText
+        resultsController.wordArray = self.wordArray
+        resultsController.wordModelArray = self.wordModelArray
+        resultsController.results = self.results
+        resultsController.alternateTranslations = self.alternateTranslations
+        
+        if results.count == 1 {
+            
+            resultsController.soundItOutColors = self.createButtons(results[0].attributedText)
+        
+        } else { resultsController.soundItOutColors = [] }
+            
+        navigationController?.pushViewController(resultsController, animated: true)
+        
     }
 }
