@@ -147,12 +147,15 @@ class ResultsController: UIViewController {
         return scrollView
         
     }()
-    
-    var mainContentView: UIView = {
         
-        let view = UIView()
-        view.backgroundColor = K.Colors.lightGrey
-        return view
+    var mainStackView: UIStackView = {
+       
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 30
+        return stackView
         
     }()
     
@@ -176,7 +179,12 @@ class ResultsController: UIViewController {
         
     }()
     
-    var bottomLabel = UILabel()
+    var bottomLabel: UILabel = {
+        
+        let label = UILabel()
+        return label
+        
+    }()
     
     var soundButton: UIButton = {
         
@@ -496,7 +504,7 @@ extension ResultsController {
         // Add scroll view and content view
         view.addSubview(mainScrollView)
         view.sendSubviewToBack(mainScrollView)
-        mainScrollView.addSubview(mainContentView)
+        mainScrollView.addSubview(mainStackView)
         
         // Anchor Scroll View
         mainScrollView.anchor(top: textView.bottomAnchor,
@@ -507,26 +515,14 @@ extension ResultsController {
                           width: nil)
         
         // Anchor Content View
-        mainContentView.anchor(top: mainScrollView.topAnchor,
+        mainStackView.anchor(top: mainScrollView.topAnchor,
                            bottom: mainScrollView.bottomAnchor,
                            leading: mainScrollView.leadingAnchor,
                            trailing: mainScrollView.trailingAnchor,
                            height: nil,
                            width: nil)
         
-        mainContentView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        
-        
-        // Setup Results Background
-        mainContentView.addSubview(resultBackgroundView)
-        
-        resultBackgroundView.anchor(top: mainContentView.topAnchor,
-                                    bottom: nil,
-                                    leading: mainContentView.leadingAnchor,
-                                    trailing: mainContentView.trailingAnchor,
-                                    height: nil,
-                                    width: nil,
-                                    padding: UIEdgeInsets(top: 30, left: 20, bottom: -20, right: -20))
+        mainStackView.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor).isActive = true
         
         // Setup Results Card
         resultBackgroundView.addSubview(resultCardView)
@@ -539,6 +535,9 @@ extension ResultsController {
                               width: nil)
         
         setupResultsView(resultCardView)
+        
+        // Add Results Card to Stack View
+        mainStackView.addArrangedSubview(resultBackgroundView, withMargin: UIEdgeInsets(top: 27, left: 20, bottom: 0, right: -20))
         
         // Setup Alternative Translations Scroll View
         setupAlternativeTranslationScrollView()
@@ -692,30 +691,12 @@ extension ResultsController {
     func setupAlternativeTranslationScrollView() {
         
         // Add Header Label and Scroll View to the Main Content View
-        mainContentView.addSubview(alternativesHeaderLabel)
-        mainContentView.addSubview(alternativesScrollView)
+        mainStackView.addArrangedSubview(alternativesHeaderLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
+        mainStackView.addArrangedSubview(alternativesScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
         
         // Add Stack View to Scroll View
         alternativesScrollView.addSubview(alternativesStackView)
         
-        // Anchor Header, Scroll, and Stack  Views
-        alternativesHeaderLabel.anchor(top: resultCardView.bottomAnchor,
-                                       bottom: nil,
-                                       leading: mainContentView.leadingAnchor,
-                                       trailing: mainContentView.trailingAnchor,
-                                       height: nil, width: nil,
-                                       padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: -20))
-        
-    
-        
-        alternativesScrollView.anchor(top: alternativesHeaderLabel.bottomAnchor,
-                                      bottom: nil,
-                                      leading: mainContentView.leadingAnchor,
-                                      trailing: mainContentView.trailingAnchor,
-                                      height: nil,
-                                      width: nil,
-                                      padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
-
         // Anchor StackView Within Scroll View
         alternativesStackView.anchor(top: alternativesScrollView.topAnchor,
                                      bottom: alternativesScrollView.bottomAnchor,
@@ -730,14 +711,14 @@ extension ResultsController {
         
         // Populate Alternative Translations Stack View
         populateAlternativeTranslationsStackView()
-        
-        
-        
+
     }
     
     func populateAlternativeTranslationsStackView() {
         
-        for alt in alternateTranslations {
+        let alttrans = ["hello", "whats up", "how are you", "I hope this works"]
+        
+        for alt in alttrans {
             
             // Create Background Shadow View
             let myView = UIView()
@@ -796,27 +777,11 @@ extension ResultsController {
     func setupLearnMoreScrollView() {
         
         // Add Header Label and Scroll View to the Main Content View
-        mainContentView.addSubview(learnMoreHeaderLabel)
-        mainContentView.addSubview(learnMoreScrollView)
+        mainStackView.addArrangedSubview(learnMoreHeaderLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
+        mainStackView.addArrangedSubview(learnMoreScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
         
         // Add Stack View to Scroll View
         learnMoreScrollView.addSubview(learnMoreStackView)
-        
-        // Anchor Header, Scroll, and Stack  Views
-        learnMoreHeaderLabel.anchor(top: alternativesScrollView.bottomAnchor,
-                                       bottom: nil,
-                                       leading: mainContentView.leadingAnchor,
-                                       trailing: mainContentView.trailingAnchor,
-                                       height: nil, width: nil,
-                                       padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: -20))
-        
-       learnMoreScrollView.anchor(top: learnMoreHeaderLabel.bottomAnchor,
-                                      bottom: nil,
-                                      leading: mainContentView.leadingAnchor,
-                                      trailing: mainContentView.trailingAnchor,
-                                      height: nil,
-                                      width: nil,
-                                      padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
         
         learnMoreStackView.anchor(top: learnMoreScrollView.topAnchor,
                                      bottom: learnMoreScrollView.bottomAnchor,
@@ -896,17 +861,13 @@ extension ResultsController {
     
     func setupGoToFlashcardsButton() {
         
-        mainContentView.addSubview(goToFlashcardBackgroundView)
+        mainStackView.addArrangedSubview(goToFlashcardBackgroundView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         goToFlashcardBackgroundView.addSubview(goToFlashcardsButton)
         
-        goToFlashcardBackgroundView.anchor(top: learnMoreScrollView.bottomAnchor,
-                                           bottom: nil,
-                                           leading: mainContentView.leadingAnchor,
-                                           trailing: mainContentView.trailingAnchor,
-                                           height: 120,
-                                           width: nil,
-                                           padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
-        
+        goToFlashcardBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        goToFlashcardBackgroundView.heightAnchor.constraint(equalToConstant: 220).isActive = true
+        goToFlashcardBackgroundView.widthAnchor.constraint(greaterThanOrEqualToConstant: 10).isActive = true
+                
         goToFlashcardsButton.anchor(top: goToFlashcardBackgroundView.topAnchor,
                                     bottom: goToFlashcardBackgroundView.bottomAnchor,
                                     leading: goToFlashcardBackgroundView.leadingAnchor,
@@ -917,16 +878,12 @@ extension ResultsController {
     
     func setupLessonsButton() {
         
-        mainContentView.addSubview(lessonBackgroundView)
+        mainStackView.addArrangedSubview(lessonBackgroundView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: -27, right: -20))
         lessonBackgroundView.addSubview(lessonsButton)
         
-        lessonBackgroundView.anchor(top: goToFlashcardBackgroundView.bottomAnchor,
-                                    bottom: mainContentView.bottomAnchor,
-                                    leading: mainContentView.leadingAnchor,
-                                    trailing: mainContentView.trailingAnchor,
-                                    height: 240,
-                                    width: nil,
-                                    padding: UIEdgeInsets(top: 20, left: 20, bottom: -40, right: -20))
+        lessonBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        lessonBackgroundView.heightAnchor.constraint(equalToConstant: 220).isActive = true
+        lessonBackgroundView.widthAnchor.constraint(greaterThanOrEqualToConstant: 10).isActive = true
         
         lessonsButton.anchor(top: lessonBackgroundView.topAnchor,
                              bottom: lessonBackgroundView.bottomAnchor,
