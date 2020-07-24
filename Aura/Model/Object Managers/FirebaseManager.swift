@@ -37,10 +37,12 @@ class FirebaseManager {
         
         var results = [WordModel?]()
         var finalResults = [WordModel?]()
-        let lowerCaseWords = words.map { $0.lowercased() }
+        let lowerCaseWords = words.map { $0.removeSymbols().lowercased() }
+        print(lowerCaseWords)
         let dispatchGroup = DispatchGroup()
         
         for word in lowerCaseWords {
+            
             
             let docRef = db.collection(K.FBConstants.dictionaryCollectionName).document(word)
             dispatchGroup.enter()
@@ -68,7 +70,7 @@ class FirebaseManager {
         }
         dispatchGroup.notify(queue: .main) {
             for word in words {
-                let temp = results.filter{$0?.id == word.lowercased()}
+                let temp = results.filter{$0?.id == word.removeSymbols().lowercased()}
                 if temp.count == 0 {finalResults.append(nil)}
                 else {
                     finalResults.append(temp[0])

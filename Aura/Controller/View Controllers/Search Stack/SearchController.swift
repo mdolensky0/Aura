@@ -19,13 +19,16 @@ class SearchController: UIViewController {
                         "you are so amazing",
                         "I am obsessed with you"]
     
-    var searchType = SearchType.nativeToEnglish
     var bottomLabelText = ""
     var wordArray = [String]()
     var wordModelArray = [WordModel?]()
     var results = [ColorResultModel]()
     var alternateTranslations = [String]()
+    var learnMoreArray = [(text: NSMutableAttributedString, ipaIndex: Int)]()
     
+    // Search Information
+    var searchInfo = SearchInfo(sourceLanguageCode: "en", sourceLanguageName: "English")
+
     // Main Views and Buttons
     
     var titleLabel: UILabel = {
@@ -147,7 +150,7 @@ extension SearchController {
     }
     
     func setupShadows() {
-        textViewBackgroundView.setShadow(color: UIColor.black, opacity: 0.3, offset: .init(width: 0, height: 3), radius: 2)
+        textViewBackgroundView.setShadowWithBZPath(color: UIColor.black, opacity: 0.3, offset: .init(width: 0, height: 3), radius: 2)
     }
     
     func setupNavBar() {
@@ -290,7 +293,6 @@ extension SearchController {
         
         let supportedLanguagesVC = SupportedLanguagesVC()
         supportedLanguagesVC.delegate = self
-        supportedLanguagesVC.searchType = self.searchType
         self.present(supportedLanguagesVC, animated: true, completion: nil)
         
     }
@@ -307,13 +309,13 @@ extension SearchController {
             let sub2 = subviews[2]
             
             // Change Search Type and If Necessary, Change English HD to English
-            switch self.searchType {
+            switch self.searchInfo.searchType {
             
             case .englishToNative:
-                self.searchType = .nativeToEnglish
+                self.searchInfo.searchType = .nativeToEnglish
                 
             case .nativeToEnglish:
-                self.searchType = .englishToNative
+                self.searchInfo.searchType = .englishToNative
 
             }
             
@@ -330,13 +332,13 @@ extension SearchController {
         }
         
         // Swap Source And Target Language Codes and Names
-        let tempSourceCode = TranslationManager.shared.sourceLanguageCode
-        TranslationManager.shared.sourceLanguageCode = TranslationManager.shared.targetLanguageCode
-        TranslationManager.shared.targetLanguageCode = tempSourceCode
+        let tempSourceCode = searchInfo.sourceLanguageCode
+        searchInfo.sourceLanguageCode = searchInfo.targetLanguageCode
+        searchInfo.targetLanguageCode = tempSourceCode
         
-        let tempSourceName = TranslationManager.shared.sourceLanguageName
-        TranslationManager.shared.sourceLanguageName = TranslationManager.shared.targetLanguageName
-        TranslationManager.shared.targetLanguageName = tempSourceName
+        let tempSourceName = searchInfo.sourceLanguageName
+        searchInfo.sourceLanguageName = searchInfo.targetLanguageName
+        searchInfo.targetLanguageName = tempSourceName
         
     }
     
@@ -374,15 +376,17 @@ extension SearchController: UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
         if text == "\n" {
-            print("search")
-            // Dismiss Keyboard
-            textView.resignFirstResponder()
             
-            // Perform Search
-            startSearchSequence()
-            
-            
+            // Make sure textView is not Empty
+            if textView.text != nil && textView.text.count > 0 {
+                
+                textView.resignFirstResponder()
+                
+                startSearchSequence(searchText: textView.text!, searchInfo)
+                
+            }
             return false
         }
         return true
@@ -429,9 +433,9 @@ extension SearchController: UITableViewDelegate {
 
 extension SearchController: SupportedLanguagesDelegate, ResultsControllerDelegate {
     
-    func updateLanguageStackView(searchType: SearchType) {
+    func updateLanguageStackView(searchInfo: SearchInfo) {
         
-        self.searchType = searchType
+        self.searchInfo = searchInfo
         
         DispatchQueue.main.async {
             
@@ -439,7 +443,7 @@ extension SearchController: SupportedLanguagesDelegate, ResultsControllerDelegat
                 self.langStackView.removeArrangedSubview(view)
             }
             
-            switch searchType {
+            switch self.searchInfo.searchType {
             
             case .englishToNative:
                 self.langStackView.addArrangedSubview(self.englishLabel)
@@ -448,11 +452,11 @@ extension SearchController: SupportedLanguagesDelegate, ResultsControllerDelegat
                 self.langStackView.addArrangedSubview(self.swapButton)
                 
                 self.langStackView.addArrangedSubview(self.languageButton)
-                self.languageButton.setTitle(TranslationManager.shared.targetLanguageName, for: .normal)
+                self.languageButton.setTitle(self.searchInfo.targetLanguageName, for: .normal)
                 
             case .nativeToEnglish:
                 self.langStackView.addArrangedSubview(self.languageButton)
-                self.languageButton.setTitle(TranslationManager.shared.sourceLanguageName, for: .normal)
+                self.languageButton.setTitle(self.searchInfo.sourceLanguageName, for: .normal)
                 
                 self.langStackView.addArrangedSubview(self.swapButton)
                 
@@ -463,10 +467,21 @@ extension SearchController: SupportedLanguagesDelegate, ResultsControllerDelegat
         }
     }
     
-    func updateLanguageButton(selectedLanguage: TranslationLanguage) {
+    func updateLanguageCodes(languageName: String, languageCode: String) {
         
-        languageButton.setTitle(selectedLanguage.name, for: .normal)
-                
+        switch searchInfo.searchType {
+            
+        case .englishToNative:
+            searchInfo.targetLanguageCode = languageCode
+            searchInfo.targetLanguageName = languageName
+            
+        case .nativeToEnglish:
+            searchInfo.sourceLanguageCode = languageCode
+            searchInfo.sourceLanguageName = languageName
+            
+        }
+        
+        languageButton.setTitle(languageName, for: .normal)
     }
     
     func setupLangButtonWithDeviceLang() {
@@ -481,9 +496,12 @@ extension SearchController: SupportedLanguagesDelegate, ResultsControllerDelegat
         }
         
         languageButton.setTitle(buttonLanguageName, for: .normal)
-        TranslationManager.shared.sourceLanguageCode = buttonLanguageCode
-        TranslationManager.shared.sourceLanguageName = buttonLanguageName
-    
+        
+        self.searchInfo.sourceLanguageCode = buttonLanguageCode
+        
+        if let name = buttonLanguageName {
+            self.searchInfo.sourceLanguageName = name
+        }
     }
     
 }
@@ -492,77 +510,101 @@ extension SearchController: SupportedLanguagesDelegate, ResultsControllerDelegat
 
 extension SearchController {
     
-    func startSearchSequence() {
+    func startSearchSequence(searchText: String,_ searchInfo: SearchInfo, ipaIndex: Int = 0) {
+        
+        //Update global SearchInfo
+        self.searchInfo = searchInfo
+        
+        // Set Language Codes
+        TranslationManager.shared.sourceLanguageCode = searchInfo.sourceLanguageCode
+        TranslationManager.shared.targetLanguageCode = searchInfo.targetLanguageCode
         
         // Clear Results Array
         results = []
+        wordArray = []
+        bottomLabelText = ""
+        wordModelArray = []
+        alternateTranslations = []
         
-        // Make sure textView is not Empty
-        if textView.text != nil && textView.text.count > 0 {
+        // Update Query Text
+        bottomLabelText = searchText
+        
+        // Start Loading Screen
+        DispatchQueue.main.async {
+            self.startLoadingScreen()
+        }
+        
+        // translate and populate wordModelArray and alternatives array, then color words
+        runSearchsequence(searchText: searchText) { (success) in
             
-            // Update Query Text
-            bottomLabelText = textView.text
-            
-            // Start Loading Screen
-            DispatchQueue.main.async {
-                self.startLoadingScreen()
-            }
-            
-            // translate and populate wordModelArray and alternatives array, then color words
-            runSearchsequence(searchText: textView.text!) { (success) in
+            if success {
                 
-                if success {
+                // Populate Results Array
+                for (word,wordModel) in zip(self.wordArray, self.wordModelArray) {
                     
-                    // Populate Results Array
-                    for (word,wordModel) in zip(self.wordArray, self.wordModelArray) {
+                    // If  Word Model Exists, addg colored word and audio to result
+                    if let wordModel = wordModel {
                         
-                        // If  Word Model Exists, addg colored word and audio to result
-                        if let wordModel = wordModel {
+                        // Take only the first ipa spelling for now
+                        if let ipa = wordModel.ipa[ipaIndex] {
                             
-                            // Take only the first ipa spelling for now
-                            if let ipa = wordModel.ipa[0] {
+                            let audio = (0 < wordModel.audio.count ? wordModel.audio[ipaIndex] : nil)
+                            var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
+                            text = text.setCapitalLetters(from: word).replaceSpecialCharacters(from: word)
+                            self.results.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
+                        }
+                        
+                        for i in 0..<wordModel.ipa.count {
+                            
+                            if let ipa = wordModel.ipa[i] {
                                 
-                                let audio = (0 < wordModel.audio.count ? wordModel.audio[0] : nil)
                                 var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
-                                text = text.setCapitalLetters(from: word)
-                                self.results.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
+                                text = text.setCapitalLetters(from: word).replaceSpecialCharacters(from: word)
+                                self.learnMoreArray.append((text: text, ipaIndex: i))
                             }
                             
                         }
                         
-                        // If Word Model doesn't exist, add plain text to result
-                        else {
-                            
-                            let text = NSMutableAttributedString(string: word)
-                            self.results.append(ColorResultModel(attributedText: text, audioString: nil, ipa: "", isColored: false))
-                        }
                     }
-                    
-                    // End Loading Screen
-                    DispatchQueue.main.async {
-                        self.endLoadingScreen()
-                        self.goToResultsVC()
+                        
+                        // If Word Model doesn't exist, add plain text to result
+                    else {
+                        
+                        let text = NSMutableAttributedString(string: word)
+                        self.results.append(ColorResultModel(attributedText: text, audioString: nil, ipa: "", isColored: false))
+                        self.learnMoreArray.append((text: text, ipaIndex: 0))
                     }
                 }
                 
+                // End Loading Screen
+                DispatchQueue.main.async {
+                    self.endLoadingScreen()
+                    self.goToResultsVC(searchInfo: searchInfo)
+                }
+            }
+                
                 // If search sequence not successful (no words found in database) alert to check spelling and internet
-                else {
-                    let alert = UIAlertController(title: "oops! something went wrong", message: "Check spelling or internet connection", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (action) in
-                        return // do nothing
-                    }))
-                    DispatchQueue.main.async {
-                        self.endLoadingScreen()
-                        self.present(alert, animated: true)
-                    }
+            else {
+                
+                for word in self.wordArray {
+                    
+                    self.results.append(ColorResultModel(attributedText: NSMutableAttributedString(string: word),
+                                                         audioString: nil, ipa: "", isColored: false))
+                    
+                }
+                
+                DispatchQueue.main.async {
+                    self.endLoadingScreen()
+                    self.goToResultsVC(searchInfo: searchInfo)
                 }
             }
         }
+        
     }
     
     func runSearchsequence(searchText: String, completion: @escaping(_ success: Bool) -> Void) {
         
-        switch searchType {
+        switch searchInfo.searchType {
         
         case .nativeToEnglish:
             
@@ -679,17 +721,18 @@ extension SearchController {
         }
     }
     
-    func goToResultsVC() {
+    func goToResultsVC(searchInfo: SearchInfo) {
         
         let resultsController = ResultsController()
         
         resultsController.delegate = self
-        resultsController.searchType = self.searchType
+        resultsController.searchInfo = searchInfo
         resultsController.bottomLabelText = self.bottomLabelText
         resultsController.wordArray = self.wordArray
         resultsController.wordModelArray = self.wordModelArray
         resultsController.results = self.results
         resultsController.alternateTranslations = self.alternateTranslations
+        resultsController.learnMoreArray = self.learnMoreArray
         
         if results.count == 1 {
             

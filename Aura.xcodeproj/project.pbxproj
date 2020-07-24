@@ -73,6 +73,8 @@
 		7D15DBD024C62EEE009ACDB4 /* SupportedLanguagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBCF24C62EEE009ACDB4 /* SupportedLanguagesVC.swift */; };
 		7D15DBD224C631D9009ACDB4 /* SupportedLanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBD124C631D9009ACDB4 /* SupportedLanguageCell.swift */; };
 		7D15DBD624C8D629009ACDB4 /* TappableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */; };
+		7D15DBD824CA1D47009ACDB4 /* SearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBD724CA1D46009ACDB4 /* SearchInfo.swift */; };
+		7D15DBDA24CA417A009ACDB4 /* QueryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBD924CA417A009ACDB4 /* QueryButton.swift */; };
 		7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89724B41EFB0019BFF0 /* Constants.swift */; };
 		7D66D89A24B424160019BFF0 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89924B424160019BFF0 /* HomeController.swift */; };
 		7D66D89C24B4244D0019BFF0 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89B24B4244D0019BFF0 /* SearchController.swift */; };
@@ -161,6 +163,8 @@
 		7D15DBCF24C62EEE009ACDB4 /* SupportedLanguagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedLanguagesVC.swift; sourceTree = "<group>"; };
 		7D15DBD124C631D9009ACDB4 /* SupportedLanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedLanguageCell.swift; sourceTree = "<group>"; };
 		7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappableLabel.swift; sourceTree = "<group>"; };
+		7D15DBD724CA1D46009ACDB4 /* SearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInfo.swift; sourceTree = "<group>"; };
+		7D15DBD924CA417A009ACDB4 /* QueryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryButton.swift; sourceTree = "<group>"; };
 		7D66D89724B41EFB0019BFF0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7D66D89924B424160019BFF0 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		7D66D89B24B4244D0019BFF0 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
@@ -408,8 +412,10 @@
 				7DD1B09C24B8F0BA0052BC7B /* SearchType.swift */,
 				7D907C4824C00958007D5894 /* DynamicCollectionView.swift */,
 				7D15DB6A24C2ABDB009ACDB4 /* SoundButton.swift */,
+				7D15DBD924CA417A009ACDB4 /* QueryButton.swift */,
 				7D15DBCD24C625FA009ACDB4 /* UserModel.swift */,
 				7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */,
+				7D15DBD724CA1D46009ACDB4 /* SearchInfo.swift */,
 				7D15DB5F24C2A4A8009ACDB4 /* Object Managers */,
 				7D15DB6424C2A70A009ACDB4 /* Firebase Models */,
 				7D15DB5424C29520009ACDB4 /* Realm Models */,
@@ -601,6 +607,7 @@
 				7DFBA8C824B4189500618332 /* SceneDelegate.swift in Sources */,
 				7D907C4924C00958007D5894 /* DynamicCollectionView.swift in Sources */,
 				7D77098724B691DF0009B93B /* PrevSearchCell.swift in Sources */,
+				7D15DBDA24CA417A009ACDB4 /* QueryButton.swift in Sources */,
 				7D66D8A024B4249B0019BFF0 /* LoginController.swift in Sources */,
 				7D66D8A424B424C20019BFF0 /* LessonsController.swift in Sources */,
 				7D15DB6324C2A701009ACDB4 /* TranslationModel.swift in Sources */,
@@ -611,6 +618,7 @@
 				7D15DB5B24C2A49F009ACDB4 /* TranslationManager.swift in Sources */,
 				7D15DB5E24C2A49F009ACDB4 /* FirebaseManager.swift in Sources */,
 				7D15DBD024C62EEE009ACDB4 /* SupportedLanguagesVC.swift in Sources */,
+				7D15DBD824CA1D47009ACDB4 /* SearchInfo.swift in Sources */,
 				7D15DB5224C29517009ACDB4 /* MappingModel.swift in Sources */,
 				7D66D89E24B424830019BFF0 /* KeyController.swift in Sources */,
 			);

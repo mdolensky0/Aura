@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SupportedLanguagesDelegate {
-    func updateLanguageButton(selectedLanguage: TranslationLanguage)
+    func updateLanguageCodes(languageName: String, languageCode: String)
 }
 
 class SupportedLanguagesVC: UIViewController {
@@ -17,7 +17,6 @@ class SupportedLanguagesVC: UIViewController {
     var supportedLangs = [TranslationLanguage]()
     var tableView = UITableView()
     var delegate: SupportedLanguagesDelegate?
-    var searchType: SearchType = .nativeToEnglish
     
     var searchBar: UISearchBar = {
         
@@ -108,21 +107,14 @@ extension SupportedLanguagesVC: UITableViewDelegate {
         
         let selectedLanguage = supportedLangs[indexPath.row]
         
-        switch searchType {
-            
-        case .englishToNative:
-            TranslationManager.shared.targetLanguageCode = selectedLanguage.code
-            TranslationManager.shared.targetLanguageName = selectedLanguage.name
-            
-        case .nativeToEnglish:
-            TranslationManager.shared.sourceLanguageCode = selectedLanguage.code
-            TranslationManager.shared.sourceLanguageName = selectedLanguage.name
-            
+        guard let name = selectedLanguage.name, let code = selectedLanguage.code else {
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
         }
-        
-        self.delegate?.updateLanguageButton(selectedLanguage: selectedLanguage)
+                
+        self.delegate?.updateLanguageCodes(languageName: name, languageCode: code)
         dismiss(animated: true, completion: nil)
-        
+    
     }
     
 }

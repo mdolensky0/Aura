@@ -53,15 +53,9 @@ class TranslationManager: NSObject {
     
     static let shared = TranslationManager()
     private let apiKey = "AIzaSyBirAtubkd-R8rTzQZZb1kJ06BTc-4xlYE"
-    var sourceLanguageCode: String? = nil {
-        didSet {
-            print(sourceLanguageCode)
-        }
-    }
-    var sourceLanguageName: String? = nil    // Not used in query 
+    var sourceLanguageCode: String? = nil
     var textToTranslate: String?
     var targetLanguageCode: String? = "en"
-    var targetLanguageName: String? = "English"  // Not used in query
     var supportedLanguages = [TranslationLanguage]()
     
     

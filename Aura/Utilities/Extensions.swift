@@ -81,10 +81,29 @@ extension UIView {
         self.layer.shadowOffset = offset
         self.layer.shadowRadius = radius
         
-        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
-        self.layer.shouldRasterize = true
-        self.layer.rasterizationScale = UIScreen.main.scale
+// THIS DOESNT ALLOW SHADOW TO RESIZE IF VIEW CHANGE. WORKS WITHOUT. IF WANT THIS, MUST REDRAW WHEN SUBVIEWS ARE RE-LAYED OUT
+        
+//        self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
+//        self.layer.shouldRasterize = true
+//        self.layer.rasterizationScale = UIScreen.main.scale
     }
+    
+        func setShadowWithBZPath(color: UIColor, opacity: Float, offset: CGSize, radius: CGFloat, cornerRadius: CGFloat = 0) {
+
+            self.layer.masksToBounds = false
+            self.clipsToBounds = false
+
+            self.backgroundColor = .clear
+            
+            self.layer.shadowColor = color.cgColor
+            self.layer.shadowOpacity = opacity
+            self.layer.shadowOffset = offset
+            self.layer.shadowRadius = radius
+
+            self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
+            self.layer.shouldRasterize = true
+            self.layer.rasterizationScale = UIScreen.main.scale
+        }
     
     func roundCorners(cornerRadius: CGFloat) {
         
@@ -255,8 +274,9 @@ extension NSMutableAttributedString {
     }
     
     func setCapitalLetters(from word: String) -> NSMutableAttributedString {
+        
         var indices = [Int]()
-        var result = NSMutableAttributedString(attributedString: self)
+        var result = self
         
         for i in 0..<word.count {
             if word[i].isUppercase {
@@ -269,6 +289,55 @@ extension NSMutableAttributedString {
         }
         
         return result
+    }
+    
+    func removeSymbols() -> NSMutableAttributedString {
+
+        let result = self
+        var indices = [Int]()
+        let stringText = result.string
+        
+        for i in 0..<stringText.count {
+            
+            if !stringText[i].isLetter && stringText[i] != "'" {
+                
+                indices.append(i)
+                
+            }
+            
+        }
+        
+        for index in indices.reversed() {
+            result.deleteCharacters(in: NSRange(location: index, length: 1))
+        }
+        
+        return result
+    }
+    
+    func replaceSpecialCharacters(from word: String) -> NSMutableAttributedString {
+        
+        let result = self
+        
+        var indices = [Int]()
+        var symbols = [NSMutableAttributedString]()
+        
+        for i in 0..<word.count {
+            
+            if !word[i].isLetter && word[i] != "'" {
+                
+                indices.append(i)
+                symbols.append(NSMutableAttributedString(string: String(word[i]) ) )
+                
+            }
+        }
+        
+        for (index, symbol) in zip(indices, symbols) {
+            
+            result.insert(symbol, at: index)
+            
+        }
+        
+      return result
     }
 }
 
@@ -291,6 +360,14 @@ extension NSAttributedString.Key {
 // ===========================================================================================
 
 extension String {
+    
+    func removeSymbols() -> String {
+
+        let allowedChars = Set("abcdefghijklmnopqrstuvwxyz\nABCDEFGHIJKLMNOPQRSTUVWXYZ'")
+        return self.filter {allowedChars.contains($0) }
+        
+    }
+    
     func indicesOf(string: String) -> [Int] {
         var indices = [Int]()
         var searchStartIndex = self.startIndex
