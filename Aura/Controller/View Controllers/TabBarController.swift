@@ -12,10 +12,83 @@ class TabBarController: UITabBarController {
 
     var isSignedIn = false
     
+    var homeController: UINavigationController = {
+        
+        let vc = HomeController()
+        
+        vc.tabBarItem = UITabBarItem(title: "Home",
+                                     image: UIImage(named: "Home1"),
+                                     selectedImage: UIImage(contentsOfFile: "Home1"))
+        
+        return UINavigationController(rootViewController: vc)
+        
+    }()
+    
+    let searchController: UINavigationController = {
+        
+        let vc = SearchController()
+        
+        vc.tabBarItem = UITabBarItem(title: "Search",
+                                     image: UIImage(named: "Search1"),
+                                     selectedImage: UIImage(contentsOfFile: "Search1"))
+        
+        return UINavigationController(rootViewController: vc)
+        
+    }()
+    
+    let keyController: UINavigationController = {
+        
+        let vc = KeyController()
+        
+        vc.tabBarItem = UITabBarItem(title: "Key",
+                                     image: UIImage(named: "Key1"),
+                                     selectedImage: UIImage(contentsOfFile: "Key1"))
+       
+        return UINavigationController(rootViewController: vc)
+        
+    }()
+    
+    let loginController: UINavigationController = {
+        
+        let vc = LoginController()
+        
+        vc.tabBarItem = UITabBarItem(title: "Flashcards",
+                                     image: UIImage(named: "Flashcard1"),
+                                     selectedImage: UIImage(contentsOfFile: "Flashcard1"))
+       
+        return UINavigationController(rootViewController: vc)
+        
+    }()
+    
+    let flashCardController: UINavigationController = {
+        
+        let vc = FlashCardController()
+        
+        vc.tabBarItem = UITabBarItem(title: "Flashcards",
+                                     image: UIImage(named: "Flashcard1"),
+                                     selectedImage: UIImage(contentsOfFile: "Flashcard1"))
+        
+        return UINavigationController(rootViewController: vc)
+        
+    }()
+    
+    let lessonsController: UINavigationController = {
+        
+        let vc = LessonsController()
+        
+        vc.tabBarItem = UITabBarItem(title: "Lessons",
+                                     image: UIImage(named: "Lessons1"),
+                                     selectedImage: UIImage(contentsOfFile: "Lessons1"))
+       
+        return UINavigationController(rootViewController: vc)
+        
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Utilities.shared.tabController = self
         setupTabBar()
-
     }
     
     func setupTabBar() {
@@ -27,48 +100,23 @@ class TabBarController: UITabBarController {
 
     func setupViewControllers() {
         
-        let homeController = HomeController()
-        let searchController = SearchController()
-        let keyController = KeyController()
-        let loginController = LoginController()
-        let flashCardController = FlashCardController()
-        let lessonsController = LessonsController()
-        
-        homeController.tabBarItem = UITabBarItem(title: "Home",
-                                                 image: UIImage(named: "Home1"),
-                                                 selectedImage: UIImage(contentsOfFile: "Home1"))
-        
-        searchController.tabBarItem = UITabBarItem(title: "Search",
-                                                   image: UIImage(named: "Search1"),
-                                                   selectedImage: UIImage(contentsOfFile: "Search1"))
-     
-        keyController.tabBarItem = UITabBarItem(title: "Key",
-                                                image: UIImage(named: "Key1"),
-                                                selectedImage: UIImage(contentsOfFile: "Key1"))
-        
-        loginController.tabBarItem = UITabBarItem(title: "Flashcards",
-                                                  image: UIImage(named: "Flashcard1"),
-                                                  selectedImage: UIImage(contentsOfFile: "Flashcard1"))
-    
-        flashCardController.tabBarItem = UITabBarItem(title: "Flashcards",
-                                                      image: UIImage(named: "Flashcard1"),
-                                                      selectedImage: UIImage(contentsOfFile: "Flashcard1"))
-        
-        lessonsController.tabBarItem = UITabBarItem(title: "Lessons",
-                                                    image: UIImage(named: "Lessons1"),
-                                                    selectedImage: UIImage(contentsOfFile: "Lessons1"))
-        
         if isSignedIn {
             
-            viewControllers = [homeController, searchController, keyController, flashCardController, lessonsController].map
-                { UINavigationController(rootViewController: $0) }
+            self.viewControllers = [homeController, searchController, keyController, flashCardController, lessonsController]
         }
         
         else {
-            
-            viewControllers = [homeController, searchController, keyController, loginController, lessonsController].map
-                           { UINavigationController(rootViewController: $0) }
+
+            self.viewControllers = [homeController, searchController, keyController, loginController, lessonsController]
         }
+        
+    }
+    
+    func userSignedIn() {
+        
+        self.isSignedIn = true
+        self.viewControllers = [homeController, searchController, keyController, flashCardController, lessonsController]
+        self.selectedIndex = 3
         
     }
     

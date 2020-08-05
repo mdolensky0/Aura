@@ -286,7 +286,19 @@ extension SearchController {
 //MARK:- Selector Functions
     
     @objc func profileButtonTapped() {
-        print(0)
+        
+        if Utilities.shared.isUserSignedIn {
+            
+            Utilities.shared.signUserOut(alertIn: self)
+            
+        }
+        
+        else {
+            
+            Utilities.shared.tabController?.selectedIndex = 3
+            
+        }
+        
     }
     
     @objc func languageButtonPressed() {
@@ -525,6 +537,7 @@ extension SearchController {
         bottomLabelText = ""
         wordModelArray = []
         alternateTranslations = []
+        learnMoreArray = []
         
         // Update Query Text
         bottomLabelText = searchText
@@ -630,7 +643,7 @@ extension SearchController {
                 TranslationManager.shared.textToTranslate = searchText
                 TranslationManager.shared.translate { (translation) in
                     
-                    guard let translation = translation else {
+                    guard var translation = translation else {
                         print("Translation is nil")
                         completion(false)
                         return
@@ -638,6 +651,11 @@ extension SearchController {
                     
                     if translation.count > 1 {
                         self.alternateTranslations = translation[1..<translation.count].map { String($0) }
+                    }
+                    
+                    // If the Translation Returns an empty string we want the result to be the original searched Text
+                    if translation[0] == "" {
+                        translation[0] = searchText
                     }
                     
                     self.wordArray = translation[0].split(separator: " ").map { String($0) }
@@ -679,7 +697,7 @@ extension SearchController {
                 TranslationManager.shared.textToTranslate = searchText
                 TranslationManager.shared.translate { (translation) in
                     
-                    guard let translation = translation else {
+                    guard var translation = translation else {
                         print("Translation is nil")
                         completion(false)
                         return
@@ -687,6 +705,11 @@ extension SearchController {
                     
                     if translation.count > 1 {
                         self.alternateTranslations = translation[1..<translation.count].map { String($0) }
+                    }
+                    
+                    // If the Translation Returns an empty string we want the result to be the original searched Text
+                    if translation[0] == "" {
+                        translation[0] = searchText
                     }
                     
                     self.bottomLabelText = translation[0]
@@ -733,6 +756,7 @@ extension SearchController {
         resultsController.results = self.results
         resultsController.alternateTranslations = self.alternateTranslations
         resultsController.learnMoreArray = self.learnMoreArray
+        resultsController.textView.text = self.textView.text
         
         if results.count == 1 {
             

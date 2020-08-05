@@ -1,5 +1,5 @@
 //
-//  LoginController.swift
+//  FlashCardController.swift
 //  Aura
 //
 //  Created by Max Dolensky on 7/6/20.
@@ -8,12 +8,18 @@
 
 import UIKit
 
-class LoginController: UIViewController {
+class FlashCardController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+       setup()
+    }
+    
+    func setup() {
+        
         view.backgroundColor = .white
+        
     }
     
 

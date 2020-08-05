@@ -37,8 +37,21 @@ class FirebaseManager {
         
         var results = [WordModel?]()
         var finalResults = [WordModel?]()
-        let lowerCaseWords = words.map { $0.removeSymbols().lowercased() }
-        print(lowerCaseWords)
+        
+        // Remove Symbols and make word lowercased
+        var lowerCaseWords = words.map { $0.removeSymbols().lowercased() }
+        
+        // This Prevents Fatal Error when removing symbols removes every character in the word.
+        // This can happen when a user searches in the wrong language
+        for i in 0..<words.count {
+            
+            if lowerCaseWords[i] == "" {
+                lowerCaseWords[i] = words[i]
+            }
+            
+        }
+        
+        // Start Query
         let dispatchGroup = DispatchGroup()
         
         for word in lowerCaseWords {

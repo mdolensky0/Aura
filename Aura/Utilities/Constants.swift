@@ -70,6 +70,39 @@ struct K {
                                           "zh-HK" : "zh_TW", "nb" : "no"]
     }
     
+    struct KeyInfo {
+        
+        // Info for vowelKey cards
+        static let vowelSoundAndColor = [("BOT", K.Colors.green), ("BAT", K.Colors.red), ("BOUT", K.Colors.blue),
+                              ("BOOT", K.Colors.lightGreen), ("BUT", K.Colors.lightPink), ("BOOK", K.Colors.lightBlue),
+                              ("BEAT", K.Colors.seaBlue), ("BIT", K.Colors.orange), ("BET", K.Colors.darkGreen),
+                              ("BAIT", K.Colors.pink), ("BITE", K.Colors.darkBlue), ("BOAT", K.Colors.purple),
+                              ("BOYD", K.Colors.turquoise)]
+        
+        // Info for fluidConsonantsKey cards
+        static let fluidSoundAndColor = [("VISION", K.Colors.brownPurple), ("JOKE", K.Colors.brownYellow),
+                              ("CHOKE", K.Colors.brownRed), ("MISSION", K.Colors.tan),
+                              ("Y", K.Colors.blueGrey)]
+        
+        // Info for trueConsonantsKey cards
+        static let trueSoundAndText = [("B", "b"), ("K", "c"), ("D", "d"), ("F", "f"), ("G", "g"), ("H", "h"), ("K", "k"),
+                                ("L", "l"), ("M", "m"), ("N", "n"), ("P", "p"), ("R", "r"), ("S", "s"), ("T", "t"),
+                                ("V", "v"), ("W", "w"), ("KS", "x"), ("Z", "z"), ("Q", "qu"), ("TH", "th")]
+        
+        // Info for flipConsonantsKey cards
+        static let flipSoundAndText = [("S", "c"), ("T", "d"), ("V", "f"), ("DarkL", "l"), ("NSoft", "n"), ("DarkR", "r"),
+                                ("Z", "s"), ("D", "t"), ("GZ", "x"), ("S", "z"), ("THunvoiced", "th")]
+        
+        // Might Use to give the full key view sound options
+        static let colorToSoundDictionary = [K.Colors.green: "BOT", K.Colors.red: "BAT", K.Colors.blue: "BOUT",
+                                             K.Colors.lightGreen: "BOOT", K.Colors.lightPink: "BUT", K.Colors.lightBlue: "BOOK",
+                                             K.Colors.seaBlue: "BEAT", K.Colors.orange: "BIT", K.Colors.darkGreen: "BET",
+                                             K.Colors.pink: "BAIT", K.Colors.darkBlue: "BITE", K.Colors.purple: "BOAT",
+                                             K.Colors.turquoise: "BOYD", K.Colors.brownPurple: "VISION", K.Colors.brownYellow: "JOKE",
+                                             K.Colors.brownRed: "CHOKE", K.Colors.tan: "MISSION", K.Colors.blueGrey: "Y"]
+        
+    }
+    
     static let linkToWildCardDictionary: [String: NSMutableAttributedString] = {
         
         var dictionary = [String: NSMutableAttributedString]()

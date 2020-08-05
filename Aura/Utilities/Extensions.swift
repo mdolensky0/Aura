@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 //MARK:- UIView Extensions
 extension UIView {
@@ -293,9 +294,8 @@ extension NSMutableAttributedString {
     
     func removeSymbols() -> NSMutableAttributedString {
 
-        let result = self
         var indices = [Int]()
-        let stringText = result.string
+        let stringText = self.string
         
         for i in 0..<stringText.count {
             
@@ -307,17 +307,19 @@ extension NSMutableAttributedString {
             
         }
         
-        for index in indices.reversed() {
-            result.deleteCharacters(in: NSRange(location: index, length: 1))
+        if indices.count == self.length {
+            return self
         }
         
-        return result
+        for index in indices.reversed() {
+            self.deleteCharacters(in: NSRange(location: index, length: 1))
+        }
+        
+        return self
     }
     
     func replaceSpecialCharacters(from word: String) -> NSMutableAttributedString {
-        
-        let result = self
-        
+
         var indices = [Int]()
         var symbols = [NSMutableAttributedString]()
         
@@ -331,13 +333,18 @@ extension NSMutableAttributedString {
             }
         }
         
+        // If the word is all Symbols, nothing would have been deleted and thus no need for replacement
+        if indices.count == word.count {
+            return self
+        }
+        
         for (index, symbol) in zip(indices, symbols) {
             
-            result.insert(symbol, at: index)
+            self.insert(symbol, at: index)
             
         }
         
-      return result
+      return self
     }
 }
 
@@ -362,9 +369,9 @@ extension NSAttributedString.Key {
 extension String {
     
     func removeSymbols() -> String {
-
-        let allowedChars = Set("abcdefghijklmnopqrstuvwxyz\nABCDEFGHIJKLMNOPQRSTUVWXYZ'")
-        return self.filter {allowedChars.contains($0) }
+        
+        let newString = self.filter { $0.isLetter || $0 == "'" }
+        return newString != "" ? newString : self
         
     }
     
@@ -512,6 +519,69 @@ extension UIStackView {
         ])
 
         addArrangedSubview(containerForMargin)
+    }
+    
+    func addCenteredSubview(_ v: UIView, stackViewParent: UIView) {
+        
+        let containerView = UIView()
+        containerView.addSubview(v)
+        
+        v.translatesAutoresizingMaskIntoConstraints = false
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // center the view inside its container
+        v.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        v.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        
+        // set a height constraint so the stackView can adjust its size
+        containerView.heightAnchor.constraint(greaterThanOrEqualTo: v.heightAnchor).isActive = true
+
+        self.addArrangedSubview(containerView)
+        
+        // set the width of the container to be the same width as the scroll view so that paging works
+        containerView.widthAnchor.constraint(equalTo: stackViewParent.widthAnchor).isActive = true
+    }
+    
+}
+
+//MARK: - UIButton Extensions
+
+extension UIButton {
+    
+    func styleFilledButton(fillColor color: UIColor) {
+        
+        self.backgroundColor = color
+        self.layer.cornerRadius = 24
+        self.tintColor = .white
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .medium)
+
+    }
+    
+    func styleHollowbutton(outlineColor color: UIColor) {
+        
+        self.layer.borderWidth = 2
+        self.layer.borderColor = color.cgColor
+        self.layer.cornerRadius = 24
+        self.tintColor = color
+        self.setTitleColor(color, for: .normal)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .medium)
+ 
+    }
+    
+}
+
+//MARK: - Text Field Extensions
+
+extension UITextField {
+    
+    func styleTextFieldWithUnderline(ofColor bottomLineColor: UIColor) {
+        
+        self.borderStyle = .none
+        let bottomLine = CALayer()
+        bottomLine.frame = CGRect(x: 0.0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
+        bottomLine.backgroundColor = bottomLineColor.cgColor
+        self.layer.addSublayer(bottomLine)
+        
     }
     
 }

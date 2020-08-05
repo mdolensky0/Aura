@@ -36,9 +36,6 @@ class ResultsController: UIViewController {
     
     let cellID = "SoundItOutCell"
     var delegate: ResultsControllerDelegate?
-    var player : AVPlayer?
-    var soundItOutPlayer: AVAudioPlayer?
-    
     let popTip: PopTip =  {
         
         let popTip = PopTip()
@@ -124,8 +121,7 @@ class ResultsController: UIViewController {
         
         let textView = UITextView()
         textView.returnKeyType = .search
-        textView.text = "Enter text"
-        textView.textColor = .lightGray
+        textView.textColor = .black
         textView.font = .systemFont(ofSize: 20)
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 50)
         return textView
@@ -359,8 +355,8 @@ class ResultsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         view.backgroundColor = K.Colors.lightGrey
+        setupView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -851,7 +847,14 @@ extension ResultsController {
     
     func populateLearnMoreStackView() {
         
-        if results.count == 1 && learnMoreArray.count <= 1 {
+        if results.count <= 1 && learnMoreArray.count <= 1 {
+            
+            learnMoreHeaderLabel.superview?.isHidden = true
+            learnMoreScrollView.superview?.isHidden = true
+            
+        }
+        
+        else if learnMoreArray.count == 0 {
             
             learnMoreHeaderLabel.superview?.isHidden = true
             learnMoreScrollView.superview?.isHidden = true
@@ -961,7 +964,19 @@ extension ResultsController {
     //MARK:- Selector Functions
     
     @objc func profileButtonTapped() {
-        print(0)
+        
+        if Utilities.shared.isUserSignedIn {
+            
+            Utilities.shared.signUserOut(alertIn: self)
+            
+        }
+            
+        else {
+            
+            Utilities.shared.tabController?.selectedIndex = 3
+            
+        }
+        
     }
     
     @objc func languageButtonPressed() {
@@ -1028,7 +1043,7 @@ extension ResultsController {
         
         if let soundURL = results[sender.tag].audioString {
             
-            playAudioFile(urlString: soundURL, loop: 0)
+            Utilities.shared.playAudioFile(urlString: soundURL, loop: 0)
             
         }
         
@@ -1038,7 +1053,7 @@ extension ResultsController {
         
         if let soundURL = results[sender.tag].audioString {
             
-            playAudioFile(urlString: soundURL, loop: 5)
+            Utilities.shared.playAudioFile(urlString: soundURL, loop: 5)
             
         }
     }
@@ -1060,17 +1075,17 @@ extension ResultsController {
         
         switch sender.title(for: .normal) {
         case "i":
-            playSound("BEAT")
+            Utilities.shared.playSound("BEAT")
         case "ɪ":
-            playSound("BIT")
+            Utilities.shared.playSound("BIT")
         case "ɑ","ɔ":
-            playSound("BOT")
+            Utilities.shared.playSound("BOT")
         case "u":
-            playSound("BOOT")
+            Utilities.shared.playSound("BOOT")
         case "ʊ":
-            playSound("BOOK")
+            Utilities.shared.playSound("BOOK")
         case "p":
-            playSound("P")
+            Utilities.shared.playSound("P")
         case "v":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1079,19 +1094,19 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("V")
+            Utilities.shared.playSound("V")
         case "aɪ":
-            playSound("BITE")
+            Utilities.shared.playSound("BITE")
         case "əl","oʊl","ʊl":
-            playSound("DarkL")
+            Utilities.shared.playSound("DarkL")
         case "ɪr" where sender.backgroundColor == K.Colors.seaBlue:
-            playSound("BEAT")
+            Utilities.shared.playSound("BEAT")
         case "ɪr" where sender.backgroundColor == K.Colors.darkGrey:
-            playSound("DarkR")
+            Utilities.shared.playSound("DarkR")
         case "ks":
-            playSound("KS")
+            Utilities.shared.playSound("KS")
         case "ɔɪ":
-            playSound("BOYD")
+            Utilities.shared.playSound("BOYD")
         case "weɪ":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1100,11 +1115,11 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("WEI")
+            Utilities.shared.playSound("WEI")
         case "j":
-            playSound("Y")
+            Utilities.shared.playSound("Y")
         case "n":
-            playSound("N")
+            Utilities.shared.playSound("N")
         case "t":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1113,13 +1128,13 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("T")
+            Utilities.shared.playSound("T")
         case "æŋ" where sender.backgroundColor == K.Colors.pink:
-            playSound("BAIT")
+            Utilities.shared.playSound("BAIT")
         case "æŋ" where sender.backgroundColor == K.Colors.darkGrey:
-            playSound("NSoft")
+            Utilities.shared.playSound("NSoft")
         case "eɪ":
-            playSound("BAIT")
+            Utilities.shared.playSound("BAIT")
         case "ər","ʊr":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1128,11 +1143,11 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("DarkR")
+            Utilities.shared.playSound("DarkR")
         case "ɪŋ" where sender.backgroundColor == K.Colors.seaBlue:
-            playSound("BEAT")
+            Utilities.shared.playSound("BEAT")
         case "ɪŋ" where sender.backgroundColor == K.Colors.darkGrey:
-            playSound("NSoft")
+            Utilities.shared.playSound("NSoft")
         case "h":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1141,17 +1156,17 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("H")
+            Utilities.shared.playSound("H")
         case "m":
-            playSound("M")
+            Utilities.shared.playSound("M")
         case "ð":
-            playSound("TH")
+            Utilities.shared.playSound("TH")
         case "b":
-            playSound("B")
+            Utilities.shared.playSound("B")
         case "dʒ":
-            playSound("JOKE")
+            Utilities.shared.playSound("JOKE")
         case "ɡz":
-            playSound("GZ")
+            Utilities.shared.playSound("GZ")
         case "ju":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1160,11 +1175,11 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("YOU")
+            Utilities.shared.playSound("YOU")
         case "oʊ":
-            playSound("BOAT")
+            Utilities.shared.playSound("BOAT")
         case "tʃ":
-            playSound("CHOKE")
+            Utilities.shared.playSound("CHOKE")
         case "f":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1173,25 +1188,25 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("F")
+            Utilities.shared.playSound("F")
         case "l":
-            playSound("L")
+            Utilities.shared.playSound("L")
         case "d":
-            playSound("D")
+            Utilities.shared.playSound("D")
         case "θ":
-            playSound("THunvoiced")
+            Utilities.shared.playSound("THunvoiced")
         case "ɑr" where sender.backgroundColor == K.Colors.green:
-            playSound("BOT")
+            Utilities.shared.playSound("BOT")
         case "ɑr" where sender.backgroundColor == K.Colors.darkGrey:
-            playSound("DarkR")
+            Utilities.shared.playSound("DarkR")
         case "ɛr" where sender.backgroundColor == K.Colors.darkGreen:
-            playSound("BET")
+            Utilities.shared.playSound("BET")
         case "ɛr" where sender.backgroundColor == K.Colors.darkGrey:
-            playSound("DarkR")
+            Utilities.shared.playSound("DarkR")
         case "kw":
-            playSound("Q")
+            Utilities.shared.playSound("Q")
         case "ɔr" where sender.backgroundColor == K.Colors.purple:
-            playSound("BOAT")
+            Utilities.shared.playSound("BOAT")
         case "ʔ":
             break
         case "ɡ":
@@ -1202,9 +1217,9 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("G")
+            Utilities.shared.playSound("G")
         case "r":
-            playSound("R")
+            Utilities.shared.playSound("R")
         case "z":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1213,13 +1228,13 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("Z")
+            Utilities.shared.playSound("Z")
         case "aʊ":
-            playSound("BOUT")
+            Utilities.shared.playSound("BOUT")
         case "ɛŋ" where sender.backgroundColor == K.Colors.pink:
-            playSound("BAIT")
+            Utilities.shared.playSound("BAIT")
         case "ɛŋ" where sender.backgroundColor == K.Colors.darkGrey:
-            playSound("NSoft")
+            Utilities.shared.playSound("NSoft")
         case "jə":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1228,7 +1243,7 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("YUH")
+            Utilities.shared.playSound("YUH")
         case "kʃ":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1237,7 +1252,7 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("KSH")
+            Utilities.shared.playSound("KSH")
         case "wə":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1246,7 +1261,7 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("WUH")
+            Utilities.shared.playSound("WUH")
         case "wɪ":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1255,7 +1270,7 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("WIH")
+            Utilities.shared.playSound("WIH")
         case "k":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1264,13 +1279,13 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("K")
+            Utilities.shared.playSound("K")
         case "ŋ":
-            playSound("NSoft")
+            Utilities.shared.playSound("NSoft")
         case "s":
-            playSound("S")
+            Utilities.shared.playSound("S")
         case "ʃ":
-            playSound("MISSION")
+            Utilities.shared.playSound("MISSION")
         case "w":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
@@ -1279,15 +1294,15 @@ extension ResultsController {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
             }
-            playSound("W")
+            Utilities.shared.playSound("W")
         case "ʒ":
-            playSound("VISION")
+            Utilities.shared.playSound("VISION")
         case "æ":
-            playSound("BAT")
+            Utilities.shared.playSound("BAT")
         case "ə":
-            playSound("BUT")
+            Utilities.shared.playSound("BUT")
         case "ɛ":
-            playSound("BET")
+            Utilities.shared.playSound("BET")
         default:
             break
         }
@@ -1348,6 +1363,9 @@ extension ResultsController: UITextViewDelegate {
             cancelButton.isHidden = false
         }
         
+        else if textView.textColor == .black && textView.text.count >= 0 {
+            cancelButton.isHidden = false
+        }
     }
 
     
@@ -1467,6 +1485,9 @@ extension ResultsController: SupportedLanguagesDelegate  {
 extension ResultsController {
     
     func startSearchSequence(searchText: String,_ searchInfo: SearchInfo, ipaIndex: Int = 0) {
+        
+        //Clear popTip
+        popTip.hide()
         
         //Update global SearchInfo
         self.searchInfo = searchInfo
@@ -1588,7 +1609,7 @@ extension ResultsController {
                 TranslationManager.shared.textToTranslate = searchText
                 TranslationManager.shared.translate { (translation) in
                     
-                    guard let translation = translation else {
+                    guard var translation = translation else {
                         print("Translation is nil")
                         completion(false)
                         return
@@ -1596,6 +1617,11 @@ extension ResultsController {
                     
                     if translation.count > 1 {
                         self.alternateTranslations = translation[1..<translation.count].map { String($0) }
+                    }
+                    
+                    // If the Translation Returns an empty string we want the result to be the original searched Text
+                    if translation[0] == "" {
+                        translation[0] = searchText
                     }
                     
                     self.wordArray = translation[0].split(separator: " ").map { String($0) }
@@ -1637,7 +1663,7 @@ extension ResultsController {
                 TranslationManager.shared.textToTranslate = searchText
                 TranslationManager.shared.translate { (translation) in
                     
-                    guard let translation = translation else {
+                    guard var translation = translation else {
                         print("Translation is nil")
                         completion(false)
                         return
@@ -1645,6 +1671,11 @@ extension ResultsController {
                     
                     if translation.count > 1 {
                         self.alternateTranslations = translation[1..<translation.count].map { String($0) }
+                    }
+                    
+                    // If the Translation Returns an empty string we want the result to be the original searched Text
+                    if translation[0] == "" {
+                        translation[0] = searchText
                     }
                     
                     self.bottomLabelText = translation[0]
@@ -1737,55 +1768,7 @@ extension ResultsController {
 //MARK:- Utility Functions
 
 extension ResultsController {
-    
-    func playAudioFile(urlString: String, loop: Int) {
         
-        var count = 0
-        
-        guard let url = URL.init(string: urlString.trimmingCharacters(in: .whitespacesAndNewlines)) else { return }
-        
-        let playerItem = AVPlayerItem.init(url: url)
-        
-        player = AVPlayer.init(playerItem: playerItem)
-        player?.play()
-        
-        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
-                                               object: self.player?.currentItem,
-                                               queue: .main)
-        { [weak self] _ in
-            
-            if count < (loop - 1) {
-                
-                self?.player?.seek(to: CMTime.zero)
-                self?.player?.play()
-                count += 1
-                
-            }
-        }
-    }
-    
-    func playSound(_ soundFileName: String) {
-        guard let url = Bundle.main.url(forResource: soundFileName, withExtension: "wav") else { return }
-        
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-            
-            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-            soundItOutPlayer = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
-    
-            /* iOS 10 and earlier require the following line:
-             player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
-            
-            guard let player = soundItOutPlayer else { return }
-            
-            player.play()
-            
-        } catch let error {
-            print(error.localizedDescription)
-        }
-    }
-    
     func showPopTip(range : NSRange, linkString: String) {
         
         guard let rectForRange = self.topLabel.boundingRect(forCharacterRange: range),

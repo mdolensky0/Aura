@@ -17,3 +17,8 @@ struct SearchInfo {
     var targetLanguageName: String = "English"
     
 }
+
+enum SearchType {
+    case englishToNative
+    case nativeToEnglish
+}
