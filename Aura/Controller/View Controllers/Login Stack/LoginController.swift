@@ -8,8 +8,16 @@
 
 import UIKit
 
-class LoginController: UIViewController {
+protocol AddFlashcardDelegate {
+    
+    func tapAddFlashcardButton()
+    
+}
 
+class LoginController: UIViewController {
+    
+    var isModal = false
+    var delegate: AddFlashcardDelegate?
     var auraLabel: UILabel = {
         
         let label = UILabel()
@@ -52,6 +60,14 @@ class LoginController: UIViewController {
         super.viewDidLoad()
 
         setup()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = false
     }
     
     func setup() {
@@ -102,7 +118,8 @@ class LoginController: UIViewController {
     @objc func signUpPressed() {
         
         let signUpVC = SignUpController()
-        
+        signUpVC.isModal = self.isModal
+        signUpVC.delegate = self.delegate
         self.navigationController?.pushViewController(signUpVC, animated: true)
         
     }
@@ -110,7 +127,8 @@ class LoginController: UIViewController {
     @objc func logInPressed() {
         
         let logInVC = SignInController()
-        
+        logInVC.isModal = self.isModal
+        logInVC.delegate = self.delegate
         self.navigationController?.pushViewController(logInVC, animated: true)
         
     }

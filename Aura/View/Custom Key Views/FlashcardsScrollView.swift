@@ -1,26 +1,24 @@
 //
-//  KeyCardScrollView.swift
+//  flashcardsScrollView.swift
 //  Aura
 //
-//  Created by Max Dolensky on 7/30/20.
+//  Created by Max Dolensky on 8/8/20.
 //  Copyright © 2020 Max Dolensky. All rights reserved.
 //
 
 import UIKit
 
-class KeyCardScrollView: UIScrollView {
+class FlashcardsScrollView: UIScrollView {
     
     // Data
-    var soundAndColorArray: [(String, UIColor)]?
-    var soundAndTextArray: [(String, String)]?
-    var isTextBlack: Bool = true
-    
-    // Subviews    
+    var flashcards = [ResultCardView]()
+
+    // Subviews
     var stackView: UIStackView = {
        
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.alignment = .center
+        stackView.alignment = .fill
         stackView.distribution = .fill
         stackView.spacing = 0
         return stackView
@@ -31,13 +29,9 @@ class KeyCardScrollView: UIScrollView {
         super.init(frame: frame)
     }
     
-    convenience init(frame: CGRect,_ soundAndColor: [(String, UIColor)]?,_ soundAndText: [(String, String)]?,_ isTextBlack: Bool) {
+    convenience init(frame: CGRect, flashcards: [ResultCardView]) {
         self.init(frame: frame)
-        
-        self.soundAndColorArray = soundAndColor
-        self.soundAndTextArray = soundAndText
-        self.isTextBlack = isTextBlack
-        
+        self.flashcards = flashcards
         setup()
     }
     
@@ -52,6 +46,7 @@ class KeyCardScrollView: UIScrollView {
         self.isPagingEnabled = true
         self.backgroundColor = K.Colors.lightGrey
         self.showsHorizontalScrollIndicator = false
+        
         self.layer.masksToBounds = false
         
         // Add Stack View to Scroll View
@@ -68,30 +63,26 @@ class KeyCardScrollView: UIScrollView {
         // Prevent Vertical Scrolling
         stackView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         
-        if let soundAndColorArray = soundAndColorArray {
-            
-            for soundAndColor in soundAndColorArray {
-                
-                let keyCard = KeyCardView(frame: .zero, audioString: soundAndColor.0, color: soundAndColor.1, text: nil)
-                stackView.addCenteredSubview(keyCard, stackViewParent: self)
-                
-            }
-            
-        }
-        
-        if let soundAndTextArray = soundAndTextArray {
-            
-            for soundAndText in soundAndTextArray {
-                
-                let keyCard = KeyCardView(frame: .zero, audioString: soundAndText.0, color: .white, text: soundAndText.1)
-                
-                if !isTextBlack {
-                    keyCard.textLabel.textColor = K.Colors.darkGrey
-                }
-                
-                stackView.addCenteredSubview(keyCard, stackViewParent: self)
-            }
+        for flashcard in flashcards {
+                        
+            stackView.addHorizontallyCenteredSubview(flashcard, stackViewParent: self)
             
         }
     }
+    
+    func updateFlashcards(_ flashcards: [ResultCardView], completion: @escaping() -> ()) {
+        
+        self.flashcards = flashcards
+        
+        for view in stackView.subviews {
+            view.removeFromSuperview()
+        }
+        
+        for flashcard in flashcards {
+
+            stackView.addHorizontallyCenteredSubview(flashcard, stackViewParent: self)
+        }
+        
+    }
 }
+

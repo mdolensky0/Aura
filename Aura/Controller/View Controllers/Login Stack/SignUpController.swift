@@ -11,6 +11,8 @@ import Firebase
 
 class SignUpController: UIViewController {
     
+    var isModal = false
+    var delegate: AddFlashcardDelegate?
     var emailTextField: UITextField = {
         
         let textField = UITextField()
@@ -75,7 +77,7 @@ class SignUpController: UIViewController {
         reTypePasswordTextField.styleTextFieldWithUnderline(ofColor: K.Colors.purple)
         
     }
-    
+        
     func setup() {
         
         view.backgroundColor = .white
@@ -83,6 +85,7 @@ class SignUpController: UIViewController {
         setupToHideKeyboardOnTapOnView()
         self.navigationController?.isNavigationBarHidden = false
         self.navigationController?.navigationBar.tintColor = .black
+        self.navigationController?.navigationBar.barTintColor = .white
         errLabel.isHidden = true
         
         let container = UIView()
@@ -200,8 +203,37 @@ class SignUpController: UIViewController {
             
             Utilities.shared.isUserSignedIn = true
             
-            guard let tabBarController = self.tabBarController as? TabBarController else { return }
-            tabBarController.userSignedIn()
+            FirebaseManager.shared.loadUser { (user) in
+                
+                if let user = user {
+                    
+                    Utilities.shared.user = user
+                    
+                }
+                
+                else {
+                    
+                    FirebaseManager.shared.createUser()
+
+                }
+                
+            }
+            
+            if self.isModal {
+            
+                guard let tabBarController = self.presentingViewController as? TabBarController
+                    else { return }
+                
+                tabBarController.userSignedIn()
+                self.dismiss(animated: true, completion: nil)
+                self.delegate?.tapAddFlashcardButton()
+            }
+                
+            else {
+                guard let tabBarController = self.tabBarController as? TabBarController else { return }
+                tabBarController.userSignedIn()
+            }
+
             
         }
     }

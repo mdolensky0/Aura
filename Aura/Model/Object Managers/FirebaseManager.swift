@@ -119,4 +119,90 @@ class FirebaseManager {
             }
         }
     }
+    
+    func createUser() {
+        
+        if let userID = Auth.auth().currentUser?.uid {
+            
+            let user = User(UID: userID, decks: [], prevSearches: [], purchases: [:])
+            
+            // Save Updated User to Utlities Singleton Class
+            Utilities.shared.user = user
+            
+            // Save Updated User Model to Firebase
+            do {
+                
+                try self.db.collection(K.FBConstants.usersCollectionName).document(userID).setData(from: user)
+                
+            } catch let error {
+                
+                print("Error writing deck to Firestore: \(error)")
+                
+            }
+            
+        }
+        
+    }
+    
+    func loadUser(completion: @escaping(_ result: User?) -> Void) {
+        
+        if let userID = Auth.auth().currentUser?.uid {
+            
+            let docRef = db.collection(K.FBConstants.usersCollectionName).document(userID)
+            
+            docRef.getDocument { (document, error) in
+
+                let result = Result {
+                    try document.flatMap {
+                        try $0.data(as: User.self)
+                    }
+                }
+                
+                switch result {
+                    
+                case .success(let user):
+                    
+                    if let user = user {
+                        
+                        completion(user)
+                        
+                    }
+                    
+                    else {
+                        
+                        completion(nil)
+                        print("Document does not exist")
+                        
+                    }
+                    
+                case .failure(let error):
+                    
+                    completion(nil)
+                    print("Error decoding: \(error)")
+                    
+                }
+            }
+            
+        }
+        
+        else { completion(nil) }
+    }
+    
+    func updateUser(user: User) {
+        
+        
+        // Save Updated User to Utlities Singleton Class
+        Utilities.shared.user = user
+        
+        // Save Updated User Model to Firebase
+        do {
+            
+            try self.db.collection(K.FBConstants.usersCollectionName).document(user.UID).setData(from: user)
+            
+        } catch let error {
+            print("Error writing deck to Firestore: \(error)")
+ 
+        }
+    }
+    
 }

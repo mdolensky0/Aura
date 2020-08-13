@@ -10,11 +10,35 @@ import UIKit
 import AVFoundation
 import Firebase
 
+protocol DecksControllerDelegate {
+    
+    func updateMyDecks()
+    
+}
+
+protocol AddSearchHistoryDelegate {
+    
+    func updateSearchHistory()
+    
+}
+
 class Utilities {
     
     static let shared = Utilities()
     
 //MARK: - Sound Variables and Functions
+    
+    var delegate: DecksControllerDelegate?
+    var searchHistoryDelegate: AddSearchHistoryDelegate?
+    
+    var user: User? {
+        
+        didSet {
+            self.delegate?.updateMyDecks()
+            self.searchHistoryDelegate?.updateSearchHistory()
+        }
+        
+    }
     
     var soundItOutPlayer: AVAudioPlayer?
     var player : AVPlayer?
@@ -119,6 +143,7 @@ class Utilities {
                 vc.present(signedOutAlert, animated: true, completion: nil)
                 
                 self.isUserSignedIn = false
+                self.user = nil
                 self.tabController?.isSignedIn = false
                 
                 self.tabController?.viewControllers = [self.tabController!.homeController,
@@ -143,6 +168,41 @@ class Utilities {
         alert.addAction(actionNo)
         
         vc.present(alert, animated: true, completion: nil)
+        
+    }
+
+//MARK: - Add New Deck Function
+    func getUniqueDeckName(from input: String, given myDecks: [DeckModel]) -> String {
+        
+        var nameSet = Set<String>()
+        
+        for deck in myDecks {
+            
+            nameSet.insert(deck.name)
+            
+        }
+        
+        if !nameSet.contains(input) {
+            
+            return input
+            
+        }
+        
+        var count = 1
+        
+        while true {
+            
+            let text = "\(input) \(count)"
+            
+            if !nameSet.contains(text) {
+                
+                return text
+                
+            }
+            
+            count += 1
+            
+        }
         
     }
 }

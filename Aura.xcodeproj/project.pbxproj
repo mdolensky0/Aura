@@ -77,9 +77,15 @@
 		7D15DBD624C8D629009ACDB4 /* TappableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */; };
 		7D15DBD824CA1D47009ACDB4 /* SearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBD724CA1D46009ACDB4 /* SearchInfo.swift */; };
 		7D15DBDA24CA417A009ACDB4 /* QueryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DBD924CA417A009ACDB4 /* QueryButton.swift */; };
+		7D2F9A0124DF3F77009E2139 /* DeckModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F9A0024DF3F77009E2139 /* DeckModel.swift */; };
+		7D2F9A0324E02E4B009E2139 /* DeckSelectingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F9A0224E02E4B009E2139 /* DeckSelectingController.swift */; };
+		7D2F9A0524E03414009E2139 /* DeckCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F9A0424E03414009E2139 /* DeckCell.swift */; };
 		7D43FDCF24CBAE0800D727F1 /* empty.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D43FDCE24CBAE0800D727F1 /* empty.wav */; };
+		7D530E3124E37B5E00C0C209 /* FlashcardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D530E3024E37B5E00C0C209 /* FlashcardCell.swift */; };
+		7D530E3324E3841000C0C209 /* FlashcardDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D530E3224E3841000C0C209 /* FlashcardDetailsView.swift */; };
+		7D530E3724E4E87300C0C209 /* NoScrollTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D530E3624E4E87300C0C209 /* NoScrollTableView.swift */; };
+		7D530E3924E4E8FE00C0C209 /* ColorKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D530E3824E4E8FE00C0C209 /* ColorKeyView.swift */; };
 		7D600BF324D107DF002EA266 /* KeyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D600BF224D107DF002EA266 /* KeyCardView.swift */; };
-		7D600BF624D242AC002EA266 /* ColorKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D600BF524D242AC002EA266 /* ColorKeyView.swift */; };
 		7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89724B41EFB0019BFF0 /* Constants.swift */; };
 		7D66D89A24B424160019BFF0 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89924B424160019BFF0 /* HomeController.swift */; };
 		7D66D89C24B4244D0019BFF0 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89B24B4244D0019BFF0 /* SearchController.swift */; };
@@ -90,6 +96,7 @@
 		7D77098524B566300009B93B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D77098424B5662F0009B93B /* Extensions.swift */; };
 		7D77098724B691DF0009B93B /* PrevSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D77098624B691DF0009B93B /* PrevSearchCell.swift */; };
 		7D77098C24B7A2B20009B93B /* ResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D77098B24B7A2B10009B93B /* ResultsController.swift */; };
+		7D87608324DF328900FE2913 /* FlashcardsScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D87608224DF328900FE2913 /* FlashcardsScrollView.swift */; };
 		7D907C4924C00958007D5894 /* DynamicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D907C4824C00958007D5894 /* DynamicCollectionView.swift */; };
 		7D99A36C24D27F59006C977E /* FullKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D99A36B24D27F59006C977E /* FullKeyView.swift */; };
 		7D99A36E24D3B948006C977E /* KeyCardScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D99A36D24D3B948006C977E /* KeyCardScrollView.swift */; };
@@ -102,6 +109,7 @@
 		7DFBA8CA24B4189500618332 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFBA8C924B4189500618332 /* TabBarController.swift */; };
 		7DFBA8CF24B418A200618332 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFBA8CE24B418A200618332 /* Assets.xcassets */; };
 		7DFBA8D224B418A200618332 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DFBA8D024B418A200618332 /* LaunchScreen.storyboard */; };
+		7DFF962724DC9679008A93A9 /* ResultCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF962624DC9679008A93A9 /* ResultCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -176,9 +184,15 @@
 		7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappableLabel.swift; sourceTree = "<group>"; };
 		7D15DBD724CA1D46009ACDB4 /* SearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInfo.swift; sourceTree = "<group>"; };
 		7D15DBD924CA417A009ACDB4 /* QueryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryButton.swift; sourceTree = "<group>"; };
+		7D2F9A0024DF3F77009E2139 /* DeckModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckModel.swift; sourceTree = "<group>"; };
+		7D2F9A0224E02E4B009E2139 /* DeckSelectingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckSelectingController.swift; sourceTree = "<group>"; };
+		7D2F9A0424E03414009E2139 /* DeckCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckCell.swift; sourceTree = "<group>"; };
 		7D43FDCE24CBAE0800D727F1 /* empty.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = empty.wav; sourceTree = "<group>"; };
+		7D530E3024E37B5E00C0C209 /* FlashcardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardCell.swift; sourceTree = "<group>"; };
+		7D530E3224E3841000C0C209 /* FlashcardDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardDetailsView.swift; sourceTree = "<group>"; };
+		7D530E3624E4E87300C0C209 /* NoScrollTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoScrollTableView.swift; sourceTree = "<group>"; };
+		7D530E3824E4E8FE00C0C209 /* ColorKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorKeyView.swift; sourceTree = "<group>"; };
 		7D600BF224D107DF002EA266 /* KeyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCardView.swift; sourceTree = "<group>"; };
-		7D600BF524D242AC002EA266 /* ColorKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorKeyView.swift; sourceTree = "<group>"; };
 		7D66D89724B41EFB0019BFF0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7D66D89924B424160019BFF0 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		7D66D89B24B4244D0019BFF0 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
@@ -189,6 +203,7 @@
 		7D77098424B5662F0009B93B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		7D77098624B691DF0009B93B /* PrevSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrevSearchCell.swift; sourceTree = "<group>"; };
 		7D77098B24B7A2B10009B93B /* ResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsController.swift; sourceTree = "<group>"; };
+		7D87608224DF328900FE2913 /* FlashcardsScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsScrollView.swift; sourceTree = "<group>"; };
 		7D907C4824C00958007D5894 /* DynamicCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicCollectionView.swift; sourceTree = "<group>"; };
 		7D99A36B24D27F59006C977E /* FullKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullKeyView.swift; sourceTree = "<group>"; };
 		7D99A36D24D3B948006C977E /* KeyCardScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCardScrollView.swift; sourceTree = "<group>"; };
@@ -203,6 +218,7 @@
 		7DFBA8CE24B418A200618332 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7DFBA8D124B418A200618332 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7DFBA8D324B418A200618332 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7DFF962624DC9679008A93A9 /* ResultCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCardView.swift; sourceTree = "<group>"; };
 		C7297326C784963B5DDBF4B4 /* Pods-Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.release.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -270,6 +286,7 @@
 			children = (
 				7D15DB6124C2A701009ACDB4 /* TranslationModel.swift */,
 				7D15DB6024C2A700009ACDB4 /* WordModel.swift */,
+				7D2F9A0024DF3F77009E2139 /* DeckModel.swift */,
 			);
 			path = "Firebase Models";
 			sourceTree = "<group>";
@@ -351,10 +368,13 @@
 		7D600BF424D241F6002EA266 /* Custom Key Views */ = {
 			isa = PBXGroup;
 			children = (
+				7DFF962624DC9679008A93A9 /* ResultCardView.swift */,
 				7D600BF224D107DF002EA266 /* KeyCardView.swift */,
-				7D600BF524D242AC002EA266 /* ColorKeyView.swift */,
+				7D530E3824E4E8FE00C0C209 /* ColorKeyView.swift */,
 				7D99A36B24D27F59006C977E /* FullKeyView.swift */,
 				7D99A36D24D3B948006C977E /* KeyCardScrollView.swift */,
+				7D87608224DF328900FE2913 /* FlashcardsScrollView.swift */,
+				7D530E3224E3841000C0C209 /* FlashcardDetailsView.swift */,
 			);
 			path = "Custom Key Views";
 			sourceTree = "<group>";
@@ -381,6 +401,7 @@
 				7D0C129224DB4B470024FD31 /* FlashCard Stack */,
 				7D66D8A324B424C20019BFF0 /* LessonsController.swift */,
 				7D15DBCF24C62EEE009ACDB4 /* SupportedLanguagesVC.swift */,
+				7D2F9A0224E02E4B009E2139 /* DeckSelectingController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -391,6 +412,8 @@
 				7D77098624B691DF0009B93B /* PrevSearchCell.swift */,
 				7DD1B09E24BD06AB0052BC7B /* SoundItOutCell.swift */,
 				7D15DBD124C631D9009ACDB4 /* SupportedLanguageCell.swift */,
+				7D2F9A0424E03414009E2139 /* DeckCell.swift */,
+				7D530E3024E37B5E00C0C209 /* FlashcardCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -464,6 +487,7 @@
 			children = (
 				7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */,
 				7D907C4824C00958007D5894 /* DynamicCollectionView.swift */,
+				7D530E3624E4E87300C0C209 /* NoScrollTableView.swift */,
 				7D600BF124D0FF7B002EA266 /* Custom Buttons */,
 				7D600BF424D241F6002EA266 /* Custom Key Views */,
 			);
@@ -653,11 +677,13 @@
 				7D99A37224D9EC7A006C977E /* SignInController.swift in Sources */,
 				7D15DBCE24C625FB009ACDB4 /* UserModel.swift in Sources */,
 				7D15DB5324C29517009ACDB4 /* WildCardModel.swift in Sources */,
+				7D530E3124E37B5E00C0C209 /* FlashcardCell.swift in Sources */,
 				7D66D89C24B4244D0019BFF0 /* SearchController.swift in Sources */,
 				7D15DB5D24C2A49F009ACDB4 /* WordColoringManager.swift in Sources */,
 				7D99A36C24D27F59006C977E /* FullKeyView.swift in Sources */,
 				7D15DB6824C2A8A2009ACDB4 /* ColorResultModel.swift in Sources */,
 				7D15DBD224C631D9009ACDB4 /* SupportedLanguageCell.swift in Sources */,
+				7D2F9A0524E03414009E2139 /* DeckCell.swift in Sources */,
 				7D99A37024D8F757006C977E /* UtilityFunctions.swift in Sources */,
 				7D15DB6724C2A8A2009ACDB4 /* ColoringDataStructures.swift in Sources */,
 				7D15DB5C24C2A49F009ACDB4 /* RealmManager.swift in Sources */,
@@ -665,18 +691,24 @@
 				7DFBA8CA24B4189500618332 /* TabBarController.swift in Sources */,
 				7DD1B09F24BD06AB0052BC7B /* SoundItOutCell.swift in Sources */,
 				7DFBA8C624B4189500618332 /* AppDelegate.swift in Sources */,
+				7D530E3924E4E8FE00C0C209 /* ColorKeyView.swift in Sources */,
 				7D15DB4F24C29481009ACDB4 /* RealmPopulater.swift in Sources */,
 				7DFBA8C824B4189500618332 /* SceneDelegate.swift in Sources */,
 				7D907C4924C00958007D5894 /* DynamicCollectionView.swift in Sources */,
 				7D77098724B691DF0009B93B /* PrevSearchCell.swift in Sources */,
 				7D15DBDA24CA417A009ACDB4 /* QueryButton.swift in Sources */,
+				7D530E3724E4E87300C0C209 /* NoScrollTableView.swift in Sources */,
 				7D66D8A024B4249B0019BFF0 /* LoginController.swift in Sources */,
+				7D530E3324E3841000C0C209 /* FlashcardDetailsView.swift in Sources */,
 				7D66D8A424B424C20019BFF0 /* LessonsController.swift in Sources */,
+				7D2F9A0324E02E4B009E2139 /* DeckSelectingController.swift in Sources */,
 				7D15DB6324C2A701009ACDB4 /* TranslationModel.swift in Sources */,
 				7D15DBD624C8D629009ACDB4 /* TappableLabel.swift in Sources */,
+				7DFF962724DC9679008A93A9 /* ResultCardView.swift in Sources */,
 				7D0C129124DB4B390024FD31 /* TestController.swift in Sources */,
 				7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */,
 				7D77098524B566300009B93B /* Extensions.swift in Sources */,
+				7D2F9A0124DF3F77009E2139 /* DeckModel.swift in Sources */,
 				7D77098C24B7A2B20009B93B /* ResultsController.swift in Sources */,
 				7D15DB5B24C2A49F009ACDB4 /* TranslationManager.swift in Sources */,
 				7D15DB5E24C2A49F009ACDB4 /* FirebaseManager.swift in Sources */,
@@ -684,7 +716,7 @@
 				7D99A36E24D3B948006C977E /* KeyCardScrollView.swift in Sources */,
 				7D15DBD824CA1D47009ACDB4 /* SearchInfo.swift in Sources */,
 				7D99A37424D9EC91006C977E /* SignUpController.swift in Sources */,
-				7D600BF624D242AC002EA266 /* ColorKeyView.swift in Sources */,
+				7D87608324DF328900FE2913 /* FlashcardsScrollView.swift in Sources */,
 				7D15DB5224C29517009ACDB4 /* MappingModel.swift in Sources */,
 				7D600BF324D107DF002EA266 /* KeyCardView.swift in Sources */,
 				7D0C128F24DB4B230024FD31 /* DeckController.swift in Sources */,

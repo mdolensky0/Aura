@@ -11,15 +11,9 @@ import UIKit
 class SearchController: UIViewController {
     
     // Data
-    var prevSearches = ["Hello",
-                        "Whats up",
-                        "Yo dog",
-                        "its been so long",
-                        "I hope we can hang soon",
-                        "you are so amazing",
-                        "I am obsessed with you"]
-    
     var bottomLabelText = ""
+    var searchInput = ""
+    var searchOutput = ""
     var wordArray = [String]()
     var wordModelArray = [WordModel?]()
     var results = [ColorResultModel]()
@@ -126,6 +120,8 @@ class SearchController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Utilities.shared.searchHistoryDelegate = self
         setupView()
         view.backgroundColor = K.Colors.lightGrey
     }
@@ -134,6 +130,18 @@ class SearchController: UIViewController {
            super.viewDidLayoutSubviews()
            
            setupShadows()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+        
+        if Utilities.shared.isUserSignedIn {
+            
+            if Utilities.shared.user!.prevSearches.count > 0 { tableView.isHidden = false }
+            else { tableView.isHidden = true }
+            
+        } else { tableView.isHidden = true }
+        
     }
 }
 
@@ -295,7 +303,10 @@ extension SearchController {
         
         else {
             
-            Utilities.shared.tabController?.selectedIndex = 3
+            let vc = UINavigationController(rootViewController: LoginController())
+            let login = vc.viewControllers[0] as! LoginController
+            login.isModal = true
+            self.present(vc, animated: true, completion: nil)
             
         }
         
@@ -410,14 +421,22 @@ extension SearchController: UITextViewDelegate {
 
 extension SearchController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return prevSearches.count
+        
+        if let user = Utilities.shared.user {
+            
+            return user.prevSearches.count
+        }
+        
+        return 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: K.Cells.prevSearchCell) as! PrevSearchCell
         
-        cell.populateCell(topLabelText: prevSearches[indexPath.row], bottomLabelText: prevSearches[indexPath.row])
+        guard let prevSearches = Utilities.shared.user?.prevSearches else { return cell }
+        
+        cell.populateCell(topLabelText: prevSearches[indexPath.row].searchText, bottomLabelText: prevSearches[indexPath.row].resultText)
         
         return cell
     }
@@ -524,6 +543,9 @@ extension SearchController {
     
     func startSearchSequence(searchText: String,_ searchInfo: SearchInfo, ipaIndex: Int = 0) {
         
+        //Update Search Input Variable
+        self.searchInput = searchText
+        
         //Update global SearchInfo
         self.searchInfo = searchInfo
         
@@ -624,6 +646,8 @@ extension SearchController {
             // If source Lang is English, retrieve word models from database
             if TranslationManager.shared.sourceLanguageCode == "en" {
                 
+                self.searchOutput = searchText
+                
                 self.wordArray = searchText.replacingOccurrences(of: "’", with: "'").split(separator: " ").map {String($0)}
                
                 FirebaseManager.shared.readEnglishDocumentByWord(words: wordArray) { (wordModelArray) in
@@ -657,6 +681,8 @@ extension SearchController {
                     if translation[0] == "" {
                         translation[0] = searchText
                     }
+                    
+                    self.searchOutput = translation[0]
                     
                     self.wordArray = translation[0].split(separator: " ").map { String($0) }
                     
@@ -678,6 +704,8 @@ extension SearchController {
             // If Target Lang is English, retrieve word models from database
             if TranslationManager.shared.targetLanguageCode == "en" {
                 
+                self.searchOutput = searchText
+                
                 self.wordArray = searchText.replacingOccurrences(of: "’", with: "'").split(separator: " ").map {String($0)}
                
                 FirebaseManager.shared.readEnglishDocumentByWord(words: wordArray) { (wordModelArray) in
@@ -711,6 +739,8 @@ extension SearchController {
                     if translation[0] == "" {
                         translation[0] = searchText
                     }
+                    
+                    self.searchOutput = translation[0]
                     
                     self.bottomLabelText = translation[0]
                     
@@ -746,11 +776,14 @@ extension SearchController {
     
     func goToResultsVC(searchInfo: SearchInfo) {
         
+        // Initialize result controller
         let resultsController = ResultsController()
         
+        // Populate result controller data
         resultsController.delegate = self
         resultsController.searchInfo = searchInfo
         resultsController.bottomLabelText = self.bottomLabelText
+        resultsController.ipaIndex = 0
         resultsController.wordArray = self.wordArray
         resultsController.wordModelArray = self.wordModelArray
         resultsController.results = self.results
@@ -758,13 +791,53 @@ extension SearchController {
         resultsController.learnMoreArray = self.learnMoreArray
         resultsController.textView.text = self.textView.text
         
+        // Update search history
+        if Utilities.shared.isUserSignedIn {
+            
+            if var user = Utilities.shared.user {
+                
+                let info = SearchAndResult(searchText: self.searchInput, resultText: self.searchOutput)
+                
+                user.prevSearches.insert(info, at: 0)
+                
+                if user.prevSearches.count > 50 { _ =  user.prevSearches.popLast() }
+                
+                Utilities.shared.user = user
+                FirebaseManager.shared.updateUser(user: user)
+                self.tableView.reloadData()
+                
+            }
+            
+        }
+        
+        // Create sound it out buttons for result controller
         if results.count == 1 {
             
             resultsController.soundItOutColors = self.createButtons(results[0].attributedText)
         
         } else { resultsController.soundItOutColors = [] }
-            
+        
+        // Push Result Controller
         navigationController?.pushViewController(resultsController, animated: true)
+        
+    }
+}
+
+extension SearchController: AddSearchHistoryDelegate {
+    
+    func updateSearchHistory() {
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            
+            if Utilities.shared.user == nil {
+                
+                self.tableView.isHidden = true
+                
+            } else { self.tableView.isHidden = false}
+        }
+        
+
         
     }
 }

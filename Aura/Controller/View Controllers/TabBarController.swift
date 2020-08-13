@@ -116,7 +116,6 @@ class TabBarController: UITabBarController {
         
         self.isSignedIn = true
         self.viewControllers = [homeController, searchController, keyController, flashCardController, lessonsController]
-        self.selectedIndex = 3
         
     }
     

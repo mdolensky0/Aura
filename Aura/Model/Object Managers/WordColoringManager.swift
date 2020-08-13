@@ -42,9 +42,9 @@ class WordColoringManager {
         
         matchDipthongs(&wordArray, &ipaArray, for: word, with: ipa)
         
-        for letter in wordArray {
-            print("\(letter.letter) -> \(letter.ipaParent ?? "nil")")
-        }
+//        for letter in wordArray {
+//            print("\(letter.letter) -> \(letter.ipaParent ?? "nil")")
+//        }
         
         return addAttributes(word: word, wordArray: wordArray)
     }

@@ -112,6 +112,17 @@ extension UIView {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = cornerRadius
     }
+    
+    func setGradientBackground(topColor: UIColor, bottomColor: UIColor, cornerRadius: CGFloat) {
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [topColor.cgColor, bottomColor.cgColor]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.frame = self.bounds
+        gradientLayer.cornerRadius = cornerRadius
+
+        self.layer.insertSublayer(gradientLayer, at:0)
+    }
 
 }
 
@@ -525,13 +536,33 @@ extension UIStackView {
         
         let containerView = UIView()
         containerView.addSubview(v)
-        
         v.translatesAutoresizingMaskIntoConstraints = false
         containerView.translatesAutoresizingMaskIntoConstraints = false
         
         // center the view inside its container
         v.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         v.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        
+        // set a height constraint so the stackView can adjust its size
+        containerView.heightAnchor.constraint(greaterThanOrEqualTo: v.heightAnchor).isActive = true
+
+        self.addArrangedSubview(containerView)
+        
+        // set the width of the container to be the same width as the scroll view so that paging works
+        containerView.widthAnchor.constraint(equalTo: stackViewParent.widthAnchor).isActive = true
+    }
+    
+    func addHorizontallyCenteredSubview(_ v: UIView, stackViewParent: UIView) {
+        
+        let containerView = UIView()
+        containerView.addSubview(v)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // center the view inside its container
+        v.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        v.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        v.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
         
         // set a height constraint so the stackView can adjust its size
         containerView.heightAnchor.constraint(greaterThanOrEqualTo: v.heightAnchor).isActive = true
@@ -567,7 +598,6 @@ extension UIButton {
         self.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .medium)
  
     }
-    
 }
 
 //MARK: - Text Field Extensions

@@ -11,6 +11,14 @@ import Foundation
 struct User: Codable {
     
     var UID: String
-    // var decks: [DeckModel]
-    // var prevSearches: [SearchAndResult]
+    var decks: [DeckModel]
+    var prevSearches: [SearchAndResult]
+    var purchases: [String : Bool]
+}
+
+struct SearchAndResult: Codable {
+    
+    let searchText: String
+    let resultText: String
+    
 }

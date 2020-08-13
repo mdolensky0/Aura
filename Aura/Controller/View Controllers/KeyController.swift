@@ -327,7 +327,10 @@ class KeyController: UIViewController {
         
         else {
             
-            Utilities.shared.tabController?.selectedIndex = 3
+            let vc = UINavigationController(rootViewController: LoginController())
+            let login = vc.viewControllers[0] as! LoginController
+            login.isModal = true
+            self.present(vc, animated: true, completion: nil)
             
         }
 

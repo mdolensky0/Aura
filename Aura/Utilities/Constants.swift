@@ -45,6 +45,8 @@ struct K {
     struct Cells {
         static let prevSearchCell = "PrevSearchCell"
         static let supportedLanguageCell = "SupportedLanguageCell"
+        static let deckCell = "DeckCell"
+        static let flashcardCell = "FlashcardCell"
     }
     
     struct LanguageCodes {

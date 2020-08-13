@@ -230,14 +230,5 @@ class FullKeyView: UIView {
         
         wildcardBackground.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor, constant: -20).isActive = true
         silentBackground.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor, constant: -20).isActive = true
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
 }
