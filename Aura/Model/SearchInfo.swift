@@ -22,3 +22,14 @@ enum SearchType {
     case englishToNative
     case nativeToEnglish
 }
+
+// This will be used to store data for Prev Search History
+struct FBSearchInfo: Codable {
+    
+    var searchType: Int  // 0 is native to english : 1 is english to native
+    var sourceLanguageCode: String
+    var sourceLanguageName: String
+    var targetLanguageCode: String = "en"
+    var targetLanguageName: String = "English"
+    
+}

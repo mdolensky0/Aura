@@ -18,7 +18,7 @@ class FlashcardsScrollView: UIScrollView {
        
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.alignment = .fill
+        stackView.alignment = .top
         stackView.distribution = .fill
         stackView.spacing = 0
         return stackView

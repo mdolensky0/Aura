@@ -71,7 +71,7 @@ class SearchController: UIViewController {
         
         let button = UIButton()
         button.setImage(UIImage(systemName: "repeat"), for: .normal)
-        button.addTarget(self, action: #selector(swapButtonPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(swapButtonPressed(_:)), for: .touchUpInside)
         button.tintColor = .black
         button.backgroundColor = .white
         return button
@@ -320,7 +320,7 @@ extension SearchController {
         
     }
     
-    @objc func swapButtonPressed() {
+    @objc func swapButtonPressed(_ sender: UIButton) {
         
         DispatchQueue.main.async {
             
@@ -455,6 +455,20 @@ extension SearchController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        if let searchAndResult = Utilities.shared.user?.prevSearches[indexPath.row] {
+            
+            let searchType: SearchType = searchAndResult.searchInfo.searchType == 0 ? .nativeToEnglish : .englishToNative
+            
+            let searchInfo = SearchInfo(searchType: searchType,
+                                        sourceLanguageCode: searchAndResult.searchInfo.sourceLanguageCode,
+                                        sourceLanguageName: searchAndResult.searchInfo.sourceLanguageName,
+                                        targetLanguageCode: searchAndResult.searchInfo.targetLanguageCode,
+                                        targetLanguageName: searchAndResult.searchInfo.targetLanguageName)
+            
+            startSearchSequence(searchText: searchAndResult.searchText, searchInfo)
+            
+        }
         
     }
     
@@ -796,7 +810,14 @@ extension SearchController {
             
             if var user = Utilities.shared.user {
                 
-                let info = SearchAndResult(searchText: self.searchInput, resultText: self.searchOutput)
+                let searchType = searchInfo.searchType == .nativeToEnglish ? 0 : 1
+                let fbSearchinfo = FBSearchInfo(searchType: searchType,
+                                                sourceLanguageCode: searchInfo.sourceLanguageCode,
+                                                sourceLanguageName: searchInfo.sourceLanguageName,
+                                                targetLanguageCode: searchInfo.targetLanguageCode,
+                                                targetLanguageName: searchInfo.targetLanguageName)
+                
+                let info = SearchAndResult(searchText: self.searchInput, resultText: self.searchOutput, searchInfo: fbSearchinfo)
                 
                 user.prevSearches.insert(info, at: 0)
                 
@@ -830,7 +851,7 @@ extension SearchController: AddSearchHistoryDelegate {
         DispatchQueue.main.async {
             self.tableView.reloadData()
             
-            if Utilities.shared.user == nil {
+            if Utilities.shared.user == nil || Utilities.shared.user?.prevSearches.count == 0 {
                 
                 self.tableView.isHidden = true
                 

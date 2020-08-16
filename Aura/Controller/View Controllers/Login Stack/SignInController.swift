@@ -40,7 +40,8 @@ class SignInController: UIViewController {
         let button = UIButton()
         button.setTitle("Log In", for: .normal)
         button.styleFilledButton(fillColor: K.Colors.lightPink)
-        button.addTarget(self, action: #selector(logInPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(logInPressed(_:)), for: .touchUpInside)
+        button.showsTouchWhenHighlighted = true
         return button
         
     }()
@@ -125,7 +126,7 @@ class SignInController: UIViewController {
         
     }
     
-    @objc func logInPressed() {
+    @objc func logInPressed(_ sender: UIButton) {
         
         // Get email and password
         guard let email = emailTextField.text, let password = passwordTextField.text else {
@@ -142,11 +143,19 @@ class SignInController: UIViewController {
             
         }
         
+        // Start Loading Screen
+        DispatchQueue.main.async {
+            self.startLoadingScreen()
+        }
+        
+        self.startLoadingScreen()
+        
         // Sign In
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
             
             if let error = error {
                 
+                self.endLoadingScreen()
                 self.showError(error.localizedDescription)
                 return
                 
@@ -176,18 +185,21 @@ class SignInController: UIViewController {
             
             if self.isModal {
             
-                guard let tabBarController = self.presentingViewController as? TabBarController
-                    else { return }
+                guard let tabBarController = self.presentingViewController as? TabBarController else {
+                    self.endLoadingScreen()
+                    return
+                }
                 
+                self.endLoadingScreen()
                 tabBarController.userSignedIn()
                 self.dismiss(animated: true, completion: nil)
                 self.delegate?.tapAddFlashcardButton()
             }
                 
             else {
-                guard let tabBarController = self.tabBarController as? TabBarController
-                    else { return }
                 
+                self.endLoadingScreen()
+                guard let tabBarController = self.tabBarController as? TabBarController else { return }
                 tabBarController.userSignedIn()
             }
             

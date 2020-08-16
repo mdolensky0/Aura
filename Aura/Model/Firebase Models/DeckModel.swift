@@ -13,6 +13,8 @@ struct DeckModel: Codable {
     var name: String
     var numberOfCards: Int
     var prevScore: Double
+    var numRight: Int
+    var numSeen: Int
     var cards: [FlashcardModel]
     
 }
@@ -24,5 +26,8 @@ struct FlashcardModel: Codable {
     let ipaIndex: Int
     let bottomLabelText: String
     var score: Double
+    var numRight: Int
+    var numSeen: Int
+    var cardIndex: Int
     
 }

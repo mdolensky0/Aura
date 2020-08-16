@@ -14,6 +14,9 @@ class DeckController: UIViewController {
     //MARK: - Data
     var myDeck: DeckModel!
     var myDeckIndex: Int!
+    var scrollViewHeight: NSLayoutConstraint!
+    var heightArray = [CGFloat]()
+    var currentCardIndex = 0
     
     //MARK: - Subviews
     var centerTitle: UILabel = {
@@ -143,6 +146,23 @@ class DeckController: UIViewController {
         testYourselfButton.setGradientBackground(topColor: UIColor(red: 248.0/255.0, green: 231.0/255.0, blue: 0.0, alpha: 1.0),
                                                  bottomColor: UIColor(red: 249.0/255.0, green: 150.0/255.0, blue: 0.0, alpha: 1.0),
                                                  cornerRadius: 10)
+        
+ 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+    
+        for card in flashcardsScrollView!.stackView.subviews {
+            heightArray.append(card.frame.height)
+        }
+        
+        scrollViewHeight.constant = heightArray[currentCardIndex]
+        self.scrollViewHeight.isActive = true
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+        
+        
     }
     
     //MARK: - Setup
@@ -201,8 +221,10 @@ class DeckController: UIViewController {
             card.widthAnchor.constraint(equalToConstant: view.frame.width - 60).isActive = true
 
         }
-        
+                
         flashcardsScrollView = FlashcardsScrollView(frame: .zero, flashcards: flashcards)
+        scrollViewHeight = flashcardsScrollView?.heightAnchor.constraint(equalToConstant: 0)
+        flashcardsScrollView?.delegate = self
                 
         mainStackView.addArrangedSubview(flashcardsScrollView!)
         
@@ -314,8 +336,8 @@ class DeckController: UIViewController {
     
     func updateStatsLabel() {
         
-        var formatted = NSMutableAttributedString(string: String(format: "Angle: %.2f", myDeck.prevScore))
-        
+        var formatted = NSMutableAttributedString(string: String(format: "%.1f", myDeck.prevScore))
+        formatted.append(NSAttributedString(string: "%"))
         
         if myDeck.prevScore < 0 {
             
@@ -347,7 +369,7 @@ class DeckController: UIViewController {
             
         }
         
-        let attText = NSMutableAttributedString(string: "  \(myDeck.numberOfCards) Cards\n  Previous Score: ")
+        let attText = NSMutableAttributedString(string: "  \(myDeck.numberOfCards) Cards\n  Score: ")
         attText.append(formatted)
         
         statsLabel.attributedText = attText
@@ -463,6 +485,11 @@ class DeckController: UIViewController {
     
     @objc func takeTest() {
         
+        let vc = TestController()
+        vc.myDeck = self.myDeck
+        vc.myDeckIndex = self.myDeckIndex
+        self.navigationController?.pushViewController(vc, animated: true)
+        
     }
     
 }
@@ -500,33 +527,34 @@ extension DeckController: UITableViewDataSource {
         cell.bottomLabel.text = card.bottomLabelText
         
         // Set score
-        var formatted = NSMutableAttributedString(string: String(format: "Angle: %.2f", card.score))
+        var formatted = NSMutableAttributedString(string: String(format: "%.1f", card.score))
+        formatted.append(NSAttributedString(string: "%"))
         
-        if myDeck.prevScore < 0 {
+        if card.score < 0 {
             
             formatted = NSMutableAttributedString(string: "-%")
             
         }
         
-        else if myDeck.prevScore >= 0 && myDeck.prevScore <= 50 {
+        else if card.score >= 0 && card.score <= 50 {
             
             formatted.addAttribute(.foregroundColor, value: K.Colors.red, range: NSRange(location: 0, length: formatted.length))
             
         }
         
-        else if myDeck.prevScore > 50  && myDeck.prevScore <= 69 {
+        else if card.score > 50  && card.score <= 69 {
             
             formatted.addAttribute(.foregroundColor, value: K.Colors.orange, range: NSRange(location: 0, length: formatted.length))
             
         }
         
-        else if myDeck.prevScore > 69 && myDeck.prevScore <= 79 {
+        else if card.score > 69 && card.score <= 79 {
             
             formatted.addAttribute(.foregroundColor, value: K.Colors.yellow, range: NSRange(location: 0, length: formatted.length))
             
         }
         
-        else if myDeck.prevScore > 79 && myDeck.prevScore <= 100 {
+        else if card.score > 79 && card.score <= 100 {
             
             formatted.addAttribute(.foregroundColor, value: K.Colors.green, range: NSRange(location: 0, length: formatted.length))
             
@@ -548,7 +576,15 @@ extension DeckController: UITableViewDelegate {
         
         tableView.deselectRow(at: indexPath, animated: true)
         mainScrollView.setContentOffset(.zero, animated: true)
+        
         flashcardsScrollView?.setContentOffset( CGPoint(x: flashcardsScrollView!.frame.size.width * CGFloat(indexPath.row), y: 0.0), animated: true)
+        
+        currentCardIndex = indexPath.row
+        scrollViewHeight.constant = heightArray[currentCardIndex]
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
         
     }
     
@@ -565,6 +601,12 @@ extension DeckController: SwipeTableViewCellDelegate {
                 // handle action by updating model with deletion
                 self.myDeck.cards.remove(at: indexPath.row)
                 self.myDeck.numberOfCards -= 1
+                
+                // Decrease each card index after the deleted card by one
+                for i in indexPath.row..<self.myDeck.cards.count {
+                    self.myDeck.cards[i].cardIndex -= 1
+                }
+                
                 if var user = Utilities.shared.user {
                     
                     user.decks[self.myDeckIndex] = self.myDeck
@@ -586,4 +628,20 @@ extension DeckController: SwipeTableViewCellDelegate {
         return options
     }
 
+}
+
+extension DeckController: UIScrollViewDelegate {
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        currentCardIndex = Int(targetContentOffset.pointee.x / flashcardsScrollView!.frame.size.width)
+        
+        scrollViewHeight.constant = heightArray[currentCardIndex]
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+        
+    }
+    
 }

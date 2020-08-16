@@ -1213,7 +1213,14 @@ extension ResultsController {
             
             if var user = Utilities.shared.user {
                 
-                let info = SearchAndResult(searchText: self.searchInput, resultText: self.searchOutput)
+                let searchType = searchInfo.searchType == .nativeToEnglish ? 0 : 1
+                let fbSearchinfo = FBSearchInfo(searchType: searchType,
+                                                sourceLanguageCode: searchInfo.sourceLanguageCode,
+                                                sourceLanguageName: searchInfo.sourceLanguageName,
+                                                targetLanguageCode: searchInfo.targetLanguageCode,
+                                                targetLanguageName: searchInfo.targetLanguageName)
+                
+                let info = SearchAndResult(searchText: self.searchInput, resultText: self.searchOutput, searchInfo: fbSearchinfo)
                 
                 user.prevSearches.insert(info, at: 0)
                 

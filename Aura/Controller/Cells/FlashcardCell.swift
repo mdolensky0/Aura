@@ -63,7 +63,7 @@ class FlashcardCell: SwipeTableViewCell {
         bottomLabel.font = .systemFont(ofSize: 13, weight: .light)
         
         // Add Score
-        scoreLabel.font = UIFont.systemFont(ofSize: 30, weight: .medium)
+        scoreLabel.font = UIFont.systemFont(ofSize: 24, weight: .regular)
         scoreLabel.numberOfLines = 1
         scoreLabel.setContentHuggingPriority(UILayoutPriority(999), for: .horizontal)
         scoreLabel.setContentCompressionResistancePriority(UILayoutPriority(999), for: .horizontal)

@@ -10,13 +10,7 @@ import UIKit
 import AVFoundation
 import AMPopTip
 
-protocol ResultCardDelegate {
-    
-    func presentDeckSelectionView()
-    func goToLogin()
-}
-
-class ResultCardView: UIView {
+class TestFlashcard: UIView {
     
     // DATA
     var results = [ColorResultModel]()
@@ -36,13 +30,24 @@ class ResultCardView: UIView {
     }()
     
     var prevRange: NSRange?
-    var isFlashcard = false
     var delegate: ResultCardDelegate?
     
     // SUBVIEWS
+    var mainStackView: UIStackView = {
+        
+        let view = UIStackView()
+        view.axis = .vertical
+        view.alignment = .fill
+        view.distribution = .equalSpacing
+        view.backgroundColor = .white
+        return view
+        
+    }()
+    
     var topLabel: UILabel = {
         
         let label = UILabel()
+        label.backgroundColor = .white
         label.clipsToBounds = false
         label.isUserInteractionEnabled = true
         label.lineBreakMode = .byWordWrapping
@@ -54,7 +59,20 @@ class ResultCardView: UIView {
     var bottomLabel: UILabel = {
         
         let label = UILabel()
+        label.backgroundColor = .white
         return label
+        
+    }()
+    
+    var audioStackView: UIStackView = {
+        
+        let view = UIStackView()
+        view.backgroundColor = .white
+        view.axis = .horizontal
+        view.alignment = .center
+        view.distribution = .fill
+        view.spacing = 12
+        return view
         
     }()
     
@@ -64,6 +82,7 @@ class ResultCardView: UIView {
         button.setImage(UIImage(systemName: "speaker.3.fill"), for: .normal)
         button.backgroundColor = .white
         button.tintColor = .black
+        button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(soundButtonPressed(_:)), for: .touchUpInside)
         return button
         
@@ -75,64 +94,75 @@ class ResultCardView: UIView {
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
         button.backgroundColor = .white
         button.tintColor = .black
+        button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(loopButtonPressed(_:)), for: .touchUpInside)
         return button
         
     }()
     
-    var lineDividerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = K.Colors.purple
-        return view
-    }()
-    
-    var addFlashcardButton: UIButton = {
-       
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.backgroundColor = K.Colors.purple
-        button.tintColor = .white
-        button.roundCorners(cornerRadius: 15)
-        button.addTarget(self, action: #selector(addFlashcardButtonPressed), for: .touchUpInside)
-        return button
-        
-    }()
-    
-    let addFlashcardBackgroundView = UIView()
-    
     var soundItOutCollectionView: UICollectionView = {
-       
+        
         let cv = DynamicCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.backgroundColor = .white
         return cv
         
     }()
     
+    let topLabelContainer = UIView()
+    let bottomLabelContainer = UIView()
+    
+    let spacer1: UIView = {
+        
+        let view = UIView()
+        view.backgroundColor = .white
+        view.setContentHuggingPriority(.defaultLow, for: .vertical)
+        return view
+        
+    }()
+
+    let spacer2: UIView = {
+        
+        let view = UIView()
+        view.backgroundColor = .white
+        view.setContentHuggingPriority(.defaultLow, for: .vertical)
+        return view
+        
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
     }
     
-    convenience init(frame: CGRect, results: [ColorResultModel], bottomLabelText: String, soundItOutColors: [(color: UIColor, ID: String, range: NSRange)], delegate: ResultCardDelegate? = nil, isFlashcard: Bool = false) {
+    convenience init(frame: CGRect, results: [ColorResultModel], bottomLabelText: String, soundItOutColors: [(color: UIColor, ID: String, range: NSRange)], delegate: ResultCardDelegate? = nil) {
         
         self.init(frame: frame)
         
         self.results = results
         self.bottomLabelText = bottomLabelText
         self.soundItOutColors = soundItOutColors
-        self.isFlashcard = isFlashcard
         self.delegate = delegate
-
+        
         setupView()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
     
     func setupView() {
         
+        self.isUserInteractionEnabled = true
+        self.addSubview(mainStackView)
+        mainStackView.anchor(top: self.topAnchor,
+                             bottom: self.bottomAnchor,
+                             leading: self.leadingAnchor,
+                             trailing: self.trailingAnchor,
+                             height: nil,
+                             width: nil,
+                             padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
+        
+        // Configure Self
         self.backgroundColor = .white
         self.roundCorners(cornerRadius: 10)
         
@@ -152,46 +182,49 @@ class ResultCardView: UIView {
         topLabel.configureBasedOnInput()
         topLabel.addGestureRecognizer(UITapGestureRecognizer(target:self, action: #selector(wildCardTapped(_:))))
         
-        // Configure Bottom Label
+        topLabelContainer.addSubview(topLabel)
+        topLabel.translatesAutoresizingMaskIntoConstraints = false
+        topLabel.centerXAnchor.constraint(equalTo: topLabelContainer.centerXAnchor).isActive = true
+        topLabel.widthAnchor.constraint(lessThanOrEqualTo: topLabelContainer.widthAnchor).isActive = true
+        topLabel.topAnchor.constraint(equalTo: topLabelContainer.topAnchor).isActive = true
+        topLabel.bottomAnchor.constraint(equalTo: topLabelContainer.bottomAnchor).isActive = true
         
+        // Configure Bottom Label
         bottomLabel.attributedText = NSAttributedString(string: bottomLabelText)
         bottomLabel.configureBottomLabel()
         
-        // Add Flashcard Button to its Background View
-        if !isFlashcard {
-            
-            addFlashcardBackgroundView.addSubview(addFlashcardButton)
-            
-            addFlashcardButton.anchor(top: addFlashcardBackgroundView.topAnchor,
-                                      bottom: addFlashcardBackgroundView.bottomAnchor,
-                                      leading: addFlashcardBackgroundView.leadingAnchor,
-                                      trailing: addFlashcardBackgroundView.trailingAnchor,
-                                      height: nil,
-                                      width: nil)
-        }
-
+        bottomLabelContainer.addSubview(bottomLabel)
+        bottomLabel.translatesAutoresizingMaskIntoConstraints = false
+        bottomLabel.centerXAnchor.constraint(equalTo: bottomLabelContainer.centerXAnchor).isActive = true
+        bottomLabel.widthAnchor.constraint(lessThanOrEqualTo: bottomLabelContainer.widthAnchor).isActive = true
+        bottomLabel.topAnchor.constraint(equalTo: bottomLabelContainer.topAnchor).isActive = true
+        bottomLabel.bottomAnchor.constraint(equalTo: bottomLabelContainer.bottomAnchor).isActive = true
         
         // Setup Collection View
         setupCollectionView()
         
+        // Configure Audio Stack View
+        let spacer = UIView()
+        spacer.backgroundColor = .white
+        spacer.translatesAutoresizingMaskIntoConstraints = false
+        spacer.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        
+        soundButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        loopButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
+        audioStackView.addArrangedSubview(spacer)
+        audioStackView.addArrangedSubview(soundButton)
+        audioStackView.addArrangedSubview(loopButton)
+        
         // Add subviews to Result Card
-        self.addSubview(topLabel)
-        self.addSubview(bottomLabel)
-        self.addSubview(soundButton)
-        self.addSubview(loopButton)
-        self.addSubview(lineDividerView)
-        self.addSubview(soundItOutCollectionView)
-        
-        if !isFlashcard {
-            self.addSubview(addFlashcardBackgroundView)
-        }
-        
-        // Setup Result Card Layout Constraints for subviews
-        setResultViewConstraints()
-        
-        // Hide Unecessary Views in Result Controller
-        updateResultSubviewVisibilities()
-        
+        mainStackView.addArrangedSubview(audioStackView)
+        mainStackView.addArrangedSubview(topLabelContainer)
+        mainStackView.addArrangedSubview(soundItOutCollectionView)
+        mainStackView.addArrangedSubview(spacer1)
+        mainStackView.addArrangedSubview(spacer2)
+        mainStackView.addArrangedSubview(bottomLabelContainer)
+                
     }
     
     func setupCollectionView() {
@@ -202,98 +235,85 @@ class ResultCardView: UIView {
         soundItOutCollectionView.isScrollEnabled = false
     }
     
-    func setResultViewConstraints() {
+    func updateViews() {
         
-        lineDividerView.translatesAutoresizingMaskIntoConstraints = false
-        lineDividerView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        lineDividerView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        lineDividerView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        lineDividerView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        // Update Top Label
+        let topAttributedText = NSMutableAttributedString()
         
-        loopButton.anchor(top: self.topAnchor,
-                          bottom: nil,
-                          leading: nil,
-                          trailing: self.trailingAnchor,
-                          height: nil,
-                          width: nil,
-                          padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -10))
-        
-        soundButton.anchor(top: self.topAnchor,
-                           bottom: nil,
-                           leading: nil,
-                           trailing: loopButton.leadingAnchor,
-                           height: nil,
-                           width: nil,
-                           padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -10))
-        
-        topLabel.translatesAutoresizingMaskIntoConstraints = false
-        topLabel.topAnchor.constraint(equalTo: soundButton.bottomAnchor, constant: 27).isActive = true
-        topLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0).isActive = true
-        topLabel.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor, constant: 10).isActive = true
-        topLabel.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -10).isActive = true
-        
-        soundItOutCollectionView.anchor(top: topLabel.bottomAnchor,
-                                        bottom: lineDividerView.topAnchor,
-                                        leading: self.leadingAnchor,
-                                        trailing: self.trailingAnchor,
-                                        height: nil,
-                                        width: nil,
-                                        padding: UIEdgeInsets(top: 10, left: 20, bottom: -20, right: -20))
-        
-        bottomLabel.translatesAutoresizingMaskIntoConstraints = false
-        bottomLabel.topAnchor.constraint(equalTo: lineDividerView.bottomAnchor, constant: 20).isActive = true
-        bottomLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0).isActive = true
-        bottomLabel.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor, constant: 10).isActive = true
-        bottomLabel.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -10).isActive = true
-        
-        if !isFlashcard {
+        for i in 0..<results.count {
             
-            addFlashcardBackgroundView.anchor(top: bottomLabel.bottomAnchor,
-                                              bottom: self.bottomAnchor,
-                                              leading: nil,
-                                              trailing: self.trailingAnchor,
-                                              height: 30,
-                                              width: 30,
-                                              padding: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
+            topAttributedText.append(results[i].attributedText)
             
+            if i != results.count - 1 {
+                topAttributedText.append(NSAttributedString(string: " "))
+            }
         }
         
-        else {
-            bottomLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        }
-
+        topLabel.attributedText = topAttributedText
+        topLabel.configureBasedOnInput()
+        
+        // Update Bottom Label
+        bottomLabel.attributedText = NSAttributedString(string: bottomLabelText)
+        bottomLabel.configureBottomLabel()
+        
+        // Update Collection View
+        soundItOutCollectionView.reloadData()
         
     }
     
-    func updateResultSubviewVisibilities() {
+    func updateSubviewVisibilities(isFront: Bool) {
         
-        if results.count == 1 {
+        popTip.hide()
+        
+        // Front : colored word, sound bits and audio buttons
+        if isFront {
             
-            if results[0].audioString != nil {
-                    soundButton.isHidden = false
-                    loopButton.isHidden = false
+            // Update top and bottom label visibilities
+            topLabelContainer.isHidden = false
+            bottomLabelContainer.isHidden = true
+            
+            // Update audio and collection view visibilities
+            if results.count == 1 {
+                
+                if results[0].audioString != nil {
+                    audioStackView.isHidden = false
+                }
+                    
+                else {
+                    audioStackView.isHidden = true
                 }
                 
-                else {
-                    soundButton.isHidden = true
-                    loopButton.isHidden = true
-                }
-
                 soundItOutCollectionView.isHidden = false
+                spacer1.isHidden = false
+                spacer2.isHidden = false
                 
             }
-            
+                
             else {
                 
-                soundButton.isHidden = true
-                loopButton.isHidden = true
+                audioStackView.isHidden = true
                 soundItOutCollectionView.isHidden = true
+                spacer1.isHidden = true
+                spacer2.isHidden = true
                 
             }
             
         }
+        
+        // Back : bottom label only
+        else {
+            
+            topLabelContainer.isHidden = true
+            audioStackView.isHidden = true
+            soundItOutCollectionView.isHidden = true
+            bottomLabelContainer.isHidden = false
+            spacer1.isHidden = true
+            spacer2.isHidden = true
+            
+        }
+    }
     
-//MARK: - Selector Functions
+    //MARK: - Selector Functions
     
     @objc func soundButtonPressed(_ sender: UIButton) {
         
@@ -307,7 +327,7 @@ class ResultCardView: UIView {
     
     @objc func loopButtonPressed(_ sender: UIButton) {
         
-            
+        
         if Utilities.shared.player != nil {
             print("playing")
             sender.tintColor = .black
@@ -378,7 +398,7 @@ class ResultCardView: UIView {
         case "weɪ":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -391,7 +411,7 @@ class ResultCardView: UIView {
         case "t":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -406,7 +426,7 @@ class ResultCardView: UIView {
         case "ər","ʊr":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -419,7 +439,7 @@ class ResultCardView: UIView {
         case "h":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -438,7 +458,7 @@ class ResultCardView: UIView {
         case "ju":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -451,7 +471,7 @@ class ResultCardView: UIView {
         case "f":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -480,7 +500,7 @@ class ResultCardView: UIView {
         case "ɡ":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -491,7 +511,7 @@ class ResultCardView: UIView {
         case "z":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -506,7 +526,7 @@ class ResultCardView: UIView {
         case "jə":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -515,7 +535,7 @@ class ResultCardView: UIView {
         case "kʃ":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -524,7 +544,7 @@ class ResultCardView: UIView {
         case "wə":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -533,7 +553,7 @@ class ResultCardView: UIView {
         case "wɪ":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -542,7 +562,7 @@ class ResultCardView: UIView {
         case "k":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -557,7 +577,7 @@ class ResultCardView: UIView {
         case "w":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
-                   let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
+                    let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
                     showPopTip(range: range, linkString: wildCardNumber)
                 }
@@ -575,22 +595,10 @@ class ResultCardView: UIView {
             break
         }
     }
-    
-    @objc func addFlashcardButtonPressed() {
-        
-        if Utilities.shared.isUserSignedIn {
-            self.delegate?.presentDeckSelectionView()
-        }
-        
-        else {
-            self.delegate?.goToLogin()
-        }
-    }
-    
 }
 
 //MARK: - Collection View Data Source Methods
-extension ResultCardView: UICollectionViewDataSource {
+extension TestFlashcard: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -620,7 +628,7 @@ extension ResultCardView: UICollectionViewDataSource {
 }
 
 //MARK: - Collection View Delegate Flow Layout Methods
-extension ResultCardView: UICollectionViewDelegateFlowLayout {
+extension TestFlashcard: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         return CGSize(width: 35, height: 35)
@@ -652,18 +660,18 @@ extension ResultCardView: UICollectionViewDelegateFlowLayout {
 
 //MARK:- Utility Functions
 
-extension ResultCardView {
-        
+extension TestFlashcard {
+    
     func showPopTip(range : NSRange, linkString: String) {
         
         guard let rectForRange = self.topLabel.boundingRect(forCharacterRange: range),
-              let actualPronunciation = K.linkToWildCardDictionary[linkString]
-              else { return }
+            let actualPronunciation = K.linkToWildCardDictionary[linkString]
+            else { return }
         
         actualPronunciation.addAttribute(.font,
                                          value: UIFont(name: "Arial-BoldMT", size: 30)!,
                                          range: NSRange(location: 0, length: actualPronunciation.length))
-    
+        
         if range == prevRange && popTip.isVisible {
             
             popTip.hide()
@@ -671,7 +679,7 @@ extension ResultCardView {
             prevRange = nil
             
         }
-                    
+            
         else {
             
             popTip.show(attributedText: actualPronunciation, direction: .up, maxWidth: 400, in: self.topLabel, from: rectForRange)
@@ -681,3 +689,4 @@ extension ResultCardView {
         }
     }
 }
+

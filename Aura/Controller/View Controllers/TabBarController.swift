@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class TabBarController: UITabBarController {
 
@@ -93,8 +94,29 @@ class TabBarController: UITabBarController {
     
     func setupTabBar() {
         
-        setupViewControllers()
-        setupTabBarCustomizations()
+        if Auth.auth().currentUser != nil {
+            
+            DispatchQueue.main.async {
+                self.isSignedIn = true
+                FirebaseManager.shared.loadUser { (user) in
+                    
+                    if let user = user {
+                        
+                        Utilities.shared.user = user
+                        Utilities.shared.isUserSignedIn = true
+                        
+                    }
+                }
+                self.setupViewControllers()
+                self.setupTabBarCustomizations()
+            }
+            
+        }
+        
+        else {
+            setupViewControllers()
+            setupTabBarCustomizations()
+        }
         
     }
 

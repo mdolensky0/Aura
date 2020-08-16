@@ -20,5 +20,6 @@ struct SearchAndResult: Codable {
     
     let searchText: String
     let resultText: String
+    let searchInfo: FBSearchInfo
     
 }

@@ -41,7 +41,8 @@ class LoginController: UIViewController {
         let button = UIButton()
         button.setTitle("Sign Up", for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
-        button.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(signUpPressed(_:)), for: .touchUpInside)
+        button.showsTouchWhenHighlighted = true
         return button
         
     }()
@@ -51,7 +52,8 @@ class LoginController: UIViewController {
         let button = UIButton()
         button.setTitle("Log In", for: .normal)
         button.styleHollowbutton(outlineColor: .black)
-        button.addTarget(self, action: #selector(logInPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(logInPressed(_:)), for: .touchUpInside)
+        button.showsTouchWhenHighlighted = true
         return button
         
     }()
@@ -115,7 +117,7 @@ class LoginController: UIViewController {
                 
     }
     
-    @objc func signUpPressed() {
+    @objc func signUpPressed(_ sender: UIButton) {
         
         let signUpVC = SignUpController()
         signUpVC.isModal = self.isModal
@@ -124,7 +126,7 @@ class LoginController: UIViewController {
         
     }
     
-    @objc func logInPressed() {
+    @objc func logInPressed(_ sender: UIButton) {
         
         let logInVC = SignInController()
         logInVC.isModal = self.isModal

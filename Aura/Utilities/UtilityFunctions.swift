@@ -25,9 +25,7 @@ protocol AddSearchHistoryDelegate {
 class Utilities {
     
     static let shared = Utilities()
-    
-//MARK: - Sound Variables and Functions
-    
+        
     var delegate: DecksControllerDelegate?
     var searchHistoryDelegate: AddSearchHistoryDelegate?
     
@@ -40,6 +38,7 @@ class Utilities {
         
     }
     
+//MARK: - Sound Variables and Functions
     var soundItOutPlayer: AVAudioPlayer?
     var player : AVPlayer?
 
@@ -65,9 +64,14 @@ class Utilities {
         }
     }
 
-    func playAudioFile(urlString: String, loop: Int) {
+    func playAudioFile(urlString: String, loop: Int, sender: UIButton) {
         
         var count = 0
+        sender.tintColor = K.Colors.yellow
+        
+        if loop != 0 {
+            sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        }
         
         guard let url = URL.init(string: urlString.trimmingCharacters(in: .whitespacesAndNewlines)) else { return }
         
@@ -87,6 +91,14 @@ class Utilities {
                 self?.player?.play()
                 count += 1
                 
+            } else {
+                sender.tintColor  = .black
+                
+                if loop != 0 {
+                    sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
+                }
+                
+                self?.player = nil
             }
         }
     }

@@ -48,7 +48,8 @@ class SignUpController: UIViewController {
         let button = UIButton()
         button.setTitle("Sign Up", for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
-        button.addTarget(self, action: #selector(signUpPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(signUpPressed(_:)), for: .touchUpInside)
+        button.showsTouchWhenHighlighted = true
         return button
         
     }()
@@ -143,7 +144,7 @@ class SignUpController: UIViewController {
         
     }
     
-    @objc func signUpPressed() {
+    @objc func signUpPressed(_ sender: UIButton) {
         
         // Get email, password, and retyped password
         guard let email = emailTextField.text,
@@ -186,12 +187,15 @@ class SignUpController: UIViewController {
             
         }
         
+        self.startLoadingScreen()
+        
         // Sign In
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             
             if let error = error {
                 
                 self.showError(error.localizedDescription)
+                self.endLoadingScreen()
                 return
                 
             }
@@ -220,16 +224,20 @@ class SignUpController: UIViewController {
             }
             
             if self.isModal {
-            
-                guard let tabBarController = self.presentingViewController as? TabBarController
-                    else { return }
                 
+                guard let tabBarController = self.presentingViewController as? TabBarController else {
+                    self.endLoadingScreen()
+                    return
+                }
+                
+                self.endLoadingScreen()
                 tabBarController.userSignedIn()
                 self.dismiss(animated: true, completion: nil)
                 self.delegate?.tapAddFlashcardButton()
             }
                 
             else {
+                self.endLoadingScreen()
                 guard let tabBarController = self.tabBarController as? TabBarController else { return }
                 tabBarController.userSignedIn()
             }

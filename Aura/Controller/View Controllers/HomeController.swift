@@ -51,6 +51,4 @@ class HomeController: UIViewController {
         referLabel.topAnchor.constraint(equalTo: comingSoon.topAnchor, constant: 100).isActive = true
         
     }
-    
-
 }
