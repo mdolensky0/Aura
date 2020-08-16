@@ -10,7 +10,7 @@ import UIKit
 
 class TestController: UIViewController {
     
-    // Data
+    //MARK: - Data
     var myDeck: DeckModel!
     var myDeckIndex: Int!
     var divisor: CGFloat!
@@ -18,7 +18,7 @@ class TestController: UIViewController {
     var isReverse = true
     var myQueue = [FlashcardModel]()
     
-    // Subviews
+    //MARK: - Subviews
     
     var centerTitle: UILabel = {
        
@@ -185,6 +185,37 @@ class TestController: UIViewController {
     
     var currentCard: TestFlashcard!
     
+    let containerView: UIView = {
+        
+        let view = UIView()
+        return view
+        
+    }()
+    
+    let keyTypeLabel: UILabel = {
+        
+        let label = UILabel()
+        label.text = "Front to Back"
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        label.backgroundColor = .white
+        return label
+        
+    }()
+    
+    let toggle: UISwitch = {
+        
+        let toggle = UISwitch()
+        toggle.onTintColor = K.Colors.purple
+        toggle.addTarget(self, action: #selector(togglePressed(_:)), for: .valueChanged)
+        toggle.backgroundColor = .white
+        return toggle
+        
+    }()
+    
+    
+    //MARK: - Init
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -193,12 +224,17 @@ class TestController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        
         flashcardBackground.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 10)
         XView.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 30)
         flipView.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 30)
         checkmarkView.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 30)
+        containerView.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3)
+        containerView.backgroundColor = .white
+
     }
     
+    //MARK: - Setup
     func setup() {
         
         // Get Data
@@ -221,10 +257,39 @@ class TestController: UIViewController {
         // Configure self.view
         view.backgroundColor = K.Colors.lightGrey
         
+        // Add UISwitch and View Type Label
+        containerView.addSubview(keyTypeLabel)
+        containerView.addSubview(toggle)
+        
+        keyTypeLabel.anchor(top: containerView.topAnchor,
+                            bottom: containerView.bottomAnchor,
+                            leading: containerView.leadingAnchor,
+                            trailing: toggle.trailingAnchor,
+                            height: nil,
+                            width: nil,
+                            padding: UIEdgeInsets(top: 10, left: 10, bottom: -10, right: 0))
+        
+        toggle.anchor(top: containerView.topAnchor,
+                      bottom: containerView.bottomAnchor,
+                      leading: nil,
+                      trailing: containerView.trailingAnchor,
+                      height: nil,
+                      width: nil,
+                      padding: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
+        
+        view.addSubview(containerView)
+        containerView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                             bottom: nil,
+                             leading: view.leadingAnchor,
+                             trailing: view.trailingAnchor,
+                             height: nil,
+                             width: nil)
+        
         // Add content view
         view.addSubview(contentView)
+        view.sendSubviewToBack(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+        contentView.anchor(top: containerView.bottomAnchor,
                            bottom: nil,
                            leading: view.leadingAnchor,
                            trailing: view.trailingAnchor,
@@ -555,6 +620,35 @@ class TestController: UIViewController {
             
         }
     
+    }
+    
+    @objc func togglePressed(_ sender: UISwitch) {
+        
+        if !sender.isOn {
+            
+            keyTypeLabel.text = "Front to Back"
+            isReverse = true
+            
+            if isFront {
+                isFront = false
+                currentCard.updateSubviewVisibilities(isFront: isFront)
+                UIView.transition(with: self.flashcardBackground, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+            }
+            
+        }
+            
+        else {
+            
+            keyTypeLabel.text = "Back to Front"
+            isReverse = false
+            
+            if !isFront {
+                isFront = true
+                currentCard.updateSubviewVisibilities(isFront: isFront)
+                UIView.transition(with: self.flashcardBackground, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+            }
+            
+        }
     }
     
 }
