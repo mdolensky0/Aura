@@ -50,7 +50,7 @@ class KeyCardScrollView: UIScrollView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.clipsToBounds = false
         self.isPagingEnabled = true
-        self.backgroundColor = K.Colors.lightGrey
+        self.backgroundColor = .clear
         self.showsHorizontalScrollIndicator = false
         self.layer.masksToBounds = false
         

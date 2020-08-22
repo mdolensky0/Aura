@@ -18,9 +18,9 @@ class FlashCardController: UIViewController {
     // Subviews
     var centerTitle: UILabel = {
        
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 40))
-        label.backgroundColor = K.Colors.purple
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
+        label.backgroundColor = .clear
+        label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
         label.text = "Decks"
         label.numberOfLines = 2
         label.textColor = .white
@@ -32,7 +32,7 @@ class FlashCardController: UIViewController {
     var mainScrollView: UIScrollView = {
         
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = K.Colors.lightGrey
+        scrollView.backgroundColor = .clear
         return scrollView
         
     }()
@@ -60,7 +60,7 @@ class FlashCardController: UIViewController {
         
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "plus.circle.fill")
-        imageView.tintColor = K.Colors.purple
+        imageView.tintColor = K.DesignColors.primary
         imageView.backgroundColor = .white
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -82,6 +82,10 @@ class FlashCardController: UIViewController {
             let button = UIButton()
             button.backgroundColor = .clear
             button.addTarget(self, action: #selector(createNewDeck(_:)), for: .touchUpInside)
+            button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+            button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+            button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+            button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
             return button
             
         }()
@@ -142,7 +146,7 @@ class FlashCardController: UIViewController {
     var popularDecksScrollView: UIScrollView = {
         
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = K.Colors.lightGrey
+        scrollView.backgroundColor = .clear
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.layer.masksToBounds = false
         return scrollView
@@ -152,7 +156,7 @@ class FlashCardController: UIViewController {
     var popularDecksContentView: UIView = {
         
         let view = UIView()
-        view.backgroundColor = K.Colors.lightGrey
+        view.backgroundColor = .clear
         return view
         
     }()
@@ -172,9 +176,9 @@ class FlashCardController: UIViewController {
     var popularDecksHeaderLabel: UILabel = {
         
         let label = UILabel()
-        label.backgroundColor = K.Colors.lightGrey
+        label.backgroundColor = .clear
         label.text = "Popular Decks"
-        label.font = .systemFont(ofSize: 30, weight: .medium)
+        label.font = .systemFont(ofSize: 17, weight: .regular)
         label.textAlignment = .left
         return label
         
@@ -183,7 +187,7 @@ class FlashCardController: UIViewController {
     var myDecksScrollView: UIScrollView = {
         
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = K.Colors.lightGrey
+        scrollView.backgroundColor = .clear
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.layer.masksToBounds = false
         return scrollView
@@ -193,7 +197,7 @@ class FlashCardController: UIViewController {
     var myDecksContentView: UIView = {
         
         let view = UIView()
-        view.backgroundColor = K.Colors.lightGrey
+        view.backgroundColor = .clear
         return view
         
     }()
@@ -213,9 +217,9 @@ class FlashCardController: UIViewController {
     var myDecksHeaderLabel: UILabel = {
         
         let label = UILabel()
-        label.backgroundColor = K.Colors.lightGrey
+        label.backgroundColor = .clear
         label.text = "My Decks"
-        label.font = .systemFont(ofSize: 30, weight: .medium)
+        label.font = .systemFont(ofSize: 17, weight: .regular)
         label.textAlignment = .left
         return label
         
@@ -231,7 +235,7 @@ class FlashCardController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         
-        createNewDeckButton.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 2)
+        createNewDeckButton.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
         
         for view in popularDecksStackView.arrangedSubviews {
             view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
@@ -249,7 +253,7 @@ class FlashCardController: UIViewController {
     
     func setup() {
         
-        view.backgroundColor = .white
+        view.backgroundColor = K.DesignColors.background
         
         // Setup Navigation Bar
         self.navigationItem.titleView = centerTitle
@@ -262,7 +266,7 @@ class FlashCardController: UIViewController {
         
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.barTintColor = K.Colors.purple
+        self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
         
         // Add Scroll and Stack View
         setupScrollView()
@@ -540,6 +544,10 @@ class FlashCardController: UIViewController {
             button.tag = index
             index += 1
             button.addTarget(self, action: #selector(deckPressed(_:)), for: .touchUpInside)
+            button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+            button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+            button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+            button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
             
             contentView.addSubview(button)
             button.anchor(top: contentView.topAnchor,
@@ -573,6 +581,11 @@ class FlashCardController: UIViewController {
     }
     
     @objc func createNewDeck(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.2) {
+            sender.superview?.transform = .identity
+            sender.superview?.superview?.layer.shadowOpacity = 0.3
+        }
         
         var textField = UITextField()
         
@@ -614,11 +627,33 @@ class FlashCardController: UIViewController {
     }
     
     @objc func deckPressed(_ sender: UIButton) {
+         
+        UIView.animate(withDuration: 0.1) {
+            sender.superview?.transform = .identity
+            sender.superview?.superview?.layer.shadowOpacity = 0.3
+        }
         
         let vc = DeckController()
         vc.myDeck = myDecks[sender.tag]
         vc.myDeckIndex = sender.tag
         self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
+    @objc func touchDown(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.superview?.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            sender.superview?.superview?.layer.shadowOpacity = 0.4
+        }
+    }
+    
+    @objc func cancelEvent(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.superview?.transform = .identity
+            sender.superview?.superview?.layer.shadowOpacity = 0.3
+        }
         
     }
 

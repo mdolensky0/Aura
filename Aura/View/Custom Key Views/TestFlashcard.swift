@@ -33,6 +33,15 @@ class TestFlashcard: UIView {
     var delegate: ResultCardDelegate?
     
     // SUBVIEWS
+    var container: UIView  = {
+        
+        let view = UIView()
+        view.backgroundColor = .white
+        view.roundCorners(cornerRadius: 10)
+        return view
+        
+    }()
+    
     var mainStackView: UIStackView = {
         
         let view = UIStackView()
@@ -40,6 +49,7 @@ class TestFlashcard: UIView {
         view.alignment = .fill
         view.distribution = .equalSpacing
         view.backgroundColor = .white
+        view.spacing = 20
         return view
         
     }()
@@ -56,6 +66,14 @@ class TestFlashcard: UIView {
         
     }()
     
+    var topLabelContainer: UIView = {
+        
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+        
+    }()
+    
     var bottomLabel: UILabel = {
         
         let label = UILabel()
@@ -64,14 +82,30 @@ class TestFlashcard: UIView {
         
     }()
     
-    var audioStackView: UIStackView = {
+    let bottomLabelContainer: UIView = {
+        
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+        
+    }()
+    
+    let buttonStackView: UIStackView = {
         
         let view = UIStackView()
-        view.backgroundColor = .white
         view.axis = .horizontal
         view.alignment = .center
-        view.distribution = .fill
-        view.spacing = 12
+        view.distribution = .equalSpacing
+        view.backgroundColor = K.DesignColors.darkVariant
+        view.spacing = 18
+        return view
+        
+    }()
+    
+    let buttonsContainer: UIView = {
+        
+        let view = UIView()
+        view.backgroundColor = .white
         return view
         
     }()
@@ -80,10 +114,19 @@ class TestFlashcard: UIView {
         
         let button = UIButton()
         button.setImage(UIImage(systemName: "speaker.3.fill"), for: .normal)
+        button.contentMode = .center
         button.backgroundColor = .white
-        button.tintColor = .black
-        button.contentMode = .scaleAspectFit
+        button.tintColor = K.DesignColors.primary
+        
+        button.widthAnchor.constraint(equalToConstant: 42).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        button.roundCorners(cornerRadius: 21)
+        
         button.addTarget(self, action: #selector(soundButtonPressed(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         return button
         
     }()
@@ -92,11 +135,40 @@ class TestFlashcard: UIView {
         
         let button = UIButton()
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.contentMode = .center
         button.backgroundColor = .white
-        button.tintColor = .black
-        button.contentMode = .scaleAspectFit
+        button.tintColor = K.DesignColors.primary
+        
+        button.widthAnchor.constraint(equalToConstant: 42).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        button.roundCorners(cornerRadius: 21)
+        
         button.addTarget(self, action: #selector(loopButtonPressed(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         return button
+        
+    }()
+    
+    let soundBackgroundView: UIView = {
+        
+        let view = UIView()
+        view.widthAnchor.constraint(equalToConstant: 42).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        view.roundCorners(cornerRadius: 21)
+        return view
+        
+    }()
+    
+    let loopBackgroundView: UIView = {
+        
+        let view = UIView()
+        view.widthAnchor.constraint(equalToConstant: 42).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        view.roundCorners(cornerRadius: 21)
+        return view
         
     }()
     
@@ -104,31 +176,11 @@ class TestFlashcard: UIView {
         
         let cv = DynamicCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.backgroundColor = .white
+        cv.clipsToBounds = false
         return cv
         
     }()
-    
-    let topLabelContainer = UIView()
-    let bottomLabelContainer = UIView()
-    
-    let spacer1: UIView = {
         
-        let view = UIView()
-        view.backgroundColor = .white
-        view.setContentHuggingPriority(.defaultLow, for: .vertical)
-        return view
-        
-    }()
-
-    let spacer2: UIView = {
-        
-        let view = UIView()
-        view.backgroundColor = .white
-        view.setContentHuggingPriority(.defaultLow, for: .vertical)
-        return view
-        
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -152,20 +204,32 @@ class TestFlashcard: UIView {
     
     func setupView() {
         
-        self.isUserInteractionEnabled = true
-        self.addSubview(mainStackView)
-        mainStackView.anchor(top: self.topAnchor,
-                             bottom: self.bottomAnchor,
-                             leading: self.leadingAnchor,
-                             trailing: self.trailingAnchor,
-                             height: nil,
-                             width: nil,
-                             padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
-        
         // Configure Self
         self.backgroundColor = .white
         self.roundCorners(cornerRadius: 10)
+        self.isUserInteractionEnabled = true
+        self.clipsToBounds = false
+        container.clipsToBounds = false
         
+        // Add Container View
+        self.addSubview(container)
+        container.anchor(top: self.topAnchor,
+                         bottom: self.bottomAnchor,
+                         leading: self.leadingAnchor,
+                         trailing: self.trailingAnchor,
+                         height: nil,
+                         width: nil)
+        
+        container.addSubview(mainStackView)
+        
+        mainStackView.translatesAutoresizingMaskIntoConstraints = false
+        mainStackView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20).isActive = true
+        mainStackView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20).isActive = true
+        mainStackView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        mainStackView.topAnchor.constraint(greaterThanOrEqualTo: container.topAnchor, constant: 20).isActive = true
+        mainStackView.bottomAnchor.constraint(lessThanOrEqualTo: container.bottomAnchor, constant: -20).isActive = true
+        
+
         // Configure Top Label
         let topAttributedText = NSMutableAttributedString()
         
@@ -185,10 +249,11 @@ class TestFlashcard: UIView {
         topLabelContainer.addSubview(topLabel)
         topLabel.translatesAutoresizingMaskIntoConstraints = false
         topLabel.centerXAnchor.constraint(equalTo: topLabelContainer.centerXAnchor).isActive = true
-        topLabel.widthAnchor.constraint(lessThanOrEqualTo: topLabelContainer.widthAnchor).isActive = true
         topLabel.topAnchor.constraint(equalTo: topLabelContainer.topAnchor).isActive = true
         topLabel.bottomAnchor.constraint(equalTo: topLabelContainer.bottomAnchor).isActive = true
-        
+        topLabel.leadingAnchor.constraint(greaterThanOrEqualTo: topLabelContainer.leadingAnchor).isActive = true
+        topLabel.trailingAnchor.constraint(lessThanOrEqualTo: topLabelContainer.trailingAnchor).isActive = true
+                
         // Configure Bottom Label
         bottomLabel.attributedText = NSAttributedString(string: bottomLabelText)
         bottomLabel.configureBottomLabel()
@@ -196,34 +261,48 @@ class TestFlashcard: UIView {
         bottomLabelContainer.addSubview(bottomLabel)
         bottomLabel.translatesAutoresizingMaskIntoConstraints = false
         bottomLabel.centerXAnchor.constraint(equalTo: bottomLabelContainer.centerXAnchor).isActive = true
-        bottomLabel.widthAnchor.constraint(lessThanOrEqualTo: bottomLabelContainer.widthAnchor).isActive = true
+        bottomLabel.leadingAnchor.constraint(greaterThanOrEqualTo: bottomLabelContainer.leadingAnchor).isActive = true
+        bottomLabel.trailingAnchor.constraint(lessThanOrEqualTo: bottomLabelContainer.trailingAnchor).isActive = true
         bottomLabel.topAnchor.constraint(equalTo: bottomLabelContainer.topAnchor).isActive = true
         bottomLabel.bottomAnchor.constraint(equalTo: bottomLabelContainer.bottomAnchor).isActive = true
-        
+                
         // Setup Collection View
         setupCollectionView()
         
-        // Configure Audio Stack View
-        let spacer = UIView()
-        spacer.backgroundColor = .white
-        spacer.translatesAutoresizingMaskIntoConstraints = false
-        spacer.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        // Setup Sound and Loop buttons
+        soundBackgroundView.addSubview(soundButton)
+        loopBackgroundView.addSubview(loopButton)
         
-        soundButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        loopButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        soundButton.anchor(top: soundBackgroundView.topAnchor,
+                           bottom: soundBackgroundView.bottomAnchor,
+                           leading: soundBackgroundView.leadingAnchor,
+                           trailing: soundBackgroundView.trailingAnchor,
+                           height: nil,
+                           width: nil)
         
-        audioStackView.addArrangedSubview(spacer)
-        audioStackView.addArrangedSubview(soundButton)
-        audioStackView.addArrangedSubview(loopButton)
+        loopButton.anchor(top: loopBackgroundView.topAnchor,
+                          bottom: loopBackgroundView.bottomAnchor,
+                          leading: loopBackgroundView.leadingAnchor,
+                          trailing: loopBackgroundView.trailingAnchor,
+                          height: nil,
+                          width: nil)
+        
+        buttonStackView.addArrangedSubview(loopBackgroundView)
+        buttonStackView.addArrangedSubview(soundBackgroundView)
+        
+        buttonsContainer.addSubview(buttonStackView)
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+        buttonStackView.centerXAnchor.constraint(equalTo: buttonsContainer.centerXAnchor).isActive = true
+        buttonStackView.leadingAnchor.constraint(greaterThanOrEqualTo: buttonsContainer.leadingAnchor).isActive = true
+        buttonStackView.trailingAnchor.constraint(lessThanOrEqualTo: buttonsContainer.trailingAnchor).isActive = true
+        buttonStackView.topAnchor.constraint(equalTo: buttonsContainer.topAnchor).isActive = true
+        buttonStackView.bottomAnchor.constraint(equalTo: buttonsContainer.bottomAnchor).isActive = true
         
         // Add subviews to Result Card
-        mainStackView.addArrangedSubview(audioStackView)
         mainStackView.addArrangedSubview(topLabelContainer)
         mainStackView.addArrangedSubview(soundItOutCollectionView)
-        mainStackView.addArrangedSubview(spacer1)
-        mainStackView.addArrangedSubview(spacer2)
         mainStackView.addArrangedSubview(bottomLabelContainer)
+        mainStackView.addArrangedSubview(buttonsContainer)
                 
     }
     
@@ -276,25 +355,21 @@ class TestFlashcard: UIView {
             if results.count == 1 {
                 
                 if results[0].audioString != nil {
-                    audioStackView.isHidden = false
+                    buttonsContainer.isHidden = false
                 }
                     
                 else {
-                    audioStackView.isHidden = true
+                    buttonsContainer.isHidden = true
                 }
                 
                 soundItOutCollectionView.isHidden = false
-                spacer1.isHidden = false
-                spacer2.isHidden = false
                 
             }
                 
             else {
                 
-                audioStackView.isHidden = true
+                buttonsContainer.isHidden = true
                 soundItOutCollectionView.isHidden = true
-                spacer1.isHidden = true
-                spacer2.isHidden = true
                 
             }
             
@@ -304,12 +379,9 @@ class TestFlashcard: UIView {
         else {
             
             topLabelContainer.isHidden = true
-            audioStackView.isHidden = true
+            buttonsContainer.isHidden = true
             soundItOutCollectionView.isHidden = true
             bottomLabelContainer.isHidden = false
-            spacer1.isHidden = true
-            spacer2.isHidden = true
-            
         }
     }
     
@@ -319,21 +391,37 @@ class TestFlashcard: UIView {
         
         if let soundURL = results[sender.tag].audioString {
             
+            if Utilities.shared.player != nil {
+                
+                loopButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+                Utilities.shared.player!.pause()
+                Utilities.shared.player = nil
+                
+            }
+            
             Utilities.shared.playAudioFile(urlString: soundURL, loop: 0, sender: sender)
             
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+                sender.superview?.layer.shadowOpacity = 0.5
+            }
+        
         }
         
     }
     
     @objc func loopButtonPressed(_ sender: UIButton) {
         
-        
         if Utilities.shared.player != nil {
             print("playing")
-            sender.tintColor = .black
             sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
             Utilities.shared.player!.pause()
             Utilities.shared.player = nil
+            
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+                sender.superview?.layer.shadowOpacity = 0.5
+            }
         }
             
         else {
@@ -342,6 +430,10 @@ class TestFlashcard: UIView {
                 
                 Utilities.shared.playAudioFile(urlString: soundURL, loop: 5, sender: sender)
                 
+                UIView.animate(withDuration: 0.2) {
+                    sender.transform = .identity
+                    sender.superview?.layer.shadowOpacity = 0.5
+                }
             }
         }
     }
@@ -360,6 +452,29 @@ class TestFlashcard: UIView {
     }
     
     @objc func soundItOutButtonPressed(_ sender: SoundButton) {
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            
+            sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
+            sender.superview?.layer.shadowOpacity = 0.5
+            
+        }) { (completion) in
+            
+            UIView.animate(withDuration: 0.3, animations: {
+                
+                sender.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+                sender.superview?.layer.shadowOpacity = 0.5
+                
+            }) { (completion) in
+                
+                UIView.animate(withDuration: 0.2) {
+                    
+                    sender.transform = .identity
+                    
+                }
+            }
+            
+        }
         
         switch sender.title(for: .normal) {
         case "i":
@@ -594,6 +709,23 @@ class TestFlashcard: UIView {
         default:
             break
         }
+    }
+    
+    @objc func touchDown(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
+            sender.superview?.layer.shadowOpacity = 0.7
+        }
+    }
+    
+    @objc func cancelEvent(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.5
+        }
+        
     }
 }
 

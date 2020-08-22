@@ -50,7 +50,7 @@ class PrevSearchCell: UITableViewCell {
         vertStackView.addArrangedSubview(topLabel)
         topLabel.textAlignment = .left
         topLabel.numberOfLines = 1
-        bottomLabel.font = .systemFont(ofSize: 18, weight: .medium)
+        bottomLabel.font = .systemFont(ofSize: 17, weight: .regular)
         
         // Add bottomLabel
         vertStackView.addArrangedSubview(bottomLabel)

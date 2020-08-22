@@ -37,9 +37,26 @@ struct K {
         static let black       = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
         static let darkGrey    = UIColor(red: 0.5215, green: 0.5215, blue: 0.5215, alpha: 1.0)
         static let lightGrey   = UIColor(red: 0.9215, green: 0.9215, blue: 0.9215, alpha: 1.0)
-        static let yellow      = UIColor(red: 1.0, green: 1.0, blue: 0.0, alpha: 1.0)
+        static let yellow      = UIColor(red: 255.0/255.0, green: 222.0/255.0, blue: 3.0/255.0, alpha: 1.0)
         static let blueGrey    = UIColor(red: 0.7882, green: 0.9294, blue: 0.9333, alpha: 1.0)
         static let maroon      = UIColor(red: 0.6588, green: 0.0314, blue: 0.0, alpha: 1.0)
+    }
+    
+    struct DesignColors {
+        
+        static let background   = UIColor(red: 0.97, green: 0.97, blue: 0.97, alpha: 1.0)
+        static let primary      = UIColor(red: 98.0/255.0, green: 0.0, blue: 238.0/255.0, alpha: 1.0)
+        static let darkVariant  = UIColor(red: 55.0/255.0, green: 0.0, blue: 179.0/255.0, alpha: 1.0)
+        static let lightVariant = UIColor(red: 187.0/255.0, green: 134.0/255.0, blue: 252.0/255.0, alpha: 1.0)
+        static let error        = UIColor(red: 176.0/255.0, green: 0.0, blue: 32.0/255.0, alpha: 1.0)
+    }
+    
+    struct Fonts {
+        
+        static let didot = "Didot"
+        static let didotBold = "Didot-Bold"
+        static let avenirBlack = "Avenir-Black"
+        
     }
     
     struct Cells {

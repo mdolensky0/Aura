@@ -56,6 +56,10 @@ class KeyCardView: UIView {
         button.backgroundColor = .white
         button.tintColor = .black
         button.addTarget(self, action: #selector(soundButtonPressed(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.imageView?.translatesAutoresizingMaskIntoConstraints = false
         button.imageView?.widthAnchor.constraint(equalToConstant: 35).isActive = true
@@ -72,6 +76,10 @@ class KeyCardView: UIView {
         button.backgroundColor = .white
         button.tintColor = .black
         button.addTarget(self, action: #selector(learnMoreButtonPressed(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.imageView?.translatesAutoresizingMaskIntoConstraints = false
         button.imageView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
@@ -106,7 +114,7 @@ class KeyCardView: UIView {
         
         // Background and Shadow
         self.backgroundColor = .white
-        self.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 0, height: 0), radius: 3)
+        self.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 20)
         
         // Fix the width and height of the card
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -174,6 +182,18 @@ class KeyCardView: UIView {
     
     @objc func soundButtonPressed(_ sender: UIButton) {
         
+        UIView.animate(withDuration: 0.2, animations: {
+            
+            sender.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+            
+        }) { (completion) in
+            
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+            }
+            
+        }
+        
         if let audioString = audioString {
             
             Utilities.shared.playSound(audioString)
@@ -182,7 +202,34 @@ class KeyCardView: UIView {
     }
     
     @objc func learnMoreButtonPressed(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            
+            sender.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+            
+        }) { (completion) in
+            
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+            }
+            
+        }
+        
         print("learning more")
+    }
+    
+    @objc func touchDown(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
+        }
+    }
+    
+    @objc func cancelEvent(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = .identity
+        }
     }
     
 }

@@ -47,6 +47,8 @@ class SoundItOutCell: UICollectionViewCell {
                            width: nil)
         
         soundButton.roundCorners(cornerRadius: 6)
+        
+        self.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 3, height: 3), radius: 2)
     }
     
 }

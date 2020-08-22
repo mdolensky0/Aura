@@ -49,7 +49,6 @@ class SignUpController: UIViewController {
         button.setTitle("Sign Up", for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
         button.addTarget(self, action: #selector(signUpPressed(_:)), for: .touchUpInside)
-        button.showsTouchWhenHighlighted = true
         return button
         
     }()
@@ -146,6 +145,18 @@ class SignUpController: UIViewController {
     
     @objc func signUpPressed(_ sender: UIButton) {
         
+        UIView.animate(withDuration: 0.1, animations: {
+            
+            sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            
+        }) { (completion) in
+            
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+            }
+            
+        }
+        
         // Get email, password, and retyped password
         guard let email = emailTextField.text,
               let password = passwordTextField.text,
@@ -187,7 +198,9 @@ class SignUpController: UIViewController {
             
         }
         
-        self.startLoadingScreen()
+        DispatchQueue.main.async {
+            self.startLoadingScreen()
+        }
         
         // Sign In
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
@@ -195,7 +208,9 @@ class SignUpController: UIViewController {
             if let error = error {
                 
                 self.showError(error.localizedDescription)
-                self.endLoadingScreen()
+                DispatchQueue.main.async {
+                    self.endLoadingScreen()
+                }
                 return
                 
             }
@@ -226,18 +241,24 @@ class SignUpController: UIViewController {
             if self.isModal {
                 
                 guard let tabBarController = self.presentingViewController as? TabBarController else {
-                    self.endLoadingScreen()
+                    DispatchQueue.main.async {
+                        self.endLoadingScreen()
+                    }
                     return
                 }
                 
-                self.endLoadingScreen()
+                DispatchQueue.main.async {
+                    self.endLoadingScreen()
+                }
                 tabBarController.userSignedIn()
                 self.dismiss(animated: true, completion: nil)
                 self.delegate?.tapAddFlashcardButton()
             }
                 
             else {
-                self.endLoadingScreen()
+                DispatchQueue.main.async {
+                    self.endLoadingScreen()
+                }
                 guard let tabBarController = self.tabBarController as? TabBarController else { return }
                 tabBarController.userSignedIn()
             }

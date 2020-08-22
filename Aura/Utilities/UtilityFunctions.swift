@@ -67,7 +67,6 @@ class Utilities {
     func playAudioFile(urlString: String, loop: Int, sender: UIButton) {
         
         var count = 0
-        sender.tintColor = K.Colors.yellow
         
         if loop != 0 {
             sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
@@ -92,7 +91,6 @@ class Utilities {
                 count += 1
                 
             } else {
-                sender.tintColor  = .black
                 
                 if loop != 0 {
                     sender.setImage(UIImage(systemName: "play.fill"), for: .normal)

@@ -12,9 +12,9 @@ class KeyController: UIViewController {
     
     var centerTitle: UILabel = {
        
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 40))
-        label.backgroundColor = K.Colors.purple
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
+        label.backgroundColor = .clear
+        label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
         label.text = "English HD Key"
         label.numberOfLines = 2
         label.textColor = .white
@@ -26,7 +26,7 @@ class KeyController: UIViewController {
     var mainScrollView: UIScrollView = {
         
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = K.Colors.lightGrey
+        scrollView.backgroundColor = .clear
         return scrollView
         
     }()
@@ -51,7 +51,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Vowels",
-                                   explanation: "Each color represents a single vowel sound that a letter or combination of letter can make",
+                                   explanation: "Each color represents a single vowel sound that a letter or combination of letters can make.",
                                    numRows: 5,
                                    numCol: 3,
                                    cornerRadius: 0,
@@ -72,7 +72,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "True Consonants",
-                                   explanation: "Most consonants in English are associated with a unique sound. Black letters or letter combinations represent our textbook understanding of what a consonant letter sounds like",
+                                   explanation: "Black letters or letter combinations represent our textbook understanding of what each consonant letter sounds like.",
                                    numRows: 1,
                                    numCol: 1,
                                    cornerRadius: 0,
@@ -89,7 +89,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Flip Consonants",
-                                   explanation: "Some consonants in English have a secondary sound associated with them which we refer to as the \"flip\" sound. Gray letters or letter combinations represent this \"flip\" sound.",
+                                   explanation: "Some consonants in the English language have a secondary sound associated with them, which we refer to as the \"flip\" sound. Gray letters or letter combinations represent this \"flip\" sound.",
                                    numRows: 1,
                                    numCol: 1,
                                    cornerRadius: 0,
@@ -106,7 +106,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Fluid Consonants",
-                                   explanation: "Certain consonant sounds do not have a dedicated letter to represent them. Each of these colors represents a specific consonant sound, regardless of the letter or letter combination",
+                                   explanation: "Certain consonant sounds do not have a dedicated letter to represent them. Each of these colors represents a specific consonant sound, regardless of the letter or letter combination.",
                                    numRows: 3,
                                    numCol: 2,
                                    cornerRadius: 0,
@@ -124,7 +124,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Silent",
-                                   explanation: "Light Gray indicated that the letter is silent and creates no sound in the particular word",
+                                   explanation: "Light Gray indicates that the letter is silent and therefore creates no sound in the particular word.",
                                    numRows: 1,
                                    numCol: 1,
                                    cornerRadius: 0,
@@ -141,7 +141,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Wildcards",
-                                   explanation: "Some letters or letter combinations in English do not sound as they appear. Instead of adding additional colors to represent each of these sounds, yellow is used to represent all outliers. In a given word, tap the yellow to reveal the correct sound",
+                                   explanation: "Some letters or letter combinations in English do not sound as they appear. Instead of adding additional colors to represent each of these sounds, yellow is used to represent all outliers to the system as described above. In a given word, tap the yellow letter, or yellow box, to reveal a popup with the correct pronunciation.",
                                    numRows: 1,
                                    numCol: 1,
                                    cornerRadius: 0,
@@ -184,7 +184,7 @@ class KeyController: UIViewController {
     let toggle: UISwitch = {
         
         let toggle = UISwitch()
-        toggle.onTintColor = K.Colors.purple
+        toggle.onTintColor = K.DesignColors.primary
         toggle.addTarget(self, action: #selector(togglePressed(_:)), for: .valueChanged)
         toggle.backgroundColor = .white
         return toggle
@@ -194,15 +194,29 @@ class KeyController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = K.Colors.lightGrey
+        view.backgroundColor = K.DesignColors.background
         
         setup()
     }
     
     override func viewDidLayoutSubviews() {
         
-        containerView.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3)
+        containerView.setShadow(color: .black, opacity: 0.3, offset: .init(width: 0, height: 3), radius: 2)
         containerView.backgroundColor = .white
+        
+        vowelKey.setShadows()
+        fluidConsonantsKey.setShadows()
+        trueConsonantsKey.setShadows()
+        flipConsonantsKey.setShadows()
+        silentKey.setShadows()
+        wildcardKey.setShadows()
+        
+        fullKeyView.vowelKey.setShadows()
+        fullKeyView.fluidConsonantsKey.setShadows()
+        fullKeyView.trueConsonantsKey.setShadows()
+        fullKeyView.flipConsonantsKey.setShadows()
+        fullKeyView.silentKey.setShadows()
+        fullKeyView.wildcardKey.setShadows()
         
     }
     
@@ -219,7 +233,7 @@ class KeyController: UIViewController {
         
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.barTintColor = K.Colors.purple
+        self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
         
         // Add UISwitch and View Type Label
         containerView.addSubview(keyTypeLabel)
@@ -286,26 +300,41 @@ class KeyController: UIViewController {
         wildcardKey.myScrollView = wildScrollView
         
         // Add Scroll Views to Main Stack View
-        mainStackView.addArrangedSubview(vowelScrollView)
         mainStackView.addArrangedSubview(vowelKey)
-        mainStackView.addArrangedSubview(fluidScrollView)
+        mainStackView.addArrangedSubview(vowelScrollView)
         mainStackView.addArrangedSubview(fluidConsonantsKey)
-        mainStackView.addArrangedSubview(trueScrollView)
+        mainStackView.addArrangedSubview(fluidScrollView)
         mainStackView.addArrangedSubview(trueConsonantsKey)
-        mainStackView.addArrangedSubview(flipScrollView)
+        mainStackView.addArrangedSubview(trueScrollView)
         mainStackView.addArrangedSubview(flipConsonantsKey)
-        mainStackView.addArrangedSubview(silentScrollView)
+        mainStackView.addArrangedSubview(flipScrollView)
         mainStackView.addArrangedSubview(silentKey)
-        mainStackView.addArrangedSubview(wildScrollView)
+        mainStackView.addArrangedSubview(silentScrollView)
         mainStackView.addArrangedSubview(wildcardKey)
+        mainStackView.addArrangedSubview(wildScrollView)
         
         // Constrain Scroll View width so that the prev and next cards show on the screen and the main stackView can adjust its size
-        vowelScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
-        fluidScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
-        trueScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
-        flipScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
-        silentScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
-        wildScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
+        if view.frame.width > 375 {
+            
+            vowelScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
+            fluidScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
+            trueScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
+            flipScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
+            silentScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
+            wildScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
+            
+        }
+        
+        else {
+            
+            vowelScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
+            fluidScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
+            trueScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
+            flipScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
+            silentScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
+            wildScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
+            
+        }
         
         // Set widths of explanation keys so they strech the whole screen since alignment for stack view is center
         vowelKey.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true

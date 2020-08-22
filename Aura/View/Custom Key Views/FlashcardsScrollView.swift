@@ -83,6 +83,8 @@ class FlashcardsScrollView: UIScrollView {
             stackView.addHorizontallyCenteredSubview(flashcard, stackViewParent: self)
         }
         
+        completion()
+        
     }
 }
 

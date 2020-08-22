@@ -21,9 +21,9 @@ class DeckController: UIViewController {
     //MARK: - Subviews
     var centerTitle: UILabel = {
        
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 40))
+        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
         label.text = "Deck Name"
         label.numberOfLines = 2
         label.textColor = .white
@@ -35,7 +35,7 @@ class DeckController: UIViewController {
     var mainScrollView: UIScrollView = {
         
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = K.Colors.lightGrey
+        scrollView.backgroundColor = .clear
         return scrollView
         
     }()
@@ -71,7 +71,11 @@ class DeckController: UIViewController {
         button.setTitle("Test Yourself", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(takeTest), for: .touchUpInside)
+        button.addTarget(self, action: #selector(takeTest(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         button.roundCorners(cornerRadius: 10)
         return button
         
@@ -104,7 +108,7 @@ class DeckController: UIViewController {
         
         let label = UILabel()
         label.numberOfLines = 0
-        label.backgroundColor = K.Colors.lightGrey
+        label.backgroundColor = .clear
         label.font = UIFont.systemFont(ofSize: 24, weight: .regular)
         label.textAlignment = .center
         label.textColor = K.Colors.darkGrey
@@ -125,48 +129,64 @@ class DeckController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         
-        testYourselfBackground.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 10)
+        testYourselfBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
         
         testYourselfButton.setGradientBackground(topColor: UIColor(red: 248.0/255.0, green: 231.0/255.0, blue: 0.0, alpha: 1.0),
                                                  bottomColor: UIColor(red: 249.0/255.0, green: 150.0/255.0, blue: 0.0, alpha: 1.0),
                                                  cornerRadius: 10)
         
         for card in flashcardsScrollView!.stackView.subviews {
-            card.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 2, cornerRadius: 10)
+            card.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
         }
         
-        statsLabelBackground.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 10)
+        for view in flashcardsScrollView!.flashcards {
+        
+            view.addFlashcardBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 30)
+            
+            view.soundBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
+            
+            view.loopBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
+        }
+        
+        statsLabelBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        updateFlashcardScrollView()
-        updateVisibilities()
-        testYourselfButton.setGradientBackground(topColor: UIColor(red: 248.0/255.0, green: 231.0/255.0, blue: 0.0, alpha: 1.0),
-                                                 bottomColor: UIColor(red: 249.0/255.0, green: 150.0/255.0, blue: 0.0, alpha: 1.0),
-                                                 cornerRadius: 10)
-        
- 
+        self.updateFlashcardScrollView()
+        self.updateVisibilities()
+        self.testYourselfButton.setGradientBackground(topColor: UIColor(red: 248.0/255.0, green: 231.0/255.0, blue: 0.0, alpha: 1.0),
+                                                      bottomColor: UIColor(red: 249.0/255.0, green: 150.0/255.0, blue: 0.0, alpha: 1.0),
+                                                      cornerRadius: 10)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-    
-        for card in flashcardsScrollView!.stackView.subviews {
-            heightArray.append(card.frame.height)
+        
+        self.scrollViewHeight.isActive = false
+        self.view.layoutIfNeeded()
+        
+        heightArray = []
+        
+        for card in self.flashcardsScrollView!.stackView.subviews {
+            self.heightArray.append(card.frame.height)
         }
         
-        scrollViewHeight.constant = heightArray[currentCardIndex]
-        self.scrollViewHeight.isActive = true
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
+        if myDeck.cards.count > 0 {
+            
+            self.scrollViewHeight.constant = self.heightArray[self.currentCardIndex]
+            self.scrollViewHeight.isActive = true
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+            
         }
-        
-        
     }
     
     //MARK: - Setup
     func setup() {
+        
+        view.backgroundColor = K.DesignColors.background
         
         // Setup Navigation Bar
         centerTitle.text = myDeck.name
@@ -187,7 +207,7 @@ class DeckController: UIViewController {
         
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.barTintColor = K.Colors.purple
+        self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
         
         // Add scroll view and Content view
         view.addSubview(mainScrollView)
@@ -266,19 +286,19 @@ class DeckController: UIViewController {
         tableView.estimatedRowHeight = 70.0;
         tableView.rowHeight = UITableView.automaticDimension;
         tableView.register(FlashcardCell.self, forCellReuseIdentifier: K.Cells.flashcardCell)
-        tableView.backgroundColor = K.Colors.lightGrey
+        tableView.backgroundColor = .clear
         
         mainStackView.addArrangedSubview(tableView)
         tableView.widthAnchor.constraint(equalToConstant: view.frame.width - 30).isActive = true
         
         // Add Header
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 40))
-        headerView.backgroundColor = K.Colors.lightGrey
+        headerView.backgroundColor = .clear
         
         let headerLabel = UILabel()
-        headerLabel.backgroundColor = K.Colors.lightGrey
+        headerLabel.backgroundColor = .clear
         headerLabel.text = "Cards"
-        headerLabel.font = .systemFont(ofSize: 20, weight: .medium)
+        headerLabel.font = .systemFont(ofSize: 17, weight: .regular)
         headerLabel.textAlignment = .left
         
         headerView.addSubview(headerLabel)
@@ -293,7 +313,7 @@ class DeckController: UIViewController {
         
         // Add Footer
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 60))
-        footerView.backgroundColor = K.Colors.lightGrey
+        footerView.backgroundColor = .clear
         tableView.tableFooterView = footerView
         
         // Add No Cards Label
@@ -415,7 +435,7 @@ class DeckController: UIViewController {
         return result
     }
     
-    func updateFlashcardScrollView() {
+    func updateFlashcardScrollView(didDelete: Bool = false) {
     
         DispatchQueue.main.async {
             
@@ -436,8 +456,18 @@ class DeckController: UIViewController {
                     card.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 2, cornerRadius: 10)
                 }
                 
+                if didDelete {
+                    
+                    if self.myDeck.cards.count > 0 {
+                        
+                        self.scrollViewHeight.constant = self.heightArray[self.currentCardIndex]
+                        UIView.animate(withDuration: 0.3) {
+                            self.view.layoutIfNeeded()
+                        }
+                        
+                    }
+                }
             }
-        
         }
     }
     
@@ -483,12 +513,34 @@ class DeckController: UIViewController {
         
     }
     
-    @objc func takeTest() {
+    @objc func takeTest(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.2) {
+            sender.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+        }
         
         let vc = TestController()
         vc.myDeck = self.myDeck
         vc.myDeckIndex = self.myDeckIndex
         self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
+    @objc func touchDown(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            sender.superview?.layer.shadowOpacity = 0.5
+        }
+    }
+    
+    @objc func cancelEvent(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+        }
         
     }
     
@@ -598,6 +650,11 @@ extension DeckController: SwipeTableViewCellDelegate {
             guard orientation == .right else { return nil }
 
             let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+                
+                // Update Current Card Index
+                self.currentCardIndex = (self.currentCardIndex == self.myDeck.cards.count - 1) ? (self.currentCardIndex - 1): self.currentCardIndex
+                self.heightArray.remove(at: indexPath.row)
+                
                 // handle action by updating model with deletion
                 self.myDeck.cards.remove(at: indexPath.row)
                 self.myDeck.numberOfCards -= 1
@@ -612,7 +669,7 @@ extension DeckController: SwipeTableViewCellDelegate {
                     user.decks[self.myDeckIndex] = self.myDeck
                     FirebaseManager.shared.updateUser(user: user)
                     self.updateStatsLabel()
-                    self.updateFlashcardScrollView()
+                    self.updateFlashcardScrollView(didDelete: true)
                     
                 }
                 self.updateVisibilities()
@@ -629,6 +686,8 @@ extension DeckController: SwipeTableViewCellDelegate {
     }
 
 }
+
+//MARK: - Scroll View Delegate
 
 extension DeckController: UIScrollViewDelegate {
     

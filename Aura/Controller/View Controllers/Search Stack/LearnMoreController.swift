@@ -1,8 +1,8 @@
 //
-//  ResultsController.swift
+//  LearnMoreController.swift
 //  Aura
 //
-//  Created by Max Dolensky on 7/9/20.
+//  Created by Max Dolensky on 8/21/20.
 //  Copyright © 2020 Max Dolensky. All rights reserved.
 //
 
@@ -10,15 +10,9 @@ import UIKit
 import AVFoundation
 import AMPopTip
 
-protocol ResultsControllerDelegate {
+class LearnMoreController: UIViewController {
     
-    func updateLanguageStackView(searchInfo: SearchInfo)
-    
-}
-
-class ResultsController: UIViewController {
-    
-//MARK: - Data
+    //MARK: - Data
     
     var bottomLabelText = ""
     var searchInput = ""
@@ -30,20 +24,19 @@ class ResultsController: UIViewController {
     var soundItOutColors = [(color: UIColor, ID: String, range: NSRange)]()
     var alternateTranslations = [String]()
     var learnMoreArray = [(text: NSMutableAttributedString, ipaIndex: Int)]()
-
+    
     
     // Search Information
     var searchInfo = SearchInfo(sourceLanguageCode: "en", sourceLanguageName: "English")
     
-//MARK: - Utilities
+    //MARK: - Utilities
     
     let cellID = "SoundItOutCell"
-    var delegate: ResultsControllerDelegate?
-        
-//MARK: - Views
+    
+    //MARK: - Views
     
     var centerTitle: UILabel = {
-       
+        
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
@@ -55,85 +48,6 @@ class ResultsController: UIViewController {
         
     }()
     
-    var languageBarView: UIView = {
-        
-        let view = UIView()
-        view.backgroundColor = .white
-        view.setUnderlineStyle(color: K.Colors.lightGrey)
-        return view
-        
-    }()
-    
-    var langStackView: UIStackView = {
-        
-        let stackView = UIStackView()
-        stackView.backgroundColor = .white
-        stackView.alignment = .center
-        stackView.distribution = .fillEqually
-        return stackView
-        
-    }()
-    
-    var languageButton: UIButton = {
-        
-        let button = UIButton()
-        button.addTarget(self, action: #selector(languageButtonPressed), for: .touchUpInside)
-        button.backgroundColor = .white
-        button.titleLabel!.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        button.setTitleColor(K.DesignColors.primary, for: .normal)
-        return button
-        
-    }()
-    
-    var swapButton: UIButton = {
-        
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "repeat"), for: .normal)
-        button.addTarget(self, action: #selector(swapButtonPressed), for: .touchUpInside)
-        button.tintColor = K.DesignColors.primary
-        button.backgroundColor = .white
-        return button
-        
-    }()
-    
-    var englishLabel: UILabel = {
-        
-        let label = UILabel()
-        label.text = "English HD"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.backgroundColor = .white
-        label.textAlignment = .center
-        return label
-        
-    }()
-    
-    var textViewBackgroundView = UIView()
-    
-    var textView: UITextView = {
-        
-        let textView = UITextView()
-        textView.returnKeyType = .search
-        textView.textColor = .black
-        textView.font = .systemFont(ofSize: 17, weight: .regular)
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 50)
-        textView.backgroundColor = .white
-        return textView
-    
-    }()
-    
-    var cancelButton: UIButton = {
-        
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "multiply"), for: .normal)
-        button.backgroundColor = .white
-        button.tintColor = .black
-        button.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
-        button.isHidden = true
-        return button
-        
-    }()
-    
     var mainScrollView: UIScrollView = {
         
         let scrollView = UIScrollView()
@@ -141,9 +55,9 @@ class ResultsController: UIViewController {
         return scrollView
         
     }()
-        
+    
     var mainStackView: UIStackView = {
-       
+        
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -174,7 +88,7 @@ class ResultsController: UIViewController {
     }()
     
     var alternativesStackView: UIStackView = {
-       
+        
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .fill
@@ -215,7 +129,7 @@ class ResultsController: UIViewController {
     }()
     
     var learnMoreStackView: UIStackView = {
-       
+        
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .fill
@@ -270,15 +184,15 @@ class ResultsController: UIViewController {
         return button
         
     }()
-        
+    
     // Background Views
     let resultBackgroundView = UIView ()
     
     let goToFlashcardBackgroundView = UIView()
     
     let lessonBackgroundView = UIView()
-
-//MARK: - Class Functions
+    
+    //MARK: - Class Functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -291,27 +205,19 @@ class ResultsController: UIViewController {
         
         setupShadows()
     }
-        
-    override func viewWillDisappear(_ animated: Bool) {
-        delegate?.updateLanguageStackView(searchInfo: self.searchInfo)
-    }
 }
 
-extension ResultsController {
+extension LearnMoreController {
     
-//MARK:- View Setup Functions
+    //MARK:- View Setup Functions
     
     func setupView() {
         self.setupToHideKeyboardOnTapOnView()
         setupNavBar()
-        setupLanguageSelectionView()
-        setupTextView()
         setupScrollView()
     }
     
     func setupShadows() {
-        
-        textViewBackgroundView.setShadowWithBZPath(color: UIColor.black, opacity: 0.3, offset: .init(width: 0, height: 3), radius: 2)
         
         resultBackgroundView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 10)
         
@@ -350,111 +256,7 @@ extension ResultsController {
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
-
-    }
-    
-    func setupLanguageSelectionView() {
         
-        // Add Language Bar View
-        view.addSubview(languageBarView)
-        
-        languageBarView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                               bottom: nil,
-                               leading: view.leadingAnchor,
-                               trailing: view.trailingAnchor,
-                               height: 60,
-                               width: nil)
-        
-        
-        // Add Stack View
-        languageBarView.addSubview(langStackView)
-        
-        langStackView.anchor(top: languageBarView.topAnchor,
-                             bottom: languageBarView.bottomAnchor,
-                             leading: languageBarView.leadingAnchor,
-                             trailing: languageBarView.trailingAnchor,
-                             height: nil,
-                             width: nil,
-                             padding: UIEdgeInsets(top: 0, left: 0, bottom: -2, right: 0))
-        
-        // Add Subviews To StackView
-        switch searchInfo.searchType {
-        
-        case.englishToNative:
-            languageButton.setTitle(searchInfo.targetLanguageName, for: .normal)
-            langStackView.addArrangedSubview(englishLabel)
-            langStackView.addArrangedSubview(swapButton)
-            langStackView.addArrangedSubview(languageButton)
-            
-        case.nativeToEnglish:
-            languageButton.setTitle(searchInfo.sourceLanguageName, for: .normal)
-            langStackView.addArrangedSubview(languageButton)
-            langStackView.addArrangedSubview(swapButton)
-            langStackView.addArrangedSubview(englishLabel)
-        }
-    }
-    
-    func updateLanguageStackView() {
-        
-        for view in langStackView.arrangedSubviews {
-            langStackView.removeArrangedSubview(view)
-        }
-        
-        // Add Subviews To StackView
-        switch searchInfo.searchType {
-        
-        case.englishToNative:
-            languageButton.setTitle(searchInfo.targetLanguageName, for: .normal)
-            langStackView.addArrangedSubview(englishLabel)
-            langStackView.addArrangedSubview(swapButton)
-            langStackView.addArrangedSubview(languageButton)
-            
-        case.nativeToEnglish:
-            languageButton.setTitle(searchInfo.sourceLanguageName, for: .normal)
-            langStackView.addArrangedSubview(languageButton)
-            langStackView.addArrangedSubview(swapButton)
-            langStackView.addArrangedSubview(englishLabel)
-        }
-        
-    }
-    
-    func setupTextView() {
-        
-        // Add View
-        view.addSubview(textViewBackgroundView)
-        
-        textViewBackgroundView.anchor(top: langStackView.bottomAnchor,
-                                      bottom: nil,
-                                      leading: view.leadingAnchor,
-                                      trailing: view.trailingAnchor,
-                                      height: 60,
-                                      width: nil,
-                                      padding: UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0))
-        
-        // Add TextView
-        textView.delegate = self
-        
-        view.addSubview(textView)
-        
-        textView.anchor(top: textViewBackgroundView.topAnchor,
-                        bottom: textViewBackgroundView.bottomAnchor,
-                        leading: textViewBackgroundView.leadingAnchor,
-                        trailing: textViewBackgroundView.trailingAnchor,
-                        height: nil,
-                        width: nil,
-                        padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-        
-        
-        // Add X Button
-        view.addSubview(cancelButton)
-        
-        cancelButton.anchor(top: textView.topAnchor,
-                            bottom: nil,
-                            leading: nil,
-                            trailing: textView.trailingAnchor,
-                            height: 40,
-                            width: 40,
-                            padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
     }
     
     func setupScrollView() {
@@ -465,20 +267,20 @@ extension ResultsController {
         mainScrollView.addSubview(mainStackView)
         
         // Anchor Scroll View
-        mainScrollView.anchor(top: textView.bottomAnchor,
-                          bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                          leading: view.leadingAnchor,
-                          trailing: view.trailingAnchor,
-                          height: nil,
-                          width: nil)
+        mainScrollView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              trailing: view.trailingAnchor,
+                              height: nil,
+                              width: nil)
         
         // Anchor Content View
         mainStackView.anchor(top: mainScrollView.topAnchor,
-                           bottom: mainScrollView.bottomAnchor,
-                           leading: mainScrollView.leadingAnchor,
-                           trailing: mainScrollView.trailingAnchor,
-                           height: nil,
-                           width: nil)
+                             bottom: mainScrollView.bottomAnchor,
+                             leading: mainScrollView.leadingAnchor,
+                             trailing: mainScrollView.trailingAnchor,
+                             height: nil,
+                             width: nil)
         
         mainStackView.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor).isActive = true
         
@@ -492,12 +294,12 @@ extension ResultsController {
         resultBackgroundView.addSubview(resultCard)
         
         resultCard.anchor(top: resultBackgroundView.topAnchor,
-                                      bottom: resultBackgroundView.bottomAnchor,
-                                      leading: resultBackgroundView.leadingAnchor,
-                                      trailing: resultBackgroundView.trailingAnchor,
-                                      height: nil,
-                                      width: nil)
-                
+                          bottom: resultBackgroundView.bottomAnchor,
+                          leading: resultBackgroundView.leadingAnchor,
+                          trailing: resultBackgroundView.trailingAnchor,
+                          height: nil,
+                          width: nil)
+        
         // Add Results Card to Stack View
         mainStackView.addArrangedSubview(resultBackgroundView, withMargin: UIEdgeInsets(top: 27, left: 20, bottom: 0, right: -20))
         
@@ -512,9 +314,9 @@ extension ResultsController {
         
         // Setup Lessons UpSaleButton
         setupLessonsButton()
-    
-    }
         
+    }
+    
     func setupAlternativeTranslationScrollView() {
         
         // Add Header Label and Scroll View to the Main Content View
@@ -538,7 +340,7 @@ extension ResultsController {
         
         // Populate Alternative Translations Stack View
         populateAlternativeTranslationsStackView()
-
+        
     }
     
     func populateAlternativeTranslationsStackView() {
@@ -549,7 +351,7 @@ extension ResultsController {
             alternativesScrollView.superview?.isHidden = true
             
         }
-        
+            
         else {
             
             alternativesHeaderLabel.superview?.isHidden = false
@@ -628,11 +430,11 @@ extension ResultsController {
         learnMoreScrollView.addSubview(learnMoreStackView)
         
         learnMoreStackView.anchor(top: learnMoreScrollView.topAnchor,
-                                     bottom: learnMoreScrollView.bottomAnchor,
-                                     leading: learnMoreScrollView.leadingAnchor,
-                                     trailing: learnMoreScrollView.trailingAnchor,
-                                     height: nil,
-                                     width: nil)
+                                  bottom: learnMoreScrollView.bottomAnchor,
+                                  leading: learnMoreScrollView.leadingAnchor,
+                                  trailing: learnMoreScrollView.trailingAnchor,
+                                  height: nil,
+                                  width: nil)
         
         // Prevent Vertical Scrolling
         learnMoreStackView.heightAnchor.constraint(equalTo: learnMoreScrollView.heightAnchor).isActive = true
@@ -651,14 +453,14 @@ extension ResultsController {
             learnMoreScrollView.superview?.isHidden = true
             
         }
-        
+            
         else if learnMoreArray.count == 0 {
             
             learnMoreHeaderLabel.superview?.isHidden = true
             learnMoreScrollView.superview?.isHidden = true
             
         }
-        
+            
         else {
             
             learnMoreHeaderLabel.superview?.isHidden = false
@@ -736,7 +538,7 @@ extension ResultsController {
         goToFlashcardBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         goToFlashcardBackgroundView.heightAnchor.constraint(equalToConstant: 220).isActive = true
         goToFlashcardBackgroundView.widthAnchor.constraint(greaterThanOrEqualToConstant: 10).isActive = true
-                
+        
         goToFlashcardsButton.anchor(top: goToFlashcardBackgroundView.topAnchor,
                                     bottom: goToFlashcardBackgroundView.bottomAnchor,
                                     leading: goToFlashcardBackgroundView.leadingAnchor,
@@ -781,66 +583,6 @@ extension ResultsController {
         
     }
     
-    @objc func languageButtonPressed() {
-        
-        let supportedLanguagesVC = SupportedLanguagesVC()
-        supportedLanguagesVC.delegate = self
-        self.present(supportedLanguagesVC, animated: true, completion: nil)
-        
-    }
-    
-    @objc func swapButtonPressed() {
-        
-        DispatchQueue.main.async {
-            
-            // Retrieve Subviews
-            let subviews = self.langStackView.arrangedSubviews
-            
-            let sub0 = subviews[0]
-            let sub1 = subviews[1]
-            let sub2 = subviews[2]
-            
-            // Change Search Type and If Necessary, Change English HD to English
-            switch self.searchInfo.searchType {
-                
-            case .englishToNative:
-                self.searchInfo.searchType = .nativeToEnglish
-                
-            case .nativeToEnglish:
-                self.searchInfo.searchType = .englishToNative
-                
-            }
-            
-            // Clear Subviews
-            for subview in self.langStackView.arrangedSubviews {
-                self.langStackView.removeArrangedSubview(subview)
-            }
-            
-            // Add Subviews Flipped
-            self.langStackView.addArrangedSubview(sub2)
-            self.langStackView.addArrangedSubview(sub1)
-            self.langStackView.addArrangedSubview(sub0)
-            
-        }
-        
-        // Swap Source And Target Language Codes and Names
-        let tempSourceCode = searchInfo.sourceLanguageCode
-        searchInfo.sourceLanguageCode = searchInfo.targetLanguageCode
-        searchInfo.targetLanguageCode = tempSourceCode
-        
-        let tempSourceName = searchInfo.sourceLanguageName
-        searchInfo.sourceLanguageName = searchInfo.targetLanguageName
-        searchInfo.targetLanguageName = tempSourceName
-        
-    }
-    
-    @objc func cancelButtonPressed() {
-        textView.text = ""
-        textView.textColor = .lightGray
-        textView.text = "Enter text"
-        cancelButton.isHidden = true
-    }
-        
     @objc func alternativesButtonPressed(_ sender: QueryButton) {
         
         UIView.animate(withDuration: 0.2) {
@@ -849,23 +591,23 @@ extension ResultsController {
         }
         
         let searchType = (searchInfo.searchType == .englishToNative) ? SearchType.nativeToEnglish : SearchType.englishToNative
-    
+        
         let newSearchInfo = SearchInfo(searchType: searchType,
                                        sourceLanguageCode: searchInfo.targetLanguageCode,
                                        sourceLanguageName: searchInfo.targetLanguageName,
                                        targetLanguageCode: searchInfo.sourceLanguageCode,
                                        targetLanguageName: searchInfo.sourceLanguageName)
         
-        startSearchSequence(searchText: sender.queryText, newSearchInfo, isLearnMore: true)
+        startSearchSequence(searchText: sender.queryText, newSearchInfo)
         
     }
     
     @objc func learnMoreButtonPressed(_ sender: QueryButton) {
         
         UIView.animate(withDuration: 0.2) {
-            sender.superview?.transform = .identity
-            sender.superview?.superview?.layer.shadowOpacity = 0.3
-        }
+             sender.superview?.transform = .identity
+             sender.superview?.superview?.layer.shadowOpacity = 0.3
+         }
         
         let sourceCode = (searchInfo.searchType == .englishToNative) ? searchInfo.sourceLanguageCode : searchInfo.targetLanguageCode
         let sourceName = (searchInfo.searchType == .englishToNative) ? searchInfo.sourceLanguageName : searchInfo.targetLanguageName
@@ -878,7 +620,7 @@ extension ResultsController {
                                        targetLanguageCode: targetCode,
                                        targetLanguageName: targetName)
         
-        startSearchSequence(searchText: sender.queryText, newSearchInfo, ipaIndex: sender.ipaIndex, isLearnMore: true)
+        startSearchSequence(searchText: sender.queryText, newSearchInfo, ipaIndex: sender.ipaIndex)
         
     }
     
@@ -893,7 +635,7 @@ extension ResultsController {
     }
     
     @objc func goToLessonButtonPressed(_ sender: UIButton) {
-       
+        
         UIView.animate(withDuration: 0.2) {
             sender.transform = .identity
             sender.superview?.layer.shadowOpacity = 0.7
@@ -935,57 +677,11 @@ extension ResultsController {
         }
         
     }
-    
-}
-
-//MARK:- UITextView Delegate Methods
-
-extension ResultsController: UITextViewDelegate {
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .lightGray {
-            textView.text = ""
-            textView.textColor = .black
-            cancelButton.isHidden = false
-        }
-        
-        else if textView.textColor == .black && textView.text.count >= 0 {
-            cancelButton.isHidden = false
-        }
-    }
-
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty || textView.text == "" {
-            textView.textColor = .lightGray
-            textView.text = "Enter text"
-            cancelButton.isHidden = true
-        }
-        
-        
-    }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        
-        if text == "\n" {
-            
-            // Make sure textView is not Empty
-            if textView.text != nil && textView.text.count > 0 {
-                
-                textView.resignFirstResponder()
-                startSearchSequence(searchText: textView.text!, searchInfo)
-                
-            }
-            return false
-        }
-        return true
-    }
-    
 }
 
 //MARK: - Result Card Delegate Function
 
-extension ResultsController: ResultCardDelegate {
+extension LearnMoreController: ResultCardDelegate {
     
     func presentDeckSelectionView() {
         
@@ -1011,7 +707,7 @@ extension ResultsController: ResultCardDelegate {
 }
 
 //MARK: - AddFlashcard Delegate
-extension ResultsController: AddFlashcardDelegate {
+extension LearnMoreController: AddFlashcardDelegate {
     
     func tapAddFlashcardButton() {
         
@@ -1021,46 +717,18 @@ extension ResultsController: AddFlashcardDelegate {
     
 }
 
-
-//MARK: - Language Selection Functions
-
-extension ResultsController: SupportedLanguagesDelegate  {
-    
-    func updateLanguageCodes(languageName: String, languageCode: String) {
-        
-        switch searchInfo.searchType {
-            
-        case .englishToNative:
-            searchInfo.targetLanguageCode = languageCode
-            searchInfo.targetLanguageName = languageName
-            
-        case .nativeToEnglish:
-            searchInfo.sourceLanguageCode = languageCode
-            searchInfo.sourceLanguageName = languageName
-            
-        }
-        
-        languageButton.setTitle(languageName, for: .normal)
-    }    
-}
-
 // MARK:- Search Sequence Functions
 
-extension ResultsController {
+extension LearnMoreController {
     
-    func startSearchSequence(searchText: String,_ searchInfo: SearchInfo, ipaIndex: Int = 0, isLearnMore: Bool = false) {
+    func startSearchSequence(searchText: String,_ searchInfo: SearchInfo, ipaIndex: Int = 0) {
         
         //Update Search Input Variable
         self.searchInput = searchText
         
         //Clear popTip
         resultCard.popTip.hide()
-        
-        //Update global SearchInfo
-        if !isLearnMore {
-            self.searchInfo = searchInfo
-        }
-        
+                
         //Set Language Codes
         TranslationManager.shared.sourceLanguageCode = searchInfo.sourceLanguageCode
         TranslationManager.shared.targetLanguageCode = searchInfo.targetLanguageCode
@@ -1130,15 +798,7 @@ extension ResultsController {
                 // End Loading Screen
                 DispatchQueue.main.async {
                     self.endLoadingScreen()
-                    
-                    if !isLearnMore {
-                         self.updateResultsVC()
-                    }
-                        
-                    else {
-                        self.pushToLearnMoreController(searchInfo)
-                    }
-                   
+                    self.pushToLearnMoreController(searchInfo)
                 }
             }
                 
@@ -1154,23 +814,17 @@ extension ResultsController {
                 
                 DispatchQueue.main.async {
                     self.endLoadingScreen()
-                    
-                    if !isLearnMore {
-                        self.updateResultsVC()
-                    }
-                        
-                    else {
-                        self.pushToLearnMoreController(searchInfo)
-                    }
+                    self.pushToLearnMoreController(searchInfo)
                 }
             }
         }
+        
     }
     
     func runSearchsequence(searchText: String, searchInfo: SearchInfo, completion: @escaping(_ success: Bool) -> Void) {
         
         switch searchInfo.searchType {
-        
+            
         case .nativeToEnglish:
             
             // If source Lang is English, retrieve word models from database
@@ -1179,7 +833,7 @@ extension ResultsController {
                 self.searchOutput = searchText
                 
                 self.wordArray = searchText.replacingOccurrences(of: "’", with: "'").split(separator: " ").map {String($0)}
-               
+                
                 FirebaseManager.shared.readEnglishDocumentByWord(words: wordArray) { (wordModelArray) in
                     
                     self.wordModelArray = wordModelArray
@@ -1191,7 +845,7 @@ extension ResultsController {
                 }
             }
                 
-            // Otherwise get translations and then retrieve word models from database
+                // Otherwise get translations and then retrieve word models from database
             else {
                 
                 TranslationManager.shared.textToTranslate = searchText
@@ -1228,16 +882,16 @@ extension ResultsController {
                     }
                 }
             }
-
+            
         case .englishToNative:
             
             // If Target Lang is English, retrieve word models from database
             if TranslationManager.shared.targetLanguageCode == "en" {
                 
-                 self.searchOutput = searchText
+                self.searchOutput = searchText
                 
                 self.wordArray = searchText.replacingOccurrences(of: "’", with: "'").split(separator: " ").map {String($0)}
-               
+                
                 FirebaseManager.shared.readEnglishDocumentByWord(words: wordArray) { (wordModelArray) in
                     
                     self.wordModelArray = wordModelArray
@@ -1248,8 +902,8 @@ extension ResultsController {
                     } else {completion(false)}
                 }
             }
-            
-            // Otherwise get translations and then retrieve word models from database
+                
+                // Otherwise get translations and then retrieve word models from database
             else {
                 
                 TranslationManager.shared.textToTranslate = searchText
@@ -1304,88 +958,6 @@ extension ResultsController {
         }
     }
     
-    func updateResultsVC() {
-        
-        // Update search history
-        if Utilities.shared.isUserSignedIn {
-            
-            if var user = Utilities.shared.user {
-                
-                let searchType = searchInfo.searchType == .nativeToEnglish ? 0 : 1
-                let fbSearchinfo = FBSearchInfo(searchType: searchType,
-                                                sourceLanguageCode: searchInfo.sourceLanguageCode,
-                                                sourceLanguageName: searchInfo.sourceLanguageName,
-                                                targetLanguageCode: searchInfo.targetLanguageCode,
-                                                targetLanguageName: searchInfo.targetLanguageName)
-                
-                let info = SearchAndResult(searchText: self.searchInput, resultText: self.searchOutput, searchInfo: fbSearchinfo)
-                
-                user.prevSearches.insert(info, at: 0)
-                
-                if user.prevSearches.count > 50 { _ =  user.prevSearches.popLast() }
-                
-                Utilities.shared.user = user
-                FirebaseManager.shared.updateUser(user: user)
-                
-            }
-            
-        }
-        
-        // Update Views in Results VC
-        DispatchQueue.main.async {
-            
-            // Update Languages Stack View
-            self.updateLanguageStackView()
-            
-            // Update Result Card
-            self.resultCard.results = self.results
-            self.resultCard.bottomLabelText = self.bottomLabelText
-            self.resultCard.updateResultSubviewVisibilities()
-            
-            // Configure Top Label Text
-            let topAttributedText = NSMutableAttributedString()
-            
-            for i in 0..<self.results.count {
-                
-                topAttributedText.append(self.results[i].attributedText)
-                
-                if i != self.results.count - 1 {
-                    topAttributedText.append(NSAttributedString(string: " "))
-                }
-            }
-            
-            self.resultCard.topLabel.attributedText = topAttributedText
-            self.resultCard.topLabel.configureBasedOnInput()
-            
-            // Configure Bottom Label Text
-            self.resultCard.bottomLabel.attributedText = NSAttributedString(string: self.bottomLabelText)
-            self.resultCard.bottomLabel.configureBottomLabel()
-            
-            // Update Collection View
-            self.soundItOutColors = self.createButtons(self.results[0].attributedText)
-            self.resultCard.soundItOutColors = self.soundItOutColors
-            self.resultCard.soundItOutCollectionView.reloadData()
-            
-            // Clear then re-populate Alternatives Stack View
-            for view in self.alternativesStackView.arrangedSubviews {
-                view.removeFromSuperview()
-            }
-            
-            self.populateAlternativeTranslationsStackView()
-            
-            // Clear then re-populate Learn More Stack View
-            for view in self.learnMoreStackView.arrangedSubviews {
-                view.removeFromSuperview()
-            }
-            
-            self.populateLearnMoreStackView()
-            self.setupShadows()
-            
-            self.mainScrollView.setContentOffset(.zero, animated: true)
-        }
-        
-    }
-    
     func pushToLearnMoreController(_ searchInfo: SearchInfo) {
         
         // Initialize result controller
@@ -1436,3 +1008,5 @@ extension ResultsController {
         navigationController?.pushViewController(vc, animated: true)
     }
 }
+
+

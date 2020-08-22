@@ -24,15 +24,15 @@ class DeckSelectingController: UIViewController {
         let button = UIButton()
         
         button.tintColor = .white
-        button.backgroundColor = K.Colors.purple
-        button.titleLabel?.backgroundColor = K.Colors.purple
+        button.backgroundColor = K.DesignColors.primary
+        button.titleLabel?.backgroundColor = K.DesignColors.primary
         button.setTitleColor(.white, for: .normal)
        
         button.setTitle("NEW DECK", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .heavy)
         
         button.roundCorners(cornerRadius: 20)
-        button.addTarget(self, action: #selector(newDeckPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(newDeckPressed(_:)), for: .touchUpInside)
         
         button.widthAnchor.constraint(equalToConstant: 200).isActive = true
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -87,7 +87,7 @@ class DeckSelectingController: UIViewController {
         container.backgroundColor = .white
         container.addSubview(titleLabel)
         container.addSubview(cancelButton)
-        container.setUnderlineStyle(color: K.Colors.purple)
+        container.setUnderlineStyle(color: K.DesignColors.primary)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
@@ -105,7 +105,7 @@ class DeckSelectingController: UIViewController {
                          bottom: nil,
                          leading: view.leadingAnchor,
                          trailing: view.trailingAnchor,
-                         height: 40,
+                         height: 60,
                          width: nil)
 
         tableView.delegate = self
@@ -145,7 +145,19 @@ class DeckSelectingController: UIViewController {
         
     }
     
-    @objc func newDeckPressed() {
+    @objc func newDeckPressed(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            
+            sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            
+        }) { (completion) in
+            
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+            }
+            
+        }
         
         // Create New Deck
         var textField = UITextField()
@@ -166,6 +178,9 @@ class DeckSelectingController: UIViewController {
                 
                 FirebaseManager.shared.updateUser(user: Utilities.shared.user!)
                 
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
         

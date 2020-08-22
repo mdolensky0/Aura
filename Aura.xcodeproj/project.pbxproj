@@ -10,7 +10,6 @@
 		39E1B2EBE1BEE7B06A549D59 /* Pods_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0687879DAA284F1027A6A628 /* Pods_Aura.framework */; };
 		7D0C128F24DB4B230024FD31 /* DeckController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0C128E24DB4B230024FD31 /* DeckController.swift */; };
 		7D0C129124DB4B390024FD31 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0C129024DB4B390024FD31 /* TestController.swift */; };
-		7D15DB4D24C28860009ACDB4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D15DB4C24C28860009ACDB4 /* GoogleService-Info.plist */; };
 		7D15DB4F24C29481009ACDB4 /* RealmPopulater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB4E24C29481009ACDB4 /* RealmPopulater.swift */; };
 		7D15DB5224C29517009ACDB4 /* MappingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB5024C29516009ACDB4 /* MappingModel.swift */; };
 		7D15DB5324C29517009ACDB4 /* WildCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D15DB5124C29517009ACDB4 /* WildCardModel.swift */; };
@@ -86,6 +85,7 @@
 		7D530E3724E4E87300C0C209 /* NoScrollTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D530E3624E4E87300C0C209 /* NoScrollTableView.swift */; };
 		7D530E3924E4E8FE00C0C209 /* ColorKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D530E3824E4E8FE00C0C209 /* ColorKeyView.swift */; };
 		7D530E3B24E7115B00C0C209 /* TestFlashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D530E3A24E7115A00C0C209 /* TestFlashcard.swift */; };
+		7D530E3F24E9C81E00C0C209 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D530E3E24E9C81E00C0C209 /* GoogleService-Info.plist */; };
 		7D600BF324D107DF002EA266 /* KeyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D600BF224D107DF002EA266 /* KeyCardView.swift */; };
 		7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89724B41EFB0019BFF0 /* Constants.swift */; };
 		7D66D89A24B424160019BFF0 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D66D89924B424160019BFF0 /* HomeController.swift */; };
@@ -104,6 +104,8 @@
 		7D99A37024D8F757006C977E /* UtilityFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D99A36F24D8F757006C977E /* UtilityFunctions.swift */; };
 		7D99A37224D9EC7A006C977E /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D99A37124D9EC7A006C977E /* SignInController.swift */; };
 		7D99A37424D9EC91006C977E /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D99A37324D9EC91006C977E /* SignUpController.swift */; };
+		7DCAC79D24F0526B0013D134 /* LearnMoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCAC79C24F0526B0013D134 /* LearnMoreController.swift */; };
+		7DCAC79F24F1D5BA0013D134 /* KeyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCAC79E24F1D5B90013D134 /* KeyType.swift */; };
 		7DD1B09F24BD06AB0052BC7B /* SoundItOutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD1B09E24BD06AB0052BC7B /* SoundItOutCell.swift */; };
 		7DFBA8C624B4189500618332 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFBA8C524B4189500618332 /* AppDelegate.swift */; };
 		7DFBA8C824B4189500618332 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFBA8C724B4189500618332 /* SceneDelegate.swift */; };
@@ -118,7 +120,6 @@
 		3098BAB89E76DCF1D2410AB1 /* Pods-Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.debug.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.debug.xcconfig"; sourceTree = "<group>"; };
 		7D0C128E24DB4B230024FD31 /* DeckController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckController.swift; sourceTree = "<group>"; };
 		7D0C129024DB4B390024FD31 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
-		7D15DB4C24C28860009ACDB4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7D15DB4E24C29481009ACDB4 /* RealmPopulater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmPopulater.swift; sourceTree = "<group>"; };
 		7D15DB5024C29516009ACDB4 /* MappingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingModel.swift; sourceTree = "<group>"; };
 		7D15DB5124C29517009ACDB4 /* WildCardModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WildCardModel.swift; sourceTree = "<group>"; };
@@ -194,6 +195,7 @@
 		7D530E3624E4E87300C0C209 /* NoScrollTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoScrollTableView.swift; sourceTree = "<group>"; };
 		7D530E3824E4E8FE00C0C209 /* ColorKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorKeyView.swift; sourceTree = "<group>"; };
 		7D530E3A24E7115A00C0C209 /* TestFlashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestFlashcard.swift; sourceTree = "<group>"; };
+		7D530E3E24E9C81E00C0C209 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7D600BF224D107DF002EA266 /* KeyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCardView.swift; sourceTree = "<group>"; };
 		7D66D89724B41EFB0019BFF0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7D66D89924B424160019BFF0 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
@@ -212,6 +214,8 @@
 		7D99A36F24D8F757006C977E /* UtilityFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityFunctions.swift; sourceTree = "<group>"; };
 		7D99A37124D9EC7A006C977E /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
 		7D99A37324D9EC91006C977E /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
+		7DCAC79C24F0526B0013D134 /* LearnMoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnMoreController.swift; sourceTree = "<group>"; };
+		7DCAC79E24F1D5B90013D134 /* KeyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyType.swift; sourceTree = "<group>"; };
 		7DD1B09E24BD06AB0052BC7B /* SoundItOutCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundItOutCell.swift; sourceTree = "<group>"; };
 		7DFBA8C224B4189500618332 /* Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DFBA8C524B4189500618332 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -426,6 +430,7 @@
 			children = (
 				7D66D89B24B4244D0019BFF0 /* SearchController.swift */,
 				7D77098B24B7A2B10009B93B /* ResultsController.swift */,
+				7DCAC79C24F0526B0013D134 /* LearnMoreController.swift */,
 			);
 			path = "Search Stack";
 			sourceTree = "<group>";
@@ -471,7 +476,7 @@
 				7DFBA8CE24B418A200618332 /* Assets.xcassets */,
 				7DFBA8D024B418A200618332 /* LaunchScreen.storyboard */,
 				7DFBA8D324B418A200618332 /* Info.plist */,
-				7D15DB4C24C28860009ACDB4 /* GoogleService-Info.plist */,
+				7D530E3E24E9C81E00C0C209 /* GoogleService-Info.plist */,
 			);
 			path = Aura;
 			sourceTree = "<group>";
@@ -502,6 +507,7 @@
 			children = (
 				7D15DBCD24C625FA009ACDB4 /* UserModel.swift */,
 				7D15DBD724CA1D46009ACDB4 /* SearchInfo.swift */,
+				7DCAC79E24F1D5B90013D134 /* KeyType.swift */,
 				7D15DB5F24C2A4A8009ACDB4 /* Object Managers */,
 				7D15DB6424C2A70A009ACDB4 /* Firebase Models */,
 				7D15DB5424C29520009ACDB4 /* Realm Models */,
@@ -577,6 +583,7 @@
 				7D15DBB524C2AD5F009ACDB4 /* T.wav in Resources */,
 				7D15DBCA24C2AD5F009ACDB4 /* VISION.wav in Resources */,
 				7D15DBB824C2AD5F009ACDB4 /* YUH.wav in Resources */,
+				7D530E3F24E9C81E00C0C209 /* GoogleService-Info.plist in Resources */,
 				7D15DBBA24C2AD5F009ACDB4 /* BITE.wav in Resources */,
 				7D15DBA824C2AD5F009ACDB4 /* KS.wav in Resources */,
 				7D15DBBC24C2AD5F009ACDB4 /* BOOK.wav in Resources */,
@@ -612,7 +619,6 @@
 				7D15DBC224C2AD5F009ACDB4 /* D.wav in Resources */,
 				7D43FDCF24CBAE0800D727F1 /* empty.wav in Resources */,
 				7D15DBC024C2AD5F009ACDB4 /* S.wav in Resources */,
-				7D15DB4D24C28860009ACDB4 /* GoogleService-Info.plist in Resources */,
 				7D15DBB424C2AD5F009ACDB4 /* BOUT.wav in Resources */,
 				7D15DBB924C2AD5F009ACDB4 /* Z.wav in Resources */,
 				7D15DBC324C2AD5F009ACDB4 /* M.wav in Resources */,
@@ -680,6 +686,7 @@
 				7D99A37224D9EC7A006C977E /* SignInController.swift in Sources */,
 				7D15DBCE24C625FB009ACDB4 /* UserModel.swift in Sources */,
 				7D15DB5324C29517009ACDB4 /* WildCardModel.swift in Sources */,
+				7DCAC79F24F1D5BA0013D134 /* KeyType.swift in Sources */,
 				7D530E3124E37B5E00C0C209 /* FlashcardCell.swift in Sources */,
 				7D66D89C24B4244D0019BFF0 /* SearchController.swift in Sources */,
 				7D15DB5D24C2A49F009ACDB4 /* WordColoringManager.swift in Sources */,
@@ -695,6 +702,7 @@
 				7DFBA8CA24B4189500618332 /* TabBarController.swift in Sources */,
 				7DD1B09F24BD06AB0052BC7B /* SoundItOutCell.swift in Sources */,
 				7DFBA8C624B4189500618332 /* AppDelegate.swift in Sources */,
+				7DCAC79D24F0526B0013D134 /* LearnMoreController.swift in Sources */,
 				7D530E3924E4E8FE00C0C209 /* ColorKeyView.swift in Sources */,
 				7D15DB4F24C29481009ACDB4 /* RealmPopulater.swift in Sources */,
 				7DFBA8C824B4189500618332 /* SceneDelegate.swift in Sources */,
@@ -862,13 +870,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AK255L4KWQ;
+				DEVELOPMENT_TEAM = A55DN9AQUL;
 				INFOPLIST_FILE = Aura/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.maxemus.Aura;
+				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -881,13 +889,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AK255L4KWQ;
+				DEVELOPMENT_TEAM = A55DN9AQUL;
 				INFOPLIST_FILE = Aura/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.maxemus.Aura;
+				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

@@ -24,7 +24,8 @@ class FullKeyView: UIView {
                                          K.Colors.lightGreen, K.Colors.lightPink, K.Colors.lightBlue,
                                          K.Colors.seaBlue,    K.Colors.orange,    .white,
                                          K.Colors.darkGreen,  K.Colors.pink,      K.Colors.darkBlue,
-                                         .white,              K.Colors.purple,    K.Colors.turquoise])
+                                         .white,              K.Colors.purple,    K.Colors.turquoise],
+                                keyType: .vowel)
     
     let trueConsonantsKey = ColorKeyView(frame: .zero,
                                          doesButtonScrollToView: false,
@@ -32,7 +33,8 @@ class FullKeyView: UIView {
                                          explanation: nil,
                                          numRows: 1,
                                          numCol: 1,
-                                         colors: [.black])
+                                         colors: [.black],
+                                         keyType: .trueConsonant)
     
     let flipConsonantsKey = ColorKeyView(frame: .zero,
                                          doesButtonScrollToView: false,
@@ -40,7 +42,8 @@ class FullKeyView: UIView {
                                          explanation: nil,
                                          numRows: 1,
                                          numCol: 1,
-                                         colors: [K.Colors.darkGrey])
+                                         colors: [K.Colors.darkGrey],
+                                         keyType: .flipConsonant)
     
     let fluidConsonantsKey = ColorKeyView(frame: .zero,
                                           doesButtonScrollToView: false,
@@ -50,7 +53,8 @@ class FullKeyView: UIView {
                                           numCol: 2,
                                           colors: [K.Colors.brownPurple, K.Colors.brownYellow,
                                                    K.Colors.brownRed, K.Colors.tan,
-                                                   K.Colors.blueGrey, .white])
+                                                   K.Colors.blueGrey, .white],
+                                          keyType: .fluidConsonant)
     
     let silentKey = ColorKeyView(frame: .zero,
                                  doesButtonScrollToView: false,
@@ -58,7 +62,8 @@ class FullKeyView: UIView {
                                  explanation: nil,
                                  numRows: 1,
                                  numCol: 1,
-                                 colors: [K.Colors.lightGrey])
+                                 colors: [K.Colors.lightGrey],
+                                 keyType: .silent)
     
     let wildcardKey = ColorKeyView(frame: .zero,
                                    doesButtonScrollToView: false,
@@ -66,14 +71,15 @@ class FullKeyView: UIView {
                                    explanation: nil,
                                    numRows: 1,
                                    numCol: 1,
-                                   colors: [K.Colors.yellow])
+                                   colors: [K.Colors.yellow],
+                                   keyType: .wildcard)
     
     let lineDivider: UIView = {
         
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.heightAnchor.constraint(equalToConstant: 3).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
         return view
         
     }()
@@ -104,7 +110,7 @@ class FullKeyView: UIView {
     
     func setup() {
         
-        self.backgroundColor = K.Colors.lightGrey
+        self.backgroundColor = K.DesignColors.background
         
         // Embedd all the sub-Keys in a view to add shadows
         vowelBackground.addSubview(vowelKey)
@@ -158,12 +164,12 @@ class FullKeyView: UIView {
                            height: nil,
                            width: nil)
         
-        vowelBackground.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 0, height: 0), radius: 3)
-        fluidBackground.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 0, height: 0), radius: 3)
-        trueBackground.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 0, height: 0), radius: 3)
-        flipBackground.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 0, height: 0), radius: 3)
-        silentBackground.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 0, height: 0), radius: 3)
-        wildcardBackground.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 0, height: 0), radius: 3)
+        vowelBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 12)
+        fluidBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 12)
+        trueBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 12)
+        flipBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 12)
+        silentBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 12)
+        wildcardBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 12)
         
         self.addSubview(vowelBackground)
         self.addSubview(fluidBackground)

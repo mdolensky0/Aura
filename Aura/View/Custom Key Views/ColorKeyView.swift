@@ -18,8 +18,11 @@ class ColorKeyView: UIView {
     var colors = [UIColor]()
     var doesButtonScrollToView = true
     var myScrollView: UIScrollView?
+    var keyType: KeyType?
     
     // Subviews
+    var container = UIView()
+    
     var mainStackView: UIStackView = {
         
         let stack = UIStackView()
@@ -62,7 +65,7 @@ class ColorKeyView: UIView {
         setup()
     }
     
-    convenience init(frame: CGRect, doesButtonScrollToView: Bool = true, title: String, explanation: String?, numRows: Int, numCol: Int, cornerRadius: CGFloat = 12, colors: [UIColor]) {
+    convenience init(frame: CGRect, doesButtonScrollToView: Bool = true, title: String, explanation: String?, numRows: Int, numCol: Int, cornerRadius: CGFloat = 12, colors: [UIColor], keyType: KeyType? = nil) {
         self.init(frame: frame)
         
         self.title = title
@@ -72,6 +75,7 @@ class ColorKeyView: UIView {
         self.colors = colors
         self.cornerRadius = cornerRadius
         self.doesButtonScrollToView = doesButtonScrollToView
+        self.keyType = keyType
         
         setup()
     }
@@ -83,7 +87,7 @@ class ColorKeyView: UIView {
     }
     
     func setup() {
-        
+    
         guard let numRows = numRows, let numColumns = numColumns else { return }
 
         if (numRows*numColumns != colors.count) {
@@ -92,10 +96,18 @@ class ColorKeyView: UIView {
             return
         }
         
-        self.backgroundColor = .white
-        self.roundCorners(cornerRadius: self.cornerRadius)
+        container.roundCorners(cornerRadius: cornerRadius)
+        container.backgroundColor = .white
+        self.addSubview(container)
         
-        self.addSubview(mainStackView)
+        container.anchor(top: self.topAnchor,
+                             bottom: self.bottomAnchor,
+                             leading: self.leadingAnchor,
+                             trailing: self.trailingAnchor,
+                             height: nil,
+                             width: nil)
+        
+        container.addSubview(mainStackView)
         
         titleLabel.text = title
         mainStackView.addArrangedSubview(titleLabel)
@@ -113,10 +125,10 @@ class ColorKeyView: UIView {
         
         mainStackView.addArrangedSubview(explanationLabel)
         
-        mainStackView.anchor(top: self.topAnchor,
-                             bottom: self.bottomAnchor,
-                             leading: self.leadingAnchor,
-                             trailing: self.trailingAnchor,
+        mainStackView.anchor(top: container.topAnchor,
+                             bottom: container.bottomAnchor,
+                             leading: container.leadingAnchor,
+                             trailing: container.trailingAnchor,
                              height: nil,
                              width: nil,
                              padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
@@ -126,7 +138,7 @@ class ColorKeyView: UIView {
             
             let stackView = UIStackView()
             stackView.axis = .horizontal
-            stackView.alignment = .center
+            stackView.alignment = .fill
             stackView.distribution = .equalSpacing
             stackView.spacing = 10
             
@@ -134,22 +146,37 @@ class ColorKeyView: UIView {
             
             for j in 0..<numColumns {
                 
+                let view = UIView()
+                view.backgroundColor = .white
                 
                 let button = UIButton()
                 button.translatesAutoresizingMaskIntoConstraints = false
-                button.widthAnchor.constraint(equalToConstant: 34).isActive = true
-                button.heightAnchor.constraint(equalToConstant: 34).isActive = true
+                button.widthAnchor.constraint(equalTo: button.heightAnchor).isActive = true
+                button.widthAnchor.constraint(greaterThanOrEqualToConstant: 30).isActive = true
+                button.heightAnchor.constraint(greaterThanOrEqualToConstant: 30).isActive = true
                 button.backgroundColor = colors[ (numColumns * i) + j ]
                 button.roundCorners(cornerRadius: 17)
                 
+                view.addSubview(button)
+                button.anchor(top: view.topAnchor,
+                              bottom: view.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              trailing: view.trailingAnchor,
+                              height: nil,
+                              width: nil)
+                
                 // These will be used in the Key VC to scroll to the right key card
-                if doesButtonScrollToView &&
-                   colors[ (numColumns * i) + j ] != .white &&
+                if colors[ (numColumns * i) + j ] != .white &&
                    colors[ (numColumns * i) + j ] != .black &&
                    colors[ (numColumns * i) + j ] != K.Colors.darkGrey &&
                    colors[ (numColumns * i) + j ] != K.Colors.yellow{
                     
                     button.addTarget(self, action: #selector(scrollButtonPressed(_:)), for: .touchUpInside)
+                    button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+                    button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+                    button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+                    button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
+                    
                     button.tag = count
                     count += 1
                     
@@ -160,7 +187,7 @@ class ColorKeyView: UIView {
                     button.isUserInteractionEnabled = false
                 }
                 
-                stackView.addArrangedSubview(button)
+                stackView.addArrangedSubview(view)
 
             }
             
@@ -168,11 +195,115 @@ class ColorKeyView: UIView {
         
     }
     
-    @objc func scrollButtonPressed(_ sender: UIButton) {
-        print(sender.tag)
-        if let myScrollView = myScrollView {
-            myScrollView.setContentOffset( CGPoint(x: myScrollView.frame.size.width * CGFloat(sender.tag), y: 0.0), animated: true)
+    func setShadows() {
+        
+        self.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 0, height: 2), radius: 3, cornerRadius: cornerRadius)
+        
+        for stack in mainStackView.subviews {
+            
+            for view in stack.subviews {
+                
+                if view.subviews[0].backgroundColor != .white {
+                    
+                    view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 2, height: 2), radius: 2, cornerRadius: 30)
+                    
+                }
+            }
+            
         }
+        
+    }
+    
+    @objc func scrollButtonPressed(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            
+            sender.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+            sender.superview?.layer.shadowOpacity = 0.5
+            
+        }) { (completion) in
+            
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+            }
+            
+        }
+        
+        if doesButtonScrollToView {
+                        
+            if let myScrollView = myScrollView as? KeyCardScrollView {
+                
+                myScrollView.setContentOffset( CGPoint(x: myScrollView.frame.size.width * CGFloat(sender.tag), y: 0.0), animated: true)
+                
+                if let keyCard = myScrollView.stackView.subviews[sender.tag].subviews[0] as? KeyCardView {
+                    keyCard.soundButton.sendActions(for: .touchUpInside)
+                }
+                
+            }
+            
+        }
+        
+        else {
+            
+            if let keyType = self.keyType {
+                
+                switch keyType {
+                    
+                case .vowel:
+                    
+                    let soundString = K.KeyInfo.vowelSoundAndColor[sender.tag].0
+                    playSound(audioString: soundString)
+                    
+                case .fluidConsonant:
+                    
+                    let soundString = K.KeyInfo.fluidSoundAndColor[sender.tag].0
+                    playSound(audioString: soundString)
+                    
+                case .trueConsonant:
+                    
+                    let soundString = K.KeyInfo.trueSoundAndText[sender.tag].0
+                    playSound(audioString: soundString)
+                    
+                case .flipConsonant:
+                    
+                    let soundString = K.KeyInfo.flipSoundAndText[sender.tag].0
+                    playSound(audioString: soundString)
+                    
+                case .silent:
+                    
+                    break
+                    
+                case .wildcard:
+                    
+                    break
+                    
+                }
+                
+            }
+        }
+        
+    }
+    
+    @objc func touchDown(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
+            sender.superview?.layer.shadowOpacity = 0.5
+        }
+    }
+    
+    @objc func cancelEvent(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+        }
+        
+    }
+    
+    func playSound(audioString: String) {
+        
+        Utilities.shared.playSound(audioString)
         
     }
     

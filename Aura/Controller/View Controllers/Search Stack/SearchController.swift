@@ -27,9 +27,9 @@ class SearchController: UIViewController {
     
     var titleLabel: UILabel = {
         
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 40))
-        label.backgroundColor = K.Colors.purple
-        label.font = UIFont.boldSystemFont(ofSize: 30)
+        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
+        label.backgroundColor = .clear
+        label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
         label.text = "Aura"
         label.numberOfLines = 2
         label.textColor = .white
@@ -42,7 +42,7 @@ class SearchController: UIViewController {
         
         let view = UIView()
         view.backgroundColor = .white
-        view.setUnderlineStyle(color: K.Colors.purple)
+        view.setUnderlineStyle(color: K.Colors.lightGrey)
         return view
         
     }()
@@ -62,7 +62,8 @@ class SearchController: UIViewController {
         let button = UIButton()
         button.addTarget(self, action: #selector(languageButtonPressed), for: .touchUpInside)
         button.backgroundColor = .white
-        button.setTitleColor(UIColor.systemBlue, for: .normal)
+        button.titleLabel!.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.setTitleColor(K.DesignColors.primary, for: .normal)
         return button
         
     }()
@@ -72,7 +73,7 @@ class SearchController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "repeat"), for: .normal)
         button.addTarget(self, action: #selector(swapButtonPressed(_:)), for: .touchUpInside)
-        button.tintColor = .black
+        button.tintColor = K.DesignColors.primary
         button.backgroundColor = .white
         return button
         
@@ -83,6 +84,7 @@ class SearchController: UIViewController {
         let label = UILabel()
         label.text = "English HD"
         label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.backgroundColor = .white
         label.textAlignment = .center
         return label
@@ -95,8 +97,9 @@ class SearchController: UIViewController {
         textView.returnKeyType = .search
         textView.text = "Enter text"
         textView.textColor = .lightGray
-        textView.font = .systemFont(ofSize: 20)
+        textView.font = .systemFont(ofSize: 17)
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 50)
+        textView.backgroundColor = .white
         return textView
     
     }()
@@ -123,7 +126,7 @@ class SearchController: UIViewController {
         
         Utilities.shared.searchHistoryDelegate = self
         setupView()
-        view.backgroundColor = K.Colors.lightGrey
+        view.backgroundColor = K.DesignColors.background
     }
     
     override func viewDidLayoutSubviews() {
@@ -172,7 +175,7 @@ extension SearchController {
 
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.barTintColor = K.Colors.purple
+        self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
         
     }
     
@@ -184,7 +187,7 @@ extension SearchController {
                            bottom: nil,
                            leading: view.leadingAnchor,
                            trailing: view.trailingAnchor,
-                           height: 76,
+                           height: 60,
                            width: nil)
         
         // Add Stack View
@@ -250,7 +253,7 @@ extension SearchController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(PrevSearchCell.self, forCellReuseIdentifier: K.Cells.prevSearchCell)
-        tableView.backgroundColor = K.Colors.lightGrey
+        tableView.backgroundColor = K.DesignColors.background
         
         // Add TableView
         view.addSubview(tableView)
@@ -265,12 +268,12 @@ extension SearchController {
         
         // Add Header
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 70))
-        headerView.backgroundColor = K.Colors.lightGrey
+        headerView.backgroundColor = .clear
         
         let headerLabel = UILabel()
-        headerLabel.backgroundColor = K.Colors.lightGrey
+        headerLabel.backgroundColor = K.DesignColors.background
         headerLabel.text = "Previous Searches"
-        headerLabel.font = .systemFont(ofSize: 20, weight: .medium)
+        headerLabel.font = .systemFont(ofSize: 17, weight: .regular)
         headerLabel.textAlignment = .left
         
         headerView.addSubview(headerLabel)
@@ -285,7 +288,7 @@ extension SearchController {
         
         // Add Footer
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 60))
-        footerView.backgroundColor = K.Colors.lightGrey
+        footerView.backgroundColor = K.DesignColors.background
         tableView.tableFooterView = footerView
         
         
@@ -803,7 +806,7 @@ extension SearchController {
         resultsController.results = self.results
         resultsController.alternateTranslations = self.alternateTranslations
         resultsController.learnMoreArray = self.learnMoreArray
-        resultsController.textView.text = self.textView.text
+        resultsController.textView.text = self.searchInput
         
         // Update search history
         if Utilities.shared.isUserSignedIn {

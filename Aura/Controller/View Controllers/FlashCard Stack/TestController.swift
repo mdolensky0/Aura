@@ -22,9 +22,9 @@ class TestController: UIViewController {
     
     var centerTitle: UILabel = {
        
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 40))
+        let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
         label.text = "Deck Name"
         label.numberOfLines = 2
         label.textColor = .white
@@ -32,11 +32,12 @@ class TestController: UIViewController {
         return label
         
     }()
+
     
     let contentView: UIView = {
         
         let view = UIView()
-        view.backgroundColor = K.Colors.lightGrey
+        view.backgroundColor = .clear
         return view
         
     }()
@@ -69,29 +70,33 @@ class TestController: UIViewController {
     
     let XView: UIView = {
         
-        let imageView = UIImageView()
-        imageView.backgroundColor = .white
-        imageView.image = UIImage(systemName: "xmark")
-        imageView.tintColor = K.Colors.red
-        imageView.contentMode = .scaleAspectFit
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.contentMode = .center
         
-        let view = UIView()
-        view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        view.roundCorners(cornerRadius: 35)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        button.roundCorners(cornerRadius: 35)
         
-        view.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.imageView?.backgroundColor = .white
+        button.imageView?.tintColor = K.Colors.red
+        button.imageView?.contentMode = .scaleAspectFit
+        
+        button.imageView?.translatesAutoresizingMaskIntoConstraints = false
+        button.imageView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        button.imageView?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        button.addTarget(self, action: #selector(xButtonPressed(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         
         let background = UIView()
-        background.addSubview(view)
-        view.anchor(top: background.topAnchor,
+        background.addSubview(button)
+        button.anchor(top: background.topAnchor,
                     bottom: background.bottomAnchor,
                     leading: background.leadingAnchor,
                     trailing: background.trailingAnchor,
@@ -104,29 +109,33 @@ class TestController: UIViewController {
     
     let checkmarkView: UIView = {
         
-        let imageView = UIImageView()
-        imageView.backgroundColor = .white
-        imageView.image = UIImage(systemName: "checkmark")
-        imageView.tintColor = K.Colors.green
-        imageView.contentMode = .scaleAspectFit
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.contentMode = .center
         
-        let view = UIView()
-        view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        view.roundCorners(cornerRadius: 35)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        button.roundCorners(cornerRadius: 35)
         
-        view.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        button.imageView?.backgroundColor = .white
+        button.imageView?.tintColor = K.Colors.green
+        button.imageView?.contentMode = .scaleAspectFit
+        
+        button.imageView?.translatesAutoresizingMaskIntoConstraints = false
+        button.imageView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        button.imageView?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        button.addTarget(self, action: #selector(checkButtonPressed(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         
         let background = UIView()
-        background.addSubview(view)
-        view.anchor(top: background.topAnchor,
+        background.addSubview(button)
+        button.anchor(top: background.topAnchor,
                     bottom: background.bottomAnchor,
                     leading: background.leadingAnchor,
                     trailing: background.trailingAnchor,
@@ -136,32 +145,36 @@ class TestController: UIViewController {
         return background
         
     }()
-    
+        
     let flipView: UIView = {
+                
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.contentMode = .center
         
-        let imageView = UIImageView()
-        imageView.backgroundColor = .white
-        imageView.image = UIImage(systemName: "arrow.2.circlepath")
-        imageView.tintColor = .black
-        imageView.contentMode = .scaleAspectFit
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        button.roundCorners(cornerRadius: 35)
+
+        button.setImage(UIImage(systemName: "arrow.2.circlepath"), for: .normal)
+        button.imageView?.backgroundColor = .white
+        button.imageView?.tintColor = .black
+        button.imageView?.contentMode = .scaleAspectFit
+
+        button.imageView?.translatesAutoresizingMaskIntoConstraints = false
+        button.imageView?.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        button.imageView?.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        let view = UIView()
-        view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        view.roundCorners(cornerRadius: 35)
-        
-        view.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.addTarget(self, action: #selector(flipButtonPressed(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
+        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         
         let background = UIView()
-        background.addSubview(view)
-        view.anchor(top: background.topAnchor,
+        background.addSubview(button)
+        button.anchor(top: background.topAnchor,
                     bottom: background.bottomAnchor,
                     leading: background.leadingAnchor,
                     trailing: background.trailingAnchor,
@@ -188,6 +201,8 @@ class TestController: UIViewController {
     let containerView: UIView = {
         
         let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return view
         
     }()
@@ -207,7 +222,7 @@ class TestController: UIViewController {
     let toggle: UISwitch = {
         
         let toggle = UISwitch()
-        toggle.onTintColor = K.Colors.purple
+        toggle.onTintColor = K.DesignColors.primary
         toggle.addTarget(self, action: #selector(togglePressed(_:)), for: .valueChanged)
         toggle.backgroundColor = .white
         return toggle
@@ -225,12 +240,16 @@ class TestController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         
-        flashcardBackground.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 10)
-        XView.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 30)
-        flipView.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 30)
-        checkmarkView.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3, cornerRadius: 30)
-        containerView.setShadow(color: .black, opacity: 0.5, offset: .zero, radius: 3)
+        flashcardBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
+        XView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 35)
+        flipView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 35)
+        checkmarkView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 35)
+        containerView.setShadow(color: .black, opacity: 0.3, offset: .init(width: 0, height: 3), radius: 2)
         containerView.backgroundColor = .white
+        
+        currentCard.soundBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
+        
+        currentCard.loopBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
 
     }
     
@@ -252,10 +271,17 @@ class TestController: UIViewController {
         
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.barTintColor = K.Colors.purple
+        self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
         
         // Configure self.view
-        view.backgroundColor = K.Colors.lightGrey
+        view.backgroundColor = K.DesignColors.background
+        
+        
+        // Add subviews to main view
+        view.addSubview(containerView)
+        view.addSubview(contentView)
+        view.addSubview(flashcardBackground)
+        view.addSubview(buttonsStackView)
         
         // Add UISwitch and View Type Label
         containerView.addSubview(keyTypeLabel)
@@ -277,7 +303,7 @@ class TestController: UIViewController {
                       width: nil,
                       padding: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
         
-        view.addSubview(containerView)
+        
         containerView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                              bottom: nil,
                              leading: view.leadingAnchor,
@@ -286,11 +312,10 @@ class TestController: UIViewController {
                              width: nil)
         
         // Add content view
-        view.addSubview(contentView)
         view.sendSubviewToBack(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.anchor(top: containerView.bottomAnchor,
-                           bottom: nil,
+                           bottom: buttonsStackView.topAnchor,
                            leading: view.leadingAnchor,
                            trailing: view.trailingAnchor,
                            height: nil,
@@ -299,17 +324,17 @@ class TestController: UIViewController {
         // Create first card
         createTestFlashcard()
         
-        view.addSubview(flashcardBackground)
         flashcardBackground.translatesAutoresizingMaskIntoConstraints = false
         flashcardBackground.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         flashcardBackground.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         flashcardBackground.widthAnchor.constraint(equalToConstant: view.frame.width - 60).isActive = true
         flashcardBackground.heightAnchor.constraint(greaterThanOrEqualToConstant: 350).isActive = true
         
-        // Prevent it from becoming to large
-        flashcardBackground.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-        flashcardBackground.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
-        
+        // Prevent Flashcard from becoming to large
+        flashcardBackground.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: 10).isActive = true
+        flashcardBackground.bottomAnchor.constraint(lessThanOrEqualTo: buttonsStackView.topAnchor, constant: -10).isActive = true
+
+                
         flashcardBackground.addSubview(currentCard)
         flashcardBackground.addSubview(imageContainer)
         
@@ -334,8 +359,6 @@ class TestController: UIViewController {
         flashcardBackground.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(panCard(_:))))
         flashcardBackground.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(flipCard(_:))))
 
-        
-        view.addSubview(buttonsStackView)
         buttonsStackView.anchor(top: contentView.bottomAnchor,
                                 bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                 leading: view.leadingAnchor,
@@ -347,11 +370,7 @@ class TestController: UIViewController {
         buttonsStackView.addArrangedSubview(XView)
         buttonsStackView.addArrangedSubview(flipView)
         buttonsStackView.addArrangedSubview(checkmarkView)
-        
-        XView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(xButtonPressed(_:))))
-        flipView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(flipCard(_:))))
-        checkmarkView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(checkButtonPressed(_:))))
-        
+                
     }
     
     func createTestFlashcard() {
@@ -486,7 +505,7 @@ class TestController: UIViewController {
     func getNewCard(wasCorrect: Bool) {
         
         updateDeckAfterSwipe(wasCorrect)
-        flashcardBackground.center = self.view.center
+        flashcardBackground.center = self.contentView.center
         flashcardBackground.transform = .identity
         self.imageContainer.alpha = 0
             
@@ -495,7 +514,7 @@ class TestController: UIViewController {
     func resetCard() {
         
         UIView.animate(withDuration: 0.2) {
-            self.flashcardBackground.center = self.view.center
+            self.flashcardBackground.center = self.contentView.center
             self.imageContainer.alpha = 0
             self.flashcardBackground.alpha = 1
             self.flashcardBackground.transform = .identity
@@ -503,6 +522,12 @@ class TestController: UIViewController {
     }
     
     @objc func flipCard(_ sender: UITapGestureRecognizer) {
+        
+        // Animate
+        UIView.animate(withDuration: 0.2) {
+            sender.view?.transform = .identity
+            sender.view?.superview?.layer.shadowOpacity = 0.5
+        }
         
         if isFront {
             
@@ -521,8 +546,39 @@ class TestController: UIViewController {
         }
     }
     
-    @objc func xButtonPressed(_ sender: UITapGestureRecognizer) {
+    @objc func flipButtonPressed(_ sender: UIButton) {
+        
+        // Animate
+        UIView.animate(withDuration: 0.2) {
+            sender.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.5
+        }
+        
+        if isFront {
+            
+            isFront = false
+            currentCard.updateSubviewVisibilities(isFront: isFront)
+            UIView.transition(with: self.flashcardBackground, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+            
+        }
+            
+        else {
+            
+            isFront = true
+            currentCard.updateSubviewVisibilities(isFront: isFront)
+            UIView.transition(with: self.flashcardBackground, duration: 0.3, options: .transitionFlipFromRight, animations: nil, completion: nil)
+            
+        }
+    }
     
+    @objc func xButtonPressed(_ sender: UIButton) {
+        
+        // Animate
+        UIView.animate(withDuration: 0.2) {
+            sender.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.5
+        }
+        
         // Move off to left
         UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveLinear, animations: {
             self.flashcardBackground.center = CGPoint(x: self.flashcardBackground.center.x - 300, y: self.flashcardBackground.center.y + 75)
@@ -535,7 +591,13 @@ class TestController: UIViewController {
         
     }
         
-    @objc func checkButtonPressed(_ sender: UITapGestureRecognizer) {
+    @objc func checkButtonPressed(_ sender: UIButton) {
+        
+        // Animate
+        UIView.animate(withDuration: 0.2) {
+            sender.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.5
+        }
         
         // Move off to right
         UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveLinear, animations: {
@@ -545,6 +607,23 @@ class TestController: UIViewController {
         }, completion: {(finished: Bool) in
             self.getNewCard(wasCorrect: true)
         })
+        
+    }
+    
+    @objc func touchDown(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
+            sender.superview?.layer.shadowOpacity = 0.7
+        }
+    }
+    
+    @objc func cancelEvent(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.1) {
+            sender.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.5
+        }
         
     }
     

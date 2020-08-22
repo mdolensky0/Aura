@@ -268,8 +268,13 @@ extension NSMutableAttributedString {
             return 1
         }
         
-        else {
+        else if text.count <= 40 {
             self.addAttribute(.font, value: UIFont.systemFont(ofSize: 50, weight: .bold), range: NSRange(location: 0, length: self.length))
+            return 0
+        }
+        
+        else {
+            self.addAttribute(.font, value: UIFont.systemFont(ofSize: 45, weight: .bold), range: NSRange(location: 0, length: self.length))
             return 0
         }
     }

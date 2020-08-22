@@ -145,7 +145,7 @@ class TabBarController: UITabBarController {
 
         tabBar.isTranslucent = false
         tabBar.barTintColor = .white
-        tabBar.tintColor = K.Colors.purple
+        tabBar.tintColor = K.DesignColors.primary
         tabBar.unselectedItemTintColor = K.Colors.darkGrey
         tabBar.itemPositioning = .centered
     }
