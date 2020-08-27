@@ -28,7 +28,7 @@ class WordColoringManager {
                        "æ", "ɑ","ə", "ɛ", "i", "ɪ", "ɔ", "u", "ʊ",
                        "b","ɡ","l","m","n","p","r","d","ð","t","ʔ","v","z","θ","f","h","j","k","ŋ","s","ʃ","w","ʒ"]
     
-    func colorWord(word: String, ipa: String) -> NSMutableAttributedString {
+    func colorWord(word: String, ipa: String) -> (NSMutableAttributedString, Bool) {
        
         var wordArray = [letterAndAttributes]()
         var ipaArray = [IpaLetter]()
@@ -380,11 +380,17 @@ class WordColoringManager {
         return false
     }
     
-    func addAttributes(word: String, wordArray: [letterAndAttributes]) -> NSMutableAttributedString {
+    func addAttributes(word: String, wordArray: [letterAndAttributes]) -> (NSMutableAttributedString, Bool) {
+        
         let attributedQuote = NSMutableAttributedString(string: word)
+        var isFullyMatched = true
         
         for i in 0..<wordArray.count {
             let color = UIColor(red: CGFloat(wordArray[i].color[0]), green: CGFloat(wordArray[i].color[1]), blue: CGFloat(wordArray[i].color[2]), alpha: 1)
+            
+            if !wordArray[i].matched {
+                isFullyMatched = false
+            }
             
             attributedQuote.addAttribute(.foregroundColor, value: color, range: NSRange(location: i, length: 1))
             
@@ -398,7 +404,7 @@ class WordColoringManager {
             }
         }
         
-        return attributedQuote
+        return (attributedQuote, isFullyMatched)
     }
 }
 

@@ -414,7 +414,7 @@ class DeckController: UIViewController {
                     if let ipa = wordModel.ipa[flashcard.ipaIndex] {
                         
                         let audio = (0 < wordModel.audio.count ? wordModel.audio[flashcard.ipaIndex] : nil)
-                        var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
+                        var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa).0
                         text = text.setCapitalLetters(from: word).replaceSpecialCharacters(from: word)
                         coloredResults.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
                     }

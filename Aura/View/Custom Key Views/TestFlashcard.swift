@@ -453,29 +453,19 @@ class TestFlashcard: UIView {
     
     @objc func soundItOutButtonPressed(_ sender: SoundButton) {
         
-        UIView.animate(withDuration: 0.1, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             
-            sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
+            sender.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
             sender.superview?.layer.shadowOpacity = 0.5
             
         }) { (completion) in
             
-            UIView.animate(withDuration: 0.3, animations: {
-                
-                sender.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
-                sender.superview?.layer.shadowOpacity = 0.5
-                
-            }) { (completion) in
-                
-                UIView.animate(withDuration: 0.2) {
-                    
-                    sender.transform = .identity
-                    
-                }
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
             }
             
         }
-        
+
         switch sender.title(for: .normal) {
         case "i":
             Utilities.shared.playSound("BEAT")
@@ -494,10 +484,10 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "V")
                 }
-            }
-            Utilities.shared.playSound("V")
+            } else { Utilities.shared.playSound("V") }
+            
         case "aɪ":
             Utilities.shared.playSound("BITE")
         case "əl","oʊl","ʊl":
@@ -515,10 +505,10 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "WEI")
                 }
-            }
-            Utilities.shared.playSound("WEI")
+            } else { Utilities.shared.playSound("WEI") }
+            
         case "j":
             Utilities.shared.playSound("Y")
         case "n":
@@ -528,10 +518,10 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "T")
                 }
-            }
-            Utilities.shared.playSound("T")
+            } else { Utilities.shared.playSound("T")}
+            
         case "æŋ" where sender.backgroundColor == K.Colors.pink:
             Utilities.shared.playSound("BAIT")
         case "æŋ" where sender.backgroundColor == K.Colors.darkGrey:
@@ -543,10 +533,10 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "DarkR")
                 }
-            }
-            Utilities.shared.playSound("DarkR")
+            } else { Utilities.shared.playSound("DarkR") }
+            
         case "ɪŋ" where sender.backgroundColor == K.Colors.seaBlue:
             Utilities.shared.playSound("BEAT")
         case "ɪŋ" where sender.backgroundColor == K.Colors.darkGrey:
@@ -556,10 +546,10 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "H")
                 }
-            }
-            Utilities.shared.playSound("H")
+            } else { Utilities.shared.playSound("H") }
+            
         case "m":
             Utilities.shared.playSound("M")
         case "ð":
@@ -575,10 +565,10 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "YOU")
                 }
-            }
-            Utilities.shared.playSound("YOU")
+            } else { Utilities.shared.playSound("YOU") }
+            
         case "oʊ":
             Utilities.shared.playSound("BOAT")
         case "tʃ":
@@ -588,10 +578,10 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "F")
                 }
-            }
-            Utilities.shared.playSound("F")
+            } else { Utilities.shared.playSound("F") }
+            
         case "l":
             Utilities.shared.playSound("L")
         case "d":
@@ -610,6 +600,8 @@ class TestFlashcard: UIView {
             Utilities.shared.playSound("Q")
         case "ɔr" where sender.backgroundColor == K.Colors.purple:
             Utilities.shared.playSound("BOAT")
+        case "ɔr" where sender.backgroundColor == K.Colors.darkGrey:
+            Utilities.shared.playSound("DarkR")
         case "ʔ":
             break
         case "ɡ":
@@ -617,10 +609,10 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "G")
                 }
-            }
-            Utilities.shared.playSound("G")
+            } else { Utilities.shared.playSound("G") }
+            
         case "r":
             Utilities.shared.playSound("R")
         case "z":
@@ -628,10 +620,10 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "Z")
                 }
-            }
-            Utilities.shared.playSound("Z")
+            } else { Utilities.shared.playSound("Z") }
+            
         case "aʊ":
             Utilities.shared.playSound("BOUT")
         case "ɛŋ" where sender.backgroundColor == K.Colors.pink:
@@ -643,46 +635,46 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "YUH")
                 }
-            }
-            Utilities.shared.playSound("YUH")
+            } else { Utilities.shared.playSound("YUH") }
+            
         case "kʃ":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "KSH")
                 }
-            }
-            Utilities.shared.playSound("KSH")
+            } else { Utilities.shared.playSound("KSH") }
+            
         case "wə":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "WUH")
                 }
-            }
-            Utilities.shared.playSound("WUH")
+            } else { Utilities.shared.playSound("WUH") }
+            
         case "wɪ":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "WIH")
                 }
-            }
-            Utilities.shared.playSound("WIH")
+            } else { Utilities.shared.playSound("WIH") }
+            
         case "k":
             if sender.backgroundColor == K.Colors.yellow {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "K")
                 }
-            }
-            Utilities.shared.playSound("K")
+            } else { Utilities.shared.playSound("K") }
+            
         case "ŋ":
             Utilities.shared.playSound("NSoft")
         case "s":
@@ -694,10 +686,9 @@ class TestFlashcard: UIView {
                 if let range = sender.wildRange,
                     let wildCardNumber = topLabel.attributedText?.attribute(.linkNumber, at: range.location, effectiveRange: nil) as? String
                 {
-                    showPopTip(range: range, linkString: wildCardNumber)
+                    showPopTip(range: range, linkString: wildCardNumber, audioString: "W")
                 }
-            }
-            Utilities.shared.playSound("W")
+            } else { Utilities.shared.playSound("W") }
         case "ʒ":
             Utilities.shared.playSound("VISION")
         case "æ":
@@ -794,7 +785,7 @@ extension TestFlashcard: UICollectionViewDelegateFlowLayout {
 
 extension TestFlashcard {
     
-    func showPopTip(range : NSRange, linkString: String) {
+    func showPopTip(range : NSRange, linkString: String, audioString: String? = nil) {
         
         guard let rectForRange = self.topLabel.boundingRect(forCharacterRange: range),
             let actualPronunciation = K.linkToWildCardDictionary[linkString]
@@ -815,6 +806,10 @@ extension TestFlashcard {
         else {
             
             popTip.show(attributedText: actualPronunciation, direction: .up, maxWidth: 400, in: self.topLabel, from: rectForRange)
+            
+            if let audioString = audioString {
+                Utilities.shared.playSound(audioString)
+            }
             
             prevRange = range
             

@@ -389,7 +389,7 @@ class TestController: UIViewController {
                 if let ipa = wordModel.ipa[flashcard.ipaIndex] {
                     
                     let audio = (0 < wordModel.audio.count ? wordModel.audio[flashcard.ipaIndex] : nil)
-                    var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
+                    var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa).0
                     text = text.setCapitalLetters(from: word).replaceSpecialCharacters(from: word)
                     coloredResults.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
                 }
@@ -424,7 +424,7 @@ class TestController: UIViewController {
                 if let ipa = wordModel.ipa[flashcard.ipaIndex] {
                     
                     let audio = (0 < wordModel.audio.count ? wordModel.audio[flashcard.ipaIndex] : nil)
-                    var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
+                    var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa).0
                     text = text.setCapitalLetters(from: word).replaceSpecialCharacters(from: word)
                     coloredResults.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
                 }
@@ -656,9 +656,8 @@ class TestController: UIViewController {
             
             // Place Card in Back of Queue
             let oldCard = myQueue.remove(at: 0)
-            updateTestFlashcard()
             myQueue.append(oldCard)
-            
+            updateTestFlashcard()
             
         }
         
@@ -685,7 +684,6 @@ class TestController: UIViewController {
             
             // Place Card 8 cards back or at end if small deck
             let oldCard = myQueue.remove(at: 0)
-            updateTestFlashcard()
             
             let randIndex = Int.random(in: 5...10)
             
@@ -696,6 +694,8 @@ class TestController: UIViewController {
             else {
                 myQueue.insert(oldCard, at: randIndex)
             }
+            
+            updateTestFlashcard()
             
         }
     

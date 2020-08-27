@@ -106,6 +106,8 @@
 		7D99A37424D9EC91006C977E /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D99A37324D9EC91006C977E /* SignUpController.swift */; };
 		7DCAC79D24F0526B0013D134 /* LearnMoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCAC79C24F0526B0013D134 /* LearnMoreController.swift */; };
 		7DCAC79F24F1D5BA0013D134 /* KeyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCAC79E24F1D5B90013D134 /* KeyType.swift */; };
+		7DCAC7A324F6E1100013D134 /* SearchStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCAC7A224F6E1100013D134 /* SearchStatus.swift */; };
+		7DCAC7A524F835F40013D134 /* SearchStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCAC7A424F835F40013D134 /* SearchStatusView.swift */; };
 		7DD1B09F24BD06AB0052BC7B /* SoundItOutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD1B09E24BD06AB0052BC7B /* SoundItOutCell.swift */; };
 		7DFBA8C624B4189500618332 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFBA8C524B4189500618332 /* AppDelegate.swift */; };
 		7DFBA8C824B4189500618332 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFBA8C724B4189500618332 /* SceneDelegate.swift */; };
@@ -216,6 +218,8 @@
 		7D99A37324D9EC91006C977E /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		7DCAC79C24F0526B0013D134 /* LearnMoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnMoreController.swift; sourceTree = "<group>"; };
 		7DCAC79E24F1D5B90013D134 /* KeyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyType.swift; sourceTree = "<group>"; };
+		7DCAC7A224F6E1100013D134 /* SearchStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStatus.swift; sourceTree = "<group>"; };
+		7DCAC7A424F835F40013D134 /* SearchStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStatusView.swift; sourceTree = "<group>"; };
 		7DD1B09E24BD06AB0052BC7B /* SoundItOutCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundItOutCell.swift; sourceTree = "<group>"; };
 		7DFBA8C224B4189500618332 /* Aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DFBA8C524B4189500618332 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -496,6 +500,7 @@
 				7D15DBD524C8D628009ACDB4 /* TappableLabel.swift */,
 				7D907C4824C00958007D5894 /* DynamicCollectionView.swift */,
 				7D530E3624E4E87300C0C209 /* NoScrollTableView.swift */,
+				7DCAC7A424F835F40013D134 /* SearchStatusView.swift */,
 				7D600BF124D0FF7B002EA266 /* Custom Buttons */,
 				7D600BF424D241F6002EA266 /* Custom Key Views */,
 			);
@@ -508,6 +513,7 @@
 				7D15DBCD24C625FA009ACDB4 /* UserModel.swift */,
 				7D15DBD724CA1D46009ACDB4 /* SearchInfo.swift */,
 				7DCAC79E24F1D5B90013D134 /* KeyType.swift */,
+				7DCAC7A224F6E1100013D134 /* SearchStatus.swift */,
 				7D15DB5F24C2A4A8009ACDB4 /* Object Managers */,
 				7D15DB6424C2A70A009ACDB4 /* Firebase Models */,
 				7D15DB5424C29520009ACDB4 /* Realm Models */,
@@ -693,6 +699,7 @@
 				7D99A36C24D27F59006C977E /* FullKeyView.swift in Sources */,
 				7D15DB6824C2A8A2009ACDB4 /* ColorResultModel.swift in Sources */,
 				7D530E3B24E7115B00C0C209 /* TestFlashcard.swift in Sources */,
+				7DCAC7A524F835F40013D134 /* SearchStatusView.swift in Sources */,
 				7D15DBD224C631D9009ACDB4 /* SupportedLanguageCell.swift in Sources */,
 				7D2F9A0524E03414009E2139 /* DeckCell.swift in Sources */,
 				7D99A37024D8F757006C977E /* UtilityFunctions.swift in Sources */,
@@ -719,6 +726,7 @@
 				7DFF962724DC9679008A93A9 /* ResultCardView.swift in Sources */,
 				7D0C129124DB4B390024FD31 /* TestController.swift in Sources */,
 				7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */,
+				7DCAC7A324F6E1100013D134 /* SearchStatus.swift in Sources */,
 				7D77098524B566300009B93B /* Extensions.swift in Sources */,
 				7D2F9A0124DF3F77009E2139 /* DeckModel.swift in Sources */,
 				7D77098C24B7A2B20009B93B /* ResultsController.swift in Sources */,
@@ -876,6 +884,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -895,6 +904,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

@@ -19,6 +19,8 @@ class SearchController: UIViewController {
     var results = [ColorResultModel]()
     var alternateTranslations = [String]()
     var learnMoreArray = [(text: NSMutableAttributedString, ipaIndex: Int)]()
+    var isFullyMatched = true
+    var searchStatus: SearchStatus!
     
     // Search Information
     var searchInfo = SearchInfo(sourceLanguageCode: "en", sourceLanguageName: "English")
@@ -563,20 +565,21 @@ extension SearchController {
         //Update Search Input Variable
         self.searchInput = searchText
         
-        //Update global SearchInfo
+        //Update Global SearchInfo
         self.searchInfo = searchInfo
         
         // Set Language Codes
         TranslationManager.shared.sourceLanguageCode = searchInfo.sourceLanguageCode
         TranslationManager.shared.targetLanguageCode = searchInfo.targetLanguageCode
         
-        // Clear Results Array
+        // Clear Results Array and Other Data
         results = []
         wordArray = []
         bottomLabelText = ""
         wordModelArray = []
         alternateTranslations = []
         learnMoreArray = []
+        isFullyMatched = true
         
         // Update Query Text
         bottomLabelText = searchText
@@ -586,31 +589,49 @@ extension SearchController {
             self.startLoadingScreen()
         }
         
-        // translate and populate wordModelArray and alternatives array, then color words
-        runSearchsequence(searchText: searchText) { (success) in
+        // 1. Translate
+        // 2. Populate wordModelArray and alternativesArray
+        // 3. Color Words
+        runSearchsequence(searchText: searchText) { (searchStatus) in
             
-            if success {
+            self.searchStatus = searchStatus
+            
+            switch searchStatus {
                 
-                // Populate Results Array
+            case .success,
+                 .missingSomeWordModels,
+                 .emptyTranslationMissingSomeWordModels,
+                 .emptyTranslationWithAllWordModels:
+                
+                // Populate Results Array with ColorResultModel
                 for (word,wordModel) in zip(self.wordArray, self.wordModelArray) {
                     
-                    // If  Word Model Exists, addg colored word and audio to result
+                    // If  Word Model Exists, add colored word and audio to result
                     if let wordModel = wordModel {
                         
-                        // Take only the first ipa spelling for now
+                        // Take only the first ipa spelling for for the Results Array
                         if let ipa = wordModel.ipa[ipaIndex] {
                             
+                            // Add Colored Text
                             let audio = (0 < wordModel.audio.count ? wordModel.audio[ipaIndex] : nil)
-                            var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
+                            let coloringResult = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
+                            var text = coloringResult.0
                             text = text.setCapitalLetters(from: word).replaceSpecialCharacters(from: word)
                             self.results.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
+                            
+                            // If Text Colored Incorrectly Update isFullyMatched
+                            if !coloringResult.1 {
+                                self.isFullyMatched = false
+                            }
+                            
                         }
                         
+                        // Add all ipa spellings for each word to the Learn More Array
                         for i in 0..<wordModel.ipa.count {
                             
                             if let ipa = wordModel.ipa[i] {
                                 
-                                var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa)
+                                var text = WordColoringManager.shared.colorWord(word: wordModel.id, ipa: ipa).0
                                 text = text.setCapitalLetters(from: word).replaceSpecialCharacters(from: word)
                                 self.learnMoreArray.append((text: text, ipaIndex: i))
                             }
@@ -619,12 +640,11 @@ extension SearchController {
                         
                     }
                         
-                        // If Word Model doesn't exist, add plain text to result
+                    // If Word Model doesn't exist, add plain text to result
                     else {
                         
                         let text = NSMutableAttributedString(string: word)
                         self.results.append(ColorResultModel(attributedText: text, audioString: nil, ipa: "", isColored: false))
-                        self.learnMoreArray.append((text: text, ipaIndex: 0))
                     }
                 }
                 
@@ -633,10 +653,10 @@ extension SearchController {
                     self.endLoadingScreen()
                     self.goToResultsVC(searchInfo: searchInfo)
                 }
-            }
-                
-                // If search sequence not successful (no words found in database) alert to check spelling and internet
-            else {
+            
+            case .nilTranslation,
+                 .noExistingWordModels,
+                 .emptyTranslationNoExistingWordModels:
                 
                 for word in self.wordArray {
                     
@@ -651,16 +671,15 @@ extension SearchController {
                 }
             }
         }
-        
     }
     
-    func runSearchsequence(searchText: String, completion: @escaping(_ success: Bool) -> Void) {
+    func runSearchsequence(searchText: String, completion: @escaping(_ status: SearchStatus) -> Void) {
         
         switch searchInfo.searchType {
         
         case .nativeToEnglish:
             
-            // If source Lang is English, retrieve word models from database
+            // If source Lang is English, Retrieve word models from database
             if TranslationManager.shared.sourceLanguageCode == "en" {
                 
                 self.searchOutput = searchText
@@ -672,46 +691,83 @@ extension SearchController {
                     self.wordModelArray = wordModelArray
                     
                     let filteredArray = wordModelArray.filter { $0 != nil }
-                    if wordModelArray.count > 0 && filteredArray.count > 0 {
-                        completion(true)
-                    } else {completion(false)}
+                    
+                    // All Word Models Found
+                    if wordModelArray.count > 0 && wordModelArray.count == filteredArray.count { completion(.success) }
+                    
+                    // Some Word Models Found
+                    else if wordModelArray.count > 0 && filteredArray.count > 0 { completion(.missingSomeWordModels) }
+                    
+                    // No Word Models Found
+                    else { completion(.noExistingWordModels) }
                 }
             }
                 
             // Otherwise get translations and then retrieve word models from database
             else {
                 
+                var isEmptyTranslation = true
+                
                 TranslationManager.shared.textToTranslate = searchText
                 TranslationManager.shared.translate { (translation) in
                     
                     guard var translation = translation else {
                         print("Translation is nil")
-                        completion(false)
+                        self.searchOutput = searchText
+                        self.wordArray = searchText.split(separator: " ").map { String($0) }
+                        completion(.nilTranslation)
                         return
                     }
                     
+                    // Populate Alternate Translations
                     if translation.count > 1 {
                         self.alternateTranslations = translation[1..<translation.count].map { String($0) }
                     }
                     
                     // If the Translation Returns an empty string we want the result to be the original searched Text
                     if translation[0] == "" {
+                        
                         translation[0] = searchText
-                    }
+                        
+                    } else { isEmptyTranslation = false }
                     
                     self.searchOutput = translation[0]
                     
                     self.wordArray = translation[0].split(separator: " ").map { String($0) }
                     
+                    // Retrieve word models from database
                     FirebaseManager.shared.readEnglishDocumentByWord(words: self.wordArray) { (wordModelArray) in
                         
                         self.wordModelArray = wordModelArray
                         
                         let filteredArray = wordModelArray.filter { $0 != nil }
-                        if wordModelArray.count > 0 && filteredArray.count > 0 {
-                            self.linkNativeToEnglish(self.wordModelArray)
-                            completion(true)
-                        } else {completion(false)}
+                        
+                        // All  Word Models Found
+                        if wordModelArray.count > 0 && wordModelArray.count == filteredArray.count {
+                            
+                            if isEmptyTranslation { completion(.emptyTranslationWithAllWordModels) }
+                                
+                            else { completion(.success); self.linkNativeToEnglish(self.wordModelArray) }
+                            
+                        }
+                        
+                        // Some Word Models Found
+                        else if wordModelArray.count > 0 && filteredArray.count > 0 {
+                            
+                            if isEmptyTranslation { completion(.emptyTranslationMissingSomeWordModels) }
+                            
+                            else { completion(.missingSomeWordModels); self.linkNativeToEnglish(self.wordModelArray) }
+                            
+                        }
+                        
+                        // No Word Models Found
+                        else {
+                            
+                            if isEmptyTranslation { completion(.emptyTranslationNoExistingWordModels) }
+                            
+                            else { completion(.noExistingWordModels) }
+                            
+                        }
                     }
                 }
             }
@@ -730,32 +786,45 @@ extension SearchController {
                     self.wordModelArray = wordModelArray
                     
                     let filteredArray = wordModelArray.filter { $0 != nil }
-                    if wordModelArray.count > 0 && filteredArray.count > 0 {
-                        completion(true)
-                    } else {completion(false)}
+                    
+                    // All Word Models Found
+                    if wordModelArray.count > 0 && wordModelArray.count == filteredArray.count { completion(.success) }
+                    
+                    // Some Word Models Found
+                    else if wordModelArray.count > 0 && filteredArray.count > 0 { completion(.missingSomeWordModels) }
+                    
+                    // No Word Models Found
+                    else { completion(.noExistingWordModels) }
                 }
             }
             
             // Otherwise get translations and then retrieve word models from database
             else {
                 
+                var isEmptyTranslation = true
+                
                 TranslationManager.shared.textToTranslate = searchText
                 TranslationManager.shared.translate { (translation) in
                     
                     guard var translation = translation else {
                         print("Translation is nil")
-                        completion(false)
+                        self.searchOutput = searchText
+                        self.wordArray = searchText.split(separator: " ").map { String($0) }
+                        completion(.nilTranslation)
                         return
                     }
                     
+                    // Populate Alternate Translations
                     if translation.count > 1 {
                         self.alternateTranslations = translation[1..<translation.count].map { String($0) }
                     }
                     
                     // If the Translation Returns an empty string we want the result to be the original searched Text
                     if translation[0] == "" {
+                        
                         translation[0] = searchText
-                    }
+                        
+                    } else { isEmptyTranslation = false }
                     
                     self.searchOutput = translation[0]
                     
@@ -763,15 +832,39 @@ extension SearchController {
                     
                     self.wordArray = searchText.split(separator: " ").map { String($0) }
                     
+                    // Retrieve word models from database
                     FirebaseManager.shared.readEnglishDocumentByWord(words: self.wordArray) { (wordModelArray) in
                         
                         self.wordModelArray = wordModelArray
                         
                         let filteredArray = wordModelArray.filter { $0 != nil }
-                        if wordModelArray.count > 0 && filteredArray.count > 0 {
-                            self.linkNativeToEnglish(self.wordModelArray)
-                            completion(true)
-                        } else {completion(false)}
+                        
+                        // All  Word Models Found
+                        if wordModelArray.count > 0 && wordModelArray.count == filteredArray.count {
+                            
+                            if isEmptyTranslation { completion(.emptyTranslationWithAllWordModels) }
+                                
+                            else { completion(.success); self.linkNativeToEnglish(self.wordModelArray) }
+                            
+                        }
+                        
+                        // Some Word Models Found
+                        else if wordModelArray.count > 0 && filteredArray.count > 0 {
+                            
+                            if isEmptyTranslation { completion(.emptyTranslationMissingSomeWordModels) }
+                            
+                            else { completion(.missingSomeWordModels); self.linkNativeToEnglish(self.wordModelArray) }
+                            
+                        }
+                        
+                        // No Word Models Found
+                        else {
+                            
+                            if isEmptyTranslation { completion(.emptyTranslationNoExistingWordModels) }
+                            
+                            else { completion(.noExistingWordModels) }
+                            
+                        }
                     }
                 }
             }
@@ -807,6 +900,8 @@ extension SearchController {
         resultsController.alternateTranslations = self.alternateTranslations
         resultsController.learnMoreArray = self.learnMoreArray
         resultsController.textView.text = self.searchInput
+        resultsController.searchStatus = self.searchStatus
+        resultsController.isFullyMatched = self.isFullyMatched
         
         // Update search history
         if Utilities.shared.isUserSignedIn {

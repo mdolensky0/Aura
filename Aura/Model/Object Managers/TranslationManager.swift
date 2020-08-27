@@ -83,7 +83,7 @@ class TranslationManager: NSObject {
                 let task = session.dataTask(with: request) { (results, response, error) in
                     
                     if let error = error {
-                        print(error)
+                        print("Unable to perform request: \(error.localizedDescription)")
                         completion(nil)
                     } else {
                         if let response = response as? HTTPURLResponse, let results = results {
@@ -93,7 +93,7 @@ class TranslationManager: NSObject {
                                         completion(resultsDict)
                                     }
                                 } catch {
-                                    print(error.localizedDescription)
+                                    print("2:",error.localizedDescription)
                                 }
                             }
                         } else {

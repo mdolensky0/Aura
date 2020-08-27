@@ -169,7 +169,8 @@ class ColorKeyView: UIView {
                 if colors[ (numColumns * i) + j ] != .white &&
                    colors[ (numColumns * i) + j ] != .black &&
                    colors[ (numColumns * i) + j ] != K.Colors.darkGrey &&
-                   colors[ (numColumns * i) + j ] != K.Colors.yellow{
+                   colors[ (numColumns * i) + j ] != K.Colors.yellow &&
+                   colors[ (numColumns * i) + j ] != K.Colors.lightGrey {
                     
                     button.addTarget(self, action: #selector(scrollButtonPressed(_:)), for: .touchUpInside)
                     button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
