@@ -14,50 +14,72 @@ import RealmSwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var hasAlreadyLaunched :Bool!
+    var window : UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        // Configure Firebase
         FirebaseApp.configure()
 
         let db = Firestore.firestore()
-        print(db, "\n")
-        print(Realm.Configuration.defaultConfiguration.fileURL, "\n")
+        let storage = Storage.storage()
         
+        // print(db, "\n")
+        // print(storage, "\n")
+        // print(Realm.Configuration.defaultConfiguration.fileURL, "\n")
         
+        // Initialize New Realm
         do {
             let realm = try Realm()
         } catch {
-            print("Error initialising new real, \(error)")
+            print("Error initialising new realm, \(error)")
         }
         
-        //retrieve value from local store, if value doesn't exist then false is returned
+        // Retrieve value from local store, if value doesn't exist then false is returned
         hasAlreadyLaunched = UserDefaults.standard.bool(forKey: "hasAlreadyLaunched")
         
-        //check first launched
+        // Check first launched
         if (hasAlreadyLaunched)
         {
             print("exists")
             hasAlreadyLaunched = true
+            
         }else{
             UserDefaults.standard.set(true, forKey: "hasAlreadyLaunched")
+            
             RealmPopulater.populateRealm()
             RealmPopulater.addWildcardsToRealm()
             print("1st time")
         }
         
-        // setup audio to prevent first time  lag
+        // Setup audio to prevent first time  lag
         Utilities.shared.playSound("empty", volume: 0)
         
+        // Do interface stuff for ios 12 version
+        if #available(iOS 13, *) {
+            // Do only pure app launch stuff, not interface stuff
+        }
+        
+        else {
+            
+            window = UIWindow()
+            window?.rootViewController = TabBarController()
+            window?.makeKeyAndVisible()
+                        
+        }
+                
         return true
     }
 
     // MARK: UISceneSession Lifecycle
 
+    @available(iOS 13.0, *)
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
 
+    @available(iOS 13.0, *)
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         
     }

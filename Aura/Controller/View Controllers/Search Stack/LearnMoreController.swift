@@ -25,7 +25,9 @@ class LearnMoreController: UIViewController {
     var alternateTranslations = [String]()
     var learnMoreArray = [(text: NSMutableAttributedString, ipaIndex: Int)]()
     var isFullyMatched = true
+    var learnMoreIsFullyMatched = true
     var searchStatus: SearchStatus!
+    var learnMoreSearchStatus: SearchStatus!
     
     // Search Information
     var searchInfo = SearchInfo(sourceLanguageCode: "en", sourceLanguageName: "English")
@@ -41,7 +43,7 @@ class LearnMoreController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Aura"
+        label.text = "Search"
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -231,6 +233,13 @@ class LearnMoreController: UIViewController {
         
         setupShadows()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        resultCard.updateLoopColor()
+        
+    }
+    
 }
 
 extension LearnMoreController {
@@ -274,13 +283,7 @@ extension LearnMoreController {
         // Add Center Title
         self.navigationItem.titleView = centerTitle
         self.navigationController?.navigationBar.topItem?.title = " "
-        
-        // Add userbutton
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person"),
-                                                                 style: .plain,
-                                                                 target: self,
-                                                                 action: #selector(profileButtonTapped))
-        
+                
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
@@ -598,23 +601,7 @@ extension LearnMoreController {
     }
     
     //MARK:- Selector Functions
-    
-    @objc func profileButtonTapped() {
         
-        if Utilities.shared.isUserSignedIn {
-            
-            Utilities.shared.signUserOut(alertIn: self)
-            
-        }
-            
-        else {
-            
-            goToLogin()
-            
-        }
-        
-    }
-    
     @objc func alternativesButtonPressed(_ sender: QueryButton) {
         
         UIView.animate(withDuration: 0.2) {
@@ -762,8 +749,8 @@ extension LearnMoreController {
         resultCard.popTip.hide()
                 
         //Set Language Codes
-        TranslationManager.shared.sourceLanguageCode = searchInfo.sourceLanguageCode
-        TranslationManager.shared.targetLanguageCode = searchInfo.targetLanguageCode
+        AzureTranslationManager.shared.sourceLanguageCode = searchInfo.sourceLanguageCode
+        AzureTranslationManager.shared.targetLanguageCode = searchInfo.targetLanguageCode
         
         // Clear Results Array
         results = []
@@ -773,7 +760,7 @@ extension LearnMoreController {
         alternateTranslations = []
         soundItOutColors = []
         learnMoreArray = []
-        isFullyMatched = true
+        learnMoreIsFullyMatched = true
         
         //Update Query Text
         bottomLabelText = searchText
@@ -791,7 +778,7 @@ extension LearnMoreController {
         // 3. Color Words
         runSearchsequence(searchText: searchText, searchInfo: searchInfo) { (searchStatus) in
             
-            self.searchStatus = searchStatus
+            self.learnMoreSearchStatus = searchStatus
             
             switch searchStatus {
                 
@@ -818,7 +805,7 @@ extension LearnMoreController {
                             
                             // If Text Colored Incorrectly Update isFullyMatched
                             if !coloringResult.1 {
-                                self.isFullyMatched = false
+                                self.learnMoreIsFullyMatched = false
                             }
                             
                         }
@@ -877,7 +864,7 @@ extension LearnMoreController {
         case .nativeToEnglish:
             
             // If source Lang is English, retrieve word models from database
-            if TranslationManager.shared.sourceLanguageCode == "en" {
+            if AzureTranslationManager.shared.sourceLanguageCode == "en" {
                 
                 self.searchOutput = searchText
                 
@@ -905,8 +892,8 @@ extension LearnMoreController {
                 
                 var isEmptyTranslation = true
                 
-                TranslationManager.shared.textToTranslate = searchText
-                TranslationManager.shared.translate { (translation) in
+                AzureTranslationManager.shared.textToTranslate = searchText
+                AzureTranslationManager.shared.fetchTranslation { (translation) in
                     
                     guard var translation = translation else {
                         print("Translation is nil")
@@ -917,20 +904,18 @@ extension LearnMoreController {
                     }
                     
                     // Populate Alternate Translations
-                    if translation.count > 1 {
-                        self.alternateTranslations = translation[1..<translation.count].map { String($0) }
-                    }
+
                     
                     // If the Translation Returns an empty string we want the result to be the original searched Text
-                    if translation[0] == "" {
+                    if translation == "" {
                         
-                        translation[0] = searchText
+                        translation = searchText
                         
                     } else { isEmptyTranslation = false }
                     
-                    self.searchOutput = translation[0]
+                    self.searchOutput = translation
                     
-                    self.wordArray = translation[0].split(separator: " ").map { String($0) }
+                    self.wordArray = translation.split(separator: " ").map { String($0) }
                     
                     // Retrieve word models from database
                     FirebaseManager.shared.readEnglishDocumentByWord(words: self.wordArray) { (wordModelArray) in
@@ -944,7 +929,7 @@ extension LearnMoreController {
                             
                             if isEmptyTranslation { completion(.emptyTranslationWithAllWordModels) }
                                 
-                            else { completion(.success); self.linkNativeToEnglish(self.wordModelArray) }
+                            else { completion(.success) }
                             
                         }
                         
@@ -953,7 +938,7 @@ extension LearnMoreController {
                             
                             if isEmptyTranslation { completion(.emptyTranslationMissingSomeWordModels) }
                             
-                            else { completion(.missingSomeWordModels); self.linkNativeToEnglish(self.wordModelArray) }
+                            else { completion(.missingSomeWordModels) }
                             
                         }
                         
@@ -972,7 +957,7 @@ extension LearnMoreController {
         case .englishToNative:
             
             // If Target Lang is English, retrieve word models from database
-            if TranslationManager.shared.targetLanguageCode == "en" {
+            if AzureTranslationManager.shared.targetLanguageCode == "en" {
                 
                 self.searchOutput = searchText
                 
@@ -1000,8 +985,8 @@ extension LearnMoreController {
                 
                 var isEmptyTranslation = true
                 
-                TranslationManager.shared.textToTranslate = searchText
-                TranslationManager.shared.translate { (translation) in
+                AzureTranslationManager.shared.textToTranslate = searchText
+                AzureTranslationManager.shared.fetchTranslation { (translation) in
                     
                     guard var translation = translation else {
                         print("Translation is nil")
@@ -1012,20 +997,18 @@ extension LearnMoreController {
                     }
                     
                     // Populate Alternate Translations
-                    if translation.count > 1 {
-                        self.alternateTranslations = translation[1..<translation.count].map { String($0) }
-                    }
+
                     
                     // If the Translation Returns an empty string we want the result to be the original searched Text
-                    if translation[0] == "" {
+                    if translation == "" {
                         
-                        translation[0] = searchText
+                        translation = searchText
                         
                     } else { isEmptyTranslation = false }
                     
-                    self.searchOutput = translation[0]
+                    self.searchOutput = translation
                     
-                    self.bottomLabelText = translation[0]
+                    self.bottomLabelText = translation
                     
                     self.wordArray = searchText.split(separator: " ").map { String($0) }
                     
@@ -1041,7 +1024,7 @@ extension LearnMoreController {
                             
                             if isEmptyTranslation { completion(.emptyTranslationWithAllWordModels) }
                                 
-                            else { completion(.success); self.linkNativeToEnglish(self.wordModelArray) }
+                            else { completion(.success) }
                             
                         }
                         
@@ -1050,7 +1033,7 @@ extension LearnMoreController {
                             
                             if isEmptyTranslation { completion(.emptyTranslationMissingSomeWordModels) }
                             
-                            else { completion(.missingSomeWordModels); self.linkNativeToEnglish(self.wordModelArray) }
+                            else { completion(.missingSomeWordModels) }
                             
                         }
                         
@@ -1067,20 +1050,7 @@ extension LearnMoreController {
             }
         }
     }
-    
-    func linkNativeToEnglish(_ wordModelArray: [WordModel?]) {
-        if let searchedText = TranslationManager.shared.textToTranslate, let sourceLang = TranslationManager.shared.sourceLanguageCode {
-            var englishIDArray = [Int]()
-            for model in wordModelArray {
-                if let model = model {
-                    englishIDArray.append(model.number)
-                } else { englishIDArray.append(-1)} // -1 means missing english word
-            }
-            let newTranslationModel = TranslationModel(nativeText: searchedText, wordModelIDs: englishIDArray)
-            FirebaseManager.shared.writeNativeWordData(translationModel: newTranslationModel, to: sourceLang)
-        }
-    }
-    
+        
     func pushToLearnMoreController(_ searchInfo: SearchInfo) {
         
         // Initialize result controller
@@ -1096,7 +1066,7 @@ extension LearnMoreController {
         vc.alternateTranslations = self.alternateTranslations
         vc.learnMoreArray = self.learnMoreArray
         vc.searchStatus = self.searchStatus
-        vc.isFullyMatched = self.isFullyMatched
+        vc.isFullyMatched = self.learnMoreIsFullyMatched
         
         // Update Search History
         if Utilities.shared.isUserSignedIn {

@@ -57,7 +57,11 @@ class TestController: UIViewController {
         imageView.backgroundColor = .clear
         imageView.contentMode = .scaleAspectFit
         imageView.tintColor = K.Colors.green
-        imageView.image = UIImage(systemName: "checkmark")
+        if #available(iOS 13.0, *) {
+            imageView.image = UIImage(systemName: "checkmark")
+        } else {
+            imageView.image = #imageLiteral(resourceName: "check").withRenderingMode(.alwaysTemplate)
+        }
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
@@ -79,7 +83,12 @@ class TestController: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 70).isActive = true
         button.roundCorners(cornerRadius: 35)
         
-        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        } else {
+            button.setImage(#imageLiteral(resourceName: "xmark").withRenderingMode(.alwaysTemplate), for: .normal)
+        }
+        
         button.imageView?.backgroundColor = .white
         button.imageView?.tintColor = K.Colors.red
         button.imageView?.contentMode = .scaleAspectFit
@@ -118,7 +127,11 @@ class TestController: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 70).isActive = true
         button.roundCorners(cornerRadius: 35)
         
-        button.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        } else {
+            button.setImage(#imageLiteral(resourceName: "check").withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         button.imageView?.backgroundColor = .white
         button.imageView?.tintColor = K.Colors.green
         button.imageView?.contentMode = .scaleAspectFit
@@ -157,7 +170,11 @@ class TestController: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 70).isActive = true
         button.roundCorners(cornerRadius: 35)
 
-        button.setImage(UIImage(systemName: "arrow.2.circlepath"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "arrow.2.circlepath"), for: .normal)
+        } else {
+            button.setImage(#imageLiteral(resourceName: "flip").withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         button.imageView?.backgroundColor = .white
         button.imageView?.tintColor = .black
         button.imageView?.contentMode = .scaleAspectFit
@@ -268,6 +285,7 @@ class TestController: UIViewController {
         // Setup Navigation Bar
         centerTitle.text = myDeck.name
         self.navigationItem.titleView = centerTitle
+        self.navigationController?.navigationBar.topItem?.title = " "
         
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
@@ -463,10 +481,18 @@ class TestController: UIViewController {
         card.transform = CGAffineTransform(rotationAngle: point.x / divisor).scaledBy(x: scale, y: scale)
         
         if point.x > 0.0 {
-            imageView.image = UIImage(systemName: "checkmark")
+            if #available(iOS 13.0, *) {
+                imageView.image = UIImage(systemName: "checkmark")
+            } else {
+                imageView.image = #imageLiteral(resourceName: "check").withRenderingMode(.alwaysTemplate)
+            }
             imageView.tintColor = K.Colors.green
         } else {
-            imageView.image = UIImage(systemName: "xmark")
+            if #available(iOS 13.0, *) {
+                imageView.image = UIImage(systemName: "xmark")
+            } else {
+                imageView.image = #imageLiteral(resourceName: "xmark").withRenderingMode(.alwaysTemplate)
+            }
             imageView.tintColor = K.Colors.red
         }
         

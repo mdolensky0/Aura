@@ -9,12 +9,17 @@ import UIKit
 
 struct K {
     
+    // Firebase Collection Names
     struct FBConstants {
         static let dictionaryCollectionName = "Words"
         static let usersCollectionName = "Users"
+        static let lessonsCollectionName = "Lessons"
     }
     
+    // English HD Colors
     struct Colors {
+        
+        // Vowel Sounds
         static let red         = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
         static let green       = UIColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
         static let blue        = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
@@ -29,11 +34,13 @@ struct K {
         static let darkBlue    = UIColor(red: 0.0, green: 0.0, blue: 0.4863, alpha: 1.0)
         static let turquoise   = UIColor(red: 0.0, green: 1.0, blue: 0.7568, alpha: 1.0)
         
+        // Fluid Consonant Sounds
         static let brownPurple = UIColor(red: 0.4823, green: 0.1019, blue: 0.4117, alpha: 1.0)
         static let brownRed    = UIColor(red: 0.6196, green: 0.3098, blue: 0.2745, alpha: 1.0)
         static let tan         = UIColor(red: 1.0, green: 0.7568, blue: 0.5176, alpha: 1.0)
         static let brownYellow = UIColor(red: 0.7176, green: 0.6235, blue: 0.1922, alpha: 1.0)
         
+        // Other Sounds
         static let black       = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
         static let darkGrey    = UIColor(red: 0.5215, green: 0.5215, blue: 0.5215, alpha: 1.0)
         static let lightGrey   = UIColor(red: 0.9215, green: 0.9215, blue: 0.9215, alpha: 1.0)
@@ -42,6 +49,7 @@ struct K {
         static let maroon      = UIColor(red: 0.6588, green: 0.0314, blue: 0.0, alpha: 1.0)
     }
     
+    // Design Colors
     struct DesignColors {
         
         static let background   = UIColor(red: 0.97, green: 0.97, blue: 0.97, alpha: 1.0)
@@ -51,6 +59,7 @@ struct K {
         static let error        = UIColor(red: 176.0/255.0, green: 0.0, blue: 32.0/255.0, alpha: 1.0)
     }
     
+    // Font Names
     struct Fonts {
         
         static let didot = "Didot"
@@ -59,6 +68,7 @@ struct K {
         
     }
     
+    // Cell Ids
     struct Cells {
         static let prevSearchCell = "PrevSearchCell"
         static let supportedLanguageCell = "SupportedLanguageCell"
@@ -66,29 +76,31 @@ struct K {
         static let flashcardCell = "FlashcardCell"
     }
     
-    struct LanguageCodes {
-        
-        static let languageDict =  ["en" : "English",     "en-GB" : "English",      "en-AU" : "English",
-                                    "en-CA" : "English",  "en-IN" : "English",      "fr" : "Français",
-                                    "fr-CA" : "Français",   "es" : "Español",           "es-MX" : "Español",
-                                    "pt" : "Português",     "pt-BR" : "Português",      "it" : "Italiano",
-                                    "de" : "Deutsch",      "zh-Hans" : "简体中文",        "zh-Hant" : "繁體中文",
-                                    "zh-HK" : "繁體中文",      "ja" : "日本語",                "nl" : "Nederlands",
-                                    "ko" : "한국어",           "vi" : "Tiếng Việt",       "ru" : "Pусский",
-                                    "sv" : "Svenska",       "da" : "Dansk",               "fi" : "Suomi",
-                                    "nb" : "Norsk",         "tr" : "Türkçe",                "el" : "Eλληνικά",
-                                    "id" : "Indonesia",    "ms" : "Melayu",             "th" : "ภาษาไทย",
-                                    "hi" : "हिंदी",              "hu" : "Magyar",             "pl" : "Polski",
-                                    "cs" : "čeština",       "sk" : "Slovenčina",         "uk" : "українська",
-                                    "ca" : "Català",      "ro" : "Română",             "hr" : "Hrvatski",
-                                    "he" : "עברית",           "ar" : "العربية"]
-        
-        static let iosToGoogleLangCode = ["en-GB" : "en", "en-AU" : "en", "en-CA" : "en",
-                                          "en-IN" : "en", "fr-CA" : "fr", "es-MX" : "es",
-                                          "pt-BR" : "pt","zh-Hans" : "zh-CN", "zh-Hant" : "zh-TW",
-                                          "zh-HK" : "zh_TW", "nb" : "no"]
-    }
+    // Language Codes For Translation
+//    struct LanguageCodes {
+//        
+//        static let languageDict =  ["en" : "English",     "en-GB" : "English",      "en-AU" : "English",
+//                                    "en-CA" : "English",  "en-IN" : "English",      "fr" : "Français",
+//                                    "fr-CA" : "Français",   "es" : "Español",           "es-MX" : "Español",
+//                                    "pt" : "Português",     "pt-BR" : "Português",      "it" : "Italiano",
+//                                    "de" : "Deutsch",      "zh-Hans" : "简体中文",        "zh-Hant" : "繁體中文",
+//                                    "zh-HK" : "繁體中文",      "ja" : "日本語",                "nl" : "Nederlands",
+//                                    "ko" : "한국어",           "vi" : "Tiếng Việt",       "ru" : "Pусский",
+//                                    "sv" : "Svenska",       "da" : "Dansk",               "fi" : "Suomi",
+//                                    "nb" : "Norsk",         "tr" : "Türkçe",                "el" : "Eλληνικά",
+//                                    "id" : "Indonesia",    "ms" : "Melayu",             "th" : "ภาษาไทย",
+//                                    "hi" : "हिंदी",              "hu" : "Magyar",             "pl" : "Polski",
+//                                    "cs" : "čeština",       "sk" : "Slovenčina",         "uk" : "українська",
+//                                    "ca" : "Català",      "ro" : "Română",             "hr" : "Hrvatski",
+//                                    "he" : "עברית",           "ar" : "العربية"]
+//        
+//        static let iosToGoogleLangCode = ["en-GB" : "en", "en-AU" : "en", "en-CA" : "en",
+//                                          "en-IN" : "en", "fr-CA" : "fr", "es-MX" : "es",
+//                                          "pt-BR" : "pt","zh-Hans" : "zh-CN", "zh-Hant" : "zh-TW",
+//                                          "zh-HK" : "zh-TW", "nb" : "no"]
+//    }
     
+    // Key Data For Populating the Key Controller
     struct KeyInfo {
         
         // Info for vowelKey cards
@@ -122,6 +134,16 @@ struct K {
         
     }
     
+    struct UserDefaultKeys {
+        
+        static let voiceGender = "voiceGender"
+        static let isRepeat = "isRepeat"
+        static let langCode = "langCode"
+        static let langName = "langName"
+        
+    }
+    
+    // Number Identifiers for Wildcards
     static let linkToWildCardDictionary: [String: NSMutableAttributedString] = {
         
         var dictionary = [String: NSMutableAttributedString]()

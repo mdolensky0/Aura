@@ -31,7 +31,9 @@ class ResultsController: UIViewController {
     var alternateTranslations = [String]()
     var learnMoreArray = [(text: NSMutableAttributedString, ipaIndex: Int)]()
     var isFullyMatched = true
+    var learnMoreIsFullyMatched = true
     var searchStatus: SearchStatus!
+    var learnMoreSearchStatus: SearchStatus!
 
     // Search Information
     var searchInfo = SearchInfo(sourceLanguageCode: "en", sourceLanguageName: "English")
@@ -48,7 +50,7 @@ class ResultsController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Aura"
+        label.text = "Results"
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -89,7 +91,11 @@ class ResultsController: UIViewController {
     var swapButton: UIButton = {
         
         let button = UIButton()
-        button.setImage(UIImage(systemName: "repeat"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "arrow.right.arrow.left.circle"), for: .normal)
+        } else {
+            button.setImage(#imageLiteral(resourceName: "arrow.right.arrow.left").withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         button.addTarget(self, action: #selector(swapButtonPressed), for: .touchUpInside)
         button.tintColor = K.DesignColors.primary
         button.backgroundColor = .white
@@ -126,7 +132,11 @@ class ResultsController: UIViewController {
     var cancelButton: UIButton = {
         
         let button = UIButton()
-        button.setImage(UIImage(systemName: "multiply"), for: .normal)
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "multiply"), for: .normal)
+        } else {
+            button.setImage(#imageLiteral(resourceName: "multiply").withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         button.backgroundColor = .white
         button.tintColor = .black
         button.addTarget(self, action: #selector(cancelButtonPressed), for: .touchUpInside)
@@ -295,6 +305,12 @@ class ResultsController: UIViewController {
         setupShadows()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        resultCard.updateLoopColor()
+        
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         
         if searchStatus != .success {
@@ -368,13 +384,7 @@ extension ResultsController {
         // Add Center Title
         self.navigationItem.titleView = centerTitle
         self.navigationController?.navigationBar.topItem?.title = " "
-        
-        // Add userbutton
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person"),
-                                                                 style: .plain,
-                                                                 target: self,
-                                                                 action: #selector(profileButtonTapped))
-        
+                
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
@@ -796,29 +806,36 @@ extension ResultsController {
     }
     
     //MARK:- Selector Functions
-    
-    @objc func profileButtonTapped() {
         
-        if Utilities.shared.isUserSignedIn {
+    @objc func languageButtonPressed() {
+                
+        let supportedLanguagesVC = SupportedLanguagesVC()
+        supportedLanguagesVC.delegate = self
+        
+        if AzureTranslationManager.shared.supportedLanguages.count == 0 {
             
-            Utilities.shared.signUserOut(alertIn: self)
+            DispatchQueue.main.async {
+                self.startLoadingScreen()
+            }
             
+            AzureTranslationManager.shared.fetchSupportedLanguages {
+                
+                supportedLanguagesVC.supportedLanguages = AzureTranslationManager.shared.supportedLanguages
+                
+                DispatchQueue.main.async {
+                    self.endLoadingScreen()
+                    self.present(supportedLanguagesVC, animated: true, completion: nil)
+                }
+            }
         }
             
         else {
             
-            goToLogin()
+            supportedLanguagesVC.supportedLanguages = AzureTranslationManager.shared.supportedLanguages
+                        
+            self.present(supportedLanguagesVC, animated: true, completion: nil)
             
         }
-        
-    }
-    
-    @objc func languageButtonPressed() {
-        
-        let supportedLanguagesVC = SupportedLanguagesVC()
-        supportedLanguagesVC.delegate = self
-        self.present(supportedLanguagesVC, animated: true, completion: nil)
-        
     }
     
     @objc func swapButtonPressed() {
@@ -975,26 +992,34 @@ extension ResultsController {
 extension ResultsController: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .lightGray {
-            textView.text = ""
-            textView.textColor = .black
-            cancelButton.isHidden = false
-        }
         
-        else if textView.textColor == .black && textView.text.count >= 0 {
-            cancelButton.isHidden = false
+        DispatchQueue.main.async {
+            
+            if textView.textColor == .lightGray {
+                textView.text = ""
+                textView.textColor = .black
+                self.cancelButton.isHidden = false
+            }
+            
+            else if textView.textColor == .black && textView.text.count >= 0 {
+                self.cancelButton.isHidden = false
+            }
+            
         }
     }
 
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty || textView.text == "" {
-            textView.textColor = .lightGray
-            textView.text = "Enter text"
-            cancelButton.isHidden = true
+        
+        DispatchQueue.main.async {
+            
+            if textView.text.isEmpty || textView.text == "" {
+                textView.textColor = .lightGray
+                textView.text = "Enter text"
+                self.cancelButton.isHidden = true
+            }
+            
         }
-        
-        
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -1094,8 +1119,8 @@ extension ResultsController {
         }
         
         //Set Language Codes
-        TranslationManager.shared.sourceLanguageCode = searchInfo.sourceLanguageCode
-        TranslationManager.shared.targetLanguageCode = searchInfo.targetLanguageCode
+        AzureTranslationManager.shared.sourceLanguageCode = searchInfo.sourceLanguageCode
+        AzureTranslationManager.shared.targetLanguageCode = searchInfo.targetLanguageCode
         
         // Clear Results Array
         results = []
@@ -1105,7 +1130,11 @@ extension ResultsController {
         alternateTranslations = []
         soundItOutColors = []
         learnMoreArray = []
-        isFullyMatched = true
+        
+        if isLearnMore {
+            learnMoreIsFullyMatched = true
+        } else { isFullyMatched = true }
+        
         
         //Update Query Text
         bottomLabelText = searchText
@@ -1123,7 +1152,14 @@ extension ResultsController {
         // 3. Color Words
         runSearchsequence(searchText: searchText, searchInfo: searchInfo) { (searchStatus) in
             
-            self.searchStatus = searchStatus
+            if isLearnMore {
+                self.learnMoreSearchStatus = searchStatus
+            }
+            
+            else {
+                self.searchStatus = searchStatus
+            }
+            
             
             switch searchStatus {
                 
@@ -1150,7 +1186,11 @@ extension ResultsController {
                             
                             // If Text Colored Incorrectly Update isFullyMatched
                             if !coloringResult.1 {
-                                self.isFullyMatched = false
+                                
+                                if isLearnMore {
+                                    self.learnMoreIsFullyMatched = false
+                                } else { self.isFullyMatched = false }
+                                
                             }
                             
                         }
@@ -1224,7 +1264,7 @@ extension ResultsController {
         case .nativeToEnglish:
             
             // If source Lang is English, retrieve word models from database
-            if TranslationManager.shared.sourceLanguageCode == "en" {
+            if AzureTranslationManager.shared.sourceLanguageCode == "en" {
                 
                 self.searchOutput = searchText
                 
@@ -1252,8 +1292,8 @@ extension ResultsController {
                 
                 var isEmptyTranslation = true
                 
-                TranslationManager.shared.textToTranslate = searchText
-                TranslationManager.shared.translate { (translation) in
+                AzureTranslationManager.shared.textToTranslate = searchText
+                AzureTranslationManager.shared.fetchTranslation { (translation) in
                     
                     guard var translation = translation else {
                         print("Translation is nil")
@@ -1264,20 +1304,18 @@ extension ResultsController {
                     }
                     
                     // Populate Alternate Translations
-                    if translation.count > 1 {
-                        self.alternateTranslations = translation[1..<translation.count].map { String($0) }
-                    }
+
                     
                     // If the Translation Returns an empty string we want the result to be the original searched Text
-                    if translation[0] == "" {
+                    if translation == "" {
                         
-                        translation[0] = searchText
+                        translation = searchText
                         
                     } else { isEmptyTranslation = false }
                     
-                    self.searchOutput = translation[0]
+                    self.searchOutput = translation
                     
-                    self.wordArray = translation[0].split(separator: " ").map { String($0) }
+                    self.wordArray = translation.split(separator: " ").map { String($0) }
                     
                     // Retrieve word models from database
                     FirebaseManager.shared.readEnglishDocumentByWord(words: self.wordArray) { (wordModelArray) in
@@ -1291,7 +1329,7 @@ extension ResultsController {
                             
                             if isEmptyTranslation { completion(.emptyTranslationWithAllWordModels) }
                                 
-                            else { completion(.success); self.linkNativeToEnglish(self.wordModelArray) }
+                            else { completion(.success) }
                             
                         }
                         
@@ -1300,7 +1338,7 @@ extension ResultsController {
                             
                             if isEmptyTranslation { completion(.emptyTranslationMissingSomeWordModels) }
                             
-                            else { completion(.missingSomeWordModels); self.linkNativeToEnglish(self.wordModelArray) }
+                            else { completion(.missingSomeWordModels) }
                             
                         }
                         
@@ -1319,7 +1357,7 @@ extension ResultsController {
         case .englishToNative:
             
             // If Target Lang is English, retrieve word models from database
-            if TranslationManager.shared.targetLanguageCode == "en" {
+            if AzureTranslationManager.shared.targetLanguageCode == "en" {
                 
                 self.searchOutput = searchText
                 
@@ -1347,8 +1385,8 @@ extension ResultsController {
                 
                 var isEmptyTranslation = true
                 
-                TranslationManager.shared.textToTranslate = searchText
-                TranslationManager.shared.translate { (translation) in
+                AzureTranslationManager.shared.textToTranslate = searchText
+                AzureTranslationManager.shared.fetchTranslation { (translation) in
                     
                     guard var translation = translation else {
                         print("Translation is nil")
@@ -1359,20 +1397,18 @@ extension ResultsController {
                     }
                     
                     // Populate Alternate Translations
-                    if translation.count > 1 {
-                        self.alternateTranslations = translation[1..<translation.count].map { String($0) }
-                    }
+
                     
                     // If the Translation Returns an empty string we want the result to be the original searched Text
-                    if translation[0] == "" {
+                    if translation == "" {
                         
-                        translation[0] = searchText
+                        translation = searchText
                         
                     } else { isEmptyTranslation = false }
                     
-                    self.searchOutput = translation[0]
+                    self.searchOutput = translation
                     
-                    self.bottomLabelText = translation[0]
+                    self.bottomLabelText = translation
                     
                     self.wordArray = searchText.split(separator: " ").map { String($0) }
                     
@@ -1388,7 +1424,7 @@ extension ResultsController {
                             
                             if isEmptyTranslation { completion(.emptyTranslationWithAllWordModels) }
                                 
-                            else { completion(.success); self.linkNativeToEnglish(self.wordModelArray) }
+                            else { completion(.success) }
                             
                         }
                         
@@ -1397,7 +1433,7 @@ extension ResultsController {
                             
                             if isEmptyTranslation { completion(.emptyTranslationMissingSomeWordModels) }
                             
-                            else { completion(.missingSomeWordModels); self.linkNativeToEnglish(self.wordModelArray) }
+                            else { completion(.missingSomeWordModels) }
                             
                         }
                         
@@ -1414,20 +1450,7 @@ extension ResultsController {
             }
         }
     }
-    
-    func linkNativeToEnglish(_ wordModelArray: [WordModel?]) {
-        if let searchedText = TranslationManager.shared.textToTranslate, let sourceLang = TranslationManager.shared.sourceLanguageCode {
-            var englishIDArray = [Int]()
-            for model in wordModelArray {
-                if let model = model {
-                    englishIDArray.append(model.number)
-                } else { englishIDArray.append(-1)} // -1 means missing english word
-            }
-            let newTranslationModel = TranslationModel(nativeText: searchedText, wordModelIDs: englishIDArray)
-            FirebaseManager.shared.writeNativeWordData(translationModel: newTranslationModel, to: sourceLang)
-        }
-    }
-    
+        
     func updateResultsVC() {
         
         // Update search history
@@ -1545,8 +1568,8 @@ extension ResultsController {
         vc.results = self.results
         vc.alternateTranslations = self.alternateTranslations
         vc.learnMoreArray = self.learnMoreArray
-        vc.searchStatus = self.searchStatus
-        vc.isFullyMatched = self.isFullyMatched
+        vc.searchStatus = self.learnMoreSearchStatus
+        vc.isFullyMatched = self.learnMoreIsFullyMatched
         
         // Update Search History
         if Utilities.shared.isUserSignedIn {

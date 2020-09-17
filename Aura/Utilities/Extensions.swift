@@ -66,7 +66,12 @@ extension UIView {
         let border = UIView()
         border.backgroundColor = color
         self.addSubview(border)
-        border.anchor(top: nil, bottom: self.bottomAnchor, leading: self.leadingAnchor, trailing: self.trailingAnchor, height: 1.0, width: nil)
+        border.anchor(top: nil,
+                      bottom: self.bottomAnchor,
+                      leading: self.leadingAnchor,
+                      trailing: self.trailingAnchor,
+                      height: 1.0,
+                      width: nil)
         
     }
     
@@ -180,14 +185,23 @@ extension UIViewController {
     
     func startLoadingScreen() {
         loadingView = UIView(frame: self.view.bounds)
-        loadingView?.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
-        let activityIndicator = UIActivityIndicatorView(style: .large)
+        loadingView?.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5)
+        
+        var activityIndicator = UIActivityIndicatorView()
+        
+        if #available(iOS 13.0, *) {
+            activityIndicator = UIActivityIndicatorView(style: .large)
+        } else {
+            activityIndicator = UIActivityIndicatorView(style: .gray)
+        }
+        
+        activityIndicator.color = K.DesignColors.primary
         activityIndicator.center = loadingView!.center
         activityIndicator.startAnimating()
         loadingView?.addSubview(activityIndicator)
         self.view.addSubview(loadingView!)
         
-        Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) { (t) in
+        Timer.scheduledTimer(withTimeInterval: 40.0, repeats: false) { (t) in
             self.endLoadingScreen()
         }
     }
@@ -619,4 +633,91 @@ extension UITextField {
         
     }
     
+}
+
+//MARK: - UIImageView
+
+let imageCache = NSCache<AnyObject, AnyObject>()
+
+extension UIImageView {
+    
+    func loadImageUsingCacheWithURLString(urlString: String) {
+        
+        self.image = nil
+        
+        // Check Cache For Image
+        if let cachedImage = imageCache.object(forKey: urlString as AnyObject) as? UIImage {
+            
+            self.image = cachedImage
+            return
+            
+        }
+        
+        // Get Image From Web If not Cached
+        guard let url = URL(string: urlString) else { return }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            
+            if let error = error {
+                print("Error fetching image with url: \(error)")
+                return
+            }
+            
+            guard let data = data else { return }
+            
+            guard let downloadedImage = UIImage(data: data) else { return }
+            
+            DispatchQueue.main.async {
+                
+                imageCache.setObject(downloadedImage, forKey: urlString as AnyObject)
+                
+                self.image = UIImage(data: data)
+                
+            }
+            
+        }.resume()
+        
+    }
+    
+}
+
+//MARK: - Table View Extensions
+extension UITableView {
+    
+    func setEmptyView(title: String, message: String) {
+        
+        let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
+        
+        let titleLabel = UILabel()
+        
+        let messageLabel = UILabel()
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        titleLabel.textColor = UIColor.black
+        titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+        
+        messageLabel.textColor = UIColor.lightGray
+        messageLabel.font = UIFont(name: "HelveticaNeue-Regular", size: 17)
+        
+        emptyView.addSubview(titleLabel)
+        emptyView.addSubview(messageLabel)
+        
+        titleLabel.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
+        
+        messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
+        messageLabel.leftAnchor.constraint(equalTo: emptyView.leftAnchor, constant: 20).isActive = true
+        messageLabel.rightAnchor.constraint(equalTo: emptyView.rightAnchor, constant: -20).isActive = true
+        
+        titleLabel.text = title
+        
+        messageLabel.text = message
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        
+        self.backgroundView = emptyView
+        self.separatorStyle = .none
+    }
 }

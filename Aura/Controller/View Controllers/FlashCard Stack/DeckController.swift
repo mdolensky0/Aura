@@ -159,8 +159,15 @@ class DeckController: UIViewController {
         self.testYourselfButton.setGradientBackground(topColor: UIColor(red: 248.0/255.0, green: 231.0/255.0, blue: 0.0, alpha: 1.0),
                                                       bottomColor: UIColor(red: 249.0/255.0, green: 150.0/255.0, blue: 0.0, alpha: 1.0),
                                                       cornerRadius: 10)
+        
+        for card in flashcardsScrollView!.stackView.subviews {
+            
+            if let card = card as? TestFlashcard {
+                card.updateLoopColor()
+            }
+        }
     }
-    
+        
     override func viewDidAppear(_ animated: Bool) {
         
         self.scrollViewHeight.isActive = false
@@ -191,19 +198,24 @@ class DeckController: UIViewController {
         // Setup Navigation Bar
         centerTitle.text = myDeck.name
         self.navigationItem.titleView = centerTitle
+        self.navigationController?.navigationBar.topItem?.title = " "
         
         // Add UserButton and Trash Button
-        let userButton = UIBarButtonItem(image: UIImage(systemName: "person"),
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(profileButtonTapped))
-        
-        let trashButton = UIBarButtonItem(image: UIImage(systemName: "trash"),
+        var trashButton = UIBarButtonItem()
+                
+        if #available(iOS 13.0, *) {
+            trashButton = UIBarButtonItem(image: UIImage(systemName: "trash"),
                                           style: .plain,
                                           target: self,
                                           action: #selector(trashButtonPressed))
+        } else {
+            trashButton = UIBarButtonItem(image: #imageLiteral(resourceName: "trash").withRenderingMode(.alwaysTemplate),
+                                          style: .plain,
+                                          target: self,
+                                          action: #selector(trashButtonPressed))
+        }
         
-        self.navigationItem.rightBarButtonItems = [trashButton, userButton]
+        self.navigationItem.rightBarButtonItems = [trashButton]
         
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
@@ -472,22 +484,6 @@ class DeckController: UIViewController {
     }
     
     //MARK: - Selector Functions
-    @objc func profileButtonTapped() {
-        
-        if Utilities.shared.isUserSignedIn {
-            
-            Utilities.shared.signUserOut(alertIn: self)
-            
-        }
-        
-        else {
-            
-            Utilities.shared.tabController?.selectedIndex = 3
-            
-        }
-
-    }
-    
     @objc func trashButtonPressed() {
         
         let alert = UIAlertController(title: "Delete Deck", message: "Are you sure you want to delete this entire deck?", preferredStyle: .alert)

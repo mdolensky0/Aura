@@ -59,7 +59,11 @@ class FlashCardController: UIViewController {
         container.backgroundColor = .white
         
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "plus.circle.fill")
+        if #available(iOS 13.0, *) {
+            imageView.image = UIImage(systemName: "plus.circle.fill")
+        } else {
+            imageView.image = #imageLiteral(resourceName: "plus.circle").withRenderingMode(.alwaysTemplate)
+        }
         imageView.tintColor = K.DesignColors.primary
         imageView.backgroundColor = .white
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -259,10 +263,17 @@ class FlashCardController: UIViewController {
         self.navigationItem.titleView = centerTitle
         
         // Add UserButton
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person"),
-                                                                 style: .plain,
-                                                                 target: self,
-                                                                 action: #selector(profileButtonTapped))
+        if #available(iOS 13.0, *) {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),
+                                                                     style: .plain,
+                                                                     target: self,
+                                                                     action: #selector(settingsButtonTapped))
+        } else {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "line.horizontal.3").withRenderingMode(.alwaysTemplate),
+                                                                     style: .plain,
+                                                                     target: self,
+                                                                     action: #selector(settingsButtonTapped))
+        }
         
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
@@ -564,20 +575,11 @@ class FlashCardController: UIViewController {
     }
     
 //MARK: - Selector Functions
-    @objc func profileButtonTapped() {
-        
-        if Utilities.shared.isUserSignedIn {
-            
-            Utilities.shared.signUserOut(alertIn: self)
-            
-        }
-        
-        else {
-            
-            Utilities.shared.tabController?.selectedIndex = 3
-            
-        }
-
+    @objc func settingsButtonTapped() {
+    
+        Utilities.shared.settingsLauncher.parentVC = self
+        Utilities.shared.settingsLauncher.showSettings()
+                
     }
     
     @objc func createNewDeck(_ sender: UIButton) {

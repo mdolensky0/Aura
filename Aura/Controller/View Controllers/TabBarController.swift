@@ -21,7 +21,10 @@ class TabBarController: UITabBarController {
                                      image: UIImage(named: "Home1"),
                                      selectedImage: UIImage(contentsOfFile: "Home1"))
         
-        return UINavigationController(rootViewController: vc)
+        let nc = UINavigationController(rootViewController: vc)
+        nc.navigationBar.barStyle = .black
+        
+        return nc
         
     }()
     
@@ -33,7 +36,10 @@ class TabBarController: UITabBarController {
                                      image: UIImage(named: "Search1"),
                                      selectedImage: UIImage(contentsOfFile: "Search1"))
         
-        return UINavigationController(rootViewController: vc)
+        let nc = UINavigationController(rootViewController: vc)
+        nc.navigationBar.barStyle = .black
+        
+        return nc
         
     }()
     
@@ -45,8 +51,10 @@ class TabBarController: UITabBarController {
                                      image: UIImage(named: "Key1"),
                                      selectedImage: UIImage(contentsOfFile: "Key1"))
        
-        return UINavigationController(rootViewController: vc)
+        let nc = UINavigationController(rootViewController: vc)
+        nc.navigationBar.barStyle = .black
         
+        return nc
     }()
     
     let loginController: UINavigationController = {
@@ -69,7 +77,10 @@ class TabBarController: UITabBarController {
                                      image: UIImage(named: "Flashcard1"),
                                      selectedImage: UIImage(contentsOfFile: "Flashcard1"))
         
-        return UINavigationController(rootViewController: vc)
+        let nc = UINavigationController(rootViewController: vc)
+        nc.navigationBar.barStyle = .black
+        
+        return nc
         
     }()
     
@@ -81,7 +92,10 @@ class TabBarController: UITabBarController {
                                      image: UIImage(named: "Lessons1"),
                                      selectedImage: UIImage(contentsOfFile: "Lessons1"))
        
-        return UINavigationController(rootViewController: vc)
+        let nc = UINavigationController(rootViewController: vc)
+        nc.navigationBar.barStyle = .black
+        
+        return nc
         
     }()
     
@@ -90,6 +104,10 @@ class TabBarController: UITabBarController {
         
         Utilities.shared.tabController = self
         setupTabBar()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     func setupTabBar() {
@@ -112,12 +130,11 @@ class TabBarController: UITabBarController {
             }
             
         }
-        
+                    
         else {
             setupViewControllers()
             setupTabBarCustomizations()
         }
-        
     }
 
     func setupViewControllers() {
@@ -148,6 +165,7 @@ class TabBarController: UITabBarController {
         tabBar.tintColor = K.DesignColors.primary
         tabBar.unselectedItemTintColor = K.Colors.darkGrey
         tabBar.itemPositioning = .centered
+        
     }
 
 }

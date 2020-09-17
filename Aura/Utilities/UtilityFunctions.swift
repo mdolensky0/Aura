@@ -28,6 +28,7 @@ class Utilities {
         
     var delegate: DecksControllerDelegate?
     var searchHistoryDelegate: AddSearchHistoryDelegate?
+    var settingsLauncher = SettingsLauncher()
     
     var user: User? {
         
@@ -38,10 +39,16 @@ class Utilities {
         
     }
     
-//MARK: - Sound Variables and Functions
+    var lessons: [LessonModel]?
+    
+    //MARK: - Sound Variables and Functions
     var soundItOutPlayer: AVAudioPlayer?
     var player : AVPlayer?
 
+//    func playAudioFile(urlString: String, loop: Int = 0, sender: UIButton) {
+//        
+//    }
+    
     func playSound(_ soundFileName: String, volume: Float = 1) {
         guard let url = Bundle.main.url(forResource: soundFileName, withExtension: "wav") else { return }
         
@@ -61,43 +68,6 @@ class Utilities {
             
         } catch let error {
             print(error.localizedDescription)
-        }
-    }
-
-    func playAudioFile(urlString: String, loop: Int, sender: UIButton) {
-        
-        var count = 0
-        
-        if loop != 0 {
-            sender.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-        }
-        
-        guard let url = URL.init(string: urlString.trimmingCharacters(in: .whitespacesAndNewlines)) else { return }
-        
-        let playerItem = AVPlayerItem.init(url: url)
-        
-        player = AVPlayer.init(playerItem: playerItem)
-        player?.play()
-        
-        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
-                                               object: self.player?.currentItem,
-                                               queue: .main)
-        { [weak self] _ in
-            
-            if count < (loop - 1) {
-                
-                self?.player?.seek(to: CMTime.zero)
-                self?.player?.play()
-                count += 1
-                
-            } else {
-                
-                if loop != 0 {
-                    sender.setImage(UIImage(systemName: "play.fill"), for: .normal)
-                }
-                
-                self?.player = nil
-            }
         }
     }
     
@@ -121,8 +91,7 @@ class Utilities {
 
     }
     
-//MARK: - Log In Properties/Methods
-    
+    //MARK: - Log In Properties/Methods
     var isUserSignedIn: Bool = false
     var tabController: TabBarController?
     
@@ -181,7 +150,7 @@ class Utilities {
         
     }
 
-//MARK: - Add New Deck Function
+    //MARK: - Add New Deck Function
     func getUniqueDeckName(from input: String, given myDecks: [DeckModel]) -> String {
         
         var nameSet = Set<String>()

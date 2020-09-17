@@ -24,7 +24,13 @@ class SupportedLanguageCell: UITableViewCell {
     
     var chevron: UIImageView = {
         
-        let chevron = UIImageView(image: UIImage(systemName: "chevron.right"))
+        var chevron = UIImageView()
+        
+        if #available(iOS 13.0, *) {
+            chevron = UIImageView(image: UIImage(systemName: "chevron.right"))
+        } else {
+            chevron = UIImageView(image: #imageLiteral(resourceName: "chevron").withRenderingMode(.alwaysTemplate))
+        }
         chevron.setContentHuggingPriority(UILayoutPriority(999), for: .horizontal)
         chevron.contentMode = .scaleAspectFit
         chevron.tintColor = .black

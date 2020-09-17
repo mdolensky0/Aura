@@ -59,7 +59,13 @@ class PrevSearchCell: UITableViewCell {
         bottomLabel.font = .systemFont(ofSize: 13, weight: .light)
         
         // Add chevron
-        let chevron = UIImageView(image: UIImage(systemName: "chevron.right"))
+        var chevron = UIImageView()
+        
+        if #available(iOS 13.0, *) {
+            chevron = UIImageView(image: UIImage(systemName: "chevron.right"))
+        } else {
+            chevron = UIImageView(image: #imageLiteral(resourceName: "chevron").withRenderingMode(.alwaysTemplate))
+        }
         horzStackView.addArrangedSubview(chevron)
         chevron.setContentHuggingPriority(UILayoutPriority(999), for: .horizontal)
         chevron.setContentCompressionResistancePriority(UILayoutPriority(999), for: .horizontal)

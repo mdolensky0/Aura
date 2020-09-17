@@ -14,6 +14,8 @@ class FirebaseManager {
     
     let db = Firestore.firestore()
     static let shared = FirebaseManager()
+
+    //MARK: - Words Data
     
     func writeEnglishWordData(wordModel: WordModel) {
         print("writing dict data")
@@ -23,16 +25,7 @@ class FirebaseManager {
             print("Error writing word to Firestore: \(error)")
         }
     }
-    
-    func writeNativeWordData(translationModel: TranslationModel, to collectionName: String) {
-        print("writing dict data")
-        do {
-            try db.collection(collectionName).document(translationModel.nativeText).setData(from: translationModel)
-        } catch let error {
-            print("Error writing word to Firestore: \(error)")
-        }
-    }
-    
+        
     func readEnglishDocumentByWord(words: [String], completion: @escaping(_ result: [WordModel?]) -> Void) {
         
         var results = [WordModel?]()
@@ -95,30 +88,7 @@ class FirebaseManager {
         }
     }
     
-    func readNativeDocument(text: String, collectionName: String, completion: @escaping(_ result: [Int]?) -> Void) {
-        
-        let docRef = db.collection(collectionName).document(text)
-        docRef.getDocument { (document, error) in
-            let result = Result {
-                try document.flatMap {
-                    try $0.data(as: TranslationModel.self)
-                }
-            }
-            switch result {
-            case .success(let translationModel):
-                if let translationModel = translationModel {
-                    completion(translationModel.wordModelIDs)
-                } else {
-                    print("Word not found in Firebase")
-                    completion(nil)
-                }
-                
-            case .failure(let error):
-                print(error.localizedDescription)
-                completion(nil)
-            }
-        }
-    }
+    //MARK: - User Data
     
     func createUser() {
         
@@ -202,6 +172,62 @@ class FirebaseManager {
         } catch let error {
             print("Error writing deck to Firestore: \(error)")
  
+        }
+    }
+    
+    //MARK: - Lessons Data
+    
+    func updateLesson(lesson: LessonModel) {
+        
+        do {
+            
+            try self.db.collection(K.FBConstants.lessonsCollectionName).document(lesson.lessonTitle).setData(from: lesson)
+            
+        } catch let error {
+            print("Error weriting deck to Firestore: \(error)")
+        }
+        
+    }
+    
+    func loadLessons(completion: @escaping(_ result: [LessonModel]) -> Void) {
+        
+        var lessons = [LessonModel]()
+        
+        db.collection(K.FBConstants.lessonsCollectionName).getDocuments() { (querySnapshot, err) in
+            
+            if let err = err {
+                
+                print("Error getting documents: \(err)")
+                
+            }
+            
+            else {
+                
+                for document in querySnapshot!.documents {
+                    
+                    let result = Result {
+                        try document.data(as: LessonModel.self)
+                    }
+                    
+                    switch result {
+                        
+                    case .success(let lessonModel):
+                        
+                        if let lessonModel = lessonModel {
+                            lessons.append(lessonModel)
+                        } else {
+                            print("nil lessonModel")
+                            break
+                        }
+                        
+                    case.failure(let error):
+                        
+                        print("Error decoding: \(error)")
+                        
+                    }
+                }
+                completion(lessons)
+            }
         }
     }
     
