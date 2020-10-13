@@ -10,6 +10,8 @@ import UIKit
 
 class HomeController: UIViewController {
 
+    var mainScrollView = VerticalScrollView(frame: .zero)
+    
     var titleLabel: UILabel = {
         
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
@@ -22,95 +24,207 @@ class HomeController: UIViewController {
         return label
         
     }()
+        
+    var discoverEHDView: UIView = {
+        
+        let container = UIView()
+        
+        let iv = UIImageView()
+        iv.image = #imageLiteral(resourceName: "Discover")
+        iv.contentMode = .scaleAspectFit
+        iv.backgroundColor = .white
+        iv.roundCorners(cornerRadius: 20)
+        
+        container.addSubview(iv)
+        iv.anchor(top: container.topAnchor,
+                      bottom: container.bottomAnchor,
+                      leading: container.leadingAnchor,
+                      trailing: container.trailingAnchor,
+                      height: nil,
+                      width: nil)
+        
+        return container
+        
+    }()
+    
+    var whereToStartLabel: UILabel = {
+        
+        let l = UILabel()
+        l.text = "Where to start"
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .black
+        return l
+        
+    }()
     
     var searchView: UIView = {
         
+        let background = UIView()
+        
+        let container = UIView()
+        container.backgroundColor = .white
+        
+        let l = UILabel()
+        l.text = "Search"
+        l.textAlignment = .left
+        l.textColor = K.DesignColors.primary
+        l.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        
+        let iv = UIImageView()
+        
+        if #available(iOS 13, *) {
+            iv.image = UIImage(systemName: "magnifyingglass")
+        } else {
+            iv.image = #imageLiteral(resourceName: "Search1").withRenderingMode(.alwaysTemplate)
+        }
+        
+        iv.tintColor = K.DesignColors.primary
+        
+        iv.contentMode = .scaleAspectFit
+                
+        container.addSubview(l)
+        container.addSubview(iv)
+        
+        l.anchor(top: container.topAnchor,
+                 bottom: container.bottomAnchor,
+                 leading: container.leadingAnchor,
+                 trailing: nil,
+                 height: nil,
+                 width: nil,
+                 padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
+        
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        iv.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20).isActive = true
+        iv.centerYAnchor.constraint(equalTo: l.centerYAnchor).isActive = true
+        
+        background.addSubview(container)
+        
+        container.anchor(top: background.topAnchor,
+                         bottom: background.bottomAnchor,
+                         leading: background.leadingAnchor,
+                         trailing: background.trailingAnchor,
+                         height: nil,
+                         width: nil)
+        
+        container.roundCorners(cornerRadius: 10)
+        
+        let b = AnimatedButton(frame: .zero)
+        b.addTarget(self, action: #selector(searchPressed(_:)), for: .touchUpInside)
+        
+        background.addSubview(b)
+        b.anchor(top: background.topAnchor,
+                 bottom: background.bottomAnchor,
+                 leading: background.leadingAnchor,
+                 trailing: background.trailingAnchor,
+                 height: nil,
+                 width: nil)
+        
+        return background
+        
+    }()
+    
+    var introVideoView: UIView = {
+        
         let container = UIView()
         
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "TheSearch"), for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.roundCorners(cornerRadius: 10)
-        button.addTarget(self, action: #selector(goToSearch), for: .touchUpInside)
+        let iv = UIImageView()
+        iv.image = #imageLiteral(resourceName: "KySenpai")
+        iv.contentMode = .scaleAspectFill
         
-        container.addSubview(button)
-        button.anchor(top: container.topAnchor,
-                      bottom: container.bottomAnchor,
-                      leading: container.leadingAnchor,
-                      trailing: container.trailingAnchor,
-                      height: nil,
-                      width: nil)
+        let play = UIImageView()
+        play.backgroundColor = .white
+        
+        if #available(iOS 13, *) {
+            play.image = UIImage.init(systemName: "play.fill")
+        } else {
+            play.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
+        }
+        
+        play.tintColor = K.DesignColors.primary
+        play.backgroundColor = .white
+        play.roundCorners(cornerRadius: 30)
+        play.contentMode = .center
+        
+        play.translatesAutoresizingMaskIntoConstraints = false
+        play.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        play.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        play.alpha = 0.7
+        
+
+        
+        container.addSubview(iv)
+        
+        iv.anchor(top: container.topAnchor,
+                  bottom: container.bottomAnchor,
+                  leading: container.leadingAnchor,
+                  trailing: container.trailingAnchor,
+                  height: nil,
+                  width: nil)
+    
+        iv.roundCorners(cornerRadius: 10)
+        
+        container.addSubview(play)
+        
+        play.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        play.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        
+        let b = AnimatedButton(frame: .zero)
+        b.addTarget(self, action: #selector(introVideoPressed(_:)), for: .touchUpInside)
+        
+        container.addSubview(b)
+        b.anchor(top: container.topAnchor,
+                 bottom: container.bottomAnchor,
+                 leading: container.leadingAnchor,
+                 trailing: container.trailingAnchor,
+                 height: nil,
+                 width: nil)
         
         return container
         
     }()
     
-    var keyView: UIView = {
+    var popularFlashcardLabel: UILabel = {
         
-        let container = UIView()
-        
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "TheKey"), for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.roundCorners(cornerRadius: 10)
-        button.addTarget(self, action: #selector(goToKey), for: .touchUpInside)
-        
-        container.addSubview(button)
-        button.anchor(top: container.topAnchor,
-                      bottom: container.bottomAnchor,
-                      leading: container.leadingAnchor,
-                      trailing: container.trailingAnchor,
-                      height: nil,
-                      width: nil)
-        
-        return container
+        let l = UILabel()
+        l.text = "Popular Flashcards"
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .black
+        return l
         
     }()
     
-    var flashcardsView: UIView = {
+    var popularFlashcardScrollView: PopularDecksScrollView!
+    
+    var lessonsLabel: UILabel = {
         
-        let container = UIView()
-        
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "TheFlashcards"), for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.roundCorners(cornerRadius: 10)
-        button.addTarget(self, action: #selector(goToFlashcards), for: .touchUpInside)
-        
-        container.addSubview(button)
-        button.anchor(top: container.topAnchor,
-                      bottom: container.bottomAnchor,
-                      leading: container.leadingAnchor,
-                      trailing: container.trailingAnchor,
-                      height: nil,
-                      width: nil)
-        
-        return container
+        let l = UILabel()
+        l.text = "Lessons"
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .black
+        return l
         
     }()
     
-    var lessonsView: UIView = {
+    var lessonsScrollView = HorizontalScrollView(frame: .zero)
+    
+    var myDecksLabel: UILabel = {
         
-        let container = UIView()
-        
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "TheLessons"), for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.roundCorners(cornerRadius: 10)
-        button.addTarget(self, action: #selector(goToLessons), for: .touchUpInside)
-        
-        container.addSubview(button)
-        button.anchor(top: container.topAnchor,
-                      bottom: container.bottomAnchor,
-                      leading: container.leadingAnchor,
-                      trailing: container.trailingAnchor,
-                      height: nil,
-                      width: nil)
-        
-        return container
+        let l = UILabel()
+        l.text = "My Decks"
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .black
+        return l
         
     }()
     
+    var myDecksScrollView: MyDecksScrollView!
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -119,24 +233,35 @@ class HomeController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         
+        discoverEHDView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 10)
+
         searchView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 10)
+
+        introVideoView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 10)
         
-        keyView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 10)
+        for v in popularFlashcardScrollView.stackView.subviews {
+            v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+        }
         
-        flashcardsView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 10)
+        for v in lessonsScrollView.stackView.subviews {
+            v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+        }
         
-        lessonsView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 10)
-        
+        for v in myDecksScrollView.stackView.subviews {
+            v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+        }
     }
     
     func setup() {
+        
+        Utilities.shared.homeDelegate = self
         
         view.backgroundColor = K.DesignColors.background
         
         // Add Center Title
         self.navigationItem.titleView = titleLabel
         
-        // Add user button
+        // Add Settings Button
         if #available(iOS 13.0, *) {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),
                                                                      style: .plain,
@@ -153,78 +278,268 @@ class HomeController: UIViewController {
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
         
-        view.addSubview(searchView)
-        view.addSubview(keyView)
-        view.addSubview(flashcardsView)
-        view.addSubview(lessonsView)
+        // Initialize My Decks Scroll View
+        if let decks = Utilities.shared.user?.decks {
+            myDecksScrollView = MyDecksScrollView(frame: .zero, decks: decks)
+            myDecksScrollView.myDeckDelegate = self
+        } else {
+            myDecksScrollView = MyDecksScrollView(frame: .zero)
+            myDecksScrollView.myDeckDelegate = self
+        }
         
-        searchView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                          bottom: nil,
-                          leading: view.leadingAnchor,
-                          trailing: view.trailingAnchor,
-                          height: 157,
-                          width: nil,
-                          padding: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: -20))
+        // Initialize Popular Decks Scroll View
+        if let decks = Utilities.shared.superUser?.decks {
+            popularFlashcardScrollView = PopularDecksScrollView(frame: .zero, decks: decks)
+            popularFlashcardScrollView.popularDeckDelegate = self
+        } else {
+            popularFlashcardScrollView = PopularDecksScrollView(frame: .zero)
+            popularFlashcardScrollView.popularDeckDelegate = self
+            
+            FirebaseManager.shared.loadSuperUser { (superUser) in
+                Utilities.shared.superUser = superUser
+            }
+        }
         
-        keyView.anchor(top: searchView.bottomAnchor,
-                       bottom: nil,
-                       leading: searchView.leadingAnchor,
-                       trailing: nil,
-                       height: 157,
-                       width: nil,
-                       padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        view.addSubview(mainScrollView)
+        mainScrollView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                              bottom: view.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              trailing: view.trailingAnchor,
+                              height: nil,
+                              width: nil)
         
-        keyView.widthAnchor.constraint(equalTo: searchView.widthAnchor, multiplier: 0.5, constant: -10).isActive = true
+        mainScrollView.stackView.addArrangedSubview(discoverEHDView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(whereToStartLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(searchView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(introVideoView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(popularFlashcardLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(popularFlashcardScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(lessonsLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(lessonsScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(myDecksLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(myDecksScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         
-        flashcardsView.anchor(top: searchView.bottomAnchor,
-                       bottom: nil,
-                       leading: nil,
-                       trailing: searchView.trailingAnchor,
-                       height: 157,
-                       width: nil,
-                       padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        discoverEHDView.translatesAutoresizingMaskIntoConstraints = false
+        discoverEHDView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        flashcardsView.widthAnchor.constraint(equalTo: searchView.widthAnchor, multiplier: 0.5, constant: -10).isActive = true
+        searchView.translatesAutoresizingMaskIntoConstraints = false
+        searchView.heightAnchor.constraint(equalToConstant: 45).isActive = true
         
-        lessonsView.anchor(top: keyView.bottomAnchor,
-                           bottom: nil,
-                           leading: searchView.leadingAnchor,
-                           trailing: searchView.trailingAnchor,
-                           height: 157,
-                           width: nil,
-                           padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        introVideoView.translatesAutoresizingMaskIntoConstraints = false
+        introVideoView.heightAnchor.constraint(equalToConstant: 175).isActive = true
         
+        popularFlashcardScrollView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        lessonsScrollView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        myDecksScrollView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+                
+        // Populate Lessons
+        if Utilities.shared.lessons == nil {
+            
+            FirebaseManager.shared.loadLessons { (lessons) in
+                
+                Utilities.shared.lessons = lessons
+                
+                DispatchQueue.main.async {
+                    self.populateLessons()
+                }
+            }
+        }
+        
+        else {
+            populateLessons()
+        }
+        
+        // Update My Decks Visibility
+        myDecksScrollView.updateVisibility()
+        if myDecksScrollView.decks.count == 0 {
+            myDecksLabel.superview?.isHidden = true
+        }
+        
+        // Update Popular Decks Visibility
+        popularFlashcardScrollView.updateVisibility()
+        if popularFlashcardScrollView.decks.count == 0 {
+            popularFlashcardLabel.superview?.isHidden = true
+        }
+    }
+    
+    func populatePopularFlashcards(decks: [DeckModel]) {
+                
+        for _ in 0...3 {
+            
+            let background = UIView()
+            
+            let container = UIView()
+            container.backgroundColor = .white
+            container.roundCorners(cornerRadius: 10)
+            
+            background.addSubview(container)
+            container.anchor(top: background.topAnchor,
+                             bottom: background.bottomAnchor,
+                             leading: background.leadingAnchor,
+                             trailing: background.trailingAnchor,
+                             height: nil,
+                             width: nil)
+            
+            background.translatesAutoresizingMaskIntoConstraints = false
+            background.widthAnchor.constraint(equalToConstant: 200).isActive = true
+            background.heightAnchor.constraint(equalToConstant: 100).isActive = true
+            
+            
+            popularFlashcardScrollView.stackView.addArrangedSubview(background)
+            
+        }
         
     }
     
-    @objc func goToSearch() {
+    func populateLessons() {
         
-        self.tabBarController?.selectedIndex = 1
+        var i = 0
+        for lesson in Utilities.shared.lessons! {
+            
+            let background = UIView()
+            
+            let container = UIImageView()
+            container.backgroundColor = .white
+            container.roundCorners(cornerRadius: 10)
+            container.contentMode = .scaleAspectFill
+            container.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
+            
+            background.addSubview(container)
+            container.anchor(top: background.topAnchor,
+                             bottom: background.bottomAnchor,
+                             leading: background.leadingAnchor,
+                             trailing: background.trailingAnchor,
+                             height: nil,
+                             width: nil)
+            
+            background.translatesAutoresizingMaskIntoConstraints = false
+            background.widthAnchor.constraint(equalToConstant: 200).isActive = true
+            background.heightAnchor.constraint(equalToConstant: 100).isActive = true
+            
+            let b = AnimatedButton(frame: .zero)
+            b.index = i
+            b.addTarget(self, action: #selector(lessonPressed(_:)), for: .touchUpInside)
+            
+            background.addSubview(b)
+            b.anchor(top: background.topAnchor,
+                     bottom: background.bottomAnchor,
+                     leading: background.leadingAnchor,
+                     trailing: background.trailingAnchor,
+                     height: nil,
+                     width: nil)
+            
+            lessonsScrollView.stackView.addArrangedSubview(background)
+            i += 1
+        }
+        
+        if Utilities.shared.lessons!.count == 0 {
+            lessonsLabel.superview?.isHidden = true
+            lessonsScrollView.superview?.isHidden = true
+        }
         
     }
-    
-    @objc func goToKey() {
         
-        self.tabBarController?.selectedIndex = 2
+    @objc func searchPressed(_ sender: UIButton) {
         
+        UIView.animate(withDuration: 0.2) {
+            
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+            
+        } completion: { (_) in
+            
+            self.tabBarController?.selectedIndex = 1
+            
+        }
+         
     }
     
-    @objc func goToFlashcards() {
+    @objc func lessonPressed(_ sender: UIButton) {
         
-        self.tabBarController?.selectedIndex = 3
+        UIView.animate(withDuration: 0.2) {
+            
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+            
+        } completion: { (_) in
+            
+            self.tabBarController?.selectedIndex = 4
+            
+        }
         
     }
-    
-    @objc func goToLessons() {
-        
-        self.tabBarController?.selectedIndex = 4
-        
-    }
-    
+                
     @objc func settingsButtonTapped() {
     
         Utilities.shared.settingsLauncher.parentVC = self
         Utilities.shared.settingsLauncher.showSettings()
                 
     }
+    
+    @objc func introVideoPressed(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.2) {
+            
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+            
+        } completion: { (_) in
+            
+            self.tabBarController?.selectedIndex = 4
+            
+        }
+    }
+}
+
+extension HomeController: MyDeckDelegate, PopularDeckDelegate {
+    
+    func goToDeck(deckIndex: Int) {
+        
+        self.tabBarController?.selectedIndex = 3
+        
+    }
+    
+    func showPurchasePopUp(deckIndex: Int) {
+        print("purchase?")
+    }
+    
+}
+
+extension HomeController: HomeDelegate {
+    
+    func updateMyDecks() {
+        
+        guard let decks = Utilities.shared.user?.decks else {
+            
+            myDecksScrollView.decks = []
+            myDecksScrollView.updateDecks()
+            myDecksScrollView.updateVisibility()
+            myDecksLabel.superview?.isHidden = true
+            return
+            
+        }
+        
+        myDecksScrollView.decks = decks
+        myDecksScrollView.updateDecks()
+        myDecksScrollView.updateVisibility()
+                
+        if decks.count == 0 {
+            myDecksLabel.superview?.isHidden = true
+        } else { myDecksLabel.superview?.isHidden = false }
+    }
+    
+    func updatePopularDecks() {
+        
+        guard let decks = Utilities.shared.superUser?.decks else { return }
+        
+        popularFlashcardScrollView.decks = decks
+        popularFlashcardScrollView.updateDecks()
+        popularFlashcardScrollView.updateVisibility()
+        
+        if decks.count == 0 {
+            popularFlashcardLabel.superview?.isHidden = true
+        } else { popularFlashcardLabel.superview?.isHidden = false }
+        
+    }
+    
 }

@@ -21,8 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Configure Firebase
         FirebaseApp.configure()
 
-        let db = Firestore.firestore()
-        let storage = Storage.storage()
+        _ = Firestore.firestore()
+        _ = Storage.storage()
         
         // print(db, "\n")
         // print(storage, "\n")
@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Initialize New Realm
         do {
-            let realm = try Realm()
+            _ = try Realm()
         } catch {
             print("Error initialising new realm, \(error)")
         }
@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Utilities.shared.playSound("empty", volume: 0)
         
         // Do interface stuff for ios 12 version
-        if #available(iOS 13, *) {
+        if #available(iOS 13.0, *) {
             // Do only pure app launch stuff, not interface stuff
         }
         

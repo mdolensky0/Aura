@@ -25,6 +25,22 @@ class FirebaseManager {
             print("Error writing word to Firestore: \(error)")
         }
     }
+    
+    func writeColorError(text: String) {
+        do {
+            try db.collection(K.FBConstants.colorErrorsCollectionName).document(text).setData(from: ["word" : text])
+        } catch let error {
+            print("Error writing coloring error to Firestore: \(error)")
+        }
+    }
+    
+    func writeTranslationError(translation: TranslationError) {
+        do {
+            try db.collection(K.FBConstants.translationErrorCollectionName).document(translation.nativeText).setData(from: translation)
+        } catch let error {
+            print("Error writing word to Firestore: \(error)")
+        }
+    }
         
     func readEnglishDocumentByWord(words: [String], completion: @escaping(_ result: [WordModel?]) -> Void) {
         
@@ -156,6 +172,45 @@ class FirebaseManager {
         }
         
         else { completion(nil) }
+    }
+    
+    func loadSuperUser(completion: @escaping(_ superUser: User?) -> Void) {
+        
+        let docRef = db.collection(K.FBConstants.usersCollectionName).document(K.FBConstants.superUser)
+        
+        docRef.getDocument { (document, error) in
+
+            let result = Result {
+                try document.flatMap {
+                    try $0.data(as: User.self)
+                }
+            }
+            
+            switch result {
+                
+            case .success(let user):
+                
+                if let user = user {
+                    
+                    completion(user)
+                    
+                }
+                
+                else {
+                    
+                    completion(nil)
+                    print("Document does not exist")
+                    
+                }
+                
+            case .failure(let error):
+                
+                completion(nil)
+                print("Error decoding: \(error)")
+                
+            }
+        }
+        
     }
     
     func updateUser(user: User) {

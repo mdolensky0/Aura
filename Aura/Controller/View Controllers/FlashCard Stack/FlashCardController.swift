@@ -10,12 +10,7 @@ import UIKit
 
 class FlashCardController: UIViewController {
 
-    //Data
-    var popularDecks: [UIImage] = [#imageLiteral(resourceName: "californiaSlang"), #imageLiteral(resourceName: "flirting")]
-    var myDecks = [DeckModel]()
-    
-    
-    // Subviews
+    // MARK: - Views
     var centerTitle: UILabel = {
        
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
@@ -29,24 +24,7 @@ class FlashCardController: UIViewController {
         
     }()
     
-    var mainScrollView: UIScrollView = {
-        
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .clear
-        return scrollView
-        
-    }()
-        
-    var mainStackView: UIStackView = {
-       
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
-        stackView.spacing = 30
-        return stackView
-        
-    }()
+    var mainScrollView = VerticalScrollView(frame: .zero)
     
     var createNewDeckButton: UIView = {
         
@@ -81,16 +59,12 @@ class FlashCardController: UIViewController {
         label.adjustsFontSizeToFitWidth = true
         label.numberOfLines = 1
         
-        let button: UIButton = {
+        let button: AnimatedButton = {
             
-            let button = UIButton()
-            button.backgroundColor = .clear
-            button.addTarget(self, action: #selector(createNewDeck(_:)), for: .touchUpInside)
-            button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
-            button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
-            button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-            button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
-            return button
+            let b = AnimatedButton(frame: .zero)
+            b.backgroundColor = .clear
+            b.addTarget(self, action: #selector(createNewDeck(_:)), for: .touchUpInside)
+            return b
             
         }()
         
@@ -147,93 +121,35 @@ class FlashCardController: UIViewController {
         
     }()
     
-    var popularDecksScrollView: UIScrollView = {
+    var popularFlashcardScrollView: PopularDecksScrollView!
+    
+    var popularFlashcardLabel: UILabel = {
         
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .clear
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.layer.masksToBounds = false
-        return scrollView
+        let l = UILabel()
+        l.text = "Popular Flashcards"
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .black
+        return l
         
     }()
     
-    var popularDecksContentView: UIView = {
+    var myDecksLabel: UILabel = {
         
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-        
-    }()
-    
-    var popularDecksStackView: UIStackView = {
-       
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = 20
-        stackView.layer.masksToBounds = false
-        return stackView
+        let l = UILabel()
+        l.text = "My Decks"
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .black
+        return l
         
     }()
     
-    var popularDecksHeaderLabel: UILabel = {
-        
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.text = "Popular Decks"
-        label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.textAlignment = .left
-        return label
-        
-    }()
+    var myDecksScrollView: MyDecksScrollView!
     
-    var myDecksScrollView: UIScrollView = {
-        
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .clear
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.layer.masksToBounds = false
-        return scrollView
-        
-    }()
-    
-    var myDecksContentView: UIView = {
-        
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-        
-    }()
-    
-    var myDecksStackView: UIStackView = {
-       
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = 20
-        stackView.layer.masksToBounds = false
-        return stackView
-        
-    }()
-    
-    var myDecksHeaderLabel: UILabel = {
-        
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.text = "My Decks"
-        label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.textAlignment = .left
-        return label
-        
-    }()
-    
-    // View Lifetime Functions
+    // MARK: - INIT
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        Utilities.shared.delegate = self
         setup()
     }
     
@@ -241,21 +157,20 @@ class FlashCardController: UIViewController {
         
         createNewDeckButton.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
         
-        for view in popularDecksStackView.arrangedSubviews {
-            view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+        for v in popularFlashcardScrollView.stackView.subviews {
+            v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
         }
         
-        for view in myDecksStackView.arrangedSubviews {
-            view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+        for v in myDecksScrollView.stackView.subviews {
+            v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
         }
         
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        populateMyDecksStackView()
-    }
-    
+      
+    // MARK: - Setup
     func setup() {
+        
+        Utilities.shared.decksDelegate = self
         
         view.backgroundColor = K.DesignColors.background
         
@@ -279,302 +194,45 @@ class FlashCardController: UIViewController {
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
         
-        // Add Scroll and Stack View
-        setupScrollView()
+        // Initialize My Decks Scroll View
+        if let decks = Utilities.shared.user?.decks {
+            myDecksScrollView = MyDecksScrollView(frame: .zero, decks: decks)
+            myDecksScrollView.myDeckDelegate = self
+        } else {
+            myDecksScrollView = MyDecksScrollView(frame: .zero)
+            myDecksScrollView.myDeckDelegate = self
+        }
+        
+        // Initialize Popular Decks Scroll View
+        if let decks = Utilities.shared.superUser?.decks {
+            popularFlashcardScrollView = PopularDecksScrollView(frame: .zero, decks: decks)
+            popularFlashcardScrollView.popularDeckDelegate = self
+        } else {
+            popularFlashcardScrollView = PopularDecksScrollView(frame: .zero)
+            popularFlashcardScrollView.popularDeckDelegate = self
+            
+            FirebaseManager.shared.loadSuperUser { (superUser) in
+                Utilities.shared.superUser = superUser
+            }
+        }
+        
+        view.addSubview(mainScrollView)
+        mainScrollView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                              bottom: view.bottomAnchor,
+                              leading: view.leadingAnchor,
+                              trailing: view.trailingAnchor,
+                              height: nil,
+                              width: nil)
         
         // Add Create New Deck Button
-        mainStackView.addArrangedSubview(createNewDeckButton, withMargin: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: -20))
-        
-        // Setup Popular Decks Header and Scroll View
-        setupPopularDecksScrollView()
-        
-        // Setup My Decks Header and Scroll View
-        setupMyDecksScrollView()
-
+        mainScrollView.stackView.addArrangedSubview(createNewDeckButton, withMargin: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(popularFlashcardLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(popularFlashcardScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(myDecksLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(myDecksScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
     }
     
-    func setupScrollView() {
-        
-        // Add scroll view and content view
-        view.addSubview(mainScrollView)
-        view.sendSubviewToBack(mainScrollView)
-        mainScrollView.addSubview(mainStackView)
-        
-        // Anchor Scroll View
-        mainScrollView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                          bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                          leading: view.leadingAnchor,
-                          trailing: view.trailingAnchor,
-                          height: nil,
-                          width: nil)
-        
-        // Anchor Content View
-        mainStackView.anchor(top: mainScrollView.topAnchor,
-                           bottom: mainScrollView.bottomAnchor,
-                           leading: mainScrollView.leadingAnchor,
-                           trailing: mainScrollView.trailingAnchor,
-                           height: nil,
-                           width: nil)
-        
-        mainStackView.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor).isActive = true
-        
-    }
-    
-    func setupPopularDecksScrollView() {
-        
-        // Add Header Label and Scroll View to the Main Content View
-        mainStackView.addArrangedSubview(popularDecksHeaderLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
-        mainStackView.addArrangedSubview(popularDecksScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
-        
-        // Add Stack View to Scroll View
-        popularDecksScrollView.addSubview(popularDecksStackView)
-        
-        // Anchor StackView Within Scroll View
-        popularDecksStackView.anchor(top: popularDecksScrollView.topAnchor,
-                                     bottom: popularDecksScrollView.bottomAnchor,
-                                     leading: popularDecksScrollView.leadingAnchor,
-                                     trailing: popularDecksScrollView.trailingAnchor,
-                                     height: nil,
-                                     width: nil)
-        
-        // Prevent Vertical Scrolling
-        popularDecksStackView.heightAnchor.constraint(equalTo: popularDecksScrollView.heightAnchor).isActive = true
-        
-        
-        // Populate Alternative Translations Stack View
-        populatePopularDecksStackView()
-
-        
-    }
-    
-    func populatePopularDecksStackView() {
-        
-        if popularDecks.count == 0 {
-            
-            popularDecksHeaderLabel.superview?.isHidden = true
-            popularDecksScrollView.superview?.isHidden = true
-            
-        }
-        
-        else {
-            
-            popularDecksHeaderLabel.superview?.isHidden = false
-            popularDecksScrollView.superview?.isHidden = false
-            
-        }
-        
-        for deckImage in popularDecks {
-            
-            // Create Deck Image View
-            let imageView = UIImageView()
-            imageView.image = deckImage
-            imageView.contentMode = .scaleAspectFit
-            imageView.roundCorners(cornerRadius: 10)
-
-            
-            let background = UIView()
-            background.backgroundColor = .white
-            background.translatesAutoresizingMaskIntoConstraints = false
-            background.widthAnchor.constraint(equalToConstant: 200).isActive = true
-            background.heightAnchor.constraint(equalToConstant: 200).isActive = true
-            
-            background.addSubview(imageView)
-            imageView.anchor(top: background.topAnchor,
-                             bottom: background.bottomAnchor,
-                             leading: background.leadingAnchor,
-                             trailing: background.trailingAnchor,
-                             height: nil,
-                             width: nil)
-            
-            popularDecksStackView.addArrangedSubview(background)
-            
-        }
-        
-    }
-    
-    func setupMyDecksScrollView() {
-        
-        // Add Header Label and Scroll View to the Main Content View
-        mainStackView.addArrangedSubview(myDecksHeaderLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
-        mainStackView.addArrangedSubview(myDecksScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
-        
-        // Add Stack View to Scroll View
-        myDecksScrollView.addSubview(myDecksStackView)
-        
-        // Anchor StackView Within Scroll View
-        myDecksStackView.anchor(top: myDecksScrollView.topAnchor,
-                                     bottom: myDecksScrollView.bottomAnchor,
-                                     leading: myDecksScrollView.leadingAnchor,
-                                     trailing: myDecksScrollView.trailingAnchor,
-                                     height: nil,
-                                     width: nil)
-        
-        // Prevent Vertical Scrolling
-        myDecksStackView.heightAnchor.constraint(equalTo: myDecksScrollView.heightAnchor).isActive = true
-        
-        
-        // Populate Alternative Translations Stack View
-        populateMyDecksStackView()
-
-    }
-    
-    func populateMyDecksStackView() {
-        
-        if let decks = Utilities.shared.user?.decks {
-            
-            myDecks = decks
-            
-        }
-        
-        for view in myDecksStackView.subviews {
-            
-            view.removeFromSuperview()
-            
-        }
-        
-        if myDecks.count == 0 {
-            
-            myDecksHeaderLabel.superview?.isHidden = true
-            myDecksScrollView.superview?.isHidden = true
-            
-        }
-        
-        else {
-            
-            myDecksHeaderLabel.superview?.isHidden = false
-            myDecksScrollView.superview?.isHidden = false
-            
-        }
-        
-        var index = 0
-        for deck in myDecks {
-            
-            // Create Deck Image View
-            let titleLabel = UILabel()
-            titleLabel.adjustsFontSizeToFitWidth = true
-            titleLabel.numberOfLines = 0
-            titleLabel.font = UIFont.systemFont(ofSize: 26, weight: .medium)
-            titleLabel.textAlignment = .center
-            titleLabel.text = deck.name
-            
-            let numCardsLabel = UILabel()
-            numCardsLabel.numberOfLines = 1
-            numCardsLabel.adjustsFontSizeToFitWidth = true
-            numCardsLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-            numCardsLabel.textAlignment = .left
-            numCardsLabel.text = "\(deck.numberOfCards) cards"
-            
-            let percentageLabel = UILabel()
-            percentageLabel.numberOfLines = 1
-            percentageLabel.adjustsFontSizeToFitWidth = true
-            percentageLabel.font = UIFont.systemFont(ofSize: 23, weight: .medium)
-            percentageLabel.textAlignment = .right
-            
-            let formatted = String(format: "%.1f", deck.prevScore)
-            
-            if deck.prevScore < 0 {
-                
-                percentageLabel.text = "-%"
-                percentageLabel.textColor = .black
-                
-            }
-            
-            else if deck.prevScore >= 0 && deck.prevScore <= 50 {
-                
-                percentageLabel.text = "\(formatted)%"
-                percentageLabel.textColor = K.Colors.red
-                
-            }
-            
-            else if deck.prevScore > 50  && deck.prevScore <= 69 {
-                
-                percentageLabel.text = "\(formatted)%"
-                percentageLabel.textColor = K.Colors.orange
-                
-            }
-            
-            else if deck.prevScore > 69 && deck.prevScore <= 79 {
-                
-                percentageLabel.text = "\(formatted)%"
-                percentageLabel.textColor = K.Colors.yellow
-                
-            }
-            
-            else if deck.prevScore > 79 && deck.prevScore <= 100 {
-                
-                percentageLabel.text = "\(formatted)%"
-                percentageLabel.textColor = K.Colors.green
-                
-            }
-            
-            let contentView = UIView()
-            contentView.backgroundColor = .white
-            contentView.roundCorners(cornerRadius: 10)
-            
-            contentView.addSubview(titleLabel)
-            contentView.addSubview(numCardsLabel)
-            contentView.addSubview(percentageLabel)
-            
-            titleLabel.translatesAutoresizingMaskIntoConstraints = false
-            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: 20).isActive = true
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10).isActive = true
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-            
-            numCardsLabel.anchor(top: nil,
-                                 bottom: contentView.bottomAnchor,
-                                 leading: contentView.leadingAnchor,
-                                 trailing: nil,
-                                 height: nil,
-                                 width: nil,
-                                 padding: UIEdgeInsets(top: 0, left: 10, bottom: -10, right: 0))
-            
-            percentageLabel.translatesAutoresizingMaskIntoConstraints = false
-            percentageLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
-            percentageLabel.firstBaselineAnchor.constraint(equalTo: numCardsLabel.firstBaselineAnchor).isActive = true
-            percentageLabel.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: 20).isActive = true
-            
-            numCardsLabel.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: 20).isActive = true
-            numCardsLabel.trailingAnchor.constraint(greaterThanOrEqualTo: percentageLabel.leadingAnchor, constant: 20).isActive = true
-            
-            let background = UIView()
-            background.translatesAutoresizingMaskIntoConstraints = false
-            background.widthAnchor.constraint(equalToConstant: 200).isActive = true
-            background.heightAnchor.constraint(equalToConstant: 200).isActive = true
-            
-            background.addSubview(contentView)
-            contentView.anchor(top: background.topAnchor,
-                             bottom: background.bottomAnchor,
-                             leading: background.leadingAnchor,
-                             trailing: background.trailingAnchor,
-                             height: nil,
-                             width: nil)
-            
-            let button = UIButton()
-            button.backgroundColor = .clear
-            button.tag = index
-            index += 1
-            button.addTarget(self, action: #selector(deckPressed(_:)), for: .touchUpInside)
-            button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
-            button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
-            button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-            button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
-            
-            contentView.addSubview(button)
-            button.anchor(top: contentView.topAnchor,
-                          bottom: contentView.bottomAnchor,
-                          leading: contentView.leadingAnchor,
-                          trailing: contentView.trailingAnchor,
-                          height: nil,
-                          width: nil)
-            
-            myDecksStackView.addArrangedSubview(background)
-        
-        }
-        
-    }
-    
-//MARK: - Selector Functions
+    //MARK: - Selector Functions
     @objc func settingsButtonTapped() {
     
         Utilities.shared.settingsLauncher.parentVC = self
@@ -627,47 +285,59 @@ class FlashCardController: UIViewController {
         present(alert, animated: true, completion: nil)
         
     }
-    
-    @objc func deckPressed(_ sender: UIButton) {
-         
-        UIView.animate(withDuration: 0.1) {
-            sender.superview?.transform = .identity
-            sender.superview?.superview?.layer.shadowOpacity = 0.3
-        }
-        
-        let vc = DeckController()
-        vc.myDeck = myDecks[sender.tag]
-        vc.myDeckIndex = sender.tag
-        self.navigationController?.pushViewController(vc, animated: true)
-        
-    }
-    
-    @objc func touchDown(_ sender: UIButton) {
-        
-        UIView.animate(withDuration: 0.1) {
-            sender.superview?.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-            sender.superview?.superview?.layer.shadowOpacity = 0.4
-        }
-    }
-    
-    @objc func cancelEvent(_ sender: UIButton) {
-        
-        UIView.animate(withDuration: 0.1) {
-            sender.superview?.transform = .identity
-            sender.superview?.superview?.layer.shadowOpacity = 0.3
-        }
-        
-    }
-
 }
 
 extension FlashCardController: DecksControllerDelegate {
     
     func updateMyDecks() {
         
-        DispatchQueue.main.async {
-            self.populateMyDecksStackView()
+        guard let decks = Utilities.shared.user?.decks else {
+            
+            myDecksScrollView.decks = []
+            myDecksScrollView.updateDecks()
+            myDecksScrollView.updateVisibility()
+            myDecksLabel.superview?.isHidden = true
+            return
+            
         }
+        
+        myDecksScrollView.decks = decks
+        myDecksScrollView.updateDecks()
+        myDecksScrollView.updateVisibility()
+                
+        if decks.count == 0 {
+            myDecksLabel.superview?.isHidden = true
+        } else { myDecksLabel.superview?.isHidden = false }
+    }
+    
+    func updatePopularDecks() {
+        
+        guard let decks = Utilities.shared.superUser?.decks else { return }
+        
+        popularFlashcardScrollView.decks = decks
+        popularFlashcardScrollView.updateDecks()
+        popularFlashcardScrollView.updateVisibility()
+        
+        if decks.count == 0 {
+            popularFlashcardLabel.superview?.isHidden = true
+        } else { popularFlashcardLabel.superview?.isHidden = false }
+        
+    }
+}
+
+extension FlashCardController: MyDeckDelegate, PopularDeckDelegate {
+    
+    func goToDeck(deckIndex: Int) {
+        let vc = DeckController()
+        vc.myDeck = myDecksScrollView.decks[deckIndex]
+        vc.myDeckIndex = deckIndex
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showPurchasePopUp(deckIndex: Int) {
+        print("puchasing deck \(deckIndex)")
     }
     
 }
+
+

@@ -14,6 +14,9 @@ struct K {
         static let dictionaryCollectionName = "Words"
         static let usersCollectionName = "Users"
         static let lessonsCollectionName = "Lessons"
+        static let colorErrorsCollectionName = "Coloring_Error"
+        static let translationErrorCollectionName = "Translation_Error"
+        static let superUser = "4vCef03V7SMdjTDq5EyYYqCiLsk2"
     }
     
     // English HD Colors
@@ -76,7 +79,7 @@ struct K {
         static let flashcardCell = "FlashcardCell"
     }
     
-    // Language Codes For Translation
+// Language Codes For Translation
 //    struct LanguageCodes {
 //        
 //        static let languageDict =  ["en" : "English",     "en-GB" : "English",      "en-AU" : "English",
@@ -142,6 +145,7 @@ struct K {
         static let langName = "langName"
         
     }
+    
     
     // Number Identifiers for Wildcards
     static let linkToWildCardDictionary: [String: NSMutableAttributedString] = {

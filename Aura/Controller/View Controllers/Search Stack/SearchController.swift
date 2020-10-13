@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Speech
 
 class SearchController: UIViewController {
     
@@ -17,13 +18,21 @@ class SearchController: UIViewController {
     var wordArray = [String]()
     var wordModelArray = [WordModel?]()
     var results = [ColorResultModel]()
-    var alternateTranslations = [String]()
+    var dictionaryResult = [String: [DictionaryResult]]()
     var learnMoreArray = [(text: NSMutableAttributedString, ipaIndex: Int)]()
     var isFullyMatched = true
     var searchStatus: SearchStatus!
     
     // Search Information
-    var searchInfo = SearchInfo(sourceLanguageCode: "en", sourceLanguageName: "English")
+    var searchInfo = SearchInfo(sourceLanguageCode: "en", sourceLanguageName: "English") {
+        
+        didSet {
+            
+            updateMicButtonVisibility()
+            
+        }
+        
+    }
 
     // Main Views and Buttons
     
@@ -54,7 +63,7 @@ class SearchController: UIViewController {
         let stackView = UIStackView()
         stackView.backgroundColor = .white
         stackView.alignment = .center
-        stackView.distribution = .fillEqually
+        stackView.distribution = .fillProportionally
         return stackView
         
     }()
@@ -66,6 +75,7 @@ class SearchController: UIViewController {
         button.backgroundColor = .white
         button.titleLabel!.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         button.setTitleColor(K.DesignColors.primary, for: .normal)
+        button.titleLabel?.textAlignment = .center
         return button
         
     }()
@@ -88,7 +98,7 @@ class SearchController: UIViewController {
     var englishLabel: UILabel = {
         
         let label = UILabel()
-        label.text = "English HD"
+        label.text = "Am. English HD"
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.backgroundColor = .white
@@ -108,6 +118,34 @@ class SearchController: UIViewController {
         textView.backgroundColor = .white
         return textView
     
+    }()
+    
+    var micButton: UIButton = {
+        
+        let button = UIButton()
+        
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "mic.fill"), for: .normal)
+        } else {
+            button.setImage(#imageLiteral(resourceName: "mic.fill").withRenderingMode(.alwaysTemplate), for: .normal)
+        }
+        
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageView?.contentMode = .scaleAspectFit
+        button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        button.backgroundColor = K.DesignColors.primary
+        button.tintColor = .white
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.roundCorners(cornerRadius: 20)
+        
+        button.addTarget(self, action: #selector(recordPressed), for: .touchUpInside)
+        
+        return button
+        
     }()
     
     var cancelButton: UIButton = {
@@ -229,6 +267,39 @@ extension SearchController {
         // Add English Label
         langStackView.addArrangedSubview(englishLabel)
         
+        swapButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        languageButton.widthAnchor.constraint(equalTo: englishLabel.widthAnchor).isActive = true
+        
+    }
+    
+    func fetchLocale() -> String {
+        
+        let currentLangCode = String(searchInfo.sourceLanguageCode[0...1])
+        let phoneLanguageCode = String(Locale.preferredLanguages[0][0...1])
+        
+        let finalLangCode = currentLangCode == phoneLanguageCode ? Locale.preferredLanguages[0] : searchInfo.sourceLanguageCode
+        
+        return finalLangCode
+    }
+    
+    func updateMicButtonVisibility() {
+        
+        let localeString = fetchLocale()
+        
+        if let isAvailable = SFSpeechRecognizer(locale: Locale(identifier: localeString))?.isAvailable {
+            
+            if isAvailable {
+                micButton.isHidden = false
+            }
+            else {
+                micButton.isHidden = true
+            }
+            return
+        }
+        else {
+            micButton.isHidden = true
+        }
     }
     
     func setupTextView() {
@@ -252,11 +323,10 @@ extension SearchController {
                         trailing: textViewBackgroundView.trailingAnchor,
                         height: nil,
                         width: nil,
-                        padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 4))
+                        padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
        
         // Add X Button
         view.addSubview(cancelButton)
-        print(textView.superview!)
         cancelButton.anchor(top: textView.topAnchor,
                             bottom: nil,
                             leading: nil,
@@ -264,6 +334,18 @@ extension SearchController {
                             height: 40,
                             width: 40,
                             padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        
+        // Add Mic Button
+        view.addSubview(micButton)
+        micButton.anchor(top: nil,
+                        bottom: textView.bottomAnchor,
+                        leading: nil,
+                        trailing: textView.trailingAnchor,
+                        height: nil,
+                        width: nil,
+                        padding: UIEdgeInsets(top: 0, left: 0, bottom: -10, right: -10))
+        
+        updateMicButtonVisibility()
     }
     
     func setupTableView() {
@@ -292,7 +374,7 @@ extension SearchController {
         let headerLabel = UILabel()
         headerLabel.backgroundColor = K.DesignColors.background
         headerLabel.text = "Previous Searches"
-        headerLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        headerLabel.font = .systemFont(ofSize: 17, weight: .bold)
         headerLabel.textAlignment = .left
         
         headerView.addSubview(headerLabel)
@@ -405,9 +487,18 @@ extension SearchController {
         cancelButton.isHidden = true
     }
     
+    @objc func recordPressed() {
+        
+        let vc = SpeechToTextController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.delegate = self
+        vc.speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: self.fetchLocale()))!
+        self.present(vc, animated: true, completion: nil)
+        
+    }
 }
 
-//MARK:- UITextView Delegate Methods
+// MARK:- UITextView Delegate Methods
 
 extension SearchController: UITextViewDelegate {
     
@@ -509,7 +600,10 @@ extension SearchController: UITableViewDelegate {
             startSearchSequence(searchText: searchAndResult.searchText, searchInfo)
             
         }
-        
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        textView.resignFirstResponder()
     }
     
 }
@@ -582,12 +676,12 @@ extension SearchController: SupportedLanguagesDelegate, ResultsControllerDelegat
         
         else {
             
-            UserDefaults.standard.set("", forKey: K.UserDefaultKeys.langCode)
-            UserDefaults.standard.set("Auto Detect", forKey: K.UserDefaultKeys.langName)
+            UserDefaults.standard.set("en", forKey: K.UserDefaultKeys.langCode)
+            UserDefaults.standard.set("English", forKey: K.UserDefaultKeys.langName)
             
-            languageButton.setTitle("Auto Detect", for: .normal)
-            searchInfo.sourceLanguageCode = ""
-            searchInfo.sourceLanguageName = "Auto Detect"
+            languageButton.setTitle("English", for: .normal)
+            searchInfo.sourceLanguageCode = "en"
+            searchInfo.sourceLanguageName = "English"
             
         }
     }
@@ -614,8 +708,8 @@ extension SearchController {
         wordArray = []
         bottomLabelText = ""
         wordModelArray = []
-        alternateTranslations = []
         learnMoreArray = []
+        dictionaryResult = [:]
         isFullyMatched = true
         
         // Update Query Text
@@ -626,9 +720,12 @@ extension SearchController {
             self.startLoadingScreen()
         }
         
+        // Create And Enter Dispatch Group For Tranlsation Request
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        
         // 1. Translate
-        // 2. Populate wordModelArray and alternativesArray
-        // 3. Color Words
+        // 2. Color Words
         runSearchsequence(searchText: searchText) { (searchStatus) in
             
             self.searchStatus = searchStatus
@@ -685,11 +782,7 @@ extension SearchController {
                     }
                 }
                 
-                // End Loading Screen
-                DispatchQueue.main.async {
-                    self.endLoadingScreen()
-                    self.goToResultsVC(searchInfo: searchInfo)
-                }
+                dispatchGroup.leave()
             
             case .nilTranslation,
                  .noExistingWordModels,
@@ -702,10 +795,32 @@ extension SearchController {
                     
                 }
                 
-                DispatchQueue.main.async {
-                    self.endLoadingScreen()
-                    self.goToResultsVC(searchInfo: searchInfo)
-                }
+                self.isFullyMatched = false
+                
+                dispatchGroup.leave()
+            }
+        }
+        
+        // Enter Dispatch Group Again For Dictionary Request
+        if !(AzureTranslationManager.shared.sourceLanguageCode == "en" && AzureTranslationManager.shared.targetLanguageCode == "en") {
+            
+            dispatchGroup.enter()
+            AzureTranslationManager.shared.fetchDictionaryTranslations { (dictionaryResult) in
+                
+                self.dictionaryResult = dictionaryResult
+                dispatchGroup.leave()
+                
+            }
+            
+        }
+        
+        // When Both Network Tasks Finish
+        dispatchGroup.notify(queue: .main) {
+            
+            // End Loading Screen
+            DispatchQueue.main.async {
+                self.endLoadingScreen()
+                self.goToResultsVC(searchInfo: searchInfo)
             }
         }
     }
@@ -755,9 +870,6 @@ extension SearchController {
                         completion(.nilTranslation)
                         return
                     }
-                    
-                    // Populate Alternate Translations
-
                     
                     // If the Translation Returns an empty string we want the result to be the original searched Text
                     if translation == "" {
@@ -849,9 +961,6 @@ extension SearchController {
                         return
                     }
                     
-                    // Populate Alternate Translations
-
-                    
                     // If the Translation Returns an empty string we want the result to be the original searched Text
                     if translation == "" {
                         
@@ -917,11 +1026,14 @@ extension SearchController {
         resultsController.wordArray = self.wordArray
         resultsController.wordModelArray = self.wordModelArray
         resultsController.results = self.results
-        resultsController.alternateTranslations = self.alternateTranslations
+        resultsController.dictionaryResult = self.dictionaryResult
         resultsController.learnMoreArray = self.learnMoreArray
         resultsController.textView.text = self.searchInput
         resultsController.searchStatus = self.searchStatus
         resultsController.isFullyMatched = self.isFullyMatched
+        resultsController.searchInput = self.searchInput
+        resultsController.searchOutput = self.searchOutput
+        resultsController.checkForColorError()
         
         // Update search history
         if Utilities.shared.isUserSignedIn {
@@ -979,4 +1091,18 @@ extension SearchController: AddSearchHistoryDelegate {
 
         
     }
+}
+
+extension SearchController: SpeechToTextDelegate {
+    
+    func updateText(with transcription: String) {
+        
+        textView.textColor = .black
+        textView.text = transcription
+        cancelButton.isHidden = false
+        
+        startSearchSequence(searchText: transcription, searchInfo)
+        
+    }
+    
 }

@@ -13,6 +13,7 @@ import Firebase
 protocol DecksControllerDelegate {
     
     func updateMyDecks()
+    func updatePopularDecks()
     
 }
 
@@ -22,19 +23,37 @@ protocol AddSearchHistoryDelegate {
     
 }
 
+protocol HomeDelegate {
+    
+    func updateMyDecks()
+    func updatePopularDecks()
+    
+}
+
 class Utilities {
     
     static let shared = Utilities()
         
-    var delegate: DecksControllerDelegate?
+    var decksDelegate: DecksControllerDelegate?
     var searchHistoryDelegate: AddSearchHistoryDelegate?
+    var homeDelegate: HomeDelegate?
     var settingsLauncher = SettingsLauncher()
     
     var user: User? {
         
         didSet {
-            self.delegate?.updateMyDecks()
+            self.decksDelegate?.updateMyDecks()
             self.searchHistoryDelegate?.updateSearchHistory()
+            self.homeDelegate?.updateMyDecks()
+        }
+        
+    }
+    
+    var superUser: User? {
+        
+        didSet {
+            self.homeDelegate?.updatePopularDecks()
+            self.decksDelegate?.updatePopularDecks()
         }
         
     }
@@ -78,8 +97,10 @@ class Utilities {
         // 1 - Password length at least 8.
         // 2 - One Alphabet in Password.
         // 3 - One Special Character in Password
+        // NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-z])(?=.*[$@$#!%*?&])[A-Za-z\\d$@$#!%*?&]{8,}")
         
-        let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-z])(?=.*[$@$#!%*?&])[A-Za-z\\d$@$#!%*?&]{8,}")
+        // Password Must be 8 characters long
+        let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^.{8,}$")
         return passwordTest.evaluate(with: password)
     }
     
@@ -92,7 +113,15 @@ class Utilities {
     }
     
     //MARK: - Log In Properties/Methods
-    var isUserSignedIn: Bool = false
+    var isUserSignedIn: Bool = false {
+        
+        didSet {
+            
+            self.settingsLauncher.signInLabel.text = isUserSignedIn ? "Sign Out" : "Sign Up / Log In"
+            
+        }
+        
+    }
     var tabController: TabBarController?
     
     func signUserOut(alertIn vc: UIViewController) {
@@ -130,7 +159,6 @@ class Utilities {
                                                        self.tabController!.keyController,
                                                        self.tabController!.loginController,
                                                        self.tabController!.lessonsController]
-                
             }
             
             catch let signOutError as NSError {

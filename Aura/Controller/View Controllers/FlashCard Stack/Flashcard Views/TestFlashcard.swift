@@ -96,7 +96,7 @@ class TestFlashcard: UIView {
         view.axis = .horizontal
         view.alignment = .center
         view.distribution = .equalSpacing
-        view.backgroundColor = K.DesignColors.darkVariant
+        view.backgroundColor = .white
         view.spacing = 18
         return view
         

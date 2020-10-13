@@ -8,30 +8,36 @@
 
 import UIKit
 
+
+// NOTE: MIGHT NEED TO DELETE UNABLE TO TRANSLATE: azure always sends back a tranlsation. If it can't translate, output will be input
+// AKA: As of now only "noExistingWordModels" "missingSomeWordModels" and "colorError" will only be called
+
 class SearchStatusView: UIView {
     
     // Error Messages
     let success = "Success!"
     
-    let nilTranslation = "Unable to translate.\n\nPlease check your network connection."
+    let nilTranslation = [("Unable to translate", ["Check network connection."])]
     
-    let emptyTranslationNoExistingWordModels = "No translation found.\n\nPlease check your input/output language parameters and spelling.\n\nUnable to color any words.\n\nPlease check spelling.\n\nOtherwise, we apologize, these words do not exist in our database yet."
+    let emptyTranslationNoExistingWordModels = [("No translation found", ["Check input/output language parameters.", "Check spelling."]),
+    ("Unable to color any words", ["Check spelling.", "Some words may not exist in the database yet."])]
     
-    let emptyTranslationMissingSomeWordModels = "No translation found.\n\nPlease check your input/output language parameters and spelling.\n\nUnable to color some words.\n\nPlease check spelling.\n\nOtherwise, we apologize, these words do not exist in our database yet."
     
-    let emptyTranslationWithAllWordModels = "No translation found.\n\nPlease check your input/output language parameters."
+    let emptyTranslationMissingSomeWordModels = [("No translation found", ["Check input/output language parameters.", "Check spelling."]),
+    ("Unable to color some words", ["Check spelling.", "Some words may not exist in the database yet."])]
     
-    let noExistingWordModels = "Unable to color any words.\n\nPlease check your network connection and spelling.\n\nOtherwise, we apologize, these words do not exist in our database yet."
+    let emptyTranslationWithAllWordModels = [("No translation found", ["Check input/output language parameters."])]
     
-    let missingSomeWordModels = "Unable to color some words.\n\nPlease check your spelling.\n\nOtherwise, we apologize, these words do not exist in our database yet."
+    let noExistingWordModels = [("Unable to color any words", ["Check input/output language parameters.", "Check spelling.", "Check network connection.", "Some words may not exist in the database yet.", "Incorrect translation. We're working to improve this"])]
     
-    let colorError = "We noticed a word may be colored incorrectly. We will try and fix this as soon as possible!"
+    let missingSomeWordModels = [("Unable to color some words", ["Check input/output language parameters.", "Check spelling.", "Check network connection.", "Some words may not exist in the database yet.", "Incorrect translation. We're working to improve this"])]
+    
+    let colorError = [("Warning: we detected a word that may be colored incorrectly", ["We will try and fix this as soon as possible!"])]
     
     // Subviews
     let errLabel: UILabel = {
         
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -91,33 +97,80 @@ class SearchStatusView: UIView {
             
         case .nilTranslation:
             
-            errLabel.text = nilTranslation
+            errLabel.attributedText = formatAttributedString(errMessage: nilTranslation)
             
         case .emptyTranslationNoExistingWordModels:
             
-            errLabel.text = emptyTranslationNoExistingWordModels
+            errLabel.attributedText = formatAttributedString(errMessage: emptyTranslationNoExistingWordModels)
             
         case .emptyTranslationMissingSomeWordModels:
             
-            errLabel.text = emptyTranslationMissingSomeWordModels
+            errLabel.attributedText = formatAttributedString(errMessage: emptyTranslationMissingSomeWordModels)
             
         case .emptyTranslationWithAllWordModels:
             
-            errLabel.text = emptyTranslationWithAllWordModels
+            errLabel.attributedText = formatAttributedString(errMessage: emptyTranslationWithAllWordModels)
             
         case .noExistingWordModels:
             
-            errLabel.text = noExistingWordModels
+            errLabel.attributedText = formatAttributedString(errMessage: noExistingWordModels)
             
         case .missingSomeWordModels:
             
-            errLabel.text = missingSomeWordModels
+            errLabel.attributedText = formatAttributedString(errMessage: missingSomeWordModels)
         }
     }
     
     func setLabelTextAsColorErr() {
         
-        errLabel.text = colorError
+        errLabel.attributedText = formatAttributedString(errMessage: colorError)
+        
+    }
+    
+    func formatAttributedString(errMessage: [(String, [String])]) -> NSMutableAttributedString {
+        
+        let finalText = NSMutableAttributedString(string: "")
+
+        var count = 1
+        for err in errMessage {
+            
+            let attText1 = NSMutableAttributedString(string: err.0)
+            attText1.addAttributes([.font : UIFont.systemFont(ofSize: 17, weight: .regular),
+                                   .foregroundColor :  K.DesignColors.error],
+                                  range: NSRange(location: 0, length: attText1.length))
+         
+            finalText.append(attText1)
+            finalText.append(NSMutableAttributedString(string: "\n"))
+            
+            var count1 = 1
+            for description in err.1 {
+                
+                let attText2 = NSMutableAttributedString(string: "- \(description)")
+                attText2.addAttributes([.font : UIFont.systemFont(ofSize: 14, weight: .light),
+                                        .foregroundColor :  UIColor.gray],
+                                       range: NSRange(location: 0, length: attText2.length))
+               
+                finalText.append(attText2)
+                
+                if count1 != err.1.count {
+                    finalText.append(NSMutableAttributedString(string: "\n"))
+                    count1 += 1
+                }
+                
+            }
+            
+            if count != errMessage.count {
+                
+                finalText.append(NSMutableAttributedString(string: "\n"))
+                count += 1
+            }
+        }
+        
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.lineSpacing = 2
+        finalText.addAttribute(.paragraphStyle, value: paraStyle, range: NSRange(location: 0, length: finalText.length))
+        
+        return finalText
         
     }
 }

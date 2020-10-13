@@ -17,6 +17,7 @@ class DeckController: UIViewController {
     var scrollViewHeight: NSLayoutConstraint!
     var heightArray = [CGFloat]()
     var currentCardIndex = 0
+    var editLauncher = EditLauncher()
     
     //MARK: - Subviews
     var centerTitle: UILabel = {
@@ -143,9 +144,9 @@ class DeckController: UIViewController {
         
             view.addFlashcardBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 30)
             
-            view.soundBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
-            
             view.loopBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
+            
+            view.playBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
         }
         
         statsLabelBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
@@ -200,22 +201,10 @@ class DeckController: UIViewController {
         self.navigationItem.titleView = centerTitle
         self.navigationController?.navigationBar.topItem?.title = " "
         
-        // Add UserButton and Trash Button
-        var trashButton = UIBarButtonItem()
-                
-        if #available(iOS 13.0, *) {
-            trashButton = UIBarButtonItem(image: UIImage(systemName: "trash"),
-                                          style: .plain,
-                                          target: self,
-                                          action: #selector(trashButtonPressed))
-        } else {
-            trashButton = UIBarButtonItem(image: #imageLiteral(resourceName: "trash").withRenderingMode(.alwaysTemplate),
-                                          style: .plain,
-                                          target: self,
-                                          action: #selector(trashButtonPressed))
-        }
-        
-        self.navigationItem.rightBarButtonItems = [trashButton]
+        // Add Edit Button
+        let editButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
+            
+        self.navigationItem.rightBarButtonItems = [editButton]
         
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
@@ -431,6 +420,14 @@ class DeckController: UIViewController {
                         coloredResults.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
                     }
                 }
+                
+                else {
+                    
+                    let text = NSMutableAttributedString(string: word)
+                    coloredResults.append(ColorResultModel(attributedText: text, audioString: nil, ipa: "", isColored: false))
+                    
+                }
+                
             }
             
             let soundItOutColors = self.createButtons(coloredResults[0].attributedText)
@@ -484,31 +481,14 @@ class DeckController: UIViewController {
     }
     
     //MARK: - Selector Functions
-    @objc func trashButtonPressed() {
+    @objc func editButtonPressed() {
         
-        let alert = UIAlertController(title: "Delete Deck", message: "Are you sure you want to delete this entire deck?", preferredStyle: .alert)
-        
-        let actionOK = UIAlertAction(title: "Delete", style: .destructive) { (action) in
-            
-            if var user = Utilities.shared.user {
-                
-                user.decks.remove(at: self.myDeckIndex)
-                FirebaseManager.shared.updateUser(user: user)
-                self.navigationController?.popToRootViewController(animated: true)
-                
-            }
-        }
-        
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-            return
-        }
-        
-        alert.addAction(actionOK)
-        alert.addAction(cancel)
-        self.present(alert, animated: true, completion: nil)
+        editLauncher.parentView = self
+        editLauncher.navBarYValue = self.view.safeAreaLayoutGuide.layoutFrame.minY
+        editLauncher.showSettings()
         
     }
-    
+        
     @objc func takeTest(_ sender: UIButton) {
         
         UIView.animate(withDuration: 0.2) {

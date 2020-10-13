@@ -143,7 +143,7 @@ class LessonsController: UIViewController {
             let iv = UIImageView()
             iv.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
             iv.backgroundColor = K.DesignColors.primary
-            iv.contentMode = .scaleAspectFit
+            iv.contentMode = .scaleAspectFill
             iv.translatesAutoresizingMaskIntoConstraints = false
             iv.heightAnchor.constraint(equalToConstant: 180).isActive = true
             iv.widthAnchor.constraint(equalToConstant: 280).isActive = true
@@ -298,10 +298,8 @@ extension LessonsController: UICollectionViewDelegate {
                 av.player!.play()
                 
             }
-            
         }
     }
-    
 }
 
 //MARK: - Scroll View Delegate

@@ -412,6 +412,14 @@ class TestController: UIViewController {
                     coloredResults.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
                 }
             }
+            
+            else {
+                
+                let text = NSMutableAttributedString(string: word)
+                coloredResults.append(ColorResultModel(attributedText: text, audioString: nil, ipa: "", isColored: false))
+                
+            }
+            
         }
         
         let soundItOutColors = self.createButtons(coloredResults[0].attributedText)
@@ -447,6 +455,14 @@ class TestController: UIViewController {
                     coloredResults.append(ColorResultModel(attributedText: text, audioString: audio, ipa: ipa, isColored: true))
                 }
             }
+            
+            else {
+                
+                let text = NSMutableAttributedString(string: word)
+                coloredResults.append(ColorResultModel(attributedText: text, audioString: nil, ipa: "", isColored: false))
+                
+            }
+            
         }
         
         let soundItOutColors = self.createButtons(coloredResults[0].attributedText)

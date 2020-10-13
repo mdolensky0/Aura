@@ -10,13 +10,13 @@ import UIKit
 
 class DeckSelectingController: UIViewController {
 
-    // Data
+    //MARK: - Data
     var bottomLabelText = ""
     var ipaIndex = 0
     var wordArray = [String]()
     var wordModelArray = [WordModel?]()
     
-    // SubViews
+    //MARK: - SubViews
     let tableView = UITableView()
     
     let newDeckButton: UIButton = {
@@ -73,12 +73,14 @@ class DeckSelectingController: UIViewController {
         
     }()
     
+    // MARK: - INIT
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setup()
     }
     
+    // MARK: - Setup
     func setup() {
         
         view.backgroundColor = .clear
@@ -139,6 +141,7 @@ class DeckSelectingController: UIViewController {
         
     }
     
+    // MARK: - Selector Functions
     @objc func cancelPressed() {
         
         dismiss(animated: true, completion: nil)
@@ -204,7 +207,7 @@ class DeckSelectingController: UIViewController {
     
 }
 
-
+// MARK: - TableView Data Source
 extension DeckSelectingController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -227,11 +230,43 @@ extension DeckSelectingController: UITableViewDataSource {
     
 }
 
+// MARK: - TableView Delegate
 extension DeckSelectingController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func presentAlert(deckIndex idx: Int) {
         
-        let cardIndex = Utilities.shared.user!.decks[indexPath.row].numberOfCards
+        let alert = UIAlertController(title: "", message: "This card already exists in this deck. Would you like to add a duplicate?", preferredStyle: .alert)
+        
+        let add = UIAlertAction(title: "Add", style: .default) { (action) in
+            
+            self.addNewCard(deckIndex: idx)
+            
+            self.dismiss(animated: true) {
+                
+                if let window = UIApplication.shared.keyWindow {
+                    
+                    window.displayCheck(text: "Added Card")
+                    
+                }
+            }
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            
+            return
+            
+        }
+        
+        alert.addAction(add)
+        alert.addAction(cancel)
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func addNewCard(deckIndex idx: Int) {
+        
+        let cardIndex = Utilities.shared.user!.decks[idx].numberOfCards
         
         let flashcard = FlashcardModel(wordArray: wordArray,
                                        wordModelArray: wordModelArray,
@@ -242,13 +277,40 @@ extension DeckSelectingController: UITableViewDelegate {
                                        numSeen: 0,
                                        cardIndex: cardIndex)
         
-        Utilities.shared.user?.decks[indexPath.row].cards.append(flashcard)
-        Utilities.shared.user?.decks[indexPath.row].numberOfCards += 1
+        Utilities.shared.user?.decks[idx].cards.append(flashcard)
+        Utilities.shared.user?.decks[idx].numberOfCards += 1
         
         FirebaseManager.shared.updateUser(user: Utilities.shared.user!)
         
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // If Deck already contains card, present alert
+        for flashcard in Utilities.shared.user!.decks[indexPath.row].cards {
+            
+            if flashcard.wordArray == wordArray {
+                
+                tableView.deselectRow(at: indexPath, animated: true)
+                presentAlert(deckIndex: indexPath.row)
+                return
+                
+            }
+        }
+        
+        // Otherwise Add new card
+        addNewCard(deckIndex: indexPath.row)
+             
+        // Dismiss this Controller and animate a checkmark
         tableView.deselectRow(at: indexPath, animated: true)
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true) {
+            
+            if let window = UIApplication.shared.keyWindow {
+                
+                window.displayCheck(text: "Added Card")
+                
+            }
+        }
     }
     
 }

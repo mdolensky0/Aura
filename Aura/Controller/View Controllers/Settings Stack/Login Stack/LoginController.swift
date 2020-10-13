@@ -23,7 +23,7 @@ class LoginController: UIViewController {
         let label = UILabel()
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 100, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 80, weight: .bold)
         
         let title = NSMutableAttributedString(string: "Aura")
         title.addAttribute(.foregroundColor, value: K.Colors.purple, range: NSRange(location: 0, length: 2))
@@ -81,14 +81,14 @@ class LoginController: UIViewController {
         
         if isModal {
             
-            // Add user button
+            // Add cancel button
             if #available(iOS 13.0, *) {
-                self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"),
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"),
                                                                          style: .plain,
                                                                          target: self,
                                                                          action: #selector(cancelButtonTapped))
             } else {
-                self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "multiply").withRenderingMode(.alwaysTemplate),
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "multiply").withRenderingMode(.alwaysTemplate),
                                                                          style: .plain,
                                                                          target: self,
                                                                          action: #selector(cancelButtonTapped))
@@ -116,7 +116,7 @@ class LoginController: UIViewController {
                             trailing: container.trailingAnchor,
                             height: 50,
                             width: nil,
-                            padding: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0))
+                            padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
         
         logInButton.anchor(top: signUpButton.bottomAnchor,
                            bottom: container.bottomAnchor,
@@ -130,8 +130,8 @@ class LoginController: UIViewController {
         container.translatesAutoresizingMaskIntoConstraints = false
         
         container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        container.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
-        container.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40).isActive = true
+        container.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -80).isActive = true
+        container.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -60).isActive = true
         
         
                 

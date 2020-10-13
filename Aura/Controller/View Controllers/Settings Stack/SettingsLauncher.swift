@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SettingsLauncher: NSObject {
     
@@ -54,43 +55,20 @@ class SettingsLauncher: NSObject {
         
     }()
     
-    var signInButton: UIView = {
-        
-        let v = UIView()
-        
-        // Image Subview
-        let iv = UIImageView()
-        
-        if #available(iOS 13, *) {
-            iv.image = UIImage(systemName: "person")
-        }
-        
-        else {
-            iv.image = #imageLiteral(resourceName: "person").withRenderingMode(.alwaysTemplate)
-        }
-        
-        iv.tintColor = .black
-        iv.contentMode = .scaleAspectFit
-        
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        iv.widthAnchor.constraint(equalToConstant: 25).isActive = true
+    var signInLabel: UILabel = {
         
         // Label Subview
         let l = UILabel()
-        l.text = "Sign Up / Sign In"
+        l.text = "Sign Up / Log In"
         l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         l.textAlignment = .left
+        return l
         
-        v.addSubview(iv)
-        v.addSubview(l)
+    }()
+    
+    var signInButton: UIView = {
         
-        l.anchor(top: v.topAnchor, bottom: v.bottomAnchor, leading: nil, trailing: v.trailingAnchor, height: nil, width: nil)
-        
-        iv.centerYAnchor.constraint(equalTo: l.centerYAnchor).isActive = true
-        iv.leadingAnchor.constraint(equalTo: v.leadingAnchor, constant: 20).isActive = true
-        iv.trailingAnchor.constraint(equalTo: l.leadingAnchor, constant: -20).isActive = true
-        
+        let v = UIView()
         return v
         
     }()
@@ -113,7 +91,7 @@ class SettingsLauncher: NSObject {
         // Image Subview
         let iv = UIImageView()
         
-        if #available(iOS 13, *) {
+        if #available(iOS 13.0, *) {
             iv.image = UIImage(systemName: "questionmark.circle")
         }
         
@@ -154,7 +132,7 @@ class SettingsLauncher: NSObject {
         // Image Subview
         let iv = UIImageView()
         
-        if #available(iOS 13, *) {
+        if #available(iOS 13.0, *) {
             iv.image = UIImage(systemName: "envelope")
         }
         
@@ -209,6 +187,43 @@ class SettingsLauncher: NSObject {
         
     }
     
+    func setupSignInButton() {
+        
+        // Image Subview
+        let iv = UIImageView()
+        
+        if #available(iOS 13.0, *) {
+            iv.image = UIImage(systemName: "person")
+        }
+        
+        else {
+            iv.image = #imageLiteral(resourceName: "person").withRenderingMode(.alwaysTemplate)
+        }
+        
+        iv.tintColor = .black
+        iv.contentMode = .scaleAspectFit
+        
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        
+        signInButton.addSubview(iv)
+        signInButton.addSubview(signInLabel)
+        
+        signInLabel.anchor(top: signInButton.topAnchor,
+                           bottom: signInButton.bottomAnchor,
+                           leading: nil,
+                           trailing: signInButton.trailingAnchor,
+                           height: nil,
+                           width: nil)
+        
+        iv.centerYAnchor.constraint(equalTo: signInLabel.centerYAnchor).isActive = true
+        iv.leadingAnchor.constraint(equalTo: signInButton.leadingAnchor, constant: 20).isActive = true
+        iv.trailingAnchor.constraint(equalTo: signInLabel.leadingAnchor, constant: -20).isActive = true
+        
+    }
+    
     func setupWhiteView() {
         
         // Add Title and UnderLine
@@ -232,7 +247,15 @@ class SettingsLauncher: NSObject {
                         padding: UIEdgeInsets(top: 3, left: 0, bottom: 0, right: 0))
         
         // Add Sign In / Sign Up Button
+        setupSignInButton()
+        
         whiteView.addSubview(signInButton)
+        
+        if Auth.auth().currentUser != nil {
+            
+            signInLabel.text = "Sign Out"
+            
+        }
         
         signInButton.anchor(top: lineView.bottomAnchor,
                             bottom: nil,
@@ -284,7 +307,7 @@ class SettingsLauncher: NSObject {
         // Image Subview
         let iv = UIImageView()
         
-        if #available(iOS 13, *) {
+        if #available(iOS 13.0, *) {
             iv.image = UIImage(systemName: "waveform.path")
         }
         
@@ -344,7 +367,7 @@ class SettingsLauncher: NSObject {
         b1.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
         b1.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
         b1.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-        b1.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragInside)
+        b1.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         
         signInButton.addSubview(b1)
         
@@ -364,7 +387,7 @@ class SettingsLauncher: NSObject {
         b2.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
         b2.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
         b2.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-        b2.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragInside)
+        b2.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         
         voiceGenderButton.addSubview(b2)
         
@@ -383,7 +406,7 @@ class SettingsLauncher: NSObject {
         b3.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
         b3.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
         b3.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-        b3.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragInside)
+        b3.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         
         tutorialButton.addSubview(b3)
         
@@ -402,7 +425,7 @@ class SettingsLauncher: NSObject {
         b4.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
         b4.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
         b4.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-        b4.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragInside)
+        b4.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
         
         contactButton.addSubview(b4)
         
@@ -520,15 +543,16 @@ class SettingsLauncher: NSObject {
                 
             }) { (_ ) in
                 
+                
                 // Run Sign In / Sign Out Process
                 if Utilities.shared.isUserSignedIn {
                     
                     Utilities.shared.signUserOut(alertIn: self.parentVC!)
-                    
                 }
                     
                 else {
                     
+                    self.handleDismiss()
                     let vc = UINavigationController(rootViewController: LoginController())
                     let login = vc.viewControllers[0] as! LoginController
                     login.isModal = true

@@ -623,12 +623,21 @@ extension UIButton {
 
 extension UITextField {
     
+    func setBorder(color: UIColor) {
+        
+        self.layer.borderWidth = 2
+        self.layer.borderColor = color.cgColor
+        
+    }
+    
     func styleTextFieldWithUnderline(ofColor bottomLineColor: UIColor) {
         
+        self.layoutIfNeeded()
         self.borderStyle = .none
         let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0.0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
+        bottomLine.frame = CGRect(x: 0.0, y: self.bounds.height - 1, width: self.bounds.width, height: 1)
         bottomLine.backgroundColor = bottomLineColor.cgColor
+        print(bottomLine.frame)
         self.layer.addSublayer(bottomLine)
         
     }
@@ -719,5 +728,96 @@ extension UITableView {
         
         self.backgroundView = emptyView
         self.separatorStyle = .none
+    }
+}
+
+extension UIWindow {
+    
+    func displayCheck(text: String) {
+        
+        let container = UIView()
+        container.backgroundColor = UIColor(white: 0, alpha: 0.1)
+        container.alpha = 0
+        
+        self.addSubview(container)
+        container.anchor(top: self.topAnchor,
+                         bottom: self.bottomAnchor,
+                         leading: self.leadingAnchor,
+                         trailing: self.trailingAnchor,
+                         height: nil,
+                         width: nil)
+        
+        let v = UIView()
+        v.backgroundColor = .white
+        v.roundCorners(cornerRadius:  10)
+        
+        let label = UILabel()
+        label.text = text
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+        label.textColor = .black
+        
+        let imageView = UIImageView()
+        
+        if #available(iOS 13.0, *) {
+            
+            imageView.image = UIImage(systemName: "checkmark")
+            
+        }
+        
+        else {
+            
+            imageView.image = #imageLiteral(resourceName: "check").withRenderingMode(.alwaysTemplate)
+            
+        }
+        
+        imageView.tintColor = .green
+        imageView.backgroundColor = .clear
+        imageView.contentMode = .scaleAspectFit
+        
+        v.addSubview(label)
+        v.addSubview(imageView)
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.topAnchor.constraint(equalTo: v.topAnchor, constant: 30).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: v.centerXAnchor).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        label.anchor(top: imageView.bottomAnchor,
+                     bottom: v.bottomAnchor,
+                     leading: v.leadingAnchor,
+                     trailing: v.trailingAnchor,
+                     height: nil,
+                     width: nil,
+                     padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
+        
+        self.addSubview(v)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        v.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -120).isActive = true
+        v.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        v.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        v.alpha = 0
+        
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            
+            container.alpha = 1
+            v.alpha = 1
+            
+        }) { (_) in
+            
+            UIView.animate(withDuration: 0.4, delay: 0.2, usingSpringWithDamping: 1, initialSpringVelocity: 0.0, options: .curveEaseIn,  animations: {
+                
+                container.alpha = 0
+                v.alpha = 0
+                
+            }) { (_) in
+                
+                container.removeFromSuperview()
+                v.removeFromSuperview()
+                
+            }
+        }
     }
 }

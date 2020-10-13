@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import AMPopTip
+import Speech
 
 protocol ResultsControllerDelegate {
     
@@ -27,16 +28,27 @@ class ResultsController: UIViewController {
     var wordArray = [String]()
     var wordModelArray = [WordModel?]()
     var results = [ColorResultModel]()
+    var dictionaryResult = [String : [DictionaryResult]]()
     var soundItOutColors = [(color: UIColor, ID: String, range: NSRange)]()
-    var alternateTranslations = [String]()
     var learnMoreArray = [(text: NSMutableAttributedString, ipaIndex: Int)]()
     var isFullyMatched = true
     var learnMoreIsFullyMatched = true
     var searchStatus: SearchStatus!
     var learnMoreSearchStatus: SearchStatus!
+    
+    var textViewHeight: NSLayoutConstraint!
+    
 
     // Search Information
-    var searchInfo = SearchInfo(sourceLanguageCode: "en", sourceLanguageName: "English")
+    var searchInfo = SearchInfo(sourceLanguageCode: "en", sourceLanguageName: "English") {
+        
+        didSet {
+            
+            updateMicButtonVisibility()
+            
+        }
+        
+    }
     
 //MARK: - Utilities
     
@@ -106,7 +118,7 @@ class ResultsController: UIViewController {
     var englishLabel: UILabel = {
         
         let label = UILabel()
-        label.text = "English HD"
+        label.text = "Am. English HD"
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.backgroundColor = .white
@@ -127,6 +139,34 @@ class ResultsController: UIViewController {
         textView.backgroundColor = .white
         return textView
     
+    }()
+    
+    var micButton: UIButton = {
+        
+        let button = UIButton()
+        
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "mic.fill"), for: .normal)
+        } else {
+            button.setImage(#imageLiteral(resourceName: "mic.fill").withRenderingMode(.alwaysTemplate), for: .normal)
+        }
+        
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageView?.contentMode = .scaleAspectFit
+        button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        button.backgroundColor = K.DesignColors.primary
+        button.tintColor = .white
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.roundCorners(cornerRadius: 20)
+        
+        button.addTarget(self, action: #selector(recordPressed), for: .touchUpInside)
+        
+        return button
+        
     }()
     
     var cancelButton: UIButton = {
@@ -167,47 +207,8 @@ class ResultsController: UIViewController {
     var searchStatusView = SearchStatusView()
     
     var resultCard = ResultCardView()
-    
-    var alternativesScrollView: UIScrollView = {
         
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .clear
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.layer.masksToBounds = false
-        return scrollView
-        
-    }()
-    
-    var alternativesContentView: UIView = {
-        
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-        
-    }()
-    
-    var alternativesStackView: UIStackView = {
-       
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = 20
-        stackView.layer.masksToBounds = false
-        return stackView
-        
-    }()
-    
-    var alternativesHeaderLabel: UILabel = {
-        
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.text = "Alternative Translations"
-        label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.textAlignment = .left
-        return label
-        
-    }()
+    var alternativeCard = AltTranslationsView()
     
     var learnMoreScrollView: UIScrollView = {
         
@@ -218,15 +219,7 @@ class ResultsController: UIViewController {
         return scrollView
         
     }()
-    
-    var learnMoreContentView: UIView = {
         
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-        
-    }()
-    
     var learnMoreStackView: UIStackView = {
        
         let stackView = UIStackView()
@@ -244,7 +237,7 @@ class ResultsController: UIViewController {
         let label = UILabel()
         label.backgroundColor = .clear
         label.text = "Learn More"
-        label.font = .systemFont(ofSize: 17, weight: .regular)
+        label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textAlignment = .left
         return label
         
@@ -361,13 +354,13 @@ extension ResultsController {
         
         resultCard.addFlashcardBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 30)
         
-        resultCard.soundBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
-        
         resultCard.loopBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
         
-        for view in alternativesStackView.arrangedSubviews {
-            view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
-        }
+        resultCard.playBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
+        
+        resultCard.reportErrorBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
+              
+        alternativeCard.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
         
         for view in learnMoreStackView.arrangedSubviews {
             view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
@@ -456,6 +449,35 @@ extension ResultsController {
         
     }
     
+    func fetchLocale() -> String {
+        
+        let currentLangCode = String(searchInfo.sourceLanguageCode[0...1])
+        let phoneLanguageCode = String(Locale.preferredLanguages[0][0...1])
+        
+        let finalLangCode = currentLangCode == phoneLanguageCode ? Locale.preferredLanguages[0] : searchInfo.sourceLanguageCode
+        
+        return finalLangCode
+    }
+    
+    func updateMicButtonVisibility() {
+        
+        let localeString = fetchLocale()
+        
+        if let isAvailable = SFSpeechRecognizer(locale: Locale(identifier: localeString))?.isAvailable {
+            
+            if isAvailable {
+                micButton.isHidden = false
+            }
+            else {
+                micButton.isHidden = true
+            }
+            return
+        }
+        else {
+            micButton.isHidden = true
+        }
+    }
+    
     func setupTextView() {
         
         // Add View
@@ -465,14 +487,17 @@ extension ResultsController {
                                       bottom: nil,
                                       leading: view.leadingAnchor,
                                       trailing: view.trailingAnchor,
-                                      height: 60,
+                                      height: nil,
                                       width: nil,
                                       padding: UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0))
+        
+        textViewHeight = textViewBackgroundView.heightAnchor.constraint(equalToConstant: 140)
+        textViewHeight.isActive = true
         
         // Add TextView
         textView.delegate = self
         
-        view.addSubview(textView)
+        textViewBackgroundView.addSubview(textView)
         
         textView.anchor(top: textViewBackgroundView.topAnchor,
                         bottom: textViewBackgroundView.bottomAnchor,
@@ -484,8 +509,7 @@ extension ResultsController {
         
         
         // Add X Button
-        view.addSubview(cancelButton)
-        
+        textViewBackgroundView.addSubview(cancelButton)
         cancelButton.anchor(top: textView.topAnchor,
                             bottom: nil,
                             leading: nil,
@@ -493,9 +517,25 @@ extension ResultsController {
                             height: 40,
                             width: 40,
                             padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        
+        // Add Mic Button
+        textViewBackgroundView.addSubview(micButton)
+        micButton.anchor(top: nil,
+                        bottom: textView.bottomAnchor,
+                        leading: nil,
+                        trailing: textView.trailingAnchor,
+                        height: nil,
+                        width: nil,
+                        padding: UIEdgeInsets(top: 0, left: 0, bottom: -10, right: -10))
+        
+        updateMicButtonVisibility()
+        view.bringSubviewToFront(languageBarView)
+        
     }
     
     func setupScrollView() {
+        
+        mainScrollView.delegate = self
         
         // Add scroll view and content view
         view.addSubview(mainScrollView)
@@ -503,7 +543,7 @@ extension ResultsController {
         mainScrollView.addSubview(mainStackView)
         
         // Anchor Scroll View
-        mainScrollView.anchor(top: textView.bottomAnchor,
+        mainScrollView.anchor(top: langStackView.bottomAnchor,
                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
                           leading: view.leadingAnchor,
                           trailing: view.trailingAnchor,
@@ -516,7 +556,8 @@ extension ResultsController {
                            leading: mainScrollView.leadingAnchor,
                            trailing: mainScrollView.trailingAnchor,
                            height: nil,
-                           width: nil)
+                           width: nil,
+                           padding: UIEdgeInsets(top: 140 + 30, left: 0, bottom: 0, right: 0))
         
         mainStackView.widthAnchor.constraint(equalTo: mainScrollView.widthAnchor).isActive = true
         
@@ -537,14 +578,14 @@ extension ResultsController {
                                       width: nil)
         
         // Add Search Status View to Stack View
-        mainStackView.addArrangedSubview(searchStatusView, withMargin: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: -20))
+        mainStackView.addArrangedSubview(searchStatusView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         searchStatusView.superview?.isHidden = true
         
         // Add Results Card to Stack View
-        mainStackView.addArrangedSubview(resultBackgroundView, withMargin: UIEdgeInsets(top: 27, left: 20, bottom: 0, right: -20))
+        mainStackView.addArrangedSubview(resultBackgroundView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         
-        // Setup Alternative Translations Scroll View
-        setupAlternativeTranslationScrollView()
+        // Add Alternatives Card
+        setupAlternativesView()
         
         // Setup Learn More Scroll View
         setupLearnMoreScrollView()
@@ -556,110 +597,19 @@ extension ResultsController {
         setupLessonsButton()
     
     }
-        
-    func setupAlternativeTranslationScrollView() {
-        
-        // Add Header Label and Scroll View to the Main Content View
-        mainStackView.addArrangedSubview(alternativesHeaderLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
-        mainStackView.addArrangedSubview(alternativesScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
-        
-        // Add Stack View to Scroll View
-        alternativesScrollView.addSubview(alternativesStackView)
-        
-        // Anchor StackView Within Scroll View
-        alternativesStackView.anchor(top: alternativesScrollView.topAnchor,
-                                     bottom: alternativesScrollView.bottomAnchor,
-                                     leading: alternativesScrollView.leadingAnchor,
-                                     trailing: alternativesScrollView.trailingAnchor,
-                                     height: nil,
-                                     width: nil)
-        
-        // Prevent Vertical Scrolling
-        alternativesStackView.heightAnchor.constraint(equalTo: alternativesScrollView.heightAnchor).isActive = true
-        
-        
-        // Populate Alternative Translations Stack View
-        populateAlternativeTranslationsStackView()
-
-    }
     
-    func populateAlternativeTranslationsStackView() {
+    func setupAlternativesView() {
         
-        if alternateTranslations.count == 0 {
-            
-            alternativesHeaderLabel.superview?.isHidden = true
-            alternativesScrollView.superview?.isHidden = true
-            
-        }
+        self.alternativeCard = AltTranslationsView(frame: .zero, searchedText: self.searchInput, dictionaryResult: self.dictionaryResult, searchInfo: self.searchInfo)
+        self.alternativeCard.delegate = self
+        mainStackView.addArrangedSubview(alternativeCard, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         
-        else {
-            
-            alternativesHeaderLabel.superview?.isHidden = false
-            alternativesScrollView.superview?.isHidden = false
-            
-        }
-        
-        for alt in alternateTranslations {
-            
-            // Create Background Shadow View
-            let myView = UIView()
-            alternativesStackView.addArrangedSubview(myView)
-            myView.widthAnchor.constraint(equalToConstant: 220).isActive = true
-            myView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-            
-            // Create Content View
-            let myContentView = UIView()
-            myContentView.backgroundColor = .white
-            myContentView.roundCorners(cornerRadius: 10)
-            myView.addSubview(myContentView)
-            myContentView.anchor(top: myView.topAnchor,
-                                 bottom: myView.bottomAnchor,
-                                 leading: myView.leadingAnchor,
-                                 trailing: myView.trailingAnchor,
-                                 height: nil,
-                                 width: nil)
-            
-            // Formate Atrributed Text
-            let attText = NSMutableAttributedString(string: alt)
-            attText.addAttribute(.font, value: UIFont.systemFont(ofSize: 30), range: NSRange(location: 0, length: attText.length))
-            
-            // Create Label
-            let myLabel = UILabel()
-            myLabel.attributedText = attText
-            myLabel.numberOfLines = 2
-            myLabel.backgroundColor = .white
-            myLabel.textAlignment = .left
-            myContentView.addSubview(myLabel)
-            
-            // Anchor Label so its left aligned but stays in center if text doesn't fill the view
-            myLabel.translatesAutoresizingMaskIntoConstraints = false
-            myLabel.topAnchor.constraint(equalTo: myContentView.topAnchor, constant: 10).isActive = true
-            myLabel.bottomAnchor.constraint(equalTo: myContentView.bottomAnchor, constant: -10).isActive = true
-            myLabel.centerXAnchor.constraint(equalTo: myContentView.centerXAnchor).isActive = true
-            myLabel.widthAnchor.constraint(lessThanOrEqualTo: myContentView.widthAnchor, constant: -20).isActive = true
-            
-            // Create Clear button to overlay the label
-            let myButton = QueryButton()
-            myButton.queryText = alt
-            myButton.backgroundColor = .clear
-            myButton.addTarget(self, action: #selector(alternativesButtonPressed(_:)), for: .touchUpInside)
-            myButton.addTarget(self, action: #selector(touchDown1(_:)), for: .touchDown)
-            myButton.addTarget(self, action: #selector(cancelEvent1(_:)), for: .touchUpOutside)
-            myButton.addTarget(self, action: #selector(cancelEvent1(_:)), for: .touchDragOutside)
-            myButton.addTarget(self, action: #selector(touchDown1(_:)), for: .touchDragInside)
-            
-            // Anchor Button
-            myContentView.addSubview(myButton)
-            myButton.anchor(top: myContentView.topAnchor,
-                            bottom: myContentView.bottomAnchor,
-                            leading: myContentView.leadingAnchor,
-                            trailing: myContentView.trailingAnchor,
-                            height: nil,
-                            width: nil)
+        if self.dictionaryResult.count == 0 {
+            self.alternativeCard.superview?.isHidden = true
         }
         
     }
-    
+            
     func setupLearnMoreScrollView() {
         
         // Add Header Label and Scroll View to the Main Content View
@@ -840,35 +790,14 @@ extension ResultsController {
     
     @objc func swapButtonPressed() {
         
-        DispatchQueue.main.async {
+        // Change Search Type and If Necessary, Change English HD to English
+        switch self.searchInfo.searchType {
             
-            // Retrieve Subviews
-            let subviews = self.langStackView.arrangedSubviews
+        case .englishToNative:
+            self.searchInfo.searchType = .nativeToEnglish
             
-            let sub0 = subviews[0]
-            let sub1 = subviews[1]
-            let sub2 = subviews[2]
-            
-            // Change Search Type and If Necessary, Change English HD to English
-            switch self.searchInfo.searchType {
-                
-            case .englishToNative:
-                self.searchInfo.searchType = .nativeToEnglish
-                
-            case .nativeToEnglish:
-                self.searchInfo.searchType = .englishToNative
-                
-            }
-            
-            // Clear Subviews
-            for subview in self.langStackView.arrangedSubviews {
-                self.langStackView.removeArrangedSubview(subview)
-            }
-            
-            // Add Subviews Flipped
-            self.langStackView.addArrangedSubview(sub2)
-            self.langStackView.addArrangedSubview(sub1)
-            self.langStackView.addArrangedSubview(sub0)
+        case .nativeToEnglish:
+            self.searchInfo.searchType = .englishToNative
             
         }
         
@@ -881,6 +810,27 @@ extension ResultsController {
         searchInfo.sourceLanguageName = searchInfo.targetLanguageName
         searchInfo.targetLanguageName = tempSourceName
         
+        DispatchQueue.main.async {
+            
+            // Retrieve Subviews
+            let subviews = self.langStackView.arrangedSubviews
+            
+            let sub0 = subviews[0]
+            let sub1 = subviews[1]
+            let sub2 = subviews[2]
+                        
+            // Clear Subviews
+            for subview in self.langStackView.arrangedSubviews {
+                self.langStackView.removeArrangedSubview(subview)
+            }
+            
+            // Add Subviews Flipped
+            UIView.animate(withDuration: 0.3) {
+                self.langStackView.addArrangedSubview(sub2)
+                self.langStackView.addArrangedSubview(sub1)
+                self.langStackView.addArrangedSubview(sub0)
+            }
+        }
     }
     
     @objc func cancelButtonPressed() {
@@ -985,6 +935,16 @@ extension ResultsController {
         
     }
     
+    @objc func recordPressed() {
+        
+        let vc = SpeechToTextController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.delegate = self
+        vc.speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: self.fetchLocale()))!
+        self.present(vc, animated: true, completion: nil)
+        
+    }
+    
 }
 
 //MARK:- UITextView Delegate Methods
@@ -1043,6 +1003,10 @@ extension ResultsController: UITextViewDelegate {
 //MARK: - Result Card Delegate Function
 
 extension ResultsController: ResultCardDelegate {
+    
+    func presentReportErrorAlert(alert: UIAlertController) {
+        self.present(alert, animated: true)
+    }
     
     func presentDeckSelectionView() {
         
@@ -1127,9 +1091,9 @@ extension ResultsController {
         wordArray = []
         bottomLabelText = ""
         wordModelArray = []
-        alternateTranslations = []
         soundItOutColors = []
         learnMoreArray = []
+        dictionaryResult = [:]
         
         if isLearnMore {
             learnMoreIsFullyMatched = true
@@ -1147,9 +1111,12 @@ extension ResultsController {
             self.startLoadingScreen()
         }
         
+        // Create And Enter Dispatch Group For Tranlsation Request
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        
         // 1. Translate
-        // 2. Populate wordModelArray and alternativesArray
-        // 3. Color Words
+        // 2. Color Words
         runSearchsequence(searchText: searchText, searchInfo: searchInfo) { (searchStatus) in
             
             if isLearnMore {
@@ -1217,19 +1184,7 @@ extension ResultsController {
                     }
                 }
                 
-                // End Loading Screen
-                DispatchQueue.main.async {
-                    self.endLoadingScreen()
-                    
-                    if !isLearnMore {
-                         self.updateResultsVC()
-                    }
-                        
-                    else {
-                        self.pushToLearnMoreController(searchInfo)
-                    }
-                    
-                }
+                dispatchGroup.leave()
                 
             case .nilTranslation,
                  .noExistingWordModels,
@@ -1242,17 +1197,35 @@ extension ResultsController {
                     
                 }
                 
-                DispatchQueue.main.async {
-                    self.endLoadingScreen()
+                self.isFullyMatched = false
+                
+                dispatchGroup.leave()
+            }
+        }
+        
+        if !(AzureTranslationManager.shared.sourceLanguageCode == "en" && AzureTranslationManager.shared.targetLanguageCode == "en") {
+            
+            dispatchGroup.enter()
+            AzureTranslationManager.shared.fetchDictionaryTranslations { (dictionaryResult) in
+                
+                self.dictionaryResult = dictionaryResult
+                dispatchGroup.leave()
+                
+            }
+            
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            
+            DispatchQueue.main.async {
+                
+                self.endLoadingScreen()
+                
+                if !isLearnMore { self.updateResultsVC() }
                     
-                    if !isLearnMore {
-                        self.updateResultsVC()
-                    }
-                        
-                    else {
-                        self.pushToLearnMoreController(searchInfo)
-                    }
-                }
+                else { self.pushToLearnMoreController(searchInfo) }
+                
+                print(self.dictionaryResult)
             }
         }
     }
@@ -1302,10 +1275,7 @@ extension ResultsController {
                         completion(.nilTranslation)
                         return
                     }
-                    
-                    // Populate Alternate Translations
-
-                    
+                
                     // If the Translation Returns an empty string we want the result to be the original searched Text
                     if translation == "" {
                         
@@ -1396,9 +1366,6 @@ extension ResultsController {
                         return
                     }
                     
-                    // Populate Alternate Translations
-
-                    
                     // If the Translation Returns an empty string we want the result to be the original searched Text
                     if translation == "" {
                         
@@ -1478,6 +1445,8 @@ extension ResultsController {
             
         }
         
+        checkForColorError()
+        
         // Update Views in Results VC
         DispatchQueue.main.async {
             
@@ -1512,13 +1481,15 @@ extension ResultsController {
             self.soundItOutColors = self.createButtons(self.results[0].attributedText)
             self.resultCard.soundItOutColors = self.soundItOutColors
             self.resultCard.soundItOutCollectionView.reloadData()
-            
-            // Clear then re-populate Alternatives Stack View
-            for view in self.alternativesStackView.arrangedSubviews {
-                view.removeFromSuperview()
-            }
-            
-            self.populateAlternativeTranslationsStackView()
+             
+            // Update Alternatives View
+            if self.dictionaryResult.count != 0 {
+                
+                self.alternativeCard.update(searchedText: self.searchInput, dictionaryResult: self.dictionaryResult)
+                self.alternativeCard.superview?.isHidden = false
+                self.alternativeCard.searchInfo = self.searchInfo
+                
+            } else { self.alternativeCard.superview?.isHidden = true }
             
             // Clear then re-populate Learn More Stack View
             for view in self.learnMoreStackView.arrangedSubviews {
@@ -1566,10 +1537,13 @@ extension ResultsController {
         vc.wordArray = self.wordArray
         vc.wordModelArray = self.wordModelArray
         vc.results = self.results
-        vc.alternateTranslations = self.alternateTranslations
+        vc.dictionaryResult = self.dictionaryResult
         vc.learnMoreArray = self.learnMoreArray
         vc.searchStatus = self.learnMoreSearchStatus
         vc.isFullyMatched = self.learnMoreIsFullyMatched
+        vc.searchInput = self.searchInput
+        vc.searchOutput = self.searchOutput
+        vc.checkForColorError()
         
         // Update Search History
         if Utilities.shared.isUserSignedIn {
@@ -1606,3 +1580,112 @@ extension ResultsController {
         navigationController?.pushViewController(vc, animated: true)
     }
 }
+
+// MARK: - AltTranslation Delegate Methods
+extension ResultsController: AltTranslationDelegate {
+    
+    func searchBackTranslation(backTranslation: String, searchInfo: SearchInfo) {
+        
+        startSearchSequence(searchText: backTranslation, searchInfo, isLearnMore: true)
+        self.textView.text = backTranslation
+    }
+
+}
+
+// MARK: - Scroll View Delegate Methods
+extension ResultsController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        textView.resignFirstResponder()
+        
+        if !searchStatusView.superview!.isHidden {
+            
+            DispatchQueue.main.async {
+                
+                self.searchStatusView.superview?.isHidden = true
+                
+                UIView.animate(withDuration: 0.5) {
+                    self.view.layoutIfNeeded()
+                }
+            }
+        }
+        
+        let offset = scrollView.contentOffset.y
+        var difference = (0 - offset)
+        if difference > 0 {
+            difference = 0
+        }
+        
+        DispatchQueue.main.async {
+           
+            self.textViewBackgroundView.transform = CGAffineTransform(translationX: 0, y: difference * 1.4)
+
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            
+            let offset = scrollView.contentOffset.y
+            
+            DispatchQueue.main.async {
+                if offset <= 50 {
+                    scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+                } else if offset <= 140 {
+                    scrollView.setContentOffset(CGPoint(x: 0, y: 140), animated: true)
+                }
+            }
+        }
+    }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
+        let offset = scrollView.contentOffset.y
+        
+        DispatchQueue.main.async {
+            if offset <= 50 {
+                scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            } else if offset <= 140 {
+                scrollView.setContentOffset(CGPoint(x: 0, y: 140), animated: true)
+            }
+        }
+    }
+}
+
+// MARK: - Utilities
+extension ResultsController {
+    
+    func checkForColorError() {
+        
+        if !self.isFullyMatched {
+            
+            var text = ""
+            
+            if self.searchInfo.searchType == .englishToNative {
+                text = self.searchInput
+            }
+            
+            else {
+                text = self.searchOutput
+            }
+            
+            FirebaseManager.shared.writeColorError(text: text)
+            
+        }
+        
+    }
+}
+
+extension ResultsController: SpeechToTextDelegate {
+    
+    func updateText(with transcription: String) {
+        
+        textView.textColor = .black
+        textView.text = transcription
+        cancelButton.isHidden = false
+        startSearchSequence(searchText: transcription, searchInfo)
+        
+    }
+    
+}
+

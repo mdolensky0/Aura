@@ -21,8 +21,8 @@ class LearnMoreController: UIViewController {
     var wordArray = [String]()
     var wordModelArray = [WordModel?]()
     var results = [ColorResultModel]()
+    var dictionaryResult = [String : [DictionaryResult]]()
     var soundItOutColors = [(color: UIColor, ID: String, range: NSRange)]()
-    var alternateTranslations = [String]()
     var learnMoreArray = [(text: NSMutableAttributedString, ipaIndex: Int)]()
     var isFullyMatched = true
     var learnMoreIsFullyMatched = true
@@ -74,47 +74,8 @@ class LearnMoreController: UIViewController {
     
     var resultCard = ResultCardView()
     
-    var alternativesScrollView: UIScrollView = {
+    var alternativeCard = AltTranslationsView()
         
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .clear
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.layer.masksToBounds = false
-        return scrollView
-        
-    }()
-    
-    var alternativesContentView: UIView = {
-        
-        let view = UIView()
-        view.backgroundColor = .clear
-        return view
-        
-    }()
-    
-    var alternativesStackView: UIStackView = {
-        
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = 20
-        stackView.layer.masksToBounds = false
-        return stackView
-        
-    }()
-    
-    var alternativesHeaderLabel: UILabel = {
-        
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.text = "Alternative Translations"
-        label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.textAlignment = .left
-        return label
-        
-    }()
-    
     var learnMoreScrollView: UIScrollView = {
         
         let scrollView = UIScrollView()
@@ -150,7 +111,7 @@ class LearnMoreController: UIViewController {
         let label = UILabel()
         label.backgroundColor = .clear
         label.text = "Learn More"
-        label.font = .systemFont(ofSize: 17, weight: .regular)
+        label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textAlignment = .left
         return label
         
@@ -197,7 +158,7 @@ class LearnMoreController: UIViewController {
     
     let lessonBackgroundView = UIView()
     
-    //MARK: - Class Functions
+    //MARK: - INIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -260,13 +221,13 @@ extension LearnMoreController {
         
         resultCard.addFlashcardBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 30)
         
-        resultCard.soundBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
-        
         resultCard.loopBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
         
-        for view in alternativesStackView.arrangedSubviews {
-            view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
-        }
+        resultCard.playBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
+        
+        resultCard.reportErrorBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
+                
+        alternativeCard.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
         
         for view in learnMoreStackView.arrangedSubviews {
             view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
@@ -291,6 +252,8 @@ extension LearnMoreController {
     }
     
     func setupScrollView() {
+        
+        mainScrollView.delegate = self
         
         // Add scroll view and content view
         view.addSubview(mainScrollView)
@@ -338,8 +301,8 @@ extension LearnMoreController {
         // Add Results Card to Stack View
         mainStackView.addArrangedSubview(resultBackgroundView, withMargin: UIEdgeInsets(top: 27, left: 20, bottom: 0, right: -20))
         
-        // Setup Alternative Translations Scroll View
-        setupAlternativeTranslationScrollView()
+        // Add Alternatives Card
+        setupAlternativesView()
         
         // Setup Learn More Scroll View
         setupLearnMoreScrollView()
@@ -351,106 +314,15 @@ extension LearnMoreController {
         setupLessonsButton()
         
     }
-    
-    func setupAlternativeTranslationScrollView() {
         
-        // Add Header Label and Scroll View to the Main Content View
-        mainStackView.addArrangedSubview(alternativesHeaderLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
-        mainStackView.addArrangedSubview(alternativesScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0))
+    func setupAlternativesView() {
         
-        // Add Stack View to Scroll View
-        alternativesScrollView.addSubview(alternativesStackView)
+        self.alternativeCard = AltTranslationsView(frame: .zero, searchedText: self.searchInput, dictionaryResult: self.dictionaryResult, searchInfo: self.searchInfo)
+        self.alternativeCard.delegate = self
+        mainStackView.addArrangedSubview(alternativeCard, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         
-        // Anchor StackView Within Scroll View
-        alternativesStackView.anchor(top: alternativesScrollView.topAnchor,
-                                     bottom: alternativesScrollView.bottomAnchor,
-                                     leading: alternativesScrollView.leadingAnchor,
-                                     trailing: alternativesScrollView.trailingAnchor,
-                                     height: nil,
-                                     width: nil)
-        
-        // Prevent Vertical Scrolling
-        alternativesStackView.heightAnchor.constraint(equalTo: alternativesScrollView.heightAnchor).isActive = true
-        
-        
-        // Populate Alternative Translations Stack View
-        populateAlternativeTranslationsStackView()
-        
-    }
-    
-    func populateAlternativeTranslationsStackView() {
-        
-        if alternateTranslations.count == 0 {
-            
-            alternativesHeaderLabel.superview?.isHidden = true
-            alternativesScrollView.superview?.isHidden = true
-            
-        }
-            
-        else {
-            
-            alternativesHeaderLabel.superview?.isHidden = false
-            alternativesScrollView.superview?.isHidden = false
-            
-        }
-        
-        for alt in alternateTranslations {
-            
-            // Create Background Shadow View
-            let myView = UIView()
-            alternativesStackView.addArrangedSubview(myView)
-            myView.widthAnchor.constraint(equalToConstant: 220).isActive = true
-            myView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-            
-            // Create Content View
-            let myContentView = UIView()
-            myContentView.backgroundColor = .white
-            myContentView.roundCorners(cornerRadius: 10)
-            myView.addSubview(myContentView)
-            myContentView.anchor(top: myView.topAnchor,
-                                 bottom: myView.bottomAnchor,
-                                 leading: myView.leadingAnchor,
-                                 trailing: myView.trailingAnchor,
-                                 height: nil,
-                                 width: nil)
-            
-            // Formate Atrributed Text
-            let attText = NSMutableAttributedString(string: alt)
-            attText.addAttribute(.font, value: UIFont.systemFont(ofSize: 30), range: NSRange(location: 0, length: attText.length))
-            
-            // Create Label
-            let myLabel = UILabel()
-            myLabel.attributedText = attText
-            myLabel.numberOfLines = 2
-            myLabel.backgroundColor = .white
-            myLabel.textAlignment = .left
-            myContentView.addSubview(myLabel)
-            
-            // Anchor Label so its left aligned but stays in center if text doesn't fill the view
-            myLabel.translatesAutoresizingMaskIntoConstraints = false
-            myLabel.topAnchor.constraint(equalTo: myContentView.topAnchor, constant: 10).isActive = true
-            myLabel.bottomAnchor.constraint(equalTo: myContentView.bottomAnchor, constant: -10).isActive = true
-            myLabel.centerXAnchor.constraint(equalTo: myContentView.centerXAnchor).isActive = true
-            myLabel.widthAnchor.constraint(lessThanOrEqualTo: myContentView.widthAnchor, constant: -20).isActive = true
-            
-            // Create Clear button to overlay the label
-            let myButton = QueryButton()
-            myButton.queryText = alt
-            myButton.backgroundColor = .clear
-            myButton.addTarget(self, action: #selector(alternativesButtonPressed(_:)), for: .touchUpInside)
-            myButton.addTarget(self, action: #selector(touchDown1(_:)), for: .touchDown)
-            myButton.addTarget(self, action: #selector(cancelEvent1(_:)), for: .touchUpOutside)
-            myButton.addTarget(self, action: #selector(cancelEvent1(_:)), for: .touchDragOutside)
-            myButton.addTarget(self, action: #selector(touchDown1(_:)), for: .touchDragInside)
-            
-            // Anchor Button
-            myContentView.addSubview(myButton)
-            myButton.anchor(top: myContentView.topAnchor,
-                            bottom: myContentView.bottomAnchor,
-                            leading: myContentView.leadingAnchor,
-                            trailing: myContentView.trailingAnchor,
-                            height: nil,
-                            width: nil)
+        if self.dictionaryResult.count == 0 {
+            self.alternativeCard.isHidden = true
         }
         
     }
@@ -702,6 +574,10 @@ extension LearnMoreController {
 
 extension LearnMoreController: ResultCardDelegate {
     
+    func presentReportErrorAlert(alert: UIAlertController) {
+        self.present(alert, animated: true)
+    }
+    
     func presentDeckSelectionView() {
         
         let vc = DeckSelectingController()
@@ -757,7 +633,6 @@ extension LearnMoreController {
         wordArray = []
         bottomLabelText = ""
         wordModelArray = []
-        alternateTranslations = []
         soundItOutColors = []
         learnMoreArray = []
         learnMoreIsFullyMatched = true
@@ -773,9 +648,12 @@ extension LearnMoreController {
             self.startLoadingScreen()
         }
         
+        // Create And Enter Dispatch Group For Tranlsation Request
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        
         // 1. Translate
-        // 2. Populate wordModelArray and alternativesArray
-        // 3. Color Words
+        // 2. Color Words
         runSearchsequence(searchText: searchText, searchInfo: searchInfo) { (searchStatus) in
             
             self.learnMoreSearchStatus = searchStatus
@@ -832,11 +710,7 @@ extension LearnMoreController {
                     }
                 }
                 
-                // End Loading Screen
-                DispatchQueue.main.async {
-                    self.endLoadingScreen()
-                    self.pushToLearnMoreController(searchInfo)
-                }
+                dispatchGroup.leave()
                 
             case .nilTranslation,
                  .noExistingWordModels,
@@ -849,10 +723,29 @@ extension LearnMoreController {
                     
                 }
                 
-                DispatchQueue.main.async {
-                    self.endLoadingScreen()
-                    self.pushToLearnMoreController(searchInfo)
-                }
+                self.isFullyMatched = false
+                
+                dispatchGroup.leave()
+            }
+        }
+        
+        if !(AzureTranslationManager.shared.sourceLanguageCode == "en" && AzureTranslationManager.shared.targetLanguageCode == "en") {
+            
+            dispatchGroup.enter()
+            AzureTranslationManager.shared.fetchDictionaryTranslations { (dictionaryResult) in
+                
+                self.dictionaryResult = dictionaryResult
+                dispatchGroup.leave()
+                
+            }
+            
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            
+            DispatchQueue.main.async {
+                self.endLoadingScreen()
+                self.pushToLearnMoreController(searchInfo)
             }
         }
     }
@@ -902,9 +795,6 @@ extension LearnMoreController {
                         completion(.nilTranslation)
                         return
                     }
-                    
-                    // Populate Alternate Translations
-
                     
                     // If the Translation Returns an empty string we want the result to be the original searched Text
                     if translation == "" {
@@ -995,10 +885,7 @@ extension LearnMoreController {
                         completion(.nilTranslation)
                         return
                     }
-                    
-                    // Populate Alternate Translations
-
-                    
+      
                     // If the Translation Returns an empty string we want the result to be the original searched Text
                     if translation == "" {
                         
@@ -1063,10 +950,11 @@ extension LearnMoreController {
         vc.wordArray = self.wordArray
         vc.wordModelArray = self.wordModelArray
         vc.results = self.results
-        vc.alternateTranslations = self.alternateTranslations
+        vc.dictionaryResult = self.dictionaryResult
         vc.learnMoreArray = self.learnMoreArray
         vc.searchStatus = self.searchStatus
         vc.isFullyMatched = self.learnMoreIsFullyMatched
+        vc.checkForColorError()
         
         // Update Search History
         if Utilities.shared.isUserSignedIn {
@@ -1104,4 +992,53 @@ extension LearnMoreController {
     }
 }
 
+// MARK: - AltTranslation Delegate Methods
+extension LearnMoreController: AltTranslationDelegate {
+    
+    func searchBackTranslation(backTranslation: String, searchInfo: SearchInfo) {
+        
+        startSearchSequence(searchText: backTranslation, searchInfo)
+    }
 
+}
+
+// MARK: - Scroll View Delegate Methods
+extension LearnMoreController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if !searchStatusView.superview!.isHidden {
+            
+            DispatchQueue.main.async {
+                
+                self.searchStatusView.superview?.isHidden = true
+                
+                UIView.animate(withDuration: 0.5) {
+                    self.view.layoutIfNeeded()
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Utilities
+extension LearnMoreController {
+    
+    func checkForColorError() {
+        
+        if !self.isFullyMatched {
+            
+            var text = ""
+            
+            if self.searchInfo.searchType == .englishToNative {
+                text = self.searchInput
+            }
+            
+            else {
+                text = self.searchOutput
+            }
+            
+            FirebaseManager.shared.writeColorError(text: text)
+        }
+    }
+}

@@ -70,9 +70,9 @@ class AzureTranslationManager: NSObject {
                 return
             }
             
-            // Add Auto Detect
-            let supportedLanguage0 = SupportedLanguage(name: "Auto Detect", nativeName: "Auto Detect", code: "")
-            self.supportedLanguages.append(supportedLanguage0)
+//            // Add Auto Detect
+//            let supportedLanguage0 = SupportedLanguage(name: "Auto Detect", nativeName: "Auto Detect", code: "")
+//            self.supportedLanguages.append(supportedLanguage0)
             
             // Add English
             let supportedLanguage = SupportedLanguage(name: "English", nativeName: "English", code: "en")
@@ -171,13 +171,16 @@ class AzureTranslationManager: NSObject {
         
     }
     
-    func fetchDictionaryTranslations() {
+    func fetchDictionaryTranslations(completion: @escaping(_ dictionaryResults: [String : [DictionaryResult]]) -> Void) {
+        
+        var results = [String : [DictionaryResult]]()
         
         // Setup URL
         let urlString = "https://api.cognitive.microsofttranslator.com/dictionary/lookup?api-version=3.0&from=\(sourceLanguageCode!)&to=\(targetLanguageCode!)"
         
         guard let url = URL(string: urlString) else {
             print("Unable to form url")
+            completion(results)
             return
         }
         
@@ -193,6 +196,7 @@ class AzureTranslationManager: NSObject {
         
         guard let jsonToTranslate = try? jsonEncoder.encode(encodedLookupText) else {
             print("Unable to encode text to translate")
+            completion(results)
             return
         }
         
@@ -211,6 +215,7 @@ class AzureTranslationManager: NSObject {
             if let error = error {
                 
                 print("Error fetching dictionary translations: \(error.localizedDescription)")
+                completion(results)
                 return
                 
             }
@@ -218,6 +223,7 @@ class AzureTranslationManager: NSObject {
             // Unwrap Data
             guard let data = data else {
                 print("Data is nil")
+                completion(results)
                 return
             }
             
@@ -226,10 +232,31 @@ class AzureTranslationManager: NSObject {
             
             guard let dictionaryResponse = try? decoder.decode(DictionaryResponse.self, from: data) else {
                 print("Unable to Decode Data")
+                completion(results)
                 return
             }
             
-            print(dictionaryResponse)
+            for translation in dictionaryResponse.translations {
+                
+                let backTranslations = translation.backTranslations.map { $0.displayText }
+                
+                let newDictResult = DictionaryResult(displayTarget: translation.displayTarget, backTranslations: backTranslations)
+                
+                if let _ = results[translation.posTag] {
+                    
+                    results[translation.posTag]!.append(newDictResult)
+                    
+                }
+                
+                else {
+                    
+                    results[translation.posTag] = [newDictResult]
+                    
+                }
+                
+            }
+            
+            completion(results)
             
         }
         task.resume()

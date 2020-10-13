@@ -51,6 +51,13 @@ struct BackTranslations: Codable {
     var frequencyCount: Int
 }
 
+// Used for moving the Data Around, Not for Network Request
+struct DictionaryResult {
+    
+    var displayTarget: String
+    var backTranslations: [String]
+}
+
 //*****
 //**********
 //*****
