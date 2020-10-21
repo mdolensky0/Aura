@@ -7,13 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D44851925365FDC00E42C39 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D44851825365FDC00E42C39 /* TestController.swift */; };
+		1DA7B30A2538E6820068330B /* DefaultDecoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B3092538E6820068330B /* DefaultDecoding.swift */; };
+		1DA7B30E253DEF4A0068330B /* PopUpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B30D253DEF4A0068330B /* PopUpManager.swift */; };
+		1DA7B313253DF5E70068330B /* TestResultPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B312253DF5E70068330B /* TestResultPopUpView.swift */; };
+		1DA7B31F253F45860068330B /* TutorialController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B31E253F45860068330B /* TutorialController.swift */; };
+		1DA7B323253F52040068330B /* TutorialCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B322253F52040068330B /* TutorialCell.swift */; };
 		1DD2BAF825322CD000811F89 /* AnimatedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2BAF725322CD000811F89 /* AnimatedButton.swift */; };
-		39E1B2EBE1BEE7B06A549D59 /* Pods_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0687879DAA284F1027A6A628 /* Pods_Aura.framework */; };
 		7D03998C252662690070DB8E /* UITextFieldPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998B252662680070DB8E /* UITextFieldPadding.swift */; };
 		7D0399902526AB8A0070DB8E /* ForgotPasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998F2526AB8A0070DB8E /* ForgotPasswordController.swift */; };
 		7D05654B25003C5900025467 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05654A25003C5900025467 /* VideoCell.swift */; };
 		7D0C128F24DB4B230024FD31 /* DeckController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0C128E24DB4B230024FD31 /* DeckController.swift */; };
-		7D0C129124DB4B390024FD31 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0C129024DB4B390024FD31 /* TestController.swift */; };
+		7D0C129124DB4B390024FD31 /* StudyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0C129024DB4B390024FD31 /* StudyController.swift */; };
 		7D0FCC7B2514205C00B11F5B /* AltTranslationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0FCC7A2514205C00B11F5B /* AltTranslationsView.swift */; };
 		7D0FCC7D2514265E00B11F5B /* AlternativeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0FCC7C2514265E00B11F5B /* AlternativeCell.swift */; };
 		7D0FCC7F251945C600B11F5B /* CVSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0FCC7E251945C600B11F5B /* CVSectionHeader.swift */; };
@@ -129,17 +134,23 @@
 		7DFBA8CF24B418A200618332 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFBA8CE24B418A200618332 /* Assets.xcassets */; };
 		7DFBA8D224B418A200618332 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DFBA8D024B418A200618332 /* LaunchScreen.storyboard */; };
 		7DFF962724DC9679008A93A9 /* ResultCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF962624DC9679008A93A9 /* ResultCardView.swift */; };
+		BE768A4362EDA1278661841E /* Pods_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B452EF264FBDFE7ADE98D3D4 /* Pods_Aura.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0687879DAA284F1027A6A628 /* Pods_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A46EE129FAF371A9E33436A /* Pods-Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.debug.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.debug.xcconfig"; sourceTree = "<group>"; };
+		1D44851825365FDC00E42C39 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
+		1DA7B3092538E6820068330B /* DefaultDecoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultDecoding.swift; sourceTree = "<group>"; };
+		1DA7B30D253DEF4A0068330B /* PopUpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpManager.swift; sourceTree = "<group>"; };
+		1DA7B312253DF5E70068330B /* TestResultPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultPopUpView.swift; sourceTree = "<group>"; };
+		1DA7B31E253F45860068330B /* TutorialController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialController.swift; sourceTree = "<group>"; };
+		1DA7B322253F52040068330B /* TutorialCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialCell.swift; sourceTree = "<group>"; };
 		1DD2BAF725322CD000811F89 /* AnimatedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedButton.swift; sourceTree = "<group>"; };
-		3098BAB89E76DCF1D2410AB1 /* Pods-Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.debug.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.debug.xcconfig"; sourceTree = "<group>"; };
 		7D03998B252662680070DB8E /* UITextFieldPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPadding.swift; sourceTree = "<group>"; };
 		7D03998F2526AB8A0070DB8E /* ForgotPasswordController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordController.swift; sourceTree = "<group>"; };
 		7D05654A25003C5900025467 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
 		7D0C128E24DB4B230024FD31 /* DeckController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckController.swift; sourceTree = "<group>"; };
-		7D0C129024DB4B390024FD31 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
+		7D0C129024DB4B390024FD31 /* StudyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyController.swift; sourceTree = "<group>"; };
 		7D0FCC7A2514205C00B11F5B /* AltTranslationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AltTranslationsView.swift; sourceTree = "<group>"; };
 		7D0FCC7C2514265E00B11F5B /* AlternativeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternativeCell.swift; sourceTree = "<group>"; };
 		7D0FCC7E251945C600B11F5B /* CVSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVSectionHeader.swift; sourceTree = "<group>"; };
@@ -257,7 +268,8 @@
 		7DFBA8D124B418A200618332 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7DFBA8D324B418A200618332 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7DFF962624DC9679008A93A9 /* ResultCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCardView.swift; sourceTree = "<group>"; };
-		C7297326C784963B5DDBF4B4 /* Pods-Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.release.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.release.xcconfig"; sourceTree = "<group>"; };
+		B452EF264FBDFE7ADE98D3D4 /* Pods_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB9C8C9C6952C5D008F66A5B /* Pods-Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.release.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -265,28 +277,45 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39E1B2EBE1BEE7B06A549D59 /* Pods_Aura.framework in Frameworks */,
+				BE768A4362EDA1278661841E /* Pods_Aura.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F311CFEE6AC64418DA6DD74 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B452EF264FBDFE7ADE98D3D4 /* Pods_Aura.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1DA7B30C253DEED80068330B /* Custom Scroll Views */ = {
+			isa = PBXGroup;
+			children = (
+				7D53A71E252FFDD200BDC593 /* HorizontalScrollView.swift */,
+				7D53A72325300A1100BDC593 /* VerticalScrollView.swift */,
+			);
+			path = "Custom Scroll Views";
+			sourceTree = "<group>";
+		};
+		1DA7B311253DF5B70068330B /* PopUp Views */ = {
+			isa = PBXGroup;
+			children = (
+				1DA7B312253DF5E70068330B /* TestResultPopUpView.swift */,
+			);
+			path = "PopUp Views";
+			sourceTree = "<group>";
+		};
 		4DB00D3AE7894B3D91C610EC /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3098BAB89E76DCF1D2410AB1 /* Pods-Aura.debug.xcconfig */,
-				C7297326C784963B5DDBF4B4 /* Pods-Aura.release.xcconfig */,
+				0A46EE129FAF371A9E33436A /* Pods-Aura.debug.xcconfig */,
+				CB9C8C9C6952C5D008F66A5B /* Pods-Aura.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		605824D00F3EC70C1A73A213 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				0687879DAA284F1027A6A628 /* Pods_Aura.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7D0C129224DB4B470024FD31 /* FlashCard Stack */ = {
@@ -295,7 +324,8 @@
 				7D6BF278251008620086C438 /* Flashcard Views */,
 				7D66D8A124B424B20019BFF0 /* FlashCardController.swift */,
 				7D0C128E24DB4B230024FD31 /* DeckController.swift */,
-				7D0C129024DB4B390024FD31 /* TestController.swift */,
+				7D0C129024DB4B390024FD31 /* StudyController.swift */,
+				1D44851825365FDC00E42C39 /* TestController.swift */,
 			);
 			path = "FlashCard Stack";
 			sourceTree = "<group>";
@@ -324,10 +354,12 @@
 		7D15DB6424C2A70A009ACDB4 /* Firebase Models */ = {
 			isa = PBXGroup;
 			children = (
+				7D15DBCD24C625FA009ACDB4 /* UserModel.swift */,
 				7D15DB6024C2A700009ACDB4 /* WordModel.swift */,
 				7D2F9A0024DF3F77009E2139 /* DeckModel.swift */,
 				7D1B10742512D9E80000BFE3 /* LessonModel.swift */,
 				7D214220251E865100787DD6 /* TranslationError.swift */,
+				1DA7B3092538E6820068330B /* DefaultDecoding.swift */,
 			);
 			path = "Firebase Models";
 			sourceTree = "<group>";
@@ -409,6 +441,7 @@
 		7D600BF124D0FF7B002EA266 /* Custom Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				1DD2BAF725322CD000811F89 /* AnimatedButton.swift */,
 				7D15DB6A24C2ABDB009ACDB4 /* SoundButton.swift */,
 				7D15DBD924CA417A009ACDB4 /* QueryButton.swift */,
 			);
@@ -496,6 +529,7 @@
 			isa = PBXGroup;
 			children = (
 				7DFBA8C924B4189500618332 /* TabBarController.swift */,
+				1DA7B31E253F45860068330B /* TutorialController.swift */,
 				7D6BF27C25100A6C0086C438 /* Settings Stack */,
 				7D6BF279251009350086C438 /* Home Stack */,
 				7D77098A24B7A2660009B93B /* Search Stack */,
@@ -517,6 +551,7 @@
 				7D530E3024E37B5E00C0C209 /* FlashcardCell.swift */,
 				7D05654A25003C5900025467 /* VideoCell.swift */,
 				7D0FCC7C2514265E00B11F5B /* AlternativeCell.swift */,
+				1DA7B322253F52040068330B /* TutorialCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -551,7 +586,7 @@
 				7DFBA8C424B4189500618332 /* Aura */,
 				7DFBA8C324B4189500618332 /* Products */,
 				4DB00D3AE7894B3D91C610EC /* Pods */,
-				605824D00F3EC70C1A73A213 /* Frameworks */,
+				0F311CFEE6AC64418DA6DD74 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -597,9 +632,8 @@
 				7D530E3624E4E87300C0C209 /* NoScrollTableView.swift */,
 				7DCAC7A424F835F40013D134 /* SearchStatusView.swift */,
 				7D03998B252662680070DB8E /* UITextFieldPadding.swift */,
-				7D53A71E252FFDD200BDC593 /* HorizontalScrollView.swift */,
-				7D53A72325300A1100BDC593 /* VerticalScrollView.swift */,
-				1DD2BAF725322CD000811F89 /* AnimatedButton.swift */,
+				1DA7B311253DF5B70068330B /* PopUp Views */,
+				1DA7B30C253DEED80068330B /* Custom Scroll Views */,
 				7D600BF124D0FF7B002EA266 /* Custom Buttons */,
 			);
 			path = View;
@@ -608,7 +642,6 @@
 		7DFBA8DB24B41BA900618332 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				7D15DBCD24C625FA009ACDB4 /* UserModel.swift */,
 				7DCAC79E24F1D5B90013D134 /* KeyType.swift */,
 				7D7ECFF72509A867008573A7 /* AzureTranslationModel.swift */,
 				7D53A71C252FFBA800BDC593 /* Search Models */,
@@ -616,6 +649,7 @@
 				7D15DB6424C2A70A009ACDB4 /* Firebase Models */,
 				7D15DB5424C29520009ACDB4 /* Realm Models */,
 				7D15DB6924C2A8A6009ACDB4 /* Coloring Models */,
+				1DA7B30D253DEF4A0068330B /* PopUpManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -627,11 +661,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DFBA8D624B418A200618332 /* Build configuration list for PBXNativeTarget "Aura" */;
 			buildPhases = (
-				660F8FB07D8F7FAC010B766E /* [CP] Check Pods Manifest.lock */,
+				D31B8E79BE8E1C7F1E5D2B5D /* [CP] Check Pods Manifest.lock */,
 				7DFBA8BE24B4189500618332 /* Sources */,
 				7DFBA8BF24B4189500618332 /* Frameworks */,
 				7DFBA8C024B4189500618332 /* Resources */,
-				3C5B768FB5D153ECFB9BBD2A /* [CP] Embed Pods Frameworks */,
+				9078142982F417AAF1561D06 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -649,7 +683,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Max Dolensky";
 				TargetAttributes = {
 					7DFBA8C124B4189500618332 = {
@@ -738,7 +772,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3C5B768FB5D153ECFB9BBD2A /* [CP] Embed Pods Frameworks */ = {
+		9078142982F417AAF1561D06 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -755,7 +789,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Aura/Pods-Aura-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		660F8FB07D8F7FAC010B766E /* [CP] Check Pods Manifest.lock */ = {
+		D31B8E79BE8E1C7F1E5D2B5D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -791,6 +825,7 @@
 				7D53A71F252FFDD200BDC593 /* HorizontalScrollView.swift in Sources */,
 				7D66D8A224B424B20019BFF0 /* FlashCardController.swift in Sources */,
 				7D99A37224D9EC7A006C977E /* SignInController.swift in Sources */,
+				1DA7B323253F52040068330B /* TutorialCell.swift in Sources */,
 				7D0FCC81251C296100B11F5B /* EditLauncher.swift in Sources */,
 				7D15DBCE24C625FB009ACDB4 /* UserModel.swift in Sources */,
 				7D15DB5324C29517009ACDB4 /* WildCardModel.swift in Sources */,
@@ -804,6 +839,7 @@
 				7D530E3B24E7115B00C0C209 /* TestFlashcard.swift in Sources */,
 				7DCAC7A524F835F40013D134 /* SearchStatusView.swift in Sources */,
 				7D03998C252662690070DB8E /* UITextFieldPadding.swift in Sources */,
+				1DA7B30A2538E6820068330B /* DefaultDecoding.swift in Sources */,
 				7D0FCC7D2514265E00B11F5B /* AlternativeCell.swift in Sources */,
 				7D15DBD224C631D9009ACDB4 /* SupportedLanguageCell.swift in Sources */,
 				7D2F9A0524E03414009E2139 /* DeckCell.swift in Sources */,
@@ -818,7 +854,9 @@
 				7DD1B09F24BD06AB0052BC7B /* SoundItOutCell.swift in Sources */,
 				7DFBA8C624B4189500618332 /* AppDelegate.swift in Sources */,
 				7DCAC79D24F0526B0013D134 /* LearnMoreController.swift in Sources */,
+				1DA7B31F253F45860068330B /* TutorialController.swift in Sources */,
 				7D530E3924E4E8FE00C0C209 /* ColorKeyView.swift in Sources */,
+				1DA7B30E253DEF4A0068330B /* PopUpManager.swift in Sources */,
 				7D15DB4F24C29481009ACDB4 /* RealmPopulater.swift in Sources */,
 				7D6BF28225100E7B0086C438 /* SettingsLauncher.swift in Sources */,
 				7DFBA8C824B4189500618332 /* SceneDelegate.swift in Sources */,
@@ -830,14 +868,16 @@
 				7D66D8A024B4249B0019BFF0 /* LoginController.swift in Sources */,
 				7D530E3324E3841000C0C209 /* FlashcardDetailsView.swift in Sources */,
 				7D66D8A424B424C20019BFF0 /* LessonsController.swift in Sources */,
+				1D44851925365FDC00E42C39 /* TestController.swift in Sources */,
 				7D2F9A0324E02E4B009E2139 /* DeckSelectingController.swift in Sources */,
 				7D0FCC7F251945C600B11F5B /* CVSectionHeader.swift in Sources */,
 				7D7ECFFA250C0136008573A7 /* TextToSpeechManager.swift in Sources */,
 				7DFF962724DC9679008A93A9 /* ResultCardView.swift in Sources */,
-				7D0C129124DB4B390024FD31 /* TestController.swift in Sources */,
+				7D0C129124DB4B390024FD31 /* StudyController.swift in Sources */,
 				7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */,
 				7DCAC7A324F6E1100013D134 /* SearchStatus.swift in Sources */,
 				7D7ECFF82509A867008573A7 /* AzureTranslationModel.swift in Sources */,
+				1DA7B313253DF5E70068330B /* TestResultPopUpView.swift in Sources */,
 				7D77098524B566300009B93B /* Extensions.swift in Sources */,
 				7D2F9A0124DF3F77009E2139 /* DeckModel.swift in Sources */,
 				7D77098C24B7A2B20009B93B /* ResultsController.swift in Sources */,
@@ -896,6 +936,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -956,6 +997,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -986,7 +1028,7 @@
 		};
 		7DFBA8D724B418A200618332 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3098BAB89E76DCF1D2410AB1 /* Pods-Aura.debug.xcconfig */;
+			baseConfigurationReference = 0A46EE129FAF371A9E33436A /* Pods-Aura.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -1007,7 +1049,7 @@
 		};
 		7DFBA8D824B418A200618332 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C7297326C784963B5DDBF4B4 /* Pods-Aura.release.xcconfig */;
+			baseConfigurationReference = CB9C8C9C6952C5D008F66A5B /* Pods-Aura.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

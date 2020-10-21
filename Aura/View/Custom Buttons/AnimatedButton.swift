@@ -11,6 +11,7 @@ import UIKit
 class AnimatedButton: UIButton {
     
     var index = 0
+    var isFlat = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,17 +35,30 @@ class AnimatedButton: UIButton {
     
     @objc func touchDown(_ sender: UIButton) {
         
-        UIView.animate(withDuration: 0.1) {
-            sender.superview?.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-            sender.superview?.layer.shadowOpacity = 0.5
+        if !isFlat {
+            UIView.animate(withDuration: 0.1) {
+                sender.superview?.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                sender.superview?.layer.shadowOpacity = 0.5
+            }
+        } else {
+            UIView.animate(withDuration: 0.1) {
+                sender.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            }
         }
+
     }
     
     @objc func cancelEvent(_ sender: UIButton) {
         
-        UIView.animate(withDuration: 0.1) {
-            sender.superview?.transform = .identity
-            sender.superview?.layer.shadowOpacity = 0.3
+        if !isFlat {
+            UIView.animate(withDuration: 0.1) {
+                sender.superview?.transform = .identity
+                sender.superview?.layer.shadowOpacity = 0.3
+            }
+        } else {
+            UIView.animate(withDuration: 0.1) {
+                sender.transform = .identity
+            }
         }
     }
 }

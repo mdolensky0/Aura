@@ -160,21 +160,21 @@ class MyDecksScrollView: HorizontalScrollView {
     
     func getPrevScoreTextAndColor(deck: DeckModel) -> (String, UIColor) {
         
-        let formatted = String(format: "%.1f", deck.prevScore)
+        let formatted = String(format: "%.1f", deck.avgScore)
         
-        if deck.prevScore < 0 {
+        if deck.avgScore < 0 {
             return ("-%", .black)
         }
         
-        else if deck.prevScore <= 50 {
+        else if deck.avgScore <= 50 {
             return ("\(formatted)%", .red)
         }
         
-        else if deck.prevScore <= 69 {
+        else if deck.avgScore <= 69 {
             return ("\(formatted)%", .orange)
         }
         
-        else if deck.prevScore <= 79 {
+        else if deck.avgScore <= 79 {
             return ("\(formatted)%", K.Colors.yellow)
         }
         

@@ -260,7 +260,7 @@ class FlashCardController: UIViewController {
                 let newDeckName = Utilities.shared.getUniqueDeckName(from: textField.text!, given: Utilities.shared.user!.decks)
                 
                 // Create New Deck And Save To Firebase
-                let newDeck = DeckModel(name: newDeckName, numberOfCards: 0, prevScore: -1, numRight: 0, numSeen: 0, cards: [FlashcardModel]())
+                let newDeck = DeckModel(name: newDeckName)
                 Utilities.shared.user?.decks.append(newDeck)
                 
                 FirebaseManager.shared.updateUser(user: Utilities.shared.user!)

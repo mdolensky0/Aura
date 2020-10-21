@@ -49,27 +49,36 @@ class KeyCardView: UIView {
         
     }()
     
-    var soundButton: UIButton = {
+    var soundButton: AnimatedButton = {
         
-        let button = UIButton()
+        let button = AnimatedButton(frame: .zero)
+        
         if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "speaker.3.fill"), for: .normal)
+            button.setImage(UIImage(systemName: "play.fill"), for: .normal)
         } else {
-            button.setImage(#imageLiteral(resourceName: "speaker.3.fill").withRenderingMode(.alwaysTemplate), for: .normal)
+            button.setImage(#imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate), for: .normal)
         }
+        
+        button.contentMode = .center
         button.backgroundColor = .white
-        button.tintColor = .black
+        button.tintColor = K.DesignColors.primary
+        
+        button.widthAnchor.constraint(equalToConstant: 42).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        button.roundCorners(cornerRadius: 21)
+        
         button.addTarget(self, action: #selector(soundButtonPressed(_:)), for: .touchUpInside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.imageView?.translatesAutoresizingMaskIntoConstraints = false
-        button.imageView?.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        button.imageView?.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        button.imageView?.contentMode = .scaleAspectFit
         return button
+        
+    }()
+    
+    let soundBackgroundView: UIView = {
+        
+        let view = UIView()
+        view.widthAnchor.constraint(equalToConstant: 42).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        view.roundCorners(cornerRadius: 21)
+        return view
         
     }()
     
@@ -123,6 +132,7 @@ class KeyCardView: UIView {
         // Background and Shadow
         self.backgroundColor = .white
         self.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 20)
+        self.soundBackgroundView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 2, height: 2), radius: 2, cornerRadius: 21)
         
         // Fix the width and height of the card
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -131,7 +141,7 @@ class KeyCardView: UIView {
         
         // Add subviews
         self.addSubview(contentView)
-        self.addSubview(soundButton)
+        self.addSubview(soundBackgroundView)
         self.addSubview(learnMoreButton)
         
         // If there is text there is no color circle
@@ -142,7 +152,7 @@ class KeyCardView: UIView {
             textLabel.translatesAutoresizingMaskIntoConstraints = false
             textLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
             textLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
-            textLabel.bottomAnchor.constraint(lessThanOrEqualTo: soundButton.topAnchor, constant: -20).isActive = true
+            textLabel.bottomAnchor.constraint(lessThanOrEqualTo: soundBackgroundView.topAnchor, constant: -20).isActive = true
         }
         
         else {
@@ -152,7 +162,7 @@ class KeyCardView: UIView {
             colorCircle.translatesAutoresizingMaskIntoConstraints = false
             colorCircle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
             colorCircle.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
-            colorCircle.bottomAnchor.constraint(lessThanOrEqualTo: soundButton.topAnchor, constant: -20).isActive = true
+            colorCircle.bottomAnchor.constraint(lessThanOrEqualTo: soundBackgroundView.topAnchor, constant: -20).isActive = true
             
         }
         
@@ -163,7 +173,7 @@ class KeyCardView: UIView {
                            height: nil,
                            width: nil)
         
-        soundButton.anchor(top: nil,
+        soundBackgroundView.anchor(top: nil,
                            bottom: contentView.bottomAnchor,
                            leading: contentView.leadingAnchor,
                            trailing: nil,
@@ -171,19 +181,19 @@ class KeyCardView: UIView {
                            width: nil,
                            padding: UIEdgeInsets(top: 40, left: 40, bottom: -25, right: 0))
         
+        soundBackgroundView.addSubview(soundButton)
+        soundButton.anchor(top: soundBackgroundView.topAnchor,
+                           bottom: soundBackgroundView.bottomAnchor,
+                           leading: soundBackgroundView.leadingAnchor,
+                           trailing: soundBackgroundView.trailingAnchor,
+                           height: nil,
+                           width: nil)
+        
         learnMoreButton.translatesAutoresizingMaskIntoConstraints = false
-        learnMoreButton.centerYAnchor.constraint(equalTo: soundButton.centerYAnchor).isActive = true
+        learnMoreButton.centerYAnchor.constraint(equalTo: soundBackgroundView.centerYAnchor).isActive = true
         learnMoreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40).isActive = true
-        
-//        learnMoreButton.anchor(top: nil,
-//                               bottom: soundButton.bottomAnchor,
-//                               leading: nil,
-//                               trailing: contentView.trailingAnchor,
-//                               height: nil,
-//                               width: nil,
-//                               padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -40))
-        
-        soundButton.trailingAnchor.constraint(lessThanOrEqualTo: learnMoreButton.leadingAnchor, constant: -20).isActive = true
+                
+        soundBackgroundView.trailingAnchor.constraint(lessThanOrEqualTo: learnMoreButton.leadingAnchor, constant: -20).isActive = true
         
         if color == K.Colors.lightGrey || color == K.Colors.yellow {
             
@@ -200,16 +210,9 @@ class KeyCardView: UIView {
     
     @objc func soundButtonPressed(_ sender: UIButton) {
         
-        UIView.animate(withDuration: 0.2, animations: {
-            
-            sender.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
-            
-        }) { (completion) in
-            
-            UIView.animate(withDuration: 0.2) {
-                sender.transform = .identity
-            }
-            
+        UIView.animate(withDuration: 0.2) {
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
         }
         
         if let audioString = audioString {

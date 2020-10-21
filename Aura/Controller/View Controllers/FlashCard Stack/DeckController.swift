@@ -56,47 +56,7 @@ class DeckController: UIViewController {
     
     var flashcardsScrollView: FlashcardsScrollView?
     
-    var testYourselfBackground: UIView = {
-        
-        let background = UIView()
-        background.translatesAutoresizingMaskIntoConstraints = false
-        background.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        return background
-        
-    }()
-    
-    var testYourselfButton: UIButton = {
-        
-        let button = UIButton()
-        button.backgroundColor = .white
-        button.setTitle("Test Yourself", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(takeTest(_:)), for: .touchUpInside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
-        button.roundCorners(cornerRadius: 10)
-        return button
-        
-    }()
-    
-    let statsLabel: UILabel = {
-        
-        let label = UILabel()
-        label.numberOfLines = 2
-        label.textAlignment = .left
-        label.backgroundColor = .white
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        label.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: -10, right: -10)
-        label.roundCorners(cornerRadius: 10)
-        return label
-        
-    }()
-    
-    var statsLabelBackground: UIView = {
+    var studyLoopBackground: UIView = {
         
         let background = UIView()
         background.translatesAutoresizingMaskIntoConstraints = false
@@ -105,6 +65,102 @@ class DeckController: UIViewController {
         
     }()
     
+    var takeTestBackground: UIView = {
+        
+        let background = UIView()
+        background.translatesAutoresizingMaskIntoConstraints = false
+        background.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        return background
+        
+    }()
+    
+    var studyLoopButton: AnimatedButton = {
+        
+        let button = AnimatedButton(frame: .zero)
+        button.backgroundColor = K.DesignColors.primary
+        button.setTitle("Start Studying", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(startLoop(_:)), for: .touchUpInside)
+        button.roundCorners(cornerRadius: 10)
+        return button
+        
+    }()
+    
+    var takeTestButton: AnimatedButton = {
+        
+        let b = AnimatedButton(frame: .zero)
+        b.backgroundColor = K.DesignColors.primary
+        b.setTitle("Test Yourself", for: .normal)
+        b.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+        b.setTitleColor(.white, for: .normal)
+        b.addTarget(self, action: #selector(takeTest(_:)), for: .touchUpInside)
+        return b
+        
+    }()
+    
+    var numCardsTitle: UILabel = {
+        let l = UILabel()
+        l.textAlignment = .right
+        l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        l.text = "Number of cards:"
+        return l
+        
+    }()
+        
+    var numCardsLabel: UILabel = {
+        let l = UILabel()
+        l.textAlignment = .left
+        return l
+        
+    }()
+    
+    var avgScoreTitle: UILabel = {
+        let l = UILabel()
+        l.textAlignment = .right
+        l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        l.text = "Average study score:"
+        return l
+        
+    }()
+    
+    var avgScoreLabel: UILabel = {
+        let l = UILabel()
+        l.textAlignment = .left
+        return l
+    }()
+    
+    var prevTestScoreTitle: UILabel = {
+        let l = UILabel()
+        l.textAlignment = .right
+        l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        l.text = "Previous test score:"
+        return l
+        
+    }()
+    
+    var prevTestScoreLabel: UILabel = {
+        let l = UILabel()
+        l.textAlignment = .left
+        return l
+    }()
+    
+    var statsViewContainer: UIView = {
+        
+        let v = UIView()
+        v.backgroundColor = .white
+        v.roundCorners(cornerRadius: 10)
+        return v
+        
+    }()
+    
+    var statsViewBackground: UIView = {
+        
+        let background = UIView()
+        return background
+        
+    }()
+        
     var noFlashcardsLabel: UILabel = {
         
         let label = UILabel()
@@ -130,12 +186,9 @@ class DeckController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         
-        testYourselfBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
-        
-        testYourselfButton.setGradientBackground(topColor: UIColor(red: 248.0/255.0, green: 231.0/255.0, blue: 0.0, alpha: 1.0),
-                                                 bottomColor: UIColor(red: 249.0/255.0, green: 150.0/255.0, blue: 0.0, alpha: 1.0),
-                                                 cornerRadius: 10)
-        
+        studyLoopBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
+        takeTestBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
+                
         for card in flashcardsScrollView!.stackView.subviews {
             card.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
         }
@@ -149,7 +202,7 @@ class DeckController: UIViewController {
             view.playBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
         }
         
-        statsLabelBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
+        statsViewBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
         
     }
     
@@ -157,9 +210,6 @@ class DeckController: UIViewController {
         
         self.updateFlashcardScrollView()
         self.updateVisibilities()
-        self.testYourselfButton.setGradientBackground(topColor: UIColor(red: 248.0/255.0, green: 231.0/255.0, blue: 0.0, alpha: 1.0),
-                                                      bottomColor: UIColor(red: 249.0/255.0, green: 150.0/255.0, blue: 0.0, alpha: 1.0),
-                                                      cornerRadius: 10)
         
         for card in flashcardsScrollView!.stackView.subviews {
             
@@ -252,35 +302,98 @@ class DeckController: UIViewController {
         // Constrain Scroll View width so that the prev and next cards show on the screen and the main stackView can adjust its size
         flashcardsScrollView?.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -50).isActive = true
         
-        // Add Test Yourself Button
-        testYourselfBackground.addSubview(testYourselfButton)
+        // Add Study Loop Button
+        studyLoopBackground.addSubview(studyLoopButton)
         
-        testYourselfButton.anchor(top: testYourselfBackground.topAnchor,
-                                  bottom: testYourselfBackground.bottomAnchor,
-                                  leading: testYourselfBackground.leadingAnchor,
-                                  trailing: testYourselfBackground.trailingAnchor,
+        studyLoopButton.anchor(top: studyLoopBackground.topAnchor,
+                                  bottom: studyLoopBackground.bottomAnchor,
+                                  leading: studyLoopBackground.leadingAnchor,
+                                  trailing: studyLoopBackground.trailingAnchor,
                                   height: nil,
                                   width: nil)
         
-        testYourselfBackground.widthAnchor.constraint(equalToConstant: view.frame.width - 30).isActive = true
+        studyLoopBackground.widthAnchor.constraint(equalToConstant: view.frame.width - 30).isActive = true
         
-        mainStackView.addArrangedSubview(testYourselfBackground)
+        mainStackView.addArrangedSubview(studyLoopBackground)
+          
+        // Add Take Test Button
+        takeTestBackground.addSubview(takeTestButton)
+        
+        takeTestButton.anchor(top: takeTestBackground.topAnchor,
+                                  bottom: takeTestBackground.bottomAnchor,
+                                  leading: takeTestBackground.leadingAnchor,
+                                  trailing: takeTestBackground.trailingAnchor,
+                                  height: nil,
+                                  width: nil)
+        
+        takeTestBackground.widthAnchor.constraint(equalToConstant: view.frame.width - 30).isActive = true
+        
+        mainStackView.addArrangedSubview(takeTestBackground)
                 
-        // Add Stats Label
+        // Add Stats View
         updateStatsLabel()
         
-        statsLabelBackground.addSubview(statsLabel)
+        statsViewBackground.addSubview(statsViewContainer)
         
-        statsLabel.anchor(top: statsLabelBackground.topAnchor,
-                          bottom: statsLabelBackground.bottomAnchor,
-                          leading: statsLabelBackground.leadingAnchor,
-                          trailing: statsLabelBackground.trailingAnchor,
+        statsViewContainer.anchor(top: statsViewBackground.topAnchor,
+                          bottom: statsViewBackground.bottomAnchor,
+                          leading: statsViewBackground.leadingAnchor,
+                          trailing: statsViewBackground.trailingAnchor,
                           height: nil,
                           width: nil)
         
-        statsLabelBackground.widthAnchor.constraint(equalToConstant: view.frame.width - 30).isActive = true
-        mainStackView.addArrangedSubview(statsLabelBackground)
-                
+        statsViewBackground.widthAnchor.constraint(equalToConstant: view.frame.width - 30).isActive = true
+        mainStackView.addArrangedSubview(statsViewBackground)
+        
+        statsViewContainer.addSubview(numCardsTitle)
+        statsViewContainer.addSubview(numCardsLabel)
+        statsViewContainer.addSubview(avgScoreTitle)
+        statsViewContainer.addSubview(avgScoreLabel)
+        statsViewContainer.addSubview(prevTestScoreTitle)
+        statsViewContainer.addSubview(prevTestScoreLabel)
+        
+        numCardsTitle.anchor(top: statsViewContainer.topAnchor,
+                             bottom: nil,
+                             leading: statsViewContainer.leadingAnchor,
+                             trailing: nil,
+                             height: nil,
+                             width: nil, padding: UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 0))
+        
+        avgScoreTitle.anchor(top: numCardsTitle.bottomAnchor,
+                             bottom: nil,
+                             leading: statsViewContainer.leadingAnchor,
+                             trailing: nil,
+                             height: nil,
+                             width: nil, padding: UIEdgeInsets(top: 4, left: 10, bottom: 0, right: 0))
+        
+        prevTestScoreTitle.anchor(top: avgScoreTitle.bottomAnchor,
+                                  bottom: statsViewContainer.bottomAnchor,
+                                  leading: statsViewContainer.leadingAnchor,
+                                  trailing: nil,
+                                  height: nil,
+                                  width: nil, padding: UIEdgeInsets(top: 4, left: 10, bottom: -10, right: 0))
+        
+        numCardsLabel.anchor(top: statsViewContainer.topAnchor,
+                             bottom: nil,
+                             leading: nil,
+                             trailing: statsViewContainer.trailingAnchor,
+                             height: nil,
+                             width: nil, padding: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -10))
+        
+        avgScoreLabel.anchor(top: numCardsLabel.bottomAnchor,
+                             bottom: nil,
+                             leading: nil,
+                             trailing: statsViewContainer.trailingAnchor,
+                             height: nil,
+                             width: nil, padding: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: -10))
+        
+        prevTestScoreLabel.anchor(top: avgScoreLabel.bottomAnchor,
+                                  bottom: statsViewContainer.bottomAnchor,
+                                  leading: nil,
+                                  trailing: statsViewContainer.trailingAnchor,
+                                  height: nil,
+                                  width: nil, padding: UIEdgeInsets(top: 4, left: 0, bottom: -10, right: -10))
+        
         // Setup Flashcard Detail Views
         tableView.delegate = self
         tableView.dataSource = self
@@ -299,7 +412,7 @@ class DeckController: UIViewController {
         let headerLabel = UILabel()
         headerLabel.backgroundColor = .clear
         headerLabel.text = "Cards"
-        headerLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        headerLabel.font = .systemFont(ofSize: 17, weight: .bold)
         headerLabel.textAlignment = .left
         
         headerView.addSubview(headerLabel)
@@ -334,8 +447,8 @@ class DeckController: UIViewController {
             if self.myDeck.cards.count == 0 {
                 
                 self.flashcardsScrollView?.isHidden = true
-                self.testYourselfBackground.isHidden = true
-                self.statsLabel.isHidden = true
+                self.studyLoopBackground.isHidden = true
+                self.statsViewBackground.isHidden = true
                 self.tableView.isHidden = true
                 self.noFlashcardsLabel.isHidden = false
                 
@@ -344,8 +457,8 @@ class DeckController: UIViewController {
             else {
                 
                 self.flashcardsScrollView?.isHidden = false
-                self.testYourselfBackground.isHidden = false
-                self.statsLabel.isHidden = false
+                self.studyLoopBackground.isHidden = false
+                self.statsViewBackground.isHidden = false
                 self.tableView.isHidden = false
                 self.noFlashcardsLabel.isHidden = true
                 self.tableView.reloadData()
@@ -357,44 +470,19 @@ class DeckController: UIViewController {
     
     func updateStatsLabel() {
         
-        var formatted = NSMutableAttributedString(string: String(format: "%.1f", myDeck.prevScore))
-        formatted.append(NSAttributedString(string: "%"))
+        let avgScore = myDeck.avgScore.getAsFormattedScore()
+        let prevTestScore = myDeck.prevTestScore.getAsFormattedScore()
+        let numCards = NSMutableAttributedString(string: "\(myDeck.numberOfCards)")
         
-        if myDeck.prevScore < 0 {
-            
-            formatted = NSMutableAttributedString(string: "-%")
-            
+        avgScore.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .medium), range: .init(location: 0, length: avgScore.length))
+        prevTestScore.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .medium), range: .init(location: 0, length: prevTestScore.length))
+        numCards.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .medium), range: .init(location: 0, length: numCards.length))
+         
+        DispatchQueue.main.async {
+            self.avgScoreLabel.attributedText = avgScore
+            self.numCardsLabel.attributedText = numCards
+            self.prevTestScoreLabel.attributedText = prevTestScore
         }
-        
-        else if myDeck.prevScore >= 0 && myDeck.prevScore <= 50 {
-            
-            formatted.addAttribute(.foregroundColor, value: K.Colors.red, range: NSRange(location: 0, length: formatted.length))
-            
-        }
-        
-        else if myDeck.prevScore > 50  && myDeck.prevScore <= 69 {
-            
-            formatted.addAttribute(.foregroundColor, value: K.Colors.orange, range: NSRange(location: 0, length: formatted.length))
-            
-        }
-        
-        else if myDeck.prevScore > 69 && myDeck.prevScore <= 79 {
-            
-            formatted.addAttribute(.foregroundColor, value: K.Colors.yellow, range: NSRange(location: 0, length: formatted.length))
-            
-        }
-        
-        else if myDeck.prevScore > 79 && myDeck.prevScore <= 100 {
-            
-            formatted.addAttribute(.foregroundColor, value: K.Colors.green, range: NSRange(location: 0, length: formatted.length))
-            
-        }
-        
-        let attText = NSMutableAttributedString(string: "  \(myDeck.numberOfCards) Cards\n  Score: ")
-        attText.append(formatted)
-        
-        statsLabel.attributedText = attText
-        
     }
         
     func makeResultCardViews() -> [ResultCardView] {
@@ -489,37 +577,31 @@ class DeckController: UIViewController {
         
     }
         
+    @objc func startLoop(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.2) {
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+        } completion: { (_) in
+            let vc = StudyController()
+            vc.myDeck = self.myDeck
+            vc.myDeckIndex = self.myDeckIndex
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
     @objc func takeTest(_ sender: UIButton) {
         
         UIView.animate(withDuration: 0.2) {
-            sender.transform = .identity
+            sender.superview?.transform = .identity
             sender.superview?.layer.shadowOpacity = 0.3
-        }
-        
-        let vc = TestController()
-        vc.myDeck = self.myDeck
-        vc.myDeckIndex = self.myDeckIndex
-        self.navigationController?.pushViewController(vc, animated: true)
-        
-    }
-    
-    @objc func touchDown(_ sender: UIButton) {
-        
-        UIView.animate(withDuration: 0.1) {
-            sender.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-            sender.superview?.layer.shadowOpacity = 0.5
+        } completion: { (_) in
+            let vc = TestController()
+            vc.myDeck = self.myDeck
+            vc.myDeckIndex = self.myDeckIndex
+            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
-    
-    @objc func cancelEvent(_ sender: UIButton) {
-        
-        UIView.animate(withDuration: 0.1) {
-            sender.transform = .identity
-            sender.superview?.layer.shadowOpacity = 0.3
-        }
-        
-    }
-    
 }
 
 //MARK: - TableView Data Source Method
@@ -555,40 +637,10 @@ extension DeckController: UITableViewDataSource {
         cell.bottomLabel.text = card.bottomLabelText
         
         // Set score
-        var formatted = NSMutableAttributedString(string: String(format: "%.1f", card.score))
-        formatted.append(NSAttributedString(string: "%"))
+        let cardScoreText = card.score.getAsFormattedScore()
+        cardScoreText.addAttribute(.font, value: UIFont.systemFont(ofSize: 18, weight: .medium), range: .init(location: 0, length: cardScoreText.length))
+        cell.scoreLabel.attributedText = cardScoreText
         
-        if card.score < 0 {
-            
-            formatted = NSMutableAttributedString(string: "-%")
-            
-        }
-        
-        else if card.score >= 0 && card.score <= 50 {
-            
-            formatted.addAttribute(.foregroundColor, value: K.Colors.red, range: NSRange(location: 0, length: formatted.length))
-            
-        }
-        
-        else if card.score > 50  && card.score <= 69 {
-            
-            formatted.addAttribute(.foregroundColor, value: K.Colors.orange, range: NSRange(location: 0, length: formatted.length))
-            
-        }
-        
-        else if card.score > 69 && card.score <= 79 {
-            
-            formatted.addAttribute(.foregroundColor, value: K.Colors.yellow, range: NSRange(location: 0, length: formatted.length))
-            
-        }
-        
-        else if card.score > 79 && card.score <= 100 {
-            
-            formatted.addAttribute(.foregroundColor, value: K.Colors.green, range: NSRange(location: 0, length: formatted.length))
-            
-        }
-        
-        cell.scoreLabel.attributedText = formatted
         cell.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
         
         return cell

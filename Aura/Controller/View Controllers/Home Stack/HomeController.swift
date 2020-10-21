@@ -252,6 +252,13 @@ class HomeController: UIViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let vc = TutorialController(collectionViewLayout: layout)
+        self.present(vc, animated: true, completion: nil)
+    }
+    
     func setup() {
         
         Utilities.shared.homeDelegate = self

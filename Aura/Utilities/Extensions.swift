@@ -821,3 +821,43 @@ extension UIWindow {
         }
     }
 }
+
+extension Double {
+    
+    func getAsFormattedScore() -> NSMutableAttributedString {
+        
+        var formatted = NSMutableAttributedString(string: String(format: "%.1f", self))
+        formatted.append(NSAttributedString(string: "%"))
+        
+        if self < 0 {
+            
+            formatted = NSMutableAttributedString(string: "-%")
+            
+        }
+        
+        else if self <= 50 {
+            
+            formatted.addAttribute(.foregroundColor, value: K.Colors.red, range: NSRange(location: 0, length: formatted.length))
+            
+        }
+        
+        else if self <= 69 {
+            
+            formatted.addAttribute(.foregroundColor, value: K.Colors.orange, range: NSRange(location: 0, length: formatted.length))
+            
+        }
+        
+        else if self <= 79 {
+            
+            formatted.addAttribute(.foregroundColor, value: K.Colors.yellow, range: NSRange(location: 0, length: formatted.length))
+            
+        }
+        
+        else {
+            
+            formatted.addAttribute(.foregroundColor, value: K.Colors.green, range: NSRange(location: 0, length: formatted.length))
+            
+        }
+        return formatted
+    }
+}

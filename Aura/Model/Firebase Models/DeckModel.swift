@@ -12,10 +12,36 @@ struct DeckModel: Codable {
     
     var name: String
     var numberOfCards: Int
-    var prevScore: Double
+    var avgScore: Double
+    @DecodableDefault.NegativeOne var prevTestScore: Double
     var numRight: Int
     var numSeen: Int
     var cards: [FlashcardModel]
+    
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case numberOfCards
+        case avgScore = "prevScore"
+        case prevTestScore
+        case numRight
+        case numSeen
+        case cards
+    }
+}
+
+extension DeckModel {
+    
+    init(name: String) {
+        
+        self.name = name
+        numberOfCards = 0
+        avgScore = -1
+        prevTestScore = -1
+        numRight = 0
+        numSeen = 0
+        cards = []
+        
+    }
     
 }
 

@@ -1,15 +1,15 @@
 //
-//  TestControllerViewController.swift
+//  TestController.swift
 //  Aura
 //
-//  Created by Maxwell Dolensky on 10/13/20.
+//  Created by Max Dolensky on 8/5/20.
 //  Copyright © 2020 Max Dolensky. All rights reserved.
 //
 
 import UIKit
 
-class TestController: UIViewController {
-
+class StudyController: UIViewController {
+    
     //MARK: - Data
     var myDeck: DeckModel!
     var myDeckIndex: Int!
@@ -17,8 +17,6 @@ class TestController: UIViewController {
     var isFront = true
     var isReverse = true
     var myQueue = [FlashcardModel]()
-    var numCorrect = 0
-    var questionIndex = 1
     
     //MARK: - Subviews
     
@@ -214,33 +212,39 @@ class TestController: UIViewController {
     
     var currentCard: TestFlashcard!
     
-    let container: UIView = {
+    let containerView: UIView = {
         
-        let v = UIView()
-        v.backgroundColor = .clear
-        return v
-        
-    }()
-    
-    let progressLabel: UILabel = {
-        
-        let l = UILabel()
-        l.textAlignment = .center
-        l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        l.textColor = K.DesignColors.primary
-        return l
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return view
         
     }()
     
-    let progressView: UIProgressView = {
+    let keyTypeLabel: UILabel = {
         
-        let pv = UIProgressView()
-        pv.progressTintColor = K.DesignColors.primary
-        return pv
+        let label = UILabel()
+        label.text = "Front to Back"
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        label.backgroundColor = .white
+        return label
         
     }()
     
-    //MARK: - INIT
+    let toggle: UISwitch = {
+        
+        let toggle = UISwitch()
+        toggle.onTintColor = K.DesignColors.primary
+        toggle.addTarget(self, action: #selector(togglePressed(_:)), for: .valueChanged)
+        toggle.backgroundColor = .white
+        return toggle
+        
+    }()
+    
+    
+    //MARK: - Init
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -254,6 +258,8 @@ class TestController: UIViewController {
         XView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 35)
         flipView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 35)
         checkmarkView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 35)
+        containerView.setShadow(color: .black, opacity: 0.3, offset: .init(width: 0, height: 3), radius: 2)
+        containerView.backgroundColor = .white
         
         currentCard.soundBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
         
@@ -266,8 +272,12 @@ class TestController: UIViewController {
         
         // Get Data
         divisor = (view.frame.width / 2) / 0.61
-        myQueue = myDeck.cards.shuffled()
-        progressLabel.text = "\(questionIndex) / \(myDeck.cards.count)"
+        myQueue = myDeck.cards.sorted(by: { (card1, card2) -> Bool in
+            
+            if card1.score <= card2.score { return true }
+            else { return false}
+            
+        })
         
         // Setup Navigation Bar
         centerTitle.text = myDeck.name
@@ -283,43 +293,48 @@ class TestController: UIViewController {
         
         
         // Add subviews to main view
-        view.addSubview(container)
+        view.addSubview(containerView)
         view.addSubview(contentView)
         view.addSubview(flashcardBackground)
         view.addSubview(buttonsStackView)
         
-        // Add Progress View
-        container.translatesAutoresizingMaskIntoConstraints = false
-        container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        container.widthAnchor.constraint(equalToConstant: view.frame.width - 60).isActive = true
-        container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        // Add UISwitch and View Type Label
+        containerView.addSubview(keyTypeLabel)
+        containerView.addSubview(toggle)
         
-        container.addSubview(progressView)
-        container.addSubview(progressLabel)
-        
-        progressView.anchor(top: container.topAnchor,
-                            bottom: container.bottomAnchor,
-                            leading: container.leadingAnchor,
-                            trailing: nil,
+        keyTypeLabel.anchor(top: containerView.topAnchor,
+                            bottom: containerView.bottomAnchor,
+                            leading: containerView.leadingAnchor,
+                            trailing: toggle.trailingAnchor,
                             height: nil,
-                            width: nil)
+                            width: nil,
+                            padding: UIEdgeInsets(top: 10, left: 10, bottom: -10, right: 0))
         
-        progressLabel.translatesAutoresizingMaskIntoConstraints = false
-        progressLabel.centerYAnchor.constraint(equalTo: progressView.centerYAnchor).isActive = true
-        progressLabel.leadingAnchor.constraint(equalTo: progressView.trailingAnchor,constant: 4).isActive = true
-        progressLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor).isActive = true
+        toggle.anchor(top: containerView.topAnchor,
+                      bottom: containerView.bottomAnchor,
+                      leading: nil,
+                      trailing: containerView.trailingAnchor,
+                      height: nil,
+                      width: nil,
+                      padding: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: -10))
         
-        progressView.setProgress(Float(questionIndex) / Float(myDeck.cards.count), animated: false)
+        
+        containerView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                             bottom: nil,
+                             leading: view.leadingAnchor,
+                             trailing: view.trailingAnchor,
+                             height: nil,
+                             width: nil)
         
         // Add content view
         view.sendSubviewToBack(contentView)
-        contentView.anchor(top: container.bottomAnchor,
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.anchor(top: containerView.bottomAnchor,
                            bottom: buttonsStackView.topAnchor,
                            leading: view.leadingAnchor,
                            trailing: view.trailingAnchor,
                            height: nil,
-                           width: nil,
-                           padding: UIEdgeInsets(top: 20, left: 10, bottom: 0, right: -10))
+                           width: nil)
         
         // Create first card
         createTestFlashcard()
@@ -331,7 +346,7 @@ class TestController: UIViewController {
         flashcardBackground.heightAnchor.constraint(greaterThanOrEqualToConstant: 350).isActive = true
         
         // Prevent Flashcard from becoming to large
-        flashcardBackground.topAnchor.constraint(greaterThanOrEqualTo: container.bottomAnchor, constant: 10).isActive = true
+        flashcardBackground.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor, constant: 10).isActive = true
         flashcardBackground.bottomAnchor.constraint(lessThanOrEqualTo: buttonsStackView.topAnchor, constant: -10).isActive = true
 
                 
@@ -653,54 +668,106 @@ class TestController: UIViewController {
     }
     
     func updateDeckAfterSwipe(_ wasCorrect: Bool) {
-                
+        
+        let cardIndex = myQueue[0].cardIndex
+        
         if wasCorrect {
-            numCorrect += 1
-        }
-    
-        _ = myQueue.remove(at: 0)
-        
-        if myQueue.count != 0 {
-            questionIndex += 1
-            progressLabel.text = "\(questionIndex) / \(myDeck.cards.count)"
-            progressView.setProgress(Float(questionIndex) / Float(myDeck.cards.count), animated: true)
-            updateTestFlashcard()
-        } else {
-            showResults()
-        }
-    }
-    
-    func showResults() {
-        
-        // Update Previous Test Score
-        let score = 100.0*(Double(numCorrect) / Double(myDeck.cards.count))
-        Utilities.shared.user!.decks[myDeckIndex].prevTestScore = score
-        FirebaseManager.shared.updateUser(user: Utilities.shared.user!)
-        
-        // Show Results
-        let v = TestResultPopUpView(frame: .zero)
-        v.setupLabelsFromScore(score)
-        let popUpManager = TestResultPopUpManager(popUpView: v)
-        popUpManager.delegate = self
-        popUpManager.showPopUpFromBottom()
-    }
-}
+            
+            // Update Score For Card
+            Utilities.shared.user!.decks[myDeckIndex].cards[cardIndex].numRight += 1
+            Utilities.shared.user!.decks[myDeckIndex].cards[cardIndex].numSeen += 1
+            
+            let numRight = Utilities.shared.user!.decks[myDeckIndex].cards[cardIndex].numRight
+            let numSeen = Utilities.shared.user!.decks[myDeckIndex].cards[cardIndex].numSeen
+            
+            Utilities.shared.user!.decks[myDeckIndex].cards[cardIndex].score =  (Double(numRight) / Double(numSeen)) * 100.0
+            
+            // Update Score For Deck
+            Utilities.shared.user!.decks[myDeckIndex].numRight += 1
+            Utilities.shared.user!.decks[myDeckIndex].numSeen += 1
 
-extension TestController: TestManagerDelegate {
-    
-    func finishTest(willRestart: Bool) {
-        
-        if willRestart {
-            myQueue = myDeck.cards.shuffled()
-            numCorrect = 0
-            questionIndex = 1
-            progressLabel.text = "\(questionIndex) / \(myDeck.cards.count)"
-            progressView.setProgress(Float(questionIndex) / Float(myDeck.cards.count), animated: true)
+            let deckNumRight = Utilities.shared.user!.decks[myDeckIndex].numRight
+            let deckNumSeen = Utilities.shared.user!.decks[myDeckIndex].numSeen
+
+            Utilities.shared.user!.decks[myDeckIndex].avgScore = (Double(deckNumRight) / Double(deckNumSeen)) * 100.0
+            
+            // Update Firebase
+            FirebaseManager.shared.updateUser(user: Utilities.shared.user!)
+            
+            // Place Card in Back of Queue
+            let oldCard = myQueue.remove(at: 0)
+            myQueue.append(oldCard)
             updateTestFlashcard()
-        } else {
-            navigationController?.popViewController(animated: true)
+            
         }
         
+        else {
+            
+            // Update Score For Card
+            Utilities.shared.user!.decks[myDeckIndex].cards[cardIndex].numSeen += 1
+            
+            let numRight = Utilities.shared.user!.decks[myDeckIndex].cards[cardIndex].numRight
+            let numSeen = Utilities.shared.user!.decks[myDeckIndex].cards[cardIndex].numSeen
+            
+            Utilities.shared.user!.decks[myDeckIndex].cards[cardIndex].score =  (Double(numRight) / Double(numSeen)) * 100.0
+            
+            // Update Score For Deck
+            Utilities.shared.user!.decks[myDeckIndex].numSeen += 1
+
+            let deckNumRight = Utilities.shared.user!.decks[myDeckIndex].numRight
+            let deckNumSeen = Utilities.shared.user!.decks[myDeckIndex].numSeen
+
+            Utilities.shared.user!.decks[myDeckIndex].avgScore = (Double(deckNumRight) / Double(deckNumSeen)) * 100.0
+            
+            // Update Firebase
+            FirebaseManager.shared.updateUser(user: Utilities.shared.user!)
+            
+            // Place Card 8 cards back or at end if small deck
+            let oldCard = myQueue.remove(at: 0)
+            
+            let randIndex = Int.random(in: 5...10)
+            
+            if randIndex > myQueue.count - 1 {
+                myQueue.append(oldCard)
+            }
+            
+            else {
+                myQueue.insert(oldCard, at: randIndex)
+            }
+            
+            updateTestFlashcard()
+            
+        }
+    
+    }
+    
+    @objc func togglePressed(_ sender: UISwitch) {
+        
+        if !sender.isOn {
+            
+            keyTypeLabel.text = "Front to Back"
+            isReverse = true
+            
+            if isFront {
+                isFront = false
+                currentCard.updateSubviewVisibilities(isFront: isFront)
+                UIView.transition(with: self.flashcardBackground, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+            }
+            
+        }
+            
+        else {
+            
+            keyTypeLabel.text = "Back to Front"
+            isReverse = false
+            
+            if !isFront {
+                isFront = true
+                currentCard.updateSubviewVisibilities(isFront: isFront)
+                UIView.transition(with: self.flashcardBackground, duration: 0.3, options: .transitionFlipFromLeft, animations: nil, completion: nil)
+            }
+            
+        }
     }
     
 }

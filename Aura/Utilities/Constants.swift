@@ -59,6 +59,7 @@ struct K {
         static let primary      = UIColor(red: 98.0/255.0, green: 0.0, blue: 238.0/255.0, alpha: 1.0)
         static let darkVariant  = UIColor(red: 55.0/255.0, green: 0.0, blue: 179.0/255.0, alpha: 1.0)
         static let lightVariant = UIColor(red: 187.0/255.0, green: 134.0/255.0, blue: 252.0/255.0, alpha: 1.0)
+        static let purpleGrey   = UIColor(red: 140.0/255.0, green: 125.0/255.0, blue: 151.0/255.0, alpha: 1.0)
         static let error        = UIColor(red: 176.0/255.0, green: 0.0, blue: 32.0/255.0, alpha: 1.0)
     }
     
