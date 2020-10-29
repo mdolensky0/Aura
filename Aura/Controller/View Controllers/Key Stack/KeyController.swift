@@ -321,7 +321,7 @@ class KeyController: UIViewController {
         mainStackView.addArrangedSubview(wildScrollView)
         
         // Constrain Scroll View width so that the prev and next cards show on the screen and the main stackView can adjust its size
-        if view.frame.width > 375 {
+        if UIScreen.main.bounds.width > 375 {
             
             vowelScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
             fluidScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -160).isActive = true
@@ -332,7 +332,7 @@ class KeyController: UIViewController {
             
         }
         
-        else {
+        else if UIScreen.main.bounds.width > 320 {
             
             vowelScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
             fluidScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
@@ -340,6 +340,17 @@ class KeyController: UIViewController {
             flipScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
             silentScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
             wildScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -130).isActive = true
+            
+        }
+        
+        else {
+            
+            vowelScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -80).isActive = true
+            fluidScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -80).isActive = true
+            trueScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -80).isActive = true
+            flipScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -80).isActive = true
+            silentScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -80).isActive = true
+            wildScrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -80).isActive = true
             
         }
         

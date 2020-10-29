@@ -255,7 +255,7 @@ class TestFlashcard: UIView {
         
         topLabel.attributedText = topAttributedText
         topLabel.configureBasedOnInput()
-        topLabel.addGestureRecognizer(UITapGestureRecognizer(target:self, action: #selector(wildCardTapped(_:))))
+        topLabel.addGestureRecognizer(UITapGestureRecognizer(target:self, action: #selector(letterTapped(_:))))
         
         topLabelContainer.addSubview(topLabel)
         topLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -378,6 +378,9 @@ class TestFlashcard: UIView {
                 
             }
             
+            self.layoutIfNeeded()
+            topLabel.adjustFontSizeToFit()
+            
         }
         
         // Back : bottom label only
@@ -387,6 +390,9 @@ class TestFlashcard: UIView {
             buttonsContainer.isHidden = true
             soundItOutCollectionView.isHidden = true
             bottomLabelContainer.isHidden = false
+            
+            self.layoutIfNeeded()
+            bottomLabel.adjustFontSizeToFit()
         }
     }
     
@@ -527,15 +533,26 @@ class TestFlashcard: UIView {
         }
     }
     
-    @objc func wildCardTapped(_ gesture: UITapGestureRecognizer) {
+    @objc func letterTapped(_ gesture: UITapGestureRecognizer) {
         
+        // Get Letter Index and Color
         guard let index = gesture.indexForTapAttributedTextInLabel(label: self.topLabel) else { return }
-        
-        guard let linkNumber = topLabel.attributedText?.attribute(.linkNumber, at: index, effectiveRange: nil) as? String else { return }
         guard let color = topLabel.attributedText?.attribute(.foregroundColor, at: index, effectiveRange: nil) as? UIColor else { return }
         
-        if color == K.Colors.yellow {
-            showPopTip(range: NSRange(location: index, length: 1), linkString: linkNumber)
+        // If it's a wildcard show pop tip
+        if let linkNumber = topLabel.attributedText?.attribute(.linkNumber, at: index, effectiveRange: nil) as? String {
+            
+            if color == K.Colors.yellow {
+                showPopTip(range: NSRange(location: index, length: 1), linkString: linkNumber)
+            }
+            
+        }
+        
+        // Play Sound
+        if let id = topLabel.attributedText?.attribute(.id, at: index, effectiveRange: nil) as? String {
+            
+            playSound(ipaLetter: id, color: color)
+            
         }
         
     }
@@ -791,6 +808,144 @@ class TestFlashcard: UIView {
         }
     }
     
+    func playSound(ipaLetter: String, color: UIColor) {
+        
+        if color == K.Colors.lightGrey {
+            return
+        }
+        
+        switch ipaLetter {
+        case "i":
+            Utilities.shared.playSound("BEAT")
+        case "ɪ":
+            Utilities.shared.playSound("BIT")
+        case "ɑ","ɔ":
+            Utilities.shared.playSound("BOT")
+        case "u":
+            Utilities.shared.playSound("BOOT")
+        case "ʊ":
+            Utilities.shared.playSound("BOOK")
+        case "p":
+            Utilities.shared.playSound("P")
+        case "v":
+            Utilities.shared.playSound("V")
+        case "aɪ":
+            Utilities.shared.playSound("BITE")
+        case "əl","oʊl","ʊl":
+            Utilities.shared.playSound("DarkL")
+        case "ɪr" where color == K.Colors.seaBlue:
+            Utilities.shared.playSound("BEAT")
+        case "ɪr" where color == K.Colors.darkGrey:
+            Utilities.shared.playSound("DarkR")
+        case "ks":
+            Utilities.shared.playSound("KS")
+        case "ɔɪ":
+            Utilities.shared.playSound("BOYD")
+        case "weɪ":
+            Utilities.shared.playSound("WEI")
+        case "j":
+            Utilities.shared.playSound("Y")
+        case "n":
+            Utilities.shared.playSound("N")
+        case "t":
+            Utilities.shared.playSound("T")
+        case "æŋ" where color == K.Colors.pink:
+            Utilities.shared.playSound("BAIT")
+        case "æŋ" where color == K.Colors.darkGrey:
+            Utilities.shared.playSound("NSoft")
+        case "eɪ":
+            Utilities.shared.playSound("BAIT")
+        case "ər","ʊr":
+            Utilities.shared.playSound("DarkR")
+        case "ɪŋ" where color == K.Colors.seaBlue:
+            Utilities.shared.playSound("BEAT")
+        case "ɪŋ" where color == K.Colors.darkGrey:
+            Utilities.shared.playSound("NSoft")
+        case "h":
+            Utilities.shared.playSound("H")
+        case "m":
+            Utilities.shared.playSound("M")
+        case "ð":
+            Utilities.shared.playSound("TH")
+        case "b":
+            Utilities.shared.playSound("B")
+        case "dʒ":
+            Utilities.shared.playSound("JOKE")
+        case "ɡz":
+            Utilities.shared.playSound("GZ")
+        case "ju":
+            Utilities.shared.playSound("YOU")
+        case "oʊ":
+            Utilities.shared.playSound("BOAT")
+        case "tʃ":
+            Utilities.shared.playSound("CHOKE")
+        case "f":
+            Utilities.shared.playSound("F")
+        case "l":
+            Utilities.shared.playSound("L")
+        case "d":
+            Utilities.shared.playSound("D")
+        case "θ":
+            Utilities.shared.playSound("THunvoiced")
+        case "ɑr" where color == K.Colors.green:
+            Utilities.shared.playSound("BOT")
+        case "ɑr" where color == K.Colors.darkGrey:
+            Utilities.shared.playSound("DarkR")
+        case "ɛr" where color == K.Colors.darkGreen:
+            Utilities.shared.playSound("BET")
+        case "ɛr" where color == K.Colors.darkGrey:
+            Utilities.shared.playSound("DarkR")
+        case "kw":
+            Utilities.shared.playSound("Q")
+        case "ɔr" where color == K.Colors.purple:
+            Utilities.shared.playSound("BOAT")
+        case "ɔr" where color == K.Colors.darkGrey:
+            Utilities.shared.playSound("DarkR")
+        case "ʔ":
+            break
+        case "ɡ":
+            Utilities.shared.playSound("G")
+        case "r":
+            Utilities.shared.playSound("R")
+        case "z":
+            Utilities.shared.playSound("Z")
+        case "aʊ":
+            Utilities.shared.playSound("BOUT")
+        case "ɛŋ" where color == K.Colors.pink:
+            Utilities.shared.playSound("BAIT")
+        case "ɛŋ" where color == K.Colors.darkGrey:
+            Utilities.shared.playSound("NSoft")
+        case "jə":
+            Utilities.shared.playSound("YUH")
+        case "kʃ":
+            Utilities.shared.playSound("KSH")
+        case "wə":
+            Utilities.shared.playSound("WUH")
+        case "wɪ":
+            Utilities.shared.playSound("WIH")
+        case "k":
+            Utilities.shared.playSound("K")
+        case "ŋ":
+            Utilities.shared.playSound("NSoft")
+        case "s":
+            Utilities.shared.playSound("S")
+        case "ʃ":
+            Utilities.shared.playSound("MISSION")
+        case "w":
+            Utilities.shared.playSound("W")
+        case "ʒ":
+            Utilities.shared.playSound("VISION")
+        case "æ":
+            Utilities.shared.playSound("BAT")
+        case "ə":
+            Utilities.shared.playSound("BUT")
+        case "ɛ":
+            Utilities.shared.playSound("BET")
+        default:
+            break
+        }
+    }
+    
     @objc func touchDown(_ sender: UIButton) {
         
         UIView.animate(withDuration: 0.1) {
@@ -861,9 +1016,27 @@ extension TestFlashcard: UICollectionViewDelegateFlowLayout {
         let num = CGFloat(soundItOutCollectionView.numberOfItems(inSection: 0))
         let width = soundItOutCollectionView.frame.width
         
-        if num <= 8 {
-            let totalExtraSpace = width - (num*35.0 + (num - 1.0)*3.0)
-            return UIEdgeInsets(top: 0, left: totalExtraSpace/2.0, bottom: 0, right: totalExtraSpace/2.0)
+        if UIScreen.main.bounds.width <= 320 {
+            
+            if num <= 6 {
+                let totalExtraSpace = width - (num*35.0 + (num - 1.0)*3.0)
+                return UIEdgeInsets(top: 0, left: totalExtraSpace/2.0, bottom: 0, right: totalExtraSpace/2.0)
+            }
+            
+        } else if UIScreen.main.bounds.width <= 375 {
+            
+            if num <= 7 {
+                let totalExtraSpace = width - (num*35.0 + (num - 1.0)*3.0)
+                return UIEdgeInsets(top: 0, left: totalExtraSpace/2.0, bottom: 0, right: totalExtraSpace/2.0)
+            }
+            
+        } else {
+            
+            if num <= 8 {
+                let totalExtraSpace = width - (num*35.0 + (num - 1.0)*3.0)
+                return UIEdgeInsets(top: 0, left: totalExtraSpace/2.0, bottom: 0, right: totalExtraSpace/2.0)
+            }
+            
         }
         
         return UIEdgeInsets.zero

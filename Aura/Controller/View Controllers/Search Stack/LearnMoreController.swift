@@ -110,7 +110,7 @@ class LearnMoreController: UIViewController {
         
         let label = UILabel()
         label.backgroundColor = .clear
-        label.text = "Learn More"
+        label.text = "Related Searches"
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textAlignment = .left
         return label
@@ -121,7 +121,11 @@ class LearnMoreController: UIViewController {
         
         let button = UIButton()
         button.setTitle("Study Flashcards", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .bold)
+        if UIScreen.main.bounds.width > 320 {
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .bold)
+        } else {
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+        }
         button.tintColor = .white
         button.setBackgroundImage(#imageLiteral(resourceName: "study"), for: .normal)
         button.addTarget(self, action: #selector(goToFlashcardButtonPressed(_:)), for: .touchUpInside)
@@ -138,7 +142,11 @@ class LearnMoreController: UIViewController {
         
         let button = UIButton()
         button.setTitle("Lessons", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .bold)
+        if UIScreen.main.bounds.width > 320 {
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .bold)
+        } else {
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+        }
         button.tintColor = .white
         button.setBackgroundImage(#imageLiteral(resourceName: "classroom"), for: .normal)
         button.addTarget(self, action: #selector(goToLessonButtonPressed(_:)), for: .touchUpInside)
@@ -191,7 +199,8 @@ class LearnMoreController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+        resultCard.topLabel.adjustsMultiLineFontToFitWidth()
+        resultCard.bottomLabel.adjustsMultiLineFontToFitWidth()
         setupShadows()
     }
     
@@ -983,7 +992,7 @@ extension LearnMoreController {
         // Create sound it out buttons for result controller
         if results.count == 1 {
             
-            vc.soundItOutColors = self.createButtons(results[0].attributedText)
+            vc.soundItOutColors = createButtons(results[0].attributedText)
             
         } else { vc.soundItOutColors = [] }
         

@@ -18,7 +18,7 @@ class SignInController: UIViewController {
         
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
-        label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
+        label.font = UIFont(name: K.Fonts.avenirBlack, size: 15)
         label.text = "Log In"
         label.numberOfLines = 2
         label.textColor = .black
@@ -97,7 +97,7 @@ class SignInController: UIViewController {
         
         let b = UIButton()
         b.setTitle("Forgot Password?", for: .normal)
-        b.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        b.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         b.setTitleColor(K.Colors.purple, for: .normal)
         b.addTarget(self, action: #selector(forgotPasswordClicked), for: .touchUpInside)
         return b
@@ -162,76 +162,69 @@ class SignInController: UIViewController {
             
         }
         
-        let container = UIView()
-        container.addSubview(auraLabel)
-        container.addSubview(emailTextField)
-        container.addSubview(passwordTextField)
-        container.addSubview(logInButton)
-        container.addSubview(userAgreementLabel)
-        container.addSubview(errLabel)
+        view.addSubview(auraLabel)
+        view.addSubview(emailTextField)
+        view.addSubview(passwordTextField)
+        view.addSubview(forgotPasswordButton)
+        view.addSubview(logInButton)
+        view.addSubview(userAgreementLabel)
+        view.addSubview(errLabel)
         
-        auraLabel.anchor(top: container.topAnchor,
+        auraLabel.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          bottom: nil,
-                         leading: container.leadingAnchor,
-                         trailing: container.trailingAnchor,
+                         leading: view.leadingAnchor,
+                         trailing: view.trailingAnchor,
                          height: nil,
                          width: nil,
-                         padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                         padding: UIEdgeInsets(top: -10, left: 0, bottom: 0, right: 0))
         
         emailTextField.anchor(top: auraLabel.bottomAnchor,
                               bottom: nil,
-                              leading: container.leadingAnchor,
-                              trailing: container.trailingAnchor,
+                              leading: view.leadingAnchor,
+                              trailing: view.trailingAnchor,
                               height: 40,
-                              width: nil)
+                              width: nil,
+                              padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
         
         passwordTextField.anchor(top: emailTextField.bottomAnchor,
                                  bottom: nil,
-                                 leading: container.leadingAnchor,
-                                 trailing: container.trailingAnchor,
+                                 leading: view.leadingAnchor,
+                                 trailing: view.trailingAnchor,
                                  height: 40,
                                  width: nil,
-                                 padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                                 padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
+        
+        forgotPasswordButton.anchor(top: passwordTextField.bottomAnchor,
+                                    bottom: nil,
+                                    leading: nil,
+                                    trailing: passwordTextField.trailingAnchor,
+                                    height: nil,
+                                    width: nil,
+                                    padding: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0))
                 
-        logInButton.anchor(top: passwordTextField.bottomAnchor,
+        logInButton.anchor(top: forgotPasswordButton.bottomAnchor,
                             bottom: nil,
-                            leading: container.leadingAnchor,
-                            trailing: container.trailingAnchor,
+                            leading: view.leadingAnchor,
+                            trailing: view.trailingAnchor,
                             height: 50,
                             width: nil,
-                            padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                            padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
         
         userAgreementLabel.anchor(top: logInButton.bottomAnchor,
                                   bottom: nil,
-                                  leading: container.leadingAnchor,
-                                  trailing: container.trailingAnchor,
+                                  leading: view.leadingAnchor,
+                                  trailing: view.trailingAnchor,
                                   height: nil,
                                   width: nil,
                                   padding: UIEdgeInsets(top: 12, left: 60, bottom: 0, right: -60))
         
         errLabel.anchor(top: userAgreementLabel.bottomAnchor,
-                        bottom: container.bottomAnchor,
-                        leading: container.leadingAnchor,
-                        trailing: container.trailingAnchor,
+                        bottom: nil,
+                        leading: view.leadingAnchor,
+                        trailing: view.trailingAnchor,
                         height: nil,
                         width: nil,
                         padding: UIEdgeInsets(top: 12, left: 40, bottom: 0, right: -40))
-        
-        view.addSubview(forgotPasswordButton)
-        forgotPasswordButton.anchor(top: nil, bottom: view.bottomAnchor,
-                                    leading: view.leadingAnchor,
-                                    trailing: view.trailingAnchor,
-                                    height: nil,
-                                    width: nil,
-                                    padding: UIEdgeInsets(top: 0, left: 0, bottom: -60, right: 0))
-        
-        view.addSubview(container)
-        container.translatesAutoresizingMaskIntoConstraints = false
-        
-        container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        container.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -80).isActive = true
-        container.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -60).isActive = true
-        
     }
     
     @objc func logInPressed(_ sender: UIButton) {

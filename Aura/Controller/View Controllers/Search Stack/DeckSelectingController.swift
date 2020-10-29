@@ -46,10 +46,10 @@ class DeckSelectingController: UIViewController {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        label.text = "Add to Deck"
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         label.textAlignment = .center
+        label.lineBreakMode = .byTruncatingTail
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
         
     }()
@@ -64,11 +64,12 @@ class DeckSelectingController: UIViewController {
         button.setTitleColor(.black, for: .normal)
         
         button.setTitle("cancel", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         button.titleLabel?.textAlignment = .left
 
         button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
-        
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+
         return button
         
     }()
@@ -80,25 +81,45 @@ class DeckSelectingController: UIViewController {
         setup()
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     // MARK: - Setup
     func setup() {
         
         view.backgroundColor = .clear
-
+        
+        let text = wordArray.joined(separator: " ")
+        let attText1 = NSMutableAttributedString(string: "Add ")
+        let attText2 = NSMutableAttributedString(string: "\"\(text)\" ")
+        let attText3 = NSMutableAttributedString(string: "to deck")
+        
+        attText1.addAttribute(.font, value: UIFont.systemFont(ofSize: 16, weight: .regular), range: .init(location: 0, length: attText1.length))
+        attText2.addAttribute(.font, value: UIFont.systemFont(ofSize: 16, weight: .bold), range: .init(location: 0, length: attText2.length))
+        attText3.addAttribute(.font, value: UIFont.systemFont(ofSize: 16, weight: .regular), range: .init(location: 0, length: attText3.length))
+        
+        attText1.append(attText2)
+        attText1.append(attText3)
+        
+        titleLabel.attributedText = attText1
+        
         let container = UIView()
         container.backgroundColor = .white
         container.addSubview(titleLabel)
         container.addSubview(cancelButton)
         container.setUnderlineStyle(color: K.DesignColors.primary)
         
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20).isActive = true
+        cancelButton.topAnchor.constraint(equalTo: container.topAnchor,constant: 10).isActive = true
+        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
-        titleLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
-        
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
-        cancelButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20).isActive = true
-        cancelButton.firstBaselineAnchor.constraint(equalTo: titleLabel.firstBaselineAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: cancelButton.bottomAnchor, constant: 10).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20).isActive = true
+        titleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor, constant: 20).isActive = true
+        titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -20).isActive = true
         
         view.addSubview(container)
         
@@ -107,7 +128,7 @@ class DeckSelectingController: UIViewController {
                          bottom: nil,
                          leading: view.leadingAnchor,
                          trailing: view.trailingAnchor,
-                         height: 60,
+                         height: nil,
                          width: nil)
 
         tableView.delegate = self

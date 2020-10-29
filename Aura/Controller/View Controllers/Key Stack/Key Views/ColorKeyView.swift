@@ -39,10 +39,18 @@ class ColorKeyView: UIView {
         let label = UILabel()
         label.numberOfLines = 1
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
         label.adjustsFontSizeToFitWidth = true
         label.textColor = .black
         label.backgroundColor = .white
+        
+        if UIScreen.main.bounds.width > 375 {
+            label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        } else if UIScreen.main.bounds.width > 320 {
+            label.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        } else {
+            label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        }
+        
         return label
         
     }()
@@ -125,13 +133,23 @@ class ColorKeyView: UIView {
         
         mainStackView.addArrangedSubview(explanationLabel)
         
-        mainStackView.anchor(top: container.topAnchor,
-                             bottom: container.bottomAnchor,
-                             leading: container.leadingAnchor,
-                             trailing: container.trailingAnchor,
-                             height: nil,
-                             width: nil,
-                             padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
+        if UIScreen.main.bounds.width > 320 {
+            mainStackView.anchor(top: container.topAnchor,
+                                 bottom: container.bottomAnchor,
+                                 leading: container.leadingAnchor,
+                                 trailing: container.trailingAnchor,
+                                 height: nil,
+                                 width: nil,
+                                 padding: UIEdgeInsets(top: 20, left: 20, bottom: -20, right: -20))
+        } else {
+            mainStackView.anchor(top: container.topAnchor,
+                                 bottom: container.bottomAnchor,
+                                 leading: container.leadingAnchor,
+                                 trailing: container.trailingAnchor,
+                                 height: nil,
+                                 width: nil,
+                                 padding: UIEdgeInsets(top: 20, left: 6, bottom: -20, right: -6))
+        }
         
         var count = 0
         for i in 0..<numRows {
@@ -140,8 +158,12 @@ class ColorKeyView: UIView {
             stackView.axis = .horizontal
             stackView.alignment = .fill
             stackView.distribution = .equalSpacing
-            stackView.spacing = 10
             
+            if UIScreen.main.bounds.width > 320 {
+                stackView.spacing = 10
+            } else {
+                stackView.spacing = 4
+            }
             self.mainStackView.addArrangedSubview(stackView)
             
             for j in 0..<numColumns {

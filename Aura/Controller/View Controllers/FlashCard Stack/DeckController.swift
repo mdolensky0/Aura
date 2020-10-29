@@ -200,6 +200,9 @@ class DeckController: UIViewController {
             view.loopBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
             
             view.playBackgroundView.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 21)
+            
+            view.topLabel.adjustsMultiLineFontToFitWidth()
+            view.bottomLabel.adjustsMultiLineFontToFitWidth()
         }
         
         statsViewBackground.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 4, height: 4), radius: 3, cornerRadius: 10)
@@ -213,7 +216,7 @@ class DeckController: UIViewController {
         
         for card in flashcardsScrollView!.stackView.subviews {
             
-            if let card = card as? TestFlashcard {
+            if let card = card as? ResultCardView {
                 card.updateLoopColor()
             }
         }
@@ -448,6 +451,7 @@ class DeckController: UIViewController {
                 
                 self.flashcardsScrollView?.isHidden = true
                 self.studyLoopBackground.isHidden = true
+                self.takeTestBackground.isHidden = true
                 self.statsViewBackground.isHidden = true
                 self.tableView.isHidden = true
                 self.noFlashcardsLabel.isHidden = false
@@ -458,6 +462,7 @@ class DeckController: UIViewController {
                 
                 self.flashcardsScrollView?.isHidden = false
                 self.studyLoopBackground.isHidden = false
+                self.takeTestBackground.isHidden = false
                 self.statsViewBackground.isHidden = false
                 self.tableView.isHidden = false
                 self.noFlashcardsLabel.isHidden = true
@@ -518,7 +523,7 @@ class DeckController: UIViewController {
                 
             }
             
-            let soundItOutColors = self.createButtons(coloredResults[0].attributedText)
+            let soundItOutColors = createButtons(coloredResults[0].attributedText)
             
             let card = ResultCardView(frame: .zero,
                                       results: coloredResults,
@@ -592,14 +597,38 @@ class DeckController: UIViewController {
     
     @objc func takeTest(_ sender: UIButton) {
         
-        UIView.animate(withDuration: 0.2) {
-            sender.superview?.transform = .identity
-            sender.superview?.layer.shadowOpacity = 0.3
-        } completion: { (_) in
+        let alert = UIAlertController(title: "Flashcard Orientation", message: "Test Yourself by seeing the front of the flashcard first or back", preferredStyle: .alert)
+        
+        let action1 = UIAlertAction(title: "Front to Back", style: .default) { (_) in
+            alert.dismiss(animated: true, completion: nil)
             let vc = TestController()
             vc.myDeck = self.myDeck
             vc.myDeckIndex = self.myDeckIndex
             self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        let action2 = UIAlertAction(title: "Back to Front", style: .default) { (_) in
+            alert.dismiss(animated: true, completion: nil)
+            let vc = TestController()
+            vc.isReverse = false
+            vc.myDeck = self.myDeck
+            vc.myDeckIndex = self.myDeckIndex
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+            // Do Nothing
+        }
+        
+        alert.addAction(action1)
+        alert.addAction(action2)
+        alert.addAction(cancel)
+        
+        UIView.animate(withDuration: 0.2) {
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+        } completion: { (_) in
+            self.present(alert, animated: true)
         }
     }
 }
@@ -681,6 +710,8 @@ extension DeckController: SwipeTableViewCellDelegate {
                 
                 // Update Current Card Index
                 self.currentCardIndex = (self.currentCardIndex == self.myDeck.cards.count - 1) ? (self.currentCardIndex - 1): self.currentCardIndex
+                if self.currentCardIndex < 0 { self.currentCardIndex = 0 }
+                
                 self.heightArray.remove(at: indexPath.row)
                 
                 // handle action by updating model with deletion

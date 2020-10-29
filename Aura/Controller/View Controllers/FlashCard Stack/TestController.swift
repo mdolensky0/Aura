@@ -76,10 +76,12 @@ class TestController: UIViewController {
     
     let XView: UIView = {
         
+        let constant: CGFloat = UIScreen.main.bounds.width > 320 ? 70 : 50
+        
         let button = UIButton()
         button.backgroundColor = .white
         button.contentMode = .center
-        button.roundCorners(cornerRadius: 35)
+        button.roundCorners(cornerRadius: constant/2)
         
         if #available(iOS 13.0, *) {
             button.setImage(UIImage(systemName: "xmark"), for: .normal)
@@ -92,7 +94,11 @@ class TestController: UIViewController {
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.imageView?.contentMode = .scaleAspectFit
-        button.imageEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        if UIScreen.main.bounds.width > 320 {
+            button.imageEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        } else {
+            button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        }
                 
         button.addTarget(self, action: #selector(xButtonPressed(_:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
@@ -110,8 +116,8 @@ class TestController: UIViewController {
                     width: nil)
         
         background.translatesAutoresizingMaskIntoConstraints = false
-        background.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        background.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        background.widthAnchor.constraint(equalToConstant: constant).isActive = true
+        background.heightAnchor.constraint(equalToConstant: constant).isActive = true
         
         return background
         
@@ -119,10 +125,12 @@ class TestController: UIViewController {
     
     let checkmarkView: UIView = {
         
+        let constant: CGFloat = UIScreen.main.bounds.width > 320 ? 70 : 50
+        
         let button = UIButton()
         button.backgroundColor = .white
         button.contentMode = .center
-        button.roundCorners(cornerRadius: 35)
+        button.roundCorners(cornerRadius: constant/2)
                 
         if #available(iOS 13.0, *) {
             button.setImage(UIImage(systemName: "checkmark"), for: .normal)
@@ -134,7 +142,11 @@ class TestController: UIViewController {
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.imageView?.contentMode = .scaleAspectFit
-        button.imageEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        if UIScreen.main.bounds.width > 320 {
+            button.imageEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        } else {
+            button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        }
                 
         button.addTarget(self, action: #selector(checkButtonPressed(_:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
@@ -152,8 +164,8 @@ class TestController: UIViewController {
                     width: nil)
         
         background.translatesAutoresizingMaskIntoConstraints = false
-        background.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        background.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        background.widthAnchor.constraint(equalToConstant: constant).isActive = true
+        background.heightAnchor.constraint(equalToConstant: constant).isActive = true
         
         return background
         
@@ -161,10 +173,12 @@ class TestController: UIViewController {
         
     let flipView: UIView = {
                 
+        let constant: CGFloat = UIScreen.main.bounds.width > 320 ? 70 : 50
+        
         let button = UIButton()
         button.backgroundColor = .white
         button.contentMode = .center
-        button.roundCorners(cornerRadius: 35)
+        button.roundCorners(cornerRadius: constant/2)
         
         if #available(iOS 13.0, *) {
             button.setImage(UIImage(systemName: "arrow.2.circlepath"), for: .normal)
@@ -176,7 +190,11 @@ class TestController: UIViewController {
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.imageView?.contentMode = .scaleAspectFit
-        button.imageEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        if UIScreen.main.bounds.width > 320 {
+            button.imageEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        } else {
+            button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        }
         
         button.addTarget(self, action: #selector(flipButtonPressed(_:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
@@ -194,8 +212,8 @@ class TestController: UIViewController {
                     width: nil)
         
         background.translatesAutoresizingMaskIntoConstraints = false
-        background.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        background.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        background.widthAnchor.constraint(equalToConstant: constant).isActive = true
+        background.heightAnchor.constraint(equalToConstant: constant).isActive = true
         
         return background
         
@@ -261,6 +279,13 @@ class TestController: UIViewController {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.view.layoutIfNeeded()
+            self.currentCard.bottomLabel.adjustFontSizeToFit()
+        }
+    }
+    
     //MARK: - Setup
     func setup() {
         
@@ -281,6 +306,15 @@ class TestController: UIViewController {
         // Configure self.view
         view.backgroundColor = K.DesignColors.background
         
+        if UIScreen.main.bounds.width > 320 {
+            setupForLargerPhones()
+        } else {
+            setupForSmallerPhones()
+        }
+        
+    }
+    
+    func setupForLargerPhones() {
         
         // Add subviews to main view
         view.addSubview(container)
@@ -370,7 +404,98 @@ class TestController: UIViewController {
         buttonsStackView.addArrangedSubview(XView)
         buttonsStackView.addArrangedSubview(flipView)
         buttonsStackView.addArrangedSubview(checkmarkView)
+    }
+    
+    func setupForSmallerPhones() {
+        
+        // Add subviews to main view
+        view.addSubview(container)
+        view.addSubview(contentView)
+        view.addSubview(flashcardBackground)
+        view.addSubview(buttonsStackView)
+        
+        // Add Progress View
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        container.widthAnchor.constraint(equalToConstant: view.frame.width - 40).isActive = true
+        container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        
+        container.addSubview(progressView)
+        container.addSubview(progressLabel)
+        
+        progressView.anchor(top: container.topAnchor,
+                            bottom: container.bottomAnchor,
+                            leading: container.leadingAnchor,
+                            trailing: nil,
+                            height: nil,
+                            width: nil)
+        
+        progressLabel.translatesAutoresizingMaskIntoConstraints = false
+        progressLabel.centerYAnchor.constraint(equalTo: progressView.centerYAnchor).isActive = true
+        progressLabel.leadingAnchor.constraint(equalTo: progressView.trailingAnchor,constant: 4).isActive = true
+        progressLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor).isActive = true
+        
+        progressView.setProgress(Float(questionIndex) / Float(myDeck.cards.count), animated: false)
+        
+        // Add content view
+        view.sendSubviewToBack(contentView)
+        contentView.anchor(top: container.bottomAnchor,
+                           bottom: buttonsStackView.topAnchor,
+                           leading: view.leadingAnchor,
+                           trailing: view.trailingAnchor,
+                           height: nil,
+                           width: nil,
+                           padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        
+        // Create first card
+        createTestFlashcard()
+        
+        flashcardBackground.translatesAutoresizingMaskIntoConstraints = false
+        flashcardBackground.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        flashcardBackground.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        flashcardBackground.widthAnchor.constraint(equalToConstant: view.frame.width - 40).isActive = true
+        flashcardBackground.heightAnchor.constraint(greaterThanOrEqualToConstant: 280).isActive = true
+        
+        // Prevent Flashcard from becoming to large
+        flashcardBackground.topAnchor.constraint(greaterThanOrEqualTo: container.bottomAnchor, constant: 10).isActive = true
+        flashcardBackground.bottomAnchor.constraint(lessThanOrEqualTo: buttonsStackView.topAnchor, constant: -10).isActive = true
+
                 
+        flashcardBackground.addSubview(currentCard)
+        flashcardBackground.addSubview(imageContainer)
+        
+        currentCard.anchor(top: flashcardBackground.topAnchor,
+                        bottom: flashcardBackground.bottomAnchor,
+                        leading: flashcardBackground.leadingAnchor,
+                        trailing: flashcardBackground.trailingAnchor,
+                        height: nil,
+                        width: nil)
+        
+        imageContainer.anchor(top: flashcardBackground.topAnchor,
+                              bottom: flashcardBackground.bottomAnchor,
+                              leading: flashcardBackground.leadingAnchor,
+                              trailing: flashcardBackground.trailingAnchor,
+                              height: nil,
+                              width: nil)
+        
+        imageContainer.addSubview(imageView)
+        imageView.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: imageContainer.centerYAnchor).isActive = true
+        
+        flashcardBackground.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(panCard(_:))))
+        flashcardBackground.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(flipCard(_:))))
+
+        buttonsStackView.anchor(top: contentView.bottomAnchor,
+                                bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                                leading: view.leadingAnchor,
+                                trailing: view.trailingAnchor,
+                                height: nil,
+                                width: nil,
+                                padding: UIEdgeInsets(top: 0, left: 50, bottom: -20, right: -50))
+        
+        buttonsStackView.addArrangedSubview(XView)
+        buttonsStackView.addArrangedSubview(flipView)
+        buttonsStackView.addArrangedSubview(checkmarkView)
     }
     
     func createTestFlashcard() {
@@ -404,7 +529,7 @@ class TestController: UIViewController {
             
         }
         
-        let soundItOutColors = self.createButtons(coloredResults[0].attributedText)
+        let soundItOutColors = createButtons(coloredResults[0].attributedText)
         
         self.currentCard = TestFlashcard(frame: .zero,
                                          results: coloredResults,
@@ -447,7 +572,7 @@ class TestController: UIViewController {
             
         }
         
-        let soundItOutColors = self.createButtons(coloredResults[0].attributedText)
+        let soundItOutColors = createButtons(coloredResults[0].attributedText)
         
         currentCard.results = coloredResults
         currentCard.bottomLabelText = flashcard.bottomLabelText

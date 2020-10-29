@@ -253,10 +253,17 @@ class HomeController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        let vc = TutorialController(collectionViewLayout: layout)
-        self.present(vc, animated: true, completion: nil)
+        
+        if UserDefaults.standard.bool(forKey: "hasLaunchedHome") {
+            return
+        } else {
+         
+            let vc = TutorialController()
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+            
+            UserDefaults.standard.set(true, forKey: "hasLaunchedHome")
+        }
     }
     
     func setup() {

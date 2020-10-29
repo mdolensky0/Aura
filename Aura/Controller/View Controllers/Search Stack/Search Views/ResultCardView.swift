@@ -340,7 +340,7 @@ class ResultCardView: UIView {
         topLabel.topAnchor.constraint(equalTo: topLabelContainer.topAnchor).isActive = true
         topLabel.bottomAnchor.constraint(equalTo: topLabelContainer.bottomAnchor).isActive = true
         topLabel.leadingAnchor.constraint(greaterThanOrEqualTo: topLabelContainer.leadingAnchor).isActive = true
-        topLabel.trailingAnchor.constraint(lessThanOrEqualTo: topLabelContainer.trailingAnchor).isActive = true
+        topLabel.trailingAnchor.constraint(lessThanOrEqualTo: topLabelContainer.trailingAnchor, constant: -1).isActive = true
         
         // Configure Bottom Label
         bottomLabel.attributedText = NSAttributedString(string: bottomLabelText)
@@ -1145,13 +1145,31 @@ extension ResultCardView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
-        // Centers the collection view when there is only a single row
+        // Centers the collection view when there is only a single row and wraps the collection view to next line at right number of cells
         let num = CGFloat(soundItOutCollectionView.numberOfItems(inSection: 0))
         let width = soundItOutCollectionView.frame.width
         
-        if num <= 8 {
-            let totalExtraSpace = width - (num*35.0 + (num - 1.0)*3.0)
-            return UIEdgeInsets(top: 0, left: totalExtraSpace/2.0, bottom: 0, right: totalExtraSpace/2.0)
+        if UIScreen.main.bounds.width <= 320 {
+            
+            if num <= 6 {
+                let totalExtraSpace = width - (num*35.0 + (num - 1.0)*3.0)
+                return UIEdgeInsets(top: 0, left: totalExtraSpace/2.0, bottom: 0, right: totalExtraSpace/2.0)
+            }
+            
+        } else if UIScreen.main.bounds.width <= 375 {
+            
+            if num <= 7 {
+                let totalExtraSpace = width - (num*35.0 + (num - 1.0)*3.0)
+                return UIEdgeInsets(top: 0, left: totalExtraSpace/2.0, bottom: 0, right: totalExtraSpace/2.0)
+            }
+            
+        } else {
+            
+            if num <= 8 {
+                let totalExtraSpace = width - (num*35.0 + (num - 1.0)*3.0)
+                return UIEdgeInsets(top: 0, left: totalExtraSpace/2.0, bottom: 0, right: totalExtraSpace/2.0)
+            }
+            
         }
         
         return UIEdgeInsets.zero

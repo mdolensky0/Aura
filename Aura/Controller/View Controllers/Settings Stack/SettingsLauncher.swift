@@ -324,7 +324,7 @@ class SettingsLauncher: NSObject {
         
         // Label Subview
         let voiceGender = UserDefaults.standard.object(forKey: K.UserDefaultKeys.voiceGender) as? String
-        genderLabel.text = voiceGender! == "FEMALE" ? "Audio Gender : Female" : "Audio Gender : Male"
+        genderLabel.text = voiceGender! == "FEMALE" ? "Audio Gender: Female" : "Audio Gender: Male"
         genderLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         genderLabel.textAlignment = .left
         
@@ -354,6 +354,10 @@ class SettingsLauncher: NSObject {
         toggle.trailingAnchor.constraint(equalTo: voiceGenderButton.trailingAnchor, constant: -20).isActive = true
         
         toggle.setOn(voiceGender! == "FEMALE", animated: false)
+        
+        if UIScreen.main.bounds.width <= 320 {
+            toggle.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+        }
         
     }
     
@@ -601,7 +605,7 @@ class SettingsLauncher: NSObject {
                     
                     // Update Toggle
                     self.toggle.setOn(true, animated: true)
-                    self.genderLabel.text = "Audio Gender : Female"
+                    self.genderLabel.text = "Audio Gender: Female"
                     
                 }
                     
@@ -610,7 +614,7 @@ class SettingsLauncher: NSObject {
                     UserDefaults.standard.set("MALE", forKey: K.UserDefaultKeys.voiceGender)
                     
                     self.toggle.setOn(false, animated: true)
-                    self.genderLabel.text = "Audio Gender : Male"
+                    self.genderLabel.text = "Audio Gender: Male"
 
                 }
             }
@@ -633,8 +637,10 @@ class SettingsLauncher: NSObject {
                 
             }) { (_ ) in
                 
-                // Run Tutorial
-                print("tutorial")
+                self.handleDismiss()
+                let vc = TutorialController()
+                vc.modalPresentationStyle = .fullScreen
+                self.parentVC?.present(vc, animated: true, completion: nil)
                 
             }
         }

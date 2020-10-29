@@ -1064,7 +1064,7 @@ extension SearchController {
         // Create sound it out buttons for result controller
         if results.count == 1 {
             
-            resultsController.soundItOutColors = self.createButtons(results[0].attributedText)
+            resultsController.soundItOutColors = createButtons(results[0].attributedText)
         
         } else { resultsController.soundItOutColors = [] }
         

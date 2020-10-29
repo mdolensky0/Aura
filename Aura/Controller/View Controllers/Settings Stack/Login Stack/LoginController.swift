@@ -70,6 +70,15 @@ class LoginController: UIViewController {
         self.navigationController?.navigationBar.isHidden = false
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        if UserDefaults.standard.bool(forKey: "hasLaunchedFlashcards") {
+            return
+        } else {
+            showPopUp()
+            UserDefaults.standard.set(true, forKey: "hasLaunchedFlashcards")
+        }
+    }
+    
     func setup() {
         
         view.backgroundColor = .white
@@ -182,6 +191,30 @@ class LoginController: UIViewController {
     @objc func cancelButtonTapped() {
         
         self.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    func showPopUp() {
+        
+        guard let window = UIApplication.shared.keyWindow else { return }
+                
+        let popUp = FlashcardsPopUpView(frame: .zero)
+        popUp.alpha = 0
+        
+        window.addSubview(popUp)
+        
+        popUp.anchor(top: window.topAnchor,
+                         bottom: window.bottomAnchor,
+                         leading: window.leadingAnchor,
+                         trailing: window.trailingAnchor,
+                         height: nil,
+                         width: nil)
+            
+        UIView.animate(withDuration: 0.7, delay: 0.2, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            
+            popUp.alpha = 1
+            
+        }, completion: nil)
         
     }
     

@@ -45,14 +45,20 @@ class FlashCardController: UIViewController {
         imageView.tintColor = K.DesignColors.primary
         imageView.backgroundColor = .white
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        let constant = UIScreen.main.bounds.width > 320 ? 40 : 30
+        imageView.heightAnchor.constraint(equalToConstant: CGFloat(constant)).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: CGFloat(constant)).isActive = true
         imageView.contentMode = .scaleAspectFit
         
         
         let label = UILabel()
         label.text = "Create New Deck"
-        label.font = UIFont.systemFont(ofSize: 30, weight: .regular)
+        if UIScreen.main.bounds.width > 320 {
+            label.font = UIFont.systemFont(ofSize: 30, weight: .regular)
+        } else {
+            label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        }
+        
         label.textAlignment = .left
         label.textColor = .black
         label.backgroundColor = .white

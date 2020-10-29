@@ -18,7 +18,7 @@ class SignUpController: UIViewController {
         
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
-        label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
+        label.font = UIFont(name: K.Fonts.avenirBlack, size: 15)
         label.text = "Sign Up"
         label.numberOfLines = 2
         label.textColor = .black
@@ -179,84 +179,78 @@ class SignUpController: UIViewController {
             
         }
         
-        let container = UIView()
-        container.addSubview(auraLabel)
-        container.addSubview(emailTextField)
-        container.addSubview(passwordTextField)
-        container.addSubview(passwordRequirementsLabel)
-        container.addSubview(reTypePasswordTextField)
-        container.addSubview(userAgreementLabel)
-        container.addSubview(signUpButton)
-        container.addSubview(errLabel)
+        view.addSubview(auraLabel)
+        view.addSubview(emailTextField)
+        view.addSubview(passwordTextField)
+        view.addSubview(passwordRequirementsLabel)
+        view.addSubview(reTypePasswordTextField)
+        view.addSubview(userAgreementLabel)
+        view.addSubview(signUpButton)
+        view.addSubview(errLabel)
         
-        auraLabel.anchor(top: container.topAnchor,
+        auraLabel.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                          bottom: nil,
-                         leading: container.leadingAnchor,
-                         trailing: container.trailingAnchor,
+                         leading: view.leadingAnchor,
+                         trailing: view.trailingAnchor,
                          height: nil,
-                         width: nil)
+                         width: nil,
+                         padding: UIEdgeInsets(top: -10, left: 0, bottom: 0, right: 0))
         
         emailTextField.anchor(top: auraLabel.bottomAnchor,
                               bottom: nil,
-                              leading: container.leadingAnchor,
-                              trailing: container.trailingAnchor,
+                              leading: view.leadingAnchor,
+                              trailing: view.trailingAnchor,
                               height: 40,
                               width: nil,
-                              padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                              padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
         
         passwordTextField.anchor(top: emailTextField.bottomAnchor,
                                  bottom: nil,
-                                 leading: container.leadingAnchor,
-                                 trailing: container.trailingAnchor,
+                                 leading: view.leadingAnchor,
+                                 trailing: view.trailingAnchor,
                                  height: 40,
                                  width: nil,
-                                 padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                                 padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
         
         passwordRequirementsLabel.anchor(top: passwordTextField.bottomAnchor,
                                          bottom: nil,
-                                         leading: container.leadingAnchor,
-                                         trailing: container.trailingAnchor,
+                                         leading: view.leadingAnchor,
+                                         trailing: view.trailingAnchor,
                                          height: nil,
                                          width: nil,
-                                         padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
+                                         padding: UIEdgeInsets(top: 8, left: 30, bottom: 0, right: -30))
         
         reTypePasswordTextField.anchor(top: passwordRequirementsLabel.bottomAnchor,
                                        bottom: nil,
-                                       leading: container.leadingAnchor,
-                                       trailing: container.trailingAnchor,
+                                       leading: view.leadingAnchor,
+                                       trailing: view.trailingAnchor,
                                        height: 40,
                                        width: nil,
-                                       padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                                       padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
                 
         signUpButton.anchor(top: reTypePasswordTextField.bottomAnchor,
                             bottom: nil,
-                            leading: container.leadingAnchor,
-                            trailing: container.trailingAnchor,
+                            leading: view.leadingAnchor,
+                            trailing: view.trailingAnchor,
                             height: 50,
                             width: nil,
-                            padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+                            padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
         
         userAgreementLabel.anchor(top: signUpButton.bottomAnchor,
                                   bottom: nil,
-                                  leading: container.leadingAnchor,
-                                  trailing: container.trailingAnchor,
+                                  leading: view.leadingAnchor,
+                                  trailing: view.trailingAnchor,
                                   height: nil,
                                   width: nil,
                                   padding: UIEdgeInsets(top: 12, left: 60, bottom: 0, right: -60))
         
         errLabel.anchor(top: userAgreementLabel.bottomAnchor,
-                        bottom: container.bottomAnchor,
-                        leading: container.leadingAnchor,
-                        trailing: container.trailingAnchor,
+                        bottom: nil,
+                        leading: view.leadingAnchor,
+                        trailing: view.trailingAnchor,
                         height: nil,
                         width: nil,
-                        padding: UIEdgeInsets(top: 12, left: 40, bottom: 0, right: -40))
-        
-        view.addSubview(container)
-        container.translatesAutoresizingMaskIntoConstraints = false
-        container.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        container.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -80).isActive = true
-        container.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -60).isActive = true
+                        padding: UIEdgeInsets(top: 12, left: 40, bottom: -20, right: -40))
         
     }
     

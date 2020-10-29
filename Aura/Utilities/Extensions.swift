@@ -131,6 +131,29 @@ extension UIView {
 
 }
 
+// MARK: - Global Func
+func createButtons(_ attributedString: NSMutableAttributedString) -> [(color: UIColor, ID: String, range: NSRange)] {
+
+    // Otherwise Return an array of SoundButtons
+    var colors: [(color: UIColor, ID: String, range: NSRange)] = []
+    
+    attributedString.enumerateAttribute(.foregroundColor, in: NSRange(0..<attributedString.length)) { (color, range, stop) in
+        
+        if let color = color as? UIColor {
+            
+            attributedString.enumerateAttribute(.id, in: range) { (id, range, stop) in
+                
+                if let id = id as? String {
+                    if color != K.Colors.lightGrey {
+                        colors.append((color: color, ID: id, range: range))
+                    }
+                }
+            }
+        }
+    }
+    return colors
+}
+
 //MARK:- UIViewController Extensions
 extension UIViewController {
     
@@ -147,29 +170,7 @@ extension UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
-    
-    func createButtons(_ attributedString: NSMutableAttributedString) -> [(color: UIColor, ID: String, range: NSRange)] {
- 
-        // Otherwise Return an array of SoundButtons
-        var colors: [(color: UIColor, ID: String, range: NSRange)] = []
         
-        attributedString.enumerateAttribute(.foregroundColor, in: NSRange(0..<attributedString.length)) { (color, range, stop) in
-            
-            if let color = color as? UIColor {
-                
-                attributedString.enumerateAttribute(.id, in: range) { (id, range, stop) in
-                    
-                    if let id = id as? String {
-                        if color != K.Colors.lightGrey {
-                            colors.append((color: color, ID: id, range: range))
-                        }
-                    }
-                }
-            }
-        }
-        return colors
-    }
-    
     func getDeviceLanguageCode() -> String {
         
         guard let code = Locale.preferredLanguages.first else { return "en" }
@@ -244,6 +245,7 @@ extension UILabel {
         
         self.attributedText = mutableAttributedString
         self.numberOfLines = 0
+        
     }
     
     func boundingRect(forCharacterRange range: NSRange) -> CGRect? {
@@ -266,6 +268,105 @@ extension UILabel {
         layoutManager.characterRange(forGlyphRange: range, actualGlyphRange: &glyphRange)
 
         return layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+    }
+    
+    var fontSize: CGFloat {
+        get {
+            if adjustsFontSizeToFitWidth {
+                var currentFont: UIFont = font
+                let originalFontSize = currentFont.pointSize
+                var currentSize: CGSize = (text! as NSString).size(withAttributes: [NSAttributedString.Key.font: currentFont])
+
+                while currentSize.width > frame.size.width && currentFont.pointSize > (originalFontSize * minimumScaleFactor) {
+                    currentFont = currentFont.withSize(currentFont.pointSize - 1)
+                    currentSize = (text! as NSString).size(withAttributes: [NSAttributedString.Key.font: currentFont])
+                }
+
+                return currentFont.pointSize
+            }
+
+            return font.pointSize
+        }
+    }
+    
+    func adjustFontSizeToFit(minimumFontSize: CGFloat = 13, maximumFontSize: CGFloat = 60) {
+        // Only need this for multiline labels
+        if numberOfLines == 1 { return }
+        
+        let maxFontSize = maximumFontSize
+        
+        var sizeForHeight: CGFloat = 0
+        
+        // Adjusts for height
+        for size in stride(from: maxFontSize, to: minimumFontSize, by: -CGFloat(1.0)) {
+            let proposedFont = font.withSize(size)
+            let constraintSize = CGSize(width: bounds.size.width, height: CGFloat(MAXFLOAT))
+            let labelSize = (text! as NSString).boundingRect(with: constraintSize,
+                                                            options: .usesLineFragmentOrigin,
+                                                            attributes: [NSAttributedString.Key.font: proposedFont],
+                                                            context: nil)
+            
+            if labelSize.height <= bounds.height {
+                font = proposedFont
+                setNeedsLayout()
+                sizeForHeight = size
+                break;
+            }
+        }
+        
+        // Adjust so the largest word will fit in a single line
+        let textArray = self.text!.split(separator: " ").map { String($0) }
+        var largestWord = textArray[0]
+        for word in textArray {
+            if word.count > largestWord.count {
+                largestWord = word
+            }
+        }
+        
+        for size in stride(from: sizeForHeight, to: minimumFontSize, by: -CGFloat(1.0)) {
+            let proposedFont = font.withSize(size)
+            let constraintSize = CGSize(width: CGFloat(MAXFLOAT), height: CGFloat(MAXFLOAT))
+            let labelSize = (largestWord as NSString).boundingRect(with: constraintSize,
+                                                            options: .usesLineFragmentOrigin,
+                                                            attributes: [NSAttributedString.Key.font: proposedFont],
+                                                            context: nil)
+            
+            if labelSize.width <= bounds.width {
+                font = proposedFont
+                setNeedsLayout()
+                break;
+            }
+        }
+    }
+    
+    func adjustsMultiLineFontToFitWidth() {
+        
+        if numberOfLines == 1 { return }
+        
+        // Adjust so the largest word will fit in a single line
+        let textArray = self.text!.split(separator: " ").map { String($0) }
+        var largestWord = textArray[0]
+        for word in textArray {
+            if word.count > largestWord.count {
+                largestWord = word
+            }
+        }
+        
+        for size in stride(from: font.pointSize, to: 13, by: -CGFloat(1.0)) {
+            let proposedFont = font.withSize(size)
+            let constraintSize = CGSize(width: CGFloat(MAXFLOAT), height: CGFloat(MAXFLOAT))
+            let labelSize = (largestWord as NSString).boundingRect(with: constraintSize,
+                                                            options: .usesLineFragmentOrigin,
+                                                            attributes: [NSAttributedString.Key.font: proposedFont],
+                                                            context: nil)
+            
+            if labelSize.width <= bounds.width {
+                font = proposedFont
+                setNeedsLayout()
+                break;
+            }
+        }
+        
     }
     
 }
@@ -501,7 +602,7 @@ extension UITapGestureRecognizer {
         
         // Configure NSTextStorage and apply the layout manager
         let textStorage = NSTextStorage(attributedString: attributedText)
-        textStorage.addAttribute(NSAttributedString.Key.font, value: label.font!, range: NSMakeRange(0, attributedText.length))
+        textStorage.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: label.fontSize, weight: .bold), range: NSMakeRange(0, attributedText.length))
         textStorage.addLayoutManager(layoutManager)
 
         // get the tapped character location

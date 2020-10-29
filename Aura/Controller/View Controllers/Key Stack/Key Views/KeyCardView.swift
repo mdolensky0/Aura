@@ -82,30 +82,39 @@ class KeyCardView: UIView {
         
     }()
     
-    var learnMoreButton: UIButton = {
+    var learnMoreButton: AnimatedButton = {
         
-        let button = UIButton()
+        let button = AnimatedButton(frame: .zero)
+        
         if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+            button.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         } else {
-            button.setImage(#imageLiteral(resourceName: "chevron").withRenderingMode(.alwaysTemplate), for: .normal)
+            button.setImage(#imageLiteral(resourceName: "ellipsis").withRenderingMode(.alwaysTemplate), for: .normal)
         }
+        
+        button.contentMode = .center
         button.backgroundColor = .white
-        button.tintColor = .black
+        button.tintColor = K.DesignColors.primary
+        
+        button.widthAnchor.constraint(equalToConstant: 42).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        button.roundCorners(cornerRadius: 21)
+        
         button.addTarget(self, action: #selector(learnMoreButtonPressed(_:)), for: .touchUpInside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.imageView?.translatesAutoresizingMaskIntoConstraints = false
-        button.imageView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        button.imageView?.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        button.imageView?.contentMode = .scaleAspectFit
         return button
         
     }()
     
+    let learnMoreBackgroundView: UIView = {
+        
+        let view = UIView()
+        view.widthAnchor.constraint(equalToConstant: 42).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        view.roundCorners(cornerRadius: 21)
+        return view
+        
+    }()
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -133,6 +142,7 @@ class KeyCardView: UIView {
         self.backgroundColor = .white
         self.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 20)
         self.soundBackgroundView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 2, height: 2), radius: 2, cornerRadius: 21)
+        self.learnMoreBackgroundView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 2, height: 2), radius: 2, cornerRadius: 21)
         
         // Fix the width and height of the card
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -142,7 +152,7 @@ class KeyCardView: UIView {
         // Add subviews
         self.addSubview(contentView)
         self.addSubview(soundBackgroundView)
-        self.addSubview(learnMoreButton)
+        self.addSubview(learnMoreBackgroundView)
         
         // If there is text there is no color circle
         if self.text != nil {
@@ -189,11 +199,19 @@ class KeyCardView: UIView {
                            height: nil,
                            width: nil)
         
-        learnMoreButton.translatesAutoresizingMaskIntoConstraints = false
-        learnMoreButton.centerYAnchor.constraint(equalTo: soundBackgroundView.centerYAnchor).isActive = true
-        learnMoreButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40).isActive = true
+        learnMoreBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        learnMoreBackgroundView.centerYAnchor.constraint(equalTo: soundBackgroundView.centerYAnchor).isActive = true
+        learnMoreBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40).isActive = true
                 
-        soundBackgroundView.trailingAnchor.constraint(lessThanOrEqualTo: learnMoreButton.leadingAnchor, constant: -20).isActive = true
+        soundBackgroundView.trailingAnchor.constraint(lessThanOrEqualTo: learnMoreBackgroundView.leadingAnchor, constant: -20).isActive = true
+        
+        learnMoreBackgroundView.addSubview(learnMoreButton)
+        learnMoreButton.anchor(top: learnMoreBackgroundView.topAnchor,
+                           bottom: learnMoreBackgroundView.bottomAnchor,
+                           leading: learnMoreBackgroundView.leadingAnchor,
+                           trailing: learnMoreBackgroundView.trailingAnchor,
+                           height: nil,
+                           width: nil)
         
         if color == K.Colors.lightGrey || color == K.Colors.yellow {
             
