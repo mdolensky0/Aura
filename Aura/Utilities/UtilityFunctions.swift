@@ -10,11 +10,15 @@ import UIKit
 import AVFoundation
 import Firebase
 
-protocol DecksControllerDelegate {
+protocol DeckUpdater {
     
     func updateMyDecks()
     func updatePopularDecks()
     
+}
+
+extension DeckUpdater {
+    func updatePopularDecks() { return }
 }
 
 protocol AddSearchHistoryDelegate {
@@ -23,20 +27,14 @@ protocol AddSearchHistoryDelegate {
     
 }
 
-protocol HomeDelegate {
-    
-    func updateMyDecks()
-    func updatePopularDecks()
-    
-}
-
 class Utilities {
     
     static let shared = Utilities()
-        
-    var decksDelegate: DecksControllerDelegate?
+    
+    var homeDelegate: DeckUpdater?
+    var decksDelegate: DeckUpdater?
+    var resultsDelegate: DeckUpdater?
     var searchHistoryDelegate: AddSearchHistoryDelegate?
-    var homeDelegate: HomeDelegate?
     var settingsLauncher = SettingsLauncher()
     
     var user: User? {
@@ -45,6 +43,7 @@ class Utilities {
             self.decksDelegate?.updateMyDecks()
             self.searchHistoryDelegate?.updateSearchHistory()
             self.homeDelegate?.updateMyDecks()
+            self.resultsDelegate?.updateMyDecks()
         }
         
     }

@@ -1,59 +1,77 @@
 //
-//  TestResultPopUpView.swift
+//  StudyResultPopUpView.swift
 //  Aura
 //
-//  Created by Maxwell Dolensky on 10/19/20.
+//  Created by Maxwell Dolensky on 10/30/20.
 //  Copyright © 2020 Max Dolensky. All rights reserved.
 //
 
 import UIKit
 
-protocol TestResultPopUpDelegate {
-    func done()
-    func restart()
-}
-
-class TestResultPopUpView: UIView {
+class StudyResultPopUpView: UIView {
     
     var delegate: TestResultPopUpDelegate?
+    var fontSize: CGFloat = {
+        return UIScreen.main.bounds.width > 320 ? CGFloat(17) : CGFloat(13)
+    }()
     
     // MARK: - SubViews
-    var scoreLabel: UILabel = {
+    var titleLabel: UILabel = {
         let l = UILabel()
         l.textAlignment = .center
         l.numberOfLines = 1
-        l.font = UIFont.systemFont(ofSize: 46, weight: .bold)
-        l.text = "100%"
+        l.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+        l.text = "Summary"
         l.textColor = K.DesignColors.primary
         return l
     }()
     
-    var mainLabel: UILabel = {
+    lazy var numCardsReviewedLabel: UILabel = {
         let l = UILabel()
-        l.textAlignment = .center
+        l.textAlignment = .left
         l.numberOfLines = 1
-        l.text = "Great Job!"
+        l.text = "Number of cards reviewed: 100"
         l.textColor = K.DesignColors.purpleGrey
-        l.font = UIFont.systemFont(ofSize: 36, weight: .bold)
+        l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         return l
     }()
     
-    var subLabel: UILabel = {
+    lazy var numberOfCardsCorrectLabel: UILabel = {
         let l = UILabel()
-        l.textAlignment = .center
-        l.numberOfLines = 0
-        l.text = "You got a perfect score!"
+        l.textAlignment = .left
+        l.numberOfLines = 1
+        l.text = "Number of right answers: 100"
         l.textColor = K.DesignColors.purpleGrey
-        l.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         return l
     }()
     
-    var restartButton: AnimatedButton = {
+    lazy var numberOfCardsWrongLabel: UILabel = {
+        let l = UILabel()
+        l.textAlignment = .left
+        l.numberOfLines = 1
+        l.text = "Number of wrong answers: 100"
+        l.textColor = K.DesignColors.purpleGrey
+        l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
+        return l
+    }()
+    
+    lazy var scoreLabel: UILabel = {
+        let l = UILabel()
+        l.textAlignment = .left
+        l.numberOfLines = 1
+        l.text = "Score: "
+        l.textColor = K.DesignColors.purpleGrey
+        l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
+        return l
+    }()
+    
+    var continueButton: AnimatedButton = {
         let b = AnimatedButton(frame: .zero)
         b.isFlat = true
         b.backgroundColor = K.DesignColors.primary
         b.tintColor = .white
-        b.setTitle("Restart", for: .normal)
+        b.setTitle("Continue", for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         b.addTarget(self, action: #selector(restart(_:)), for: .touchUpInside)
         return b
@@ -85,13 +103,15 @@ class TestResultPopUpView: UIView {
         self.backgroundColor = .white
         self.roundCorners(cornerRadius: 10)
         
+        self.addSubview(titleLabel)
+        self.addSubview(numCardsReviewedLabel)
+        self.addSubview(numberOfCardsCorrectLabel)
+        self.addSubview(numberOfCardsWrongLabel)
         self.addSubview(scoreLabel)
-        self.addSubview(mainLabel)
-        self.addSubview(subLabel)
-        self.addSubview(restartButton)
+        self.addSubview(continueButton)
         self.addSubview(doneButton)
         
-        scoreLabel.anchor(top: self.topAnchor,
+        titleLabel.anchor(top: self.topAnchor,
                           bottom: nil,
                           leading: self.leadingAnchor,
                           trailing: self.trailingAnchor,
@@ -99,23 +119,39 @@ class TestResultPopUpView: UIView {
                           width: nil,
                           padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0))
         
-        mainLabel.anchor(top: scoreLabel.bottomAnchor,
+        numCardsReviewedLabel.anchor(top: titleLabel.bottomAnchor,
                           bottom: nil,
                           leading: self.leadingAnchor,
                           trailing: self.trailingAnchor,
                           height: nil,
                           width: nil,
-                          padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0))
+                          padding: UIEdgeInsets(top: 50, left: 30, bottom: 0, right: -30))
         
-        subLabel.anchor(top: mainLabel.bottomAnchor,
+        numberOfCardsCorrectLabel.anchor(top: numCardsReviewedLabel.bottomAnchor,
                           bottom: nil,
                           leading: self.leadingAnchor,
                           trailing: self.trailingAnchor,
                           height: nil,
                           width: nil,
-                          padding: UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0))
+                          padding: UIEdgeInsets(top: 8, left: 30, bottom: 0, right: -30))
         
-        restartButton.anchor(top: subLabel.bottomAnchor,
+        numberOfCardsWrongLabel.anchor(top: numberOfCardsCorrectLabel.bottomAnchor,
+                          bottom: nil,
+                          leading: self.leadingAnchor,
+                          trailing: self.trailingAnchor,
+                          height: nil,
+                          width: nil,
+                          padding: UIEdgeInsets(top: 8, left: 30, bottom: 0, right: -30))
+        
+        scoreLabel.anchor(top: numberOfCardsWrongLabel.bottomAnchor,
+                          bottom: nil,
+                          leading: self.leadingAnchor,
+                          trailing: self.trailingAnchor,
+                          height: nil,
+                          width: nil,
+                          padding: UIEdgeInsets(top: 8, left: 30, bottom: 0, right: -30))
+        
+        continueButton.anchor(top: scoreLabel.bottomAnchor,
                              bottom: nil,
                              leading: self.leadingAnchor,
                              trailing: self.trailingAnchor,
@@ -123,7 +159,7 @@ class TestResultPopUpView: UIView {
                              width: nil,
                              padding: UIEdgeInsets(top: 50, left: 30, bottom: 0, right: -30))
         
-        doneButton.anchor(top: restartButton.bottomAnchor,
+        doneButton.anchor(top: continueButton.bottomAnchor,
                           bottom: self.bottomAnchor,
                              leading: self.leadingAnchor,
                              trailing: self.trailingAnchor,
@@ -134,24 +170,18 @@ class TestResultPopUpView: UIView {
         self.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 40).isActive = true
     }
     
-    func setupLabelsFromScore(_ score: Double) {
+    
+    
+    func setupLabelsFromScore(numReviewed: Int, numCorrect: Int) {
         
+        numCardsReviewedLabel.text?.append("\(numReviewed)")
+        numberOfCardsCorrectLabel.text?.append("\(numCorrect)")
+        numberOfCardsWrongLabel.text?.append("\(numReviewed - numCorrect)")
+        
+        let score = Double(numCorrect) / Double(numReviewed) * 100.0
         let percentText = String(format: "%.1f", score) + "%"
-        scoreLabel.text = percentText
+        scoreLabel.text?.append(percentText)
         
-        if score == 100 {
-            mainLabel.text = "Great Job!"
-            subLabel.text = "You got a perfect score!"
-        } else if score > 80 {
-            mainLabel.text = "Awesome!"
-            subLabel.text = "Almost there"
-        } else if score > 70 {
-            mainLabel.text = "Nice!"
-            subLabel.text = "Keep up the good work!"
-        } else {
-            mainLabel.text = "You got this!"
-            subLabel.text = "Keep studying"
-        }
         
     }
     

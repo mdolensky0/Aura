@@ -113,3 +113,63 @@ class TestResultPopUpManager: PopUpManager, TestResultPopUpDelegate {
     }
     
 }
+
+// MARK: - Test Result Pop Up Class
+class StudyResultPopUpManager: PopUpManager, TestResultPopUpDelegate {
+    
+    var popUpView = StudyResultPopUpView()
+    var delegate: TestManagerDelegate?
+    
+    convenience init(popUpView: StudyResultPopUpView) {
+        self.init()
+        self.popUpView = popUpView
+        self.popUpView.delegate = self
+    }
+    
+    override func showPopUpFromBottom() {
+        showPopUpFromBottom(v: popUpView)
+    }
+    
+    func dismiss(completion: @escaping() -> Void) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.blackView.alpha = 0
+            self.popUpView.transform = CGAffineTransform.init(translationX: 0, y: UIScreen.main.bounds.height)
+        }) { (_) in
+            self.blackView.removeFromSuperview()
+            self.popUpView.removeFromSuperview()
+            completion()
+        }
+    }
+    
+    func done() {
+        dismiss { self.delegate?.finishTest(willRestart: false) }
+    }
+    
+    func restart() {
+        dismiss { self.delegate?.finishTest(willRestart: true) }
+    }
+    
+}
+
+class SwipeTutorialPopUpManager: PopUpManager, SwipeTutorialDelegate {
+    
+    lazy var popUpView: SwipeTutorialView = {
+        let v = SwipeTutorialView()
+        v.delegate = self
+        return v
+    }()
+    
+    override func showPopUpFadingIn() {
+        showPopUpFadingIn(v: popUpView)
+    }
+    
+    func dismiss() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.blackView.alpha = 0
+            self.popUpView.alpha = 0
+        }) { (_) in
+            self.blackView.removeFromSuperview()
+            self.popUpView.removeFromSuperview()
+        }
+    }
+}

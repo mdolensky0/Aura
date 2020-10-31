@@ -293,7 +293,7 @@ class FlashCardController: UIViewController {
     }
 }
 
-extension FlashCardController: DecksControllerDelegate {
+extension FlashCardController: DeckUpdater {
     
     func updateMyDecks() {
         
@@ -335,7 +335,7 @@ extension FlashCardController: MyDeckDelegate, PopularDeckDelegate {
     
     func goToDeck(deckIndex: Int) {
         let vc = DeckController()
-        vc.myDeck = myDecksScrollView.decks[deckIndex]
+        vc.myDeck = Utilities.shared.user?.decks[deckIndex]
         vc.myDeckIndex = deckIndex
         self.navigationController?.pushViewController(vc, animated: true)
     }

@@ -286,6 +286,18 @@ class TestController: UIViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if UserDefaults.standard.bool(forKey: "hasSeenSwipePopUp") {
+            return
+        } else {
+            let popUpManager = SwipeTutorialPopUpManager()
+            popUpManager.showPopUpFadingIn()
+            UserDefaults.standard.setValue(true, forKey: "hasSeenSwipePopUp")
+        }
+        
+    }
+    
     //MARK: - Setup
     func setup() {
         

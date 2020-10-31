@@ -320,7 +320,6 @@ class TestFlashcard: UIView {
     }
     
     func setupCollectionView() {
-        
         soundItOutCollectionView.delegate = self
         soundItOutCollectionView.dataSource = self
         soundItOutCollectionView.register(SoundItOutCell.self, forCellWithReuseIdentifier: SoundItOutCell.identifier)
@@ -1014,10 +1013,11 @@ extension TestFlashcard: UICollectionViewDelegateFlowLayout {
         
         // Centers the collection view when there is only a single row
         let num = CGFloat(soundItOutCollectionView.numberOfItems(inSection: 0))
-        let width = soundItOutCollectionView.frame.width
+        var width = UIScreen.main.bounds.width - 100
+        if UIScreen.main.bounds.width <= 320 { width = UIScreen.main.bounds.width - 80 }
         
         if UIScreen.main.bounds.width <= 320 {
-            
+        
             if num <= 6 {
                 let totalExtraSpace = width - (num*35.0 + (num - 1.0)*3.0)
                 return UIEdgeInsets(top: 0, left: totalExtraSpace/2.0, bottom: 0, right: totalExtraSpace/2.0)

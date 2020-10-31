@@ -8,8 +8,8 @@
 
 import UIKit
 
-class StudyController: UIViewController {
-    
+class StudyController: UIViewController, TestManagerDelegate {
+
     //MARK: - Data
     var myDeck: DeckModel!
     var myDeckIndex: Int!
@@ -17,6 +17,8 @@ class StudyController: UIViewController {
     var isFront = true
     var isReverse = true
     var myQueue = [FlashcardModel]()
+    var numCardsSeen = 0
+    var numCorrect = 0
     
     //MARK: - Subviews
     
@@ -228,6 +230,17 @@ class StudyController: UIViewController {
         
     }()
     
+    let doneButton: UIButton = {
+        let b = UIButton()
+        b.backgroundColor = K.DesignColors.primary
+        b.setTitle("DONE", for: .normal)
+        b.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        b.tintColor = .white
+        b.addTarget(self, action: #selector(donePressed(_:)), for: .touchUpInside)
+        b.roundCorners(cornerRadius: 10)
+        return b
+    }()
+    
     var currentCard: TestFlashcard!
     
     let containerView: UIView = {
@@ -285,6 +298,18 @@ class StudyController: UIViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if UserDefaults.standard.bool(forKey: "hasSeenSwipePopUp") {
+            return
+        } else {
+            let popUpManager = SwipeTutorialPopUpManager()
+            popUpManager.showPopUpFadingIn()
+            UserDefaults.standard.setValue(true, forKey: "hasSeenSwipePopUp")
+        }
+        
+    }
+    
     //MARK: - Setup
     func setup() {
         
@@ -305,6 +330,11 @@ class StudyController: UIViewController {
         // Make bar color purple, and buttons white
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.barTintColor = K.DesignColors.primary
+        
+        // Change Back Bar Button
+        self.navigationItem.hidesBackButton = true
+        let newBackButton = UIBarButtonItem(title: "done", style: UIBarButtonItem.Style.plain, target: self, action: #selector(donePressed(_:)))
+        self.navigationItem.leftBarButtonItem = newBackButton
         
         // Configure self.view
         view.backgroundColor = K.DesignColors.background
@@ -667,6 +697,8 @@ class StudyController: UIViewController {
     
     func getNewCard(wasCorrect: Bool) {
         
+        numCardsSeen += 1
+        if wasCorrect { numCorrect += 1 }
         updateDeckAfterSwipe(wasCorrect)
         flashcardBackground.center = self.contentView.center
         flashcardBackground.transform = .identity
@@ -894,4 +926,26 @@ class StudyController: UIViewController {
         }
     }
     
+    @objc func donePressed(_ sender: UIButton) {
+        
+        if numCardsSeen == 0 { navigationController?.popViewController(animated: true) ; return }
+        
+        // Show Results
+        let v = StudyResultPopUpView(frame: .zero)
+        v.setupLabelsFromScore(numReviewed: numCardsSeen, numCorrect: numCorrect)
+        let popUpManager = StudyResultPopUpManager(popUpView: v)
+        popUpManager.delegate = self
+        popUpManager.showPopUpFromBottom()
+    }
+    
+    func finishTest(willRestart: Bool) {
+    
+        if !willRestart {
+            navigationController?.popViewController(animated: true)
+        }
+        
+    }
+    
 }
+
+

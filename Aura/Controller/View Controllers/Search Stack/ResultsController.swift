@@ -243,28 +243,19 @@ class ResultsController: UIViewController {
         
     }()
     
-    var goToFlashcardsButton: UIButton = {
+    var myDecksLabel: UILabel = {
         
-        let button = UIButton()
-        button.setTitle("Study Flashcards", for: .normal)
-        if UIScreen.main.bounds.width > 320 {
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .bold)
-        } else {
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .bold)
-        }
-        
-        button.tintColor = .white
-        button.setBackgroundImage(#imageLiteral(resourceName: "study"), for: .normal)
-        button.addTarget(self, action: #selector(goToFlashcardButtonPressed(_:)), for: .touchUpInside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
-        button.roundCorners(cornerRadius: 10)
-        return button
+        let l = UILabel()
+        l.text = "My Decks"
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .black
+        return l
         
     }()
     
+    var myDecksScrollView: MyDecksScrollView!
+        
     var lessonsButton: UIButton = {
         
         let button = UIButton()
@@ -288,9 +279,7 @@ class ResultsController: UIViewController {
         
     // Background Views
     let resultBackgroundView = UIView ()
-    
-    let goToFlashcardBackgroundView = UIView()
-    
+        
     let lessonBackgroundView = UIView()
 
 //MARK: - Class Functions
@@ -375,10 +364,12 @@ extension ResultsController {
         for view in learnMoreStackView.arrangedSubviews {
             view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
         }
-        
-        goToFlashcardBackgroundView.setShadow(color: .black, opacity: 0.7, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
-        
+                
         lessonBackgroundView.setShadow(color: .black, opacity: 0.7, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+        
+        for v in myDecksScrollView.stackView.subviews {
+            v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+        }
         
     }
     
@@ -601,7 +592,7 @@ extension ResultsController {
         setupLearnMoreScrollView()
         
         // Setup FlashCard UpSaleButton
-        setupGoToFlashcardsButton()
+        setupMyFlashcards()
         
         // Setup Lessons UpSaleButton
         setupLessonsButton()
@@ -730,21 +721,28 @@ extension ResultsController {
         
     }
     
-    func setupGoToFlashcardsButton() {
+    func setupMyFlashcards() {
         
-        mainStackView.addArrangedSubview(goToFlashcardBackgroundView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
-        goToFlashcardBackgroundView.addSubview(goToFlashcardsButton)
+        // Initialize My Decks Scroll View
+        if let decks = Utilities.shared.user?.decks {
+            myDecksScrollView = MyDecksScrollView(frame: .zero, decks: decks)
+            myDecksScrollView.myDeckDelegate = self
+        } else {
+            myDecksScrollView = MyDecksScrollView(frame: .zero)
+            myDecksScrollView.myDeckDelegate = self
+        }
         
-        goToFlashcardBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        goToFlashcardBackgroundView.heightAnchor.constraint(equalToConstant: 220).isActive = true
-        goToFlashcardBackgroundView.widthAnchor.constraint(greaterThanOrEqualToConstant: 10).isActive = true
-                
-        goToFlashcardsButton.anchor(top: goToFlashcardBackgroundView.topAnchor,
-                                    bottom: goToFlashcardBackgroundView.bottomAnchor,
-                                    leading: goToFlashcardBackgroundView.leadingAnchor,
-                                    trailing: goToFlashcardBackgroundView.trailingAnchor,
-                                    height: nil,
-                                    width: nil)
+        mainStackView.addArrangedSubview(myDecksLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        
+        mainStackView.addArrangedSubview(myDecksScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        
+        myDecksScrollView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        // Update My Decks Visibility
+        myDecksScrollView.updateVisibility()
+        if myDecksScrollView.decks.count == 0 {
+            myDecksLabel.superview?.isHidden = true
+        }
     }
     
     func setupLessonsButton() {
@@ -1699,3 +1697,45 @@ extension ResultsController: SpeechToTextDelegate {
     
 }
 
+extension ResultsController: DeckUpdater {
+    
+    func updateMyDecks() {
+        
+        guard let decks = Utilities.shared.user?.decks else {
+            
+            myDecksScrollView.decks = []
+            myDecksScrollView.updateDecks()
+            myDecksScrollView.updateVisibility()
+            myDecksLabel.superview?.isHidden = true
+            return
+            
+        }
+        
+        myDecksScrollView.decks = decks
+        myDecksScrollView.updateDecks()
+        myDecksScrollView.updateVisibility()
+                
+        if decks.count == 0 {
+            myDecksLabel.superview?.isHidden = true
+        } else { myDecksLabel.superview?.isHidden = false }
+    }
+}
+
+extension ResultsController: MyDeckDelegate {
+    
+    func goToDeck(deckIndex: Int) {
+        
+        if let controllers = tabBarController?.viewControllers {
+            if let navVC = controllers[3] as? UINavigationController {
+                navVC.popToRootViewController(animated: false)
+                if let rootVC = navVC.viewControllers[0] as? FlashCardController {
+                    rootVC.goToDeck(deckIndex: deckIndex)
+                    self.tabBarController?.selectedIndex = 3
+                }
+                
+            }
+        }
+        
+    }
+    
+}

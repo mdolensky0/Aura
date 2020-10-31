@@ -43,6 +43,17 @@ class HomeController: UIViewController {
                       height: nil,
                       width: nil)
         
+        let b = AnimatedButton(frame: .zero)
+        b.addTarget(self, action: #selector(discoverPressed(_:)), for: .touchUpInside)
+        
+        container.addSubview(b)
+        b.anchor(top: container.topAnchor,
+                 bottom: container.bottomAnchor,
+                 leading: container.leadingAnchor,
+                 trailing: container.trailingAnchor,
+                 height: nil,
+                 width: nil)
+        
         return container
         
     }()
@@ -452,6 +463,21 @@ class HomeController: UIViewController {
         }
         
     }
+    
+    @objc func discoverPressed(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.2) {
+            
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+            
+        } completion: { (_) in
+            
+            self.tabBarController?.selectedIndex = 2
+            
+        }
+        
+    }
         
     @objc func searchPressed(_ sender: UIButton) {
         
@@ -510,6 +536,15 @@ extension HomeController: MyDeckDelegate, PopularDeckDelegate {
     func goToDeck(deckIndex: Int) {
         
         self.tabBarController?.selectedIndex = 3
+        if let controllers = tabBarController?.viewControllers {
+            if let navVC = controllers[3] as? UINavigationController {
+                navVC.popToRootViewController(animated: false)
+                if let rootVC = navVC.viewControllers[0] as? FlashCardController {
+                    rootVC.goToDeck(deckIndex: deckIndex)
+                }
+                
+            }
+        }
         
     }
     
@@ -519,7 +554,7 @@ extension HomeController: MyDeckDelegate, PopularDeckDelegate {
     
 }
 
-extension HomeController: HomeDelegate {
+extension HomeController: DeckUpdater {
     
     func updateMyDecks() {
         
