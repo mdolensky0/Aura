@@ -78,7 +78,7 @@ class DeckController: UIViewController {
         
         let button = AnimatedButton(frame: .zero)
         button.backgroundColor = K.DesignColors.primary
-        button.setTitle("Start Studying", for: .normal)
+        button.setTitle("Study Loop", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .bold)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(startLoop(_:)), for: .touchUpInside)
@@ -418,14 +418,30 @@ class DeckController: UIViewController {
         headerLabel.font = .systemFont(ofSize: 17, weight: .bold)
         headerLabel.textAlignment = .left
         
+        let cardScoreLabel = UILabel()
+        cardScoreLabel.backgroundColor = .clear
+        cardScoreLabel.text = "Retention Rate"
+        cardScoreLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        cardScoreLabel.textAlignment = .right
+        
         headerView.addSubview(headerLabel)
         headerLabel.anchor(top: nil,
                            bottom: headerView.bottomAnchor,
                            leading: headerView.leadingAnchor,
-                           trailing: headerView.trailingAnchor,
+                           trailing: nil,
                            height: nil,
                            width: nil,
-                           padding: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: 0))
+                           padding: UIEdgeInsets(top: 0, left: 0, bottom: -10, right: 0))
+        
+        headerView.addSubview(cardScoreLabel)
+        cardScoreLabel.anchor(top: nil,
+                              bottom: headerView.bottomAnchor,
+                              leading: headerLabel.trailingAnchor,
+                              trailing: headerView.trailingAnchor,
+                              height: nil,
+                              width: nil,
+                              padding: UIEdgeInsets(top: 0, left: 0, bottom: -10, right: 0))
+        
         tableView.tableHeaderView = headerView
         
         // Add Footer

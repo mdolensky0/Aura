@@ -597,11 +597,11 @@
 		7D77098924B79FED0009B93B /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				7D530E3024E37B5E00C0C209 /* FlashcardCell.swift */,
 				7D77098624B691DF0009B93B /* PrevSearchCell.swift */,
 				7DD1B09E24BD06AB0052BC7B /* SoundItOutCell.swift */,
 				7D15DBD124C631D9009ACDB4 /* SupportedLanguageCell.swift */,
 				7D2F9A0424E03414009E2139 /* DeckCell.swift */,
-				7D530E3024E37B5E00C0C209 /* FlashcardCell.swift */,
 				7D05654A25003C5900025467 /* VideoCell.swift */,
 				7D0FCC7C2514265E00B11F5B /* AlternativeCell.swift */,
 			);

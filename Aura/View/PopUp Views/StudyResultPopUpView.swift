@@ -30,7 +30,7 @@ class StudyResultPopUpView: UIView {
         let l = UILabel()
         l.textAlignment = .left
         l.numberOfLines = 1
-        l.text = "Number of cards reviewed: 100"
+        l.text = "Number of cards reviewed: "
         l.textColor = K.DesignColors.purpleGrey
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         return l
@@ -40,7 +40,7 @@ class StudyResultPopUpView: UIView {
         let l = UILabel()
         l.textAlignment = .left
         l.numberOfLines = 1
-        l.text = "Number of right answers: 100"
+        l.text = "Number of right answers: "
         l.textColor = K.DesignColors.purpleGrey
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         return l
@@ -50,7 +50,7 @@ class StudyResultPopUpView: UIView {
         let l = UILabel()
         l.textAlignment = .left
         l.numberOfLines = 1
-        l.text = "Number of wrong answers: 100"
+        l.text = "Number of wrong answers: "
         l.textColor = K.DesignColors.purpleGrey
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         return l
