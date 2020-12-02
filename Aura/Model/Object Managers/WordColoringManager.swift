@@ -40,7 +40,7 @@ class WordColoringManager {
             ipaArray.append(IpaLetter(letter: String(letter)))
         }
         
-        matchDipthongs(&wordArray, &ipaArray, for: word, with: ipa)
+        getMatches(&wordArray, &ipaArray, for: word, with: ipa)
         
 //        for letter in wordArray {
 //            print("\(letter.letter) -> \(letter.ipaParent ?? "nil")")
@@ -49,7 +49,25 @@ class WordColoringManager {
         return addAttributes(word: word, wordArray: wordArray)
     }
     
-    func matchDipthongs(_ wordArray: inout [letterAndAttributes], _ ipaArray: inout [IpaLetter], for word: String, with ipa: String) {
+    // This is only used to find example words for specific letter combo to ipa pairs
+    func getWordArray(word: String, ipa: String) -> [letterAndAttributes] {
+        
+        var wordArray = [letterAndAttributes]()
+        var ipaArray = [IpaLetter]()
+        
+        for letter in word {
+            wordArray.append(letterAndAttributes(letter: String(letter)))
+        }
+        for letter in ipa {
+            ipaArray.append(IpaLetter(letter: String(letter)))
+        }
+        
+        getMatches(&wordArray, &ipaArray, for: word, with: ipa)
+        
+        return wordArray
+    }
+    
+    func getMatches(_ wordArray: inout [letterAndAttributes], _ ipaArray: inout [IpaLetter], for word: String, with ipa: String) {
         
         for thisCombo in lettersList {
             

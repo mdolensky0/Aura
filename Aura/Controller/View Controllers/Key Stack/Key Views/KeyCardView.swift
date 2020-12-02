@@ -228,11 +228,20 @@ class KeyCardView: UIView {
     
     @objc func soundButtonPressed(_ sender: UIButton) {
         
-        UIView.animate(withDuration: 0.2) {
-            sender.superview?.transform = .identity
-            sender.superview?.layer.shadowOpacity = 0.3
+        UIView.animate(withDuration: 0.4, animations: {
+            
+            sender.transform = CGAffineTransform(scaleX: 1.4, y: 1.4)
+            
+        }) { (completion) in
+            
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+                sender.superview?.transform = .identity
+                sender.superview?.layer.shadowOpacity = 0.3
+            }
+            
         }
-        
+                
         if let audioString = audioString {
             
             Utilities.shared.playSound(audioString)

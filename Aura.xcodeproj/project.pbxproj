@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D3B667E255DB8CC0078B9DA /* finalWordAndIPA.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1D3B667D255DB8CC0078B9DA /* finalWordAndIPA.txt */; };
 		1D44851925365FDC00E42C39 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D44851825365FDC00E42C39 /* TestController.swift */; };
 		1D8D3DD0254C909800563D8C /* StudyResultPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8D3DCF254C909800563D8C /* StudyResultPopUpView.swift */; };
 		1D8D3DD3254CB7CC00563D8C /* SwipeTutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8D3DD2254CB7CC00563D8C /* SwipeTutorialView.swift */; };
@@ -29,6 +30,7 @@
 		1DA7B313253DF5E70068330B /* TestResultPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B312253DF5E70068330B /* TestResultPopUpView.swift */; };
 		1DA7B31F253F45860068330B /* TutorialController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B31E253F45860068330B /* TutorialController.swift */; };
 		1DD2BAF825322CD000811F89 /* AnimatedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2BAF725322CD000811F89 /* AnimatedButton.swift */; };
+		1DED0736255F274300AB45A7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DED0735255F274300AB45A7 /* StoreKit.framework */; };
 		7D03998C252662690070DB8E /* UITextFieldPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998B252662680070DB8E /* UITextFieldPadding.swift */; };
 		7D0399902526AB8A0070DB8E /* ForgotPasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998F2526AB8A0070DB8E /* ForgotPasswordController.swift */; };
 		7D05654B25003C5900025467 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05654A25003C5900025467 /* VideoCell.swift */; };
@@ -154,6 +156,7 @@
 
 /* Begin PBXFileReference section */
 		0A46EE129FAF371A9E33436A /* Pods-Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.debug.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.debug.xcconfig"; sourceTree = "<group>"; };
+		1D3B667D255DB8CC0078B9DA /* finalWordAndIPA.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = finalWordAndIPA.txt; path = ../../finalWordAndIPA.txt; sourceTree = "<group>"; };
 		1D44851825365FDC00E42C39 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
 		1D8D3DCF254C909800563D8C /* StudyResultPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyResultPopUpView.swift; sourceTree = "<group>"; };
 		1D8D3DD2254CB7CC00563D8C /* SwipeTutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTutorialView.swift; sourceTree = "<group>"; };
@@ -176,6 +179,7 @@
 		1DA7B312253DF5E70068330B /* TestResultPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultPopUpView.swift; sourceTree = "<group>"; };
 		1DA7B31E253F45860068330B /* TutorialController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialController.swift; sourceTree = "<group>"; };
 		1DD2BAF725322CD000811F89 /* AnimatedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedButton.swift; sourceTree = "<group>"; };
+		1DED0735255F274300AB45A7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		7D03998B252662680070DB8E /* UITextFieldPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPadding.swift; sourceTree = "<group>"; };
 		7D03998F2526AB8A0070DB8E /* ForgotPasswordController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordController.swift; sourceTree = "<group>"; };
 		7D05654A25003C5900025467 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
@@ -308,6 +312,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE768A4362EDA1278661841E /* Pods_Aura.framework in Frameworks */,
+				1DED0736255F274300AB45A7 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +322,7 @@
 		0F311CFEE6AC64418DA6DD74 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1DED0735255F274300AB45A7 /* StoreKit.framework */,
 				B452EF264FBDFE7ADE98D3D4 /* Pods_Aura.framework */,
 			);
 			name = Frameworks;
@@ -581,9 +587,9 @@
 		7D77098824B79FD30009B93B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7D6BF27C25100A6C0086C438 /* Settings Stack */,
 				7DFBA8C924B4189500618332 /* TabBarController.swift */,
 				1DA7B31E253F45860068330B /* TutorialController.swift */,
-				7D6BF27C25100A6C0086C438 /* Settings Stack */,
 				7D6BF279251009350086C438 /* Home Stack */,
 				7D77098A24B7A2660009B93B /* Search Stack */,
 				7D6BF27A2510094D0086C438 /* Key Stack */,
@@ -664,6 +670,7 @@
 				7DFBA8D024B418A200618332 /* LaunchScreen.storyboard */,
 				7DFBA8D324B418A200618332 /* Info.plist */,
 				7D530E3E24E9C81E00C0C209 /* GoogleService-Info.plist */,
+				1D3B667D255DB8CC0078B9DA /* finalWordAndIPA.txt */,
 			);
 			path = Aura;
 			sourceTree = "<group>";
@@ -814,6 +821,7 @@
 				7D15DBB924C2AD5F009ACDB4 /* Z.wav in Resources */,
 				7D15DBC324C2AD5F009ACDB4 /* M.wav in Resources */,
 				7D15DBBB24C2AD5F009ACDB4 /* DarkR.wav in Resources */,
+				1D3B667E255DB8CC0078B9DA /* finalWordAndIPA.txt in Resources */,
 				7D15DBAA24C2AD5F009ACDB4 /* CHOKE.wav in Resources */,
 				7D15DBA324C2AD5F009ACDB4 /* BET.wav in Resources */,
 				7D15DBCB24C2AD5F009ACDB4 /* N.wav in Resources */,
@@ -1099,6 +1107,7 @@
 			baseConfigurationReference = 0A46EE129FAF371A9E33436A /* Pods-Aura.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A55DN9AQUL;
 				INFOPLIST_FILE = Aura/Info.plist;
@@ -1107,9 +1116,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1120,6 +1130,7 @@
 			baseConfigurationReference = CB9C8C9C6952C5D008F66A5B /* Pods-Aura.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A55DN9AQUL;
 				INFOPLIST_FILE = Aura/Info.plist;
@@ -1128,9 +1139,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

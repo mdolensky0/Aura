@@ -169,6 +169,34 @@ class ResultsController: UIViewController {
         
     }()
     
+    var searchButton: UIButton = {
+        
+        let button = UIButton()
+        
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: "arrow.forward"), for: .normal)
+        } else {
+            button.setImage(#imageLiteral(resourceName: "arrow.forward").withRenderingMode(.alwaysTemplate), for: .normal)
+        }
+        
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageView?.contentMode = .scaleAspectFit
+        button.imageEdgeInsets = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        button.backgroundColor = K.DesignColors.primary
+        button.tintColor = .white
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.roundCorners(cornerRadius: 20)
+        
+        button.addTarget(self, action: #selector(searchPressed), for: .touchUpInside)
+        
+        return button
+        
+    }()
+    
     var cancelButton: UIButton = {
         
         let button = UIButton()
@@ -519,12 +547,22 @@ extension ResultsController {
                             width: 40,
                             padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
         
+        // Add Search Button
+        textViewBackgroundView.addSubview(searchButton)
+        searchButton.anchor(top: nil,
+                        bottom: textView.bottomAnchor,
+                        leading: nil,
+                        trailing: textView.trailingAnchor,
+                        height: nil,
+                        width: nil,
+                        padding: UIEdgeInsets(top: 0, left: 0, bottom: -10, right: -10))
+                
         // Add Mic Button
         textViewBackgroundView.addSubview(micButton)
         micButton.anchor(top: nil,
                         bottom: textView.bottomAnchor,
                         leading: nil,
-                        trailing: textView.trailingAnchor,
+                        trailing: searchButton.leadingAnchor,
                         height: nil,
                         width: nil,
                         padding: UIEdgeInsets(top: 0, left: 0, bottom: -10, right: -10))
@@ -951,6 +989,13 @@ extension ResultsController {
         vc.speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: self.fetchLocale()))!
         self.present(vc, animated: true, completion: nil)
         
+    }
+    
+    @objc func searchPressed() {
+        if textView.text != nil && textView.text.count > 0 {
+            textView.resignFirstResponder()
+            startSearchSequence(searchText: textView.text!, searchInfo)
+        }
     }
     
 }
@@ -1686,13 +1731,16 @@ extension ResultsController {
 
 extension ResultsController: SpeechToTextDelegate {
     
-    func updateText(with transcription: String) {
+    func updateText(with transcription: String, shouldPerformSearch: Bool) {
         
         textView.textColor = .black
         textView.text = transcription
         cancelButton.isHidden = false
-        startSearchSequence(searchText: transcription, searchInfo)
         
+        if shouldPerformSearch {
+            startSearchSequence(searchText: transcription, searchInfo)
+           
+        }
     }
     
 }

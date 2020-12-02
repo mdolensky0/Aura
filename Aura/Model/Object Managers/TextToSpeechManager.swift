@@ -153,18 +153,19 @@ class TextToSpeechManager: NSObject {
         
         fetchAudio(from: text) { (audioData) in
             
-            DispatchQueue.main.async {
-                do {
-                    self.avPlayer = try AVAudioPlayer(data: audioData)
-                    self.avPlayer?.numberOfLoops = numberOfTimes
-                    self.avPlayer?.delegate = sender
-                    self.avPlayer?.play()
-                } catch let error {
-                    print("Error occurred while playing audio: \(error.localizedDescription)")
-                }
+            do {
+                
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+                try AVAudioSession.sharedInstance().setActive(true)
+                
+                self.avPlayer = try AVAudioPlayer(data: audioData)
+                self.avPlayer?.numberOfLoops = numberOfTimes
+                self.avPlayer?.delegate = sender
+                self.avPlayer?.play()
+                
+            } catch let error {
+                print("Error occurred while playing audio: \(error.localizedDescription)")
             }
-            
         }
-        
     }
 }

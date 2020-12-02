@@ -240,6 +240,7 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         
         setup()
+//        getMatches(for: "ɪ", letterCombo: "oi")
     }
     
     override func viewDidLayoutSubviews() {
@@ -591,4 +592,71 @@ extension HomeController: DeckUpdater {
         
     }
     
+}
+
+
+// MARK: - Find Specific Letter Combo Matches
+extension HomeController {
+    
+    func getMatches(for ipaLetter: String, letterCombo: String) {
+        
+        var count = 0
+        var arr = [[String]]()
+        
+        // Get File URL
+        guard let fileURL = Bundle.main.url(forResource: "finalWordAndIPA", withExtension: "txt") else {
+            return
+        }
+        
+        // Get Contents of File URL
+        guard let data = try? String(contentsOf: fileURL) else {
+            return
+        }
+        
+        // Break up document line by line
+        let lines = data.components(separatedBy: "\n")
+        
+        for line in lines {
+            
+            // Get Word And IPA
+            let wordAndIPA = line.components(separatedBy: " ")
+            
+            // Check there is a word and IPA
+            if wordAndIPA.count != 2 {
+                continue
+            }
+            
+            // Check if ipa and word contains ipaLetter and letterCombo
+            if !(wordAndIPA[0].contains(letterCombo) && wordAndIPA[1].contains(ipaLetter)) {
+                continue
+            }
+            
+            let wordArray = WordColoringManager.shared.getWordArray(word: wordAndIPA[0], ipa: wordAndIPA[1])
+            let indices = wordAndIPA[0].indicesOf(string: letterCombo)
+            
+            for index in indices {
+                var isMatch = true
+                for i in index..<(index + letterCombo.count) {
+                    if wordArray[i].ipaParent != ipaLetter {
+                        isMatch = false
+                    }
+                }
+                if isMatch {
+                    arr.append(wordAndIPA)
+                    count += 1
+                }
+            }
+        }
+        
+        arr.sort {
+            $0[0].count < $1[0].count
+        }
+        
+        print("\n\n----------RESULTS----------\n")
+        print("Number of Matches Found: \(count)\n")
+        
+        for wordAndIpa in arr {
+            print(wordAndIpa[0], wordAndIpa[1])
+        }
+    }
 }

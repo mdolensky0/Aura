@@ -11,7 +11,7 @@ import Speech
 
 protocol SpeechToTextDelegate {
     
-    func updateText(with transcription: String)
+    func updateText(with transcription: String, shouldPerformSearch: Bool)
     
 }
 
@@ -264,7 +264,7 @@ class SpeechToTextController: UIViewController {
         audioEngine.stop()
         recognitionRequest?.endAudio()
         micButton.isEnabled = false
-        self.delegate?.updateText(with: transcriptionOutputLabel.text ?? "")
+        self.delegate?.updateText(with: transcriptionOutputLabel.text ?? "", shouldPerformSearch: true)
         self.dismiss(animated: true, completion: nil)
         
     }
@@ -274,7 +274,7 @@ class SpeechToTextController: UIViewController {
         audioEngine.stop()
         recognitionRequest?.endAudio()
         micButton.isEnabled = false
-        self.delegate?.updateText(with: transcriptionOutputLabel.text ?? "")
+        self.delegate?.updateText(with: transcriptionOutputLabel.text ?? "", shouldPerformSearch: false)
         self.dismiss(animated: true, completion: nil)
         
     }
