@@ -142,7 +142,7 @@ class HomeController: UIViewController {
         let container = UIView()
         
         let iv = UIImageView()
-        iv.image = #imageLiteral(resourceName: "KySenpai")
+        iv.image = #imageLiteral(resourceName: "IntroVideoThumbnail")
         iv.contentMode = .scaleAspectFill
         
         let play = UIImageView()
@@ -155,7 +155,7 @@ class HomeController: UIViewController {
         }
         
         play.tintColor = K.DesignColors.primary
-        play.backgroundColor = .white
+        play.backgroundColor = UIColor(white: 0.8, alpha: 0.4)
         play.roundCorners(cornerRadius: 30)
         play.contentMode = .center
         
