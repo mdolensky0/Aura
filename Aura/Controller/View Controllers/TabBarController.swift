@@ -116,14 +116,9 @@ class TabBarController: UITabBarController {
             
             DispatchQueue.main.async {
                 self.isSignedIn = true
-                FirebaseManager.shared.loadUser { (user) in
-                    
-                    if let user = user {
-                        
-                        Utilities.shared.user = user
-                        Utilities.shared.isUserSignedIn = true
-                        
-                    }
+                FirebaseManager.shared.loadUser()
+                if let _ = Auth.auth().currentUser?.uid {
+                    Utilities.shared.isUserSignedIn = true
                 }
                 self.setupViewControllers()
                 self.setupTabBarCustomizations()

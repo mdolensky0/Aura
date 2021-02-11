@@ -333,21 +333,7 @@ class SignUpController: UIViewController {
             
             Utilities.shared.isUserSignedIn = true
             
-            FirebaseManager.shared.loadUser { (user) in
-                
-                if let user = user {
-                    
-                    Utilities.shared.user = user
-                    
-                }
-                
-                else {
-                    
-                    FirebaseManager.shared.createUser()
-
-                }
-                
-            }
+            FirebaseManager.shared.createUser()
             
             if self.isModal {
                 

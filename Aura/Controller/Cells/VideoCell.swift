@@ -12,9 +12,9 @@ class VideoCell: UICollectionViewCell {
     
     static let identifier = "VideoCell"
     
-    var imageView: UIImageView = {
+    var imageView: CustomImageView = {
         
-        let iv = UIImageView()
+        let iv = CustomImageView()
         iv.backgroundColor = K.DesignColors.primary
         iv.roundCorners(cornerRadius: 6)
         iv.layer.borderWidth = 1

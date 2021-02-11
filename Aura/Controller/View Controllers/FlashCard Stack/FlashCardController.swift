@@ -170,9 +170,18 @@ class FlashCardController: UIViewController {
         for v in myDecksScrollView.stackView.subviews {
             v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
         }
-        
     }
-      
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if UserDefaults.standard.bool(forKey: "hasEnteredDeckController") {
+            return
+        } else {
+            AdManager.shared.showAdPopUP(parentVC: self)
+            UserDefaults.standard.set(true, forKey: "hasEnteredDeckController")
+        }
+    }
+    
     // MARK: - Setup
     func setup() {
         
@@ -217,9 +226,7 @@ class FlashCardController: UIViewController {
             popularFlashcardScrollView = PopularDecksScrollView(frame: .zero)
             popularFlashcardScrollView.popularDeckDelegate = self
             
-            FirebaseManager.shared.loadSuperUser { (superUser) in
-                Utilities.shared.superUser = superUser
-            }
+            FirebaseManager.shared.loadSuperUser()
         }
         
         view.addSubview(mainScrollView)
@@ -293,9 +300,9 @@ class FlashCardController: UIViewController {
     }
 }
 
-extension FlashCardController: DeckUpdater {
+extension FlashCardController: FirebaseUpdaterDelegate {
     
-    func updateMyDecks() {
+    func updateMyDecksDisplay() {
         
         guard let decks = Utilities.shared.user?.decks else {
             
@@ -316,7 +323,7 @@ extension FlashCardController: DeckUpdater {
         } else { myDecksLabel.superview?.isHidden = false }
     }
     
-    func updatePopularDecks() {
+    func updatePopularDecksDisplay() {
         
         guard let decks = Utilities.shared.superUser?.decks else { return }
         
@@ -331,7 +338,7 @@ extension FlashCardController: DeckUpdater {
     }
 }
 
-extension FlashCardController: MyDeckDelegate, PopularDeckDelegate {
+extension FlashCardController: MyDeckScrollViewDelegate, PopularDeckScrollViewDelegate {
     
     func goToDeck(deckIndex: Int) {
         let vc = DeckController()

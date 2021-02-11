@@ -6347,6 +6347,28 @@ struct RealmPopulater {
         newLetterCombo333.colorMapList.append(objectsIn: [newColorMap772,newColorMap773,newColorMap774])
         newIPALetter46.letterCombos.append(objectsIn: [newLetterCombo333])
         //===================================
+        let newLetterCombo749 = LetterCombo()
+        newLetterCombo749.letterCombo = "che"
+        newLetterCombo749.ipaParent = "k"
+        
+        let newColorMap2455 = ColorMap()
+        newColorMap2455.LetterComboParent = "che"
+        newColorMap2455.ipaParent = "k"
+        newColorMap2455.color = "black"
+        
+        let newColorMap2456 = ColorMap()
+        newColorMap2456.LetterComboParent = "che"
+        newColorMap2456.ipaParent = "k"
+        newColorMap2456.color = "lightGrey"
+        
+        let newColorMap2457 = ColorMap()
+        newColorMap2457.LetterComboParent = "che"
+        newColorMap2457.ipaParent = "k"
+        newColorMap2457.color = "lightGrey"
+        
+        newLetterCombo749.colorMapList.append(objectsIn: [newColorMap2455,newColorMap2456,newColorMap2457])
+        newIPALetter46.letterCombos.append(objectsIn: [newLetterCombo749])
+        //===================================
         let newLetterCombo334 = LetterCombo()
         newLetterCombo334.letterCombo = "ke"
         newLetterCombo334.ipaParent = "k"

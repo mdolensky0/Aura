@@ -54,14 +54,14 @@ class HorizontalScrollView: UIScrollView {
     
 }
 
-protocol MyDeckDelegate {
+protocol MyDeckScrollViewDelegate {
     func goToDeck(deckIndex: Int)
 }
 
 class MyDecksScrollView: HorizontalScrollView {
     
     var decks = [DeckModel]()
-    var myDeckDelegate: MyDeckDelegate?
+    var myDeckDelegate: MyDeckScrollViewDelegate?
     
     convenience init(frame: CGRect, decks: [DeckModel]) {
         self.init(frame: frame)
@@ -106,7 +106,7 @@ class MyDecksScrollView: HorizontalScrollView {
             titleLabel.textAlignment = .center
             titleLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
             titleLabel.numberOfLines = 1
-            titleLabel.lineBreakMode = .byClipping
+            titleLabel.lineBreakMode = .byTruncatingTail
             
             let numCardsLabel = UILabel()
             numCardsLabel.text = "\(deck.numberOfCards) Cards"
@@ -114,7 +114,7 @@ class MyDecksScrollView: HorizontalScrollView {
             numCardsLabel.textAlignment = .left
             numCardsLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
             numCardsLabel.numberOfLines = 1
-            numCardsLabel.lineBreakMode = .byClipping
+            numCardsLabel.lineBreakMode = .byTruncatingTail
             
             let scoreLabel = UILabel()
             let (text, color) = getPrevScoreTextAndColor(deck: deck)
@@ -123,7 +123,7 @@ class MyDecksScrollView: HorizontalScrollView {
             scoreLabel.textAlignment = .right
             scoreLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
             scoreLabel.numberOfLines = 1
-            scoreLabel.lineBreakMode = .byClipping
+            scoreLabel.lineBreakMode = .byTruncatingTail
             
             container.addSubview(titleLabel)
             container.addSubview(numCardsLabel)
@@ -132,6 +132,7 @@ class MyDecksScrollView: HorizontalScrollView {
             titleLabel.translatesAutoresizingMaskIntoConstraints = false
             titleLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
             titleLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+            titleLabel.widthAnchor.constraint(equalTo: container.widthAnchor, constant: -10).isActive = true
             
             numCardsLabel.translatesAutoresizingMaskIntoConstraints = false
             numCardsLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10).isActive = true
@@ -228,14 +229,14 @@ class MyDecksScrollView: HorizontalScrollView {
     
 }
 
-protocol PopularDeckDelegate {
+protocol PopularDeckScrollViewDelegate {
     func showPurchasePopUp(deckIndex: Int)
 }
 
 
 class PopularDecksScrollView: HorizontalScrollView {
     
-    var popularDeckDelegate: PopularDeckDelegate?
+    var popularDeckDelegate: PopularDeckScrollViewDelegate?
     var decks = [DeckModel]()
     
     convenience init(frame: CGRect, decks: [DeckModel]) {
@@ -281,13 +282,14 @@ class PopularDecksScrollView: HorizontalScrollView {
             titleLabel.textAlignment = .center
             titleLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
             titleLabel.numberOfLines = 1
-            titleLabel.lineBreakMode = .byClipping
+            titleLabel.lineBreakMode = .byTruncatingTail
             
             container.addSubview(titleLabel)
             
             titleLabel.translatesAutoresizingMaskIntoConstraints = false
             titleLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
             titleLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+            titleLabel.widthAnchor.constraint(equalTo: container.widthAnchor, constant: -10).isActive = true
 
             let b = AnimatedButton(frame: .zero)
             b.index = i
@@ -349,4 +351,101 @@ class PopularDecksScrollView: HorizontalScrollView {
         
     }
     
+}
+
+protocol LessonsScrollViewDelegate {
+    func goToLesson(lessonIndex: Int)
+}
+
+class LessonsScrollView: HorizontalScrollView {
+    
+    var lessons = [LessonModel]()
+    var lessonsScrollViewDelegate: LessonsScrollViewDelegate?
+    
+    convenience init(frame: CGRect, lessons: [LessonModel]) {
+        self.init(frame: frame)
+        self.lessons = lessons
+        addLessonViews()
+        
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    func addLessonViews() {
+        var i = 0
+        for lesson in lessons {
+            let background = UIView()
+            
+            let iv = CustomImageView()
+            iv.backgroundColor = K.DesignColors.primary
+            iv.roundCorners(cornerRadius: 10)
+            
+            background.addSubview(iv)
+            iv.anchor(top: background.topAnchor,
+                             bottom: background.bottomAnchor,
+                             leading: background.leadingAnchor,
+                             trailing: background.trailingAnchor,
+                             height: nil,
+                             width: nil)
+            
+            background.translatesAutoresizingMaskIntoConstraints = false
+            background.widthAnchor.constraint(equalToConstant: 200).isActive = true
+            background.heightAnchor.constraint(equalToConstant: 100).isActive = true
+            
+            iv.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
+            iv.backgroundColor = K.DesignColors.primary
+            iv.contentMode = .scaleAspectFill
+            iv.translatesAutoresizingMaskIntoConstraints = false
+            iv.heightAnchor.constraint(equalToConstant: 180).isActive = true
+            iv.widthAnchor.constraint(equalToConstant: 280).isActive = true
+            
+            let b = AnimatedButton(frame: .zero)
+            b.index = i
+            b.addTarget(self, action: #selector(lessonPressed(_:)), for: .touchUpInside)
+            
+            background.addSubview(b)
+            b.anchor(top: background.topAnchor,
+                     bottom: background.bottomAnchor,
+                     leading: background.leadingAnchor,
+                     trailing: background.trailingAnchor,
+                     height: nil,
+                     width: nil)
+            
+            self.stackView.addArrangedSubview(background)
+            i += 1
+        }
+    }
+    
+    func updateLessons() {
+        DispatchQueue.main.async {
+            for v in self.stackView.subviews {
+                v.removeFromSuperview()
+            }
+            
+            self.addLessonViews()
+            
+            for v in self.stackView.subviews {
+                v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+            }
+        }
+    }
+    
+    @objc func lessonPressed(_ sender: AnimatedButton) {
+        UIView.animate(withDuration: 0.2) {
+            
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+            
+        } completion: { (_) in
+            
+            self.lessonsScrollViewDelegate?.goToLesson(lessonIndex: sender.index)
+            
+        }
+    }
 }

@@ -1,0 +1,256 @@
+//
+//  AdManager.swift
+//  Aura
+//
+//  Created by Maxwell Dolensky on 2/3/21.
+//  Copyright © 2021 Max Dolensky. All rights reserved.
+//
+
+import UIKit
+
+enum FunnelProgress: String {
+    case hasNotSeenVideo1 = "hasNotSeenVideo1"
+    case seenPartOfVideo1 = "seenPartOfVideo1"
+    case completedVideo1 = "completedVideo1"
+    case seenPartOfVideo2 = "seenPartOfVideo2"
+    case completedVideo2NoBuy = "completedVideo2NoBuy"
+    case completedVideo2Bought = "completedVideo2Bought"
+}
+
+protocol AdManagerDelegate {
+    func updateSecretsThumbnail()
+}
+
+class AdManager: NSObject {
+    
+    static var shared = AdManager()
+    
+    var homeDelegate: AdManagerDelegate?
+    var searchDelegate: AdManagerDelegate?
+    var resultDelegate: AdManagerDelegate?
+    var learnMoreDelegates = [FirebaseUpdaterDelegate]()
+
+    var funnelProgress: FunnelProgress? {
+        
+        get {
+            
+            guard let progressString = UserDefaults.standard.object(forKey: "funnelProgress") as? String else {
+                return nil
+            }
+            
+            guard let funnelProgress = FunnelProgress(rawValue: progressString) else {
+                return nil
+            }
+            
+            return funnelProgress
+        }
+        
+        set(newValue) {
+            UserDefaults.standard.setValue(newValue?.rawValue, forKey: "funnelProgress")
+            homeDelegate?.updateSecretsThumbnail()
+            searchDelegate?.updateSecretsThumbnail()
+            resultDelegate?.updateSecretsThumbnail()
+            for delegate in learnMoreDelegates {
+                delegate.updateSecretsThumbnail()
+            }
+            
+        }
+    }
+    
+    func getFunnelThumbnailURLForCurrentUserState() -> String {
+        
+        guard let lessons = Utilities.shared.lessons else {
+            return ""
+        }
+        
+        if lessons.count < 2 {
+            return ""
+        }
+        
+        switch funnelProgress {
+        case .hasNotSeenVideo1, .seenPartOfVideo1:
+            // Return Video 1 Thumbnail
+            return lessons[0].videos[0].videoThumbnailURL
+        case .completedVideo1, .seenPartOfVideo2:
+            // Return Video 2 Thumbnail
+            return lessons[0].videos[1].videoThumbnailURL
+        case .completedVideo2NoBuy:
+            // Return Lessons Intro Thumbnail
+            return lessons[1].videos[0].videoThumbnailURL
+        case .completedVideo2Bought:
+            // Return Lesson Video Thumbnail they left off at
+            return fetchVideoThumbnailForLessonNum()
+        case .none:
+            // Return Video 1. User Default not set yet
+            return lessons[0].videos[0].videoThumbnailURL
+        }
+        
+    }
+    
+    func getFunnelLabelTitleForCurrentUserState() -> String {
+        
+        switch funnelProgress {
+        case .hasNotSeenVideo1:
+            return "Where to Start"
+        case .seenPartOfVideo1:
+            return "Continue Watching"
+        case .completedVideo1:
+            return "Next Step"
+        case .seenPartOfVideo2:
+            return "Continue Watching"
+        case .completedVideo2NoBuy:
+            return "Sample The EHD Master Course"
+        case .completedVideo2Bought:
+            return "Continue Learning"
+        case .none:
+            return "Where to Start"
+        }
+        
+    }
+    
+    func getVideoURLForCurrentUserState() -> String {
+        switch funnelProgress {
+        case .none, .hasNotSeenVideo1, .seenPartOfVideo1:
+            // Video 1
+            return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secrets_1_2.mp4?alt=media&token=7a1c0674-0023-4c0a-bee5-9416341ed787"
+        case .completedVideo1, .seenPartOfVideo2:
+            // Video 2
+           return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secrets_3.mp4?alt=media&token=d637f059-443e-47cb-a37a-c783c88654aa"
+        case .completedVideo2NoBuy:
+            return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/IntroVideo.m4v?alt=media&token=ce50bace-989b-43e7-9551-7b5a9a0b8802"
+        case .completedVideo2Bought:
+            return fetchVideoURLForLessonNum()
+        }
+    }
+    
+    func getSecretsVideoPopUpManagerForCurrentFunnelState() -> SecretsVideoPopUpManager {
+        switch funnelProgress {
+        case .hasNotSeenVideo1:
+            return SecretsVideoPopUpManager(title: "Welcome to Aura!",
+                                            info: "Get started with this tutorial video to learn all about this app",
+                                            thumbnailURL: getFunnelThumbnailURLForCurrentUserState(),
+                                            buttonText: "Watch Tutorial")
+        case .seenPartOfVideo1:
+            return SecretsVideoPopUpManager(title: "Finish the tutorial!",
+                                            info: "We recommend finishing this video to help you better understand the features in this app and how to use them",
+                                            thumbnailURL: getFunnelThumbnailURLForCurrentUserState(),
+                                            buttonText: "Finish Tutorial")
+        case .completedVideo1:
+            return SecretsVideoPopUpManager(title: "Discover Secret 3!",
+                                            info: "Learn about the free and amazing flashcard section where learning and practing is made easy.",
+                                            thumbnailURL: getFunnelThumbnailURLForCurrentUserState(),
+                                            buttonText: "Watch Video")
+        default:
+            return SecretsVideoPopUpManager(title: "Finish Learning about Flashcards",
+                                            info: "We recommend finishing this video to help you better understand the features in this app and how to use them",
+                                            thumbnailURL: getFunnelThumbnailURLForCurrentUserState(),
+                                            buttonText: "Finish Video")
+        }
+    }
+    
+    func showAdPopUP(parentVC: UIViewController) {
+        
+        guard let funnelProgress = funnelProgress else { return }
+        if funnelProgress == .completedVideo2Bought || funnelProgress == .completedVideo2NoBuy {
+            return
+        }
+        
+        let popUpManager = AdManager.shared.getSecretsVideoPopUpManagerForCurrentFunnelState()
+        popUpManager.parentView = parentVC
+        popUpManager.showPopUpFadingIn()
+    }
+    
+    func updateSearchCount() {
+        
+        // If funnel Progress Nil, return
+        guard let funnelProgress = AdManager.shared.funnelProgress else { return }
+        
+        // If they have not finished video 1, don't start counting for video 2 ad
+        if funnelProgress == .hasNotSeenVideo1 || funnelProgress == .seenPartOfVideo1 { return }
+        
+        guard let searchCount = UserDefaults.standard.object(forKey: "searchCount") else {
+            UserDefaults.standard.setValue(1, forKey: "searchCount")
+            return
+        }
+        
+        guard let count = searchCount as? Int else { return }
+        
+        if count > 7 {
+            return
+        } else if count < 7 {
+            UserDefaults.standard.setValue(count + 1, forKey: "searchCount")
+        }
+    }
+    
+    func showPopUpAfterSearch(parentVC: UIViewController) {
+        guard let searchCount = UserDefaults.standard.object(forKey: "searchCount") else {
+            return
+        }
+        
+        guard let count = searchCount as? Int else { return }
+        
+        if count == 7 {
+            guard let funnelProgress = AdManager.shared.funnelProgress else { return }
+            if funnelProgress == .completedVideo1 || funnelProgress == .seenPartOfVideo2 {
+                UserDefaults.standard.setValue(count + 1, forKey: "searchCount")
+                showAdPopUP(parentVC: parentVC)
+            }
+        }
+    }
+    
+    func fetchVideoURLForLessonNum() -> String {
+        if let currLessonNum = UserDefaults.standard.object(forKey: "currentLessonNum") {
+            
+            if let index = currLessonNum as? Int {
+                
+                if let lessons = Utilities.shared.lessons {
+                    
+                    if index < lessons[1].videos.count {
+                        return lessons[1].videos[index].videoURL
+                    } else {
+                        let idx = lessons[1].videos.count - 1
+                        return lessons[1].videos[idx].videoURL
+                    }
+                    
+                } else {
+                    return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/IntroVideo.m4v?alt=media&token=ce50bace-989b-43e7-9551-7b5a9a0b8802"
+                }
+                
+            } else {
+                return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/IntroVideo.m4v?alt=media&token=ce50bace-989b-43e7-9551-7b5a9a0b8802"
+            }
+            
+        } else {
+            UserDefaults.standard.set(0, forKey: "currentLessonNum")
+            return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/IntroVideo.m4v?alt=media&token=ce50bace-989b-43e7-9551-7b5a9a0b8802"
+        }
+    }
+    
+    func fetchVideoThumbnailForLessonNum() -> String {
+        
+        guard let lessons = Utilities.shared.lessons else {
+            return ""
+        }
+        
+        if lessons.count < 2 {
+            return ""
+        }
+        
+        guard let currLessonNum = UserDefaults.standard.object(forKey: "currentLessonNum") else {
+            UserDefaults.standard.set(0, forKey: "currentLessonNum")
+            return lessons[1].videos[0].videoThumbnailURL
+        }
+        
+        guard let idx = currLessonNum as? Int else {
+            return ""
+        }
+        
+        if idx >= lessons[1].videos.count {
+            return ""
+        }
+        
+        return lessons[1].videos[idx].videoThumbnailURL
+    
+    }
+    
+}

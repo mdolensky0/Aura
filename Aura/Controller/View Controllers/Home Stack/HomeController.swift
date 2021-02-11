@@ -137,13 +137,15 @@ class HomeController: UIViewController {
         
     }()
     
-    var introVideoView: UIView = {
+    var introImageView: CustomImageView = {
+        let iv = CustomImageView()
+        iv.contentMode = .scaleAspectFill
+        return iv
+    }()
+    
+    lazy var introVideoView: UIView = {
         
         let container = UIView()
-        
-        let iv = UIImageView()
-        iv.image = #imageLiteral(resourceName: "IntroVideoThumbnail")
-        iv.contentMode = .scaleAspectFill
         
         let play = UIImageView()
         play.backgroundColor = .white
@@ -166,16 +168,16 @@ class HomeController: UIViewController {
         
 
         
-        container.addSubview(iv)
+        container.addSubview(introImageView)
         
-        iv.anchor(top: container.topAnchor,
+        introImageView.anchor(top: container.topAnchor,
                   bottom: container.bottomAnchor,
                   leading: container.leadingAnchor,
                   trailing: container.trailingAnchor,
                   height: nil,
                   width: nil)
     
-        iv.roundCorners(cornerRadius: 10)
+        introImageView.roundCorners(cornerRadius: 10)
         
         container.addSubview(play)
         
@@ -221,7 +223,7 @@ class HomeController: UIViewController {
         
     }()
     
-    var lessonsScrollView = HorizontalScrollView(frame: .zero)
+    var lessonsScrollView = LessonsScrollView(frame: .zero)
     
     var myDecksLabel: UILabel = {
         
@@ -238,9 +240,17 @@ class HomeController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setup()
-//        getMatches(for: "ɪ", letterCombo: "oi")
+        //getMatches(for: "ɪ", letterCombo: "oi")
+        
+        // FOR TESTING
+        AdManager.shared.funnelProgress = .hasNotSeenVideo1
+        UserDefaults.standard.set(false, forKey: "hasLaunchedHome")
+        UserDefaults.standard.setValue(0, forKey: "currentLessonNum")
+        UserDefaults.standard.setValue(5, forKey: "searchCount")
+        UserDefaults.standard.setValue(false, forKey: "hasEnteredDeckController")
+        UserDefaults.standard.set(false, forKey: "hasLaunchedFlashcards")
+        UserDefaults.standard.set(false, forKey: "hasSeenDeckSelector")
     }
     
     override func viewDidLayoutSubviews() {
@@ -265,15 +275,13 @@ class HomeController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
+                
         if UserDefaults.standard.bool(forKey: "hasLaunchedHome") {
             return
         } else {
-         
-            let vc = TutorialController()
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true, completion: nil)
             
+            AdManager.shared.funnelProgress = .hasNotSeenVideo1
+            AdManager.shared.showAdPopUP(parentVC: self)
             UserDefaults.standard.set(true, forKey: "hasLaunchedHome")
         }
     }
@@ -281,6 +289,7 @@ class HomeController: UIViewController {
     func setup() {
         
         Utilities.shared.homeDelegate = self
+        AdManager.shared.homeDelegate = self
         
         view.backgroundColor = K.DesignColors.background
         
@@ -321,9 +330,16 @@ class HomeController: UIViewController {
             popularFlashcardScrollView = PopularDecksScrollView(frame: .zero)
             popularFlashcardScrollView.popularDeckDelegate = self
             
-            FirebaseManager.shared.loadSuperUser { (superUser) in
-                Utilities.shared.superUser = superUser
-            }
+            FirebaseManager.shared.loadSuperUser()
+        }
+        
+        // Initialize Lessons Scroll View
+        lessonsScrollView.lessonsScrollViewDelegate = self
+        if let lessons = Utilities.shared.lessons {
+            lessonsScrollView.lessons = lessons
+            lessonsScrollView.updateLessons()
+        } else {
+            FirebaseManager.shared.loadLessons()
         }
         
         view.addSubview(mainScrollView)
@@ -335,8 +351,8 @@ class HomeController: UIViewController {
                               width: nil)
         
         mainScrollView.stackView.addArrangedSubview(discoverEHDView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
-        mainScrollView.stackView.addArrangedSubview(whereToStartLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         mainScrollView.stackView.addArrangedSubview(searchView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainScrollView.stackView.addArrangedSubview(whereToStartLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         mainScrollView.stackView.addArrangedSubview(introVideoView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         mainScrollView.stackView.addArrangedSubview(popularFlashcardLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         mainScrollView.stackView.addArrangedSubview(popularFlashcardScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
@@ -353,28 +369,13 @@ class HomeController: UIViewController {
         
         introVideoView.translatesAutoresizingMaskIntoConstraints = false
         introVideoView.heightAnchor.constraint(equalToConstant: 175).isActive = true
+        introImageView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState()) 
+        whereToStartLabel.text = AdManager.shared.getFunnelLabelTitleForCurrentUserState()
         
         popularFlashcardScrollView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         lessonsScrollView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         myDecksScrollView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-                
-        // Populate Lessons
-        if Utilities.shared.lessons == nil {
-            
-            FirebaseManager.shared.loadLessons { (lessons) in
-                
-                Utilities.shared.lessons = lessons
-                
-                DispatchQueue.main.async {
-                    self.populateLessons()
-                }
-            }
-        }
-        
-        else {
-            populateLessons()
-        }
-        
+                        
         // Update My Decks Visibility
         myDecksScrollView.updateVisibility()
         if myDecksScrollView.decks.count == 0 {
@@ -424,7 +425,7 @@ class HomeController: UIViewController {
             
             let background = UIView()
             
-            let container = UIImageView()
+            let container = CustomImageView()
             container.backgroundColor = .white
             container.roundCorners(cornerRadius: 10)
             container.contentMode = .scaleAspectFill
@@ -527,12 +528,17 @@ class HomeController: UIViewController {
         } completion: { (_) in
             
             self.tabBarController?.selectedIndex = 4
-            
+
+            if let vc = self.tabBarController!.viewControllers![4] as? UINavigationController {
+                let vc = vc.viewControllers[0] as! LessonsController
+                vc.scrollToPage(page: 1, animated: false)
+                vc.playVideo()
+            }
         }
     }
 }
 
-extension HomeController: MyDeckDelegate, PopularDeckDelegate {
+extension HomeController: MyDeckScrollViewDelegate, PopularDeckScrollViewDelegate, LessonsScrollViewDelegate {
     
     func goToDeck(deckIndex: Int) {
         
@@ -553,11 +559,15 @@ extension HomeController: MyDeckDelegate, PopularDeckDelegate {
         print("purchase?")
     }
     
+    func goToLesson(lessonIndex: Int) {
+        print("going to lesson")
+    }
+    
 }
 
-extension HomeController: DeckUpdater {
+extension HomeController: FirebaseUpdaterDelegate {
     
-    func updateMyDecks() {
+    func updateMyDecksDisplay() {
         
         guard let decks = Utilities.shared.user?.decks else {
             
@@ -578,7 +588,7 @@ extension HomeController: DeckUpdater {
         } else { myDecksLabel.superview?.isHidden = false }
     }
     
-    func updatePopularDecks() {
+    func updatePopularDecksDisplay() {
         
         guard let decks = Utilities.shared.superUser?.decks else { return }
         
@@ -590,6 +600,12 @@ extension HomeController: DeckUpdater {
             popularFlashcardLabel.superview?.isHidden = true
         } else { popularFlashcardLabel.superview?.isHidden = false }
         
+    }
+    
+    func updateLessonsDisplay() {
+        guard let lessons = Utilities.shared.lessons else { return }
+        lessonsScrollView.lessons = lessons
+        lessonsScrollView.updateLessons()
     }
     
 }
@@ -659,4 +675,15 @@ extension HomeController {
             print(wordAndIpa[0], wordAndIpa[1])
         }
     }
+}
+
+
+// MARK: - AdManagerDelegate
+extension HomeController: AdManagerDelegate {
+    
+    func updateSecretsThumbnail() {
+        introImageView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState())
+        whereToStartLabel.text = AdManager.shared.getFunnelLabelTitleForCurrentUserState()
+    }
+    
 }

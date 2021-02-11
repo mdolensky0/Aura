@@ -10,15 +10,20 @@ import UIKit
 import AVFoundation
 import Firebase
 
-protocol DeckUpdater {
+protocol FirebaseUpdaterDelegate {
     
-    func updateMyDecks()
-    func updatePopularDecks()
+    func updateMyDecksDisplay()
+    func updatePopularDecksDisplay()
+    func updateLessonsDisplay()
+    func updateSecretsThumbnail()
     
 }
 
-extension DeckUpdater {
-    func updatePopularDecks() { return }
+extension FirebaseUpdaterDelegate {
+    func updateMyDecksDisplay() { return }
+    func updatePopularDecksDisplay() { return }
+    func updateLessonsDisplay() { return }
+    func updateSecretsThumbnail() { return }
 }
 
 protocol AddSearchHistoryDelegate {
@@ -31,19 +36,25 @@ class Utilities {
     
     static let shared = Utilities()
     
-    var homeDelegate: DeckUpdater?
-    var decksDelegate: DeckUpdater?
-    var resultsDelegate: DeckUpdater?
+    var homeDelegate: FirebaseUpdaterDelegate?
+    var decksDelegate: FirebaseUpdaterDelegate?
+    var resultsDelegate: FirebaseUpdaterDelegate?
     var searchHistoryDelegate: AddSearchHistoryDelegate?
+    var lessonsTabDelegate: FirebaseUpdaterDelegate?
     var settingsLauncher = SettingsLauncher()
+    var popUpDelegate: FirebaseUpdaterDelegate?
+    var learnMoreDelegates = [FirebaseUpdaterDelegate]()
     
     var user: User? {
         
         didSet {
-            self.decksDelegate?.updateMyDecks()
+            self.decksDelegate?.updateMyDecksDisplay()
             self.searchHistoryDelegate?.updateSearchHistory()
-            self.homeDelegate?.updateMyDecks()
-            self.resultsDelegate?.updateMyDecks()
+            self.homeDelegate?.updateMyDecksDisplay()
+            self.resultsDelegate?.updateMyDecksDisplay()
+            for delegate in learnMoreDelegates {
+                delegate.updateMyDecksDisplay()
+            }
         }
         
     }
@@ -51,13 +62,25 @@ class Utilities {
     var superUser: User? {
         
         didSet {
-            self.homeDelegate?.updatePopularDecks()
-            self.decksDelegate?.updatePopularDecks()
+            self.homeDelegate?.updatePopularDecksDisplay()
+            self.decksDelegate?.updatePopularDecksDisplay()
         }
         
     }
     
-    var lessons: [LessonModel]?
+    var lessons: [LessonModel]? {
+        didSet {
+            self.homeDelegate?.updateLessonsDisplay()
+            self.homeDelegate?.updateSecretsThumbnail()
+            self.lessonsTabDelegate?.updateLessonsDisplay()
+            self.resultsDelegate?.updateSecretsThumbnail()
+            self.popUpDelegate?.updateSecretsThumbnail()
+            for delegate in learnMoreDelegates {
+                delegate.updateSecretsThumbnail()
+            }
+            
+        }
+    }
     
     //MARK: - Sound Variables and Functions
     var soundItOutPlayer: AVAudioPlayer?

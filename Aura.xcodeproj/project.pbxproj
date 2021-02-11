@@ -11,6 +11,8 @@
 		1D44851925365FDC00E42C39 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D44851825365FDC00E42C39 /* TestController.swift */; };
 		1D8D3DD0254C909800563D8C /* StudyResultPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8D3DCF254C909800563D8C /* StudyResultPopUpView.swift */; };
 		1D8D3DD3254CB7CC00563D8C /* SwipeTutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8D3DD2254CB7CC00563D8C /* SwipeTutorialView.swift */; };
+		1D90A9B525CB2C5100802D3C /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D90A9B425CB2C5100802D3C /* AdManager.swift */; };
+		1D90A9B825CB315400802D3C /* SecretsPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D90A9B725CB315400802D3C /* SecretsPopUpView.swift */; };
 		1D999F962541F09C00A635DE /* Page1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D999F952541F09C00A635DE /* Page1.swift */; };
 		1D999F9A2542081700A635DE /* Page2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D999F992542081700A635DE /* Page2.swift */; };
 		1D999F9D2542138300A635DE /* Page3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D999F9C2542138300A635DE /* Page3.swift */; };
@@ -25,6 +27,7 @@
 		1D999FB92543ABAC00A635DE /* Page12.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D999FB82543ABAC00A635DE /* Page12.swift */; };
 		1D999FBC25475C0500A635DE /* FlashcardsPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D999FBB25475C0500A635DE /* FlashcardsPopUpView.swift */; };
 		1D999FBF25478ED500A635DE /* Page8_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D999FBE25478ED500A635DE /* Page8_1.swift */; };
+		1DA47CA325B8C84100B546B1 /* PurchasingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA47CA225B8C84100B546B1 /* PurchasingManager.swift */; };
 		1DA7B30A2538E6820068330B /* DefaultDecoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B3092538E6820068330B /* DefaultDecoding.swift */; };
 		1DA7B30E253DEF4A0068330B /* PopUpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B30D253DEF4A0068330B /* PopUpManager.swift */; };
 		1DA7B313253DF5E70068330B /* TestResultPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B312253DF5E70068330B /* TestResultPopUpView.swift */; };
@@ -160,6 +163,8 @@
 		1D44851825365FDC00E42C39 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
 		1D8D3DCF254C909800563D8C /* StudyResultPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyResultPopUpView.swift; sourceTree = "<group>"; };
 		1D8D3DD2254CB7CC00563D8C /* SwipeTutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTutorialView.swift; sourceTree = "<group>"; };
+		1D90A9B425CB2C5100802D3C /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdManager.swift; sourceTree = "<group>"; };
+		1D90A9B725CB315400802D3C /* SecretsPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretsPopUpView.swift; sourceTree = "<group>"; };
 		1D999F952541F09C00A635DE /* Page1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page1.swift; sourceTree = "<group>"; };
 		1D999F992542081700A635DE /* Page2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page2.swift; sourceTree = "<group>"; };
 		1D999F9C2542138300A635DE /* Page3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page3.swift; sourceTree = "<group>"; };
@@ -174,6 +179,7 @@
 		1D999FB82543ABAC00A635DE /* Page12.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page12.swift; sourceTree = "<group>"; };
 		1D999FBB25475C0500A635DE /* FlashcardsPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsPopUpView.swift; sourceTree = "<group>"; };
 		1D999FBE25478ED500A635DE /* Page8_1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page8_1.swift; sourceTree = "<group>"; };
+		1DA47CA225B8C84100B546B1 /* PurchasingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasingManager.swift; sourceTree = "<group>"; };
 		1DA7B3092538E6820068330B /* DefaultDecoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultDecoding.swift; sourceTree = "<group>"; };
 		1DA7B30D253DEF4A0068330B /* PopUpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpManager.swift; sourceTree = "<group>"; };
 		1DA7B312253DF5E70068330B /* TestResultPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResultPopUpView.swift; sourceTree = "<group>"; };
@@ -364,6 +370,7 @@
 				1D999FBB25475C0500A635DE /* FlashcardsPopUpView.swift */,
 				1D8D3DCF254C909800563D8C /* StudyResultPopUpView.swift */,
 				1D8D3DD2254CB7CC00563D8C /* SwipeTutorialView.swift */,
+				1D90A9B725CB315400802D3C /* SecretsPopUpView.swift */,
 			);
 			path = "PopUp Views";
 			sourceTree = "<group>";
@@ -406,6 +413,7 @@
 				7D15DB5924C2A49D009ACDB4 /* WordColoringManager.swift */,
 				7D7ECFF52509A7B9008573A7 /* AzureTranslateManager.swift */,
 				7D7ECFF9250C0135008573A7 /* TextToSpeechManager.swift */,
+				1DA47CA225B8C84100B546B1 /* PurchasingManager.swift */,
 			);
 			path = "Object Managers";
 			sourceTree = "<group>";
@@ -710,6 +718,7 @@
 				7D15DB5424C29520009ACDB4 /* Realm Models */,
 				7D15DB6924C2A8A6009ACDB4 /* Coloring Models */,
 				1DA7B30D253DEF4A0068330B /* PopUpManager.swift */,
+				1D90A9B425CB2C5100802D3C /* AdManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -945,9 +954,11 @@
 				7D0FCC7F251945C600B11F5B /* CVSectionHeader.swift in Sources */,
 				1D999FA625433DFA00A635DE /* Page6.swift in Sources */,
 				7D7ECFFA250C0136008573A7 /* TextToSpeechManager.swift in Sources */,
+				1D90A9B525CB2C5100802D3C /* AdManager.swift in Sources */,
 				7DFF962724DC9679008A93A9 /* ResultCardView.swift in Sources */,
 				7D0C129124DB4B390024FD31 /* StudyController.swift in Sources */,
 				7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */,
+				1D90A9B825CB315400802D3C /* SecretsPopUpView.swift in Sources */,
 				7DCAC7A324F6E1100013D134 /* SearchStatus.swift in Sources */,
 				7D7ECFF82509A867008573A7 /* AzureTranslationModel.swift in Sources */,
 				1DA7B313253DF5E70068330B /* TestResultPopUpView.swift in Sources */,
@@ -962,6 +973,7 @@
 				7D99A37424D9EC91006C977E /* SignUpController.swift in Sources */,
 				7D87608324DF328900FE2913 /* FlashcardsScrollView.swift in Sources */,
 				7D15DB5224C29517009ACDB4 /* MappingModel.swift in Sources */,
+				1DA47CA325B8C84100B546B1 /* PurchasingManager.swift in Sources */,
 				1D999FA92543461A00A635DE /* Page7.swift in Sources */,
 				1D999FB92543ABAC00A635DE /* Page12.swift in Sources */,
 				7D600BF324D107DF002EA266 /* KeyCardView.swift in Sources */,

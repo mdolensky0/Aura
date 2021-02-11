@@ -213,8 +213,6 @@ class SwipeTutorialView: UIView {
         } completion: { (_) in
             self.delegate?.dismiss()
         }
-
-        
     }
     
 }

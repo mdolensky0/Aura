@@ -749,9 +749,13 @@ extension UITextField {
 
 let imageCache = NSCache<AnyObject, AnyObject>()
 
-extension UIImageView {
+class CustomImageView: UIImageView {
+    
+    var imageURLString: String?
     
     func loadImageUsingCacheWithURLString(urlString: String) {
+        
+        imageURLString = urlString
         
         self.image = nil
         
@@ -779,9 +783,11 @@ extension UIImageView {
             
             DispatchQueue.main.async {
                 
-                imageCache.setObject(downloadedImage, forKey: urlString as AnyObject)
+                if self.imageURLString == urlString {
+                    self.image = UIImage(data: data)
+                }
                 
-                self.image = UIImage(data: data)
+                imageCache.setObject(downloadedImage, forKey: urlString as AnyObject)
                 
             }
             

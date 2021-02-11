@@ -739,6 +739,9 @@ extension SearchController {
     
     func startSearchSequence(searchText: String,_ searchInfo: SearchInfo, ipaIndex: Int = 0) {
         
+        //Update Search Count
+        AdManager.shared.updateSearchCount()
+        
         //Update Search Input Variable
         self.searchInput = searchText
         

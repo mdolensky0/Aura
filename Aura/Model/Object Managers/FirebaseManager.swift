@@ -130,87 +130,71 @@ class FirebaseManager {
         
     }
     
-    func loadUser(completion: @escaping(_ result: User?) -> Void) {
+    func loadUser() {
         
+        var userResult = User(UID: "", decks: [], prevSearches: [], purchases: [:])
+
         if let userID = Auth.auth().currentUser?.uid {
             
             let docRef = db.collection(K.FBConstants.usersCollectionName).document(userID)
             
-            docRef.getDocument { (document, error) in
+            docRef.addSnapshotListener { (querySnapshot, error) in
 
-                let result = Result {
-                    try document.flatMap {
-                        try $0.data(as: User.self)
-                    }
-                }
-                
-                switch result {
-                    
-                case .success(let user):
-                    
-                    if let user = user {
-                        
-                        completion(user)
-                        
-                    }
-                    
-                    else {
-                        
-                        completion(nil)
-                        print("Document does not exist")
-                        
-                    }
-                    
-                case .failure(let error):
-                    
-                    completion(nil)
-                    print("Error decoding: \(error)")
-                    
-                }
-            }
-            
-        }
-        
-        else { completion(nil) }
-    }
-    
-    func loadSuperUser(completion: @escaping(_ superUser: User?) -> Void) {
-        
-        let docRef = db.collection(K.FBConstants.usersCollectionName).document(K.FBConstants.superUser)
-        
-        docRef.getDocument { (document, error) in
-
-            let result = Result {
-                try document.flatMap {
-                    try $0.data(as: User.self)
-                }
-            }
-            
-            switch result {
-                
-            case .success(let user):
-                
-                if let user = user {
-                    
-                    completion(user)
-                    
+                if let error = error {
+                    print("Error getting User Document: \(error)")
                 }
                 
                 else {
+                    let result = Result {
+                        try querySnapshot?.data(as: User.self)
+                    }
                     
-                    completion(nil)
-                    print("Document does not exist")
-                    
+                    switch result {
+                    case .success(let user):
+                        if let user = user {
+                            userResult = user
+                        } else {
+                            print("Nil User Model")
+                        }
+                    case .failure(let error):
+                        print("Error decoding User Model: \(error)")
+                    }
+                    Utilities.shared.user = userResult
                 }
-                
-            case .failure(let error):
-                
-                completion(nil)
-                print("Error decoding: \(error)")
-                
             }
         }
+    }
+                
+    func loadSuperUser() {
         
+        var superUserResult = User(UID: "", decks: [], prevSearches: [], purchases: [:])
+        let docRef = db.collection(K.FBConstants.usersCollectionName).document(K.FBConstants.superUser)
+        
+        docRef.addSnapshotListener { (querySnapshot, error) in
+            
+            if let error = error {
+                print("Error getting Super User Doc: \(error)")
+            }
+            
+            else {
+                let result = Result {
+                    try querySnapshot?.data(as: User.self)
+                }
+                
+                switch result {
+                case .success(let superUser):
+                    if let superUser = superUser {
+                        superUserResult = superUser
+                    } else {
+                        print("Nil SuperUser Loaded")
+                    }
+                case .failure(let error):
+                    print("Error decoding super user: \(error)")
+                
+                }
+                Utilities.shared.superUser = superUserResult
+            }
+        }
     }
     
     func updateUser(user: User) {
@@ -244,11 +228,11 @@ class FirebaseManager {
         
     }
     
-    func loadLessons(completion: @escaping(_ result: [LessonModel]) -> Void) {
+    func loadLessons() {
         
         var lessons = [LessonModel]()
         
-        db.collection(K.FBConstants.lessonsCollectionName).getDocuments() { (querySnapshot, err) in
+        db.collection(K.FBConstants.lessonsCollectionName).order(by: "lessonTitle", descending: false).addSnapshotListener { (querySnapshot, err) in
             
             if let err = err {
                 
@@ -258,6 +242,8 @@ class FirebaseManager {
             
             else {
                 
+                print(querySnapshot!.documents.count)
+                lessons = []
                 for document in querySnapshot!.documents {
                     
                     let result = Result {
@@ -281,9 +267,8 @@ class FirebaseManager {
                         
                     }
                 }
-                completion(lessons)
+                Utilities.shared.lessons = lessons
             }
         }
     }
-    
 }

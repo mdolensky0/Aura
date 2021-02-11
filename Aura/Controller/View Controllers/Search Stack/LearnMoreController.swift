@@ -130,37 +130,89 @@ class LearnMoreController: UIViewController {
     
     var myDecksScrollView: MyDecksScrollView!
     
-    var lessonsButton: UIButton = {
+    var whereToStartLabel: UILabel = {
         
-        let button = UIButton()
-        button.setTitle("Lessons", for: .normal)
-        if UIScreen.main.bounds.width > 320 {
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .bold)
+        let l = UILabel()
+        l.text = "Where to start"
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .black
+        return l
+        
+    }()
+    
+    var introImageView: CustomImageView = {
+        let iv = CustomImageView()
+        iv.contentMode = .scaleAspectFill
+        return iv
+    }()
+    
+    lazy var introVideoView: UIView = {
+        
+        let container = UIView()
+        
+        let play = UIImageView()
+        play.backgroundColor = .white
+        
+        if #available(iOS 13, *) {
+            play.image = UIImage.init(systemName: "play.fill")
         } else {
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+            play.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
         }
-        button.tintColor = .white
-        button.setBackgroundImage(#imageLiteral(resourceName: "classroom"), for: .normal)
-        button.addTarget(self, action: #selector(goToLessonButtonPressed(_:)), for: .touchUpInside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDown)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(cancelEvent(_:)), for: .touchDragOutside)
-        button.addTarget(self, action: #selector(touchDown(_:)), for: .touchDragInside)
-        button.roundCorners(cornerRadius: 10)
-        return button
+        
+        play.tintColor = K.DesignColors.primary
+        play.backgroundColor = UIColor(white: 0.8, alpha: 0.4)
+        play.roundCorners(cornerRadius: 30)
+        play.contentMode = .center
+        
+        play.translatesAutoresizingMaskIntoConstraints = false
+        play.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        play.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        play.alpha = 0.7
+        
+
+        
+        container.addSubview(introImageView)
+        
+        introImageView.anchor(top: container.topAnchor,
+                  bottom: container.bottomAnchor,
+                  leading: container.leadingAnchor,
+                  trailing: container.trailingAnchor,
+                  height: nil,
+                  width: nil)
+    
+        introImageView.roundCorners(cornerRadius: 10)
+        
+        container.addSubview(play)
+        
+        play.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        play.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        
+        let b = AnimatedButton(frame: .zero)
+        b.addTarget(self, action: #selector(introVideoPressed(_:)), for: .touchUpInside)
+        
+        container.addSubview(b)
+        b.anchor(top: container.topAnchor,
+                 bottom: container.bottomAnchor,
+                 leading: container.leadingAnchor,
+                 trailing: container.trailingAnchor,
+                 height: nil,
+                 width: nil)
+        
+        return container
         
     }()
     
     // Background Views
     let resultBackgroundView = UIView ()
         
-    let lessonBackgroundView = UIView()
-    
     //MARK: - INIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = K.DesignColors.background
+        Utilities.shared.learnMoreDelegates.append(self)
+        AdManager.shared.learnMoreDelegates.append(self)
         setupView()
     }
     
@@ -200,6 +252,13 @@ class LearnMoreController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        if isMovingFromParent {
+            Utilities.shared.learnMoreDelegates.removeLast()
+            AdManager.shared.learnMoreDelegates.removeLast()
+        }
+    }
+    
 }
 
 extension LearnMoreController {
@@ -232,7 +291,7 @@ extension LearnMoreController {
             view.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
         }
                 
-        lessonBackgroundView.setShadow(color: .black, opacity: 0.7, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
+        introVideoView.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 10)
         
         for v in myDecksScrollView.stackView.subviews {
             v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
@@ -308,12 +367,11 @@ extension LearnMoreController {
         // Setup Learn More Scroll View
         setupLearnMoreScrollView()
         
-        // Setup FlashCard UpSaleButton
-        setupMyFlashcards()
-        
         // Setup Lessons UpSaleButton
         setupLessonsButton()
         
+        // Setup FlashCard UpSaleButton
+        setupMyFlashcards()
     }
         
     func setupAlternativesView() {
@@ -451,7 +509,7 @@ extension LearnMoreController {
         
         mainStackView.addArrangedSubview(myDecksLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         
-        mainStackView.addArrangedSubview(myDecksScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainStackView.addArrangedSubview(myDecksScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: -27, right: -20))
         
         myDecksScrollView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
@@ -465,19 +523,14 @@ extension LearnMoreController {
     
     func setupLessonsButton() {
         
-        mainStackView.addArrangedSubview(lessonBackgroundView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: -27, right: -20))
-        lessonBackgroundView.addSubview(lessonsButton)
+        introImageView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState())
+        whereToStartLabel.text = AdManager.shared.getFunnelLabelTitleForCurrentUserState()
         
-        lessonBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        lessonBackgroundView.heightAnchor.constraint(equalToConstant: 220).isActive = true
-        lessonBackgroundView.widthAnchor.constraint(greaterThanOrEqualToConstant: 10).isActive = true
+        introVideoView.translatesAutoresizingMaskIntoConstraints = false
+        introVideoView.heightAnchor.constraint(equalToConstant: 175).isActive = true
         
-        lessonsButton.anchor(top: lessonBackgroundView.topAnchor,
-                             bottom: lessonBackgroundView.bottomAnchor,
-                             leading: lessonBackgroundView.leadingAnchor,
-                             trailing: lessonBackgroundView.trailingAnchor,
-                             height: nil,
-                             width: nil)
+        mainStackView.addArrangedSubview(whereToStartLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
+        mainStackView.addArrangedSubview(introVideoView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         
     }
     
@@ -534,14 +587,23 @@ extension LearnMoreController {
         self.tabBarController?.selectedIndex = 3
     }
     
-    @objc func goToLessonButtonPressed(_ sender: UIButton) {
+    @objc func introVideoPressed(_ sender: UIButton) {
         
         UIView.animate(withDuration: 0.2) {
-            sender.transform = .identity
-            sender.superview?.layer.shadowOpacity = 0.7
+            
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+            
+        } completion: { (_) in
+            
+            self.tabBarController?.selectedIndex = 4
+
+            if let vc = self.tabBarController!.viewControllers![4] as? UINavigationController {
+                let vc = vc.viewControllers[0] as! LessonsController
+                vc.scrollToPage(page: 1, animated: false)
+                vc.playVideo()
+            }
         }
-        
-        self.tabBarController?.selectedIndex = 4
     }
     
     @objc func touchDown(_ sender: UIButton) {
@@ -1052,9 +1114,9 @@ extension LearnMoreController {
     }
 }
 
-extension LearnMoreController: DeckUpdater {
+extension LearnMoreController: FirebaseUpdaterDelegate {
     
-    func updateMyDecks() {
+    func updateMyDecksDisplay() {
         
         guard let decks = Utilities.shared.user?.decks else {
             
@@ -1076,7 +1138,7 @@ extension LearnMoreController: DeckUpdater {
     }
 }
 
-extension LearnMoreController: MyDeckDelegate {
+extension LearnMoreController: MyDeckScrollViewDelegate {
     
     func goToDeck(deckIndex: Int) {
         
@@ -1091,6 +1153,15 @@ extension LearnMoreController: MyDeckDelegate {
             }
         }
         
+    }
+    
+}
+
+extension LearnMoreController: AdManagerDelegate {
+    
+    func updateSecretsThumbnail() {
+        introImageView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState())
+        whereToStartLabel.text = AdManager.shared.getFunnelLabelTitleForCurrentUserState()
     }
     
 }

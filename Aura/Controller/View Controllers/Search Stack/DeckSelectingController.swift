@@ -81,6 +81,15 @@ class DeckSelectingController: UIViewController {
         setup()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        if UserDefaults.standard.bool(forKey: "hasSeenDeckSelector") {
+            return
+        } else {
+            AdManager.shared.showAdPopUP(parentVC: self)
+            UserDefaults.standard.set(true, forKey: "hasSeenDeckSelector")
+        }
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
