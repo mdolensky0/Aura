@@ -12,6 +12,53 @@ class VideoCell: UICollectionViewCell {
     
     static let identifier = "VideoCell"
     
+    var playImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.tintColor = K.DesignColors.primary
+        iv.backgroundColor = .white
+        iv.contentMode = .scaleAspectFit
+        
+        if #available(iOS 13, *) {
+            iv.image = UIImage(systemName: "lock.fill")
+        } else {
+            iv.image = #imageLiteral(resourceName: "lock.fill").withRenderingMode(.alwaysTemplate)
+        }
+        
+        return iv
+    }()
+    
+    lazy var playView: UIView = {
+        let v = UIView()
+        
+        let container = UIView()
+        container.backgroundColor = .white
+        
+        v.addSubview(container)
+        container.addSubview(playImageView)
+        
+        playImageView.translatesAutoresizingMaskIntoConstraints = false
+        playImageView.widthAnchor.constraint(equalToConstant: 15).isActive = true
+        playImageView.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        playImageView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        playImageView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        
+        container.anchor(top: v.topAnchor,
+                             bottom: v.bottomAnchor,
+                             leading: v.leadingAnchor,
+                             trailing: v.trailingAnchor,
+                             height: nil,
+                             width: nil)
+        
+        container.roundCorners(cornerRadius: 15)
+        
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        v.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        return v
+        
+        
+    }()
+        
     var imageView: CustomImageView = {
         
         let iv = CustomImageView()
@@ -84,7 +131,7 @@ class VideoCell: UICollectionViewCell {
     }
     
     func setup() {
-
+        
         self.addSubview(imageView)
         
         imageView.anchor(top: self.topAnchor,
@@ -94,6 +141,11 @@ class VideoCell: UICollectionViewCell {
                          height: nil,
                          width: 96,
                          padding: UIEdgeInsets(top: 10, left: 10, bottom: -10, right: 0))
+        
+        self.addSubview(playView)
+        playView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
+        playView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        playView.isHidden = true
         
         let container = UIView()
         container.addSubview(titleLabel)
@@ -139,6 +191,8 @@ class VideoCell: UICollectionViewCell {
                         trailing: self.trailingAnchor,
                         height: nil,
                         width: nil)
+        
+        playView.setShadow(color: .black, opacity: 0.7, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 30)
     }
     
 }

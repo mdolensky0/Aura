@@ -12,6 +12,7 @@ import Firebase
 class SignInController: UIViewController {
 
     var isModal = false
+    var isForPurchase = false
     var delegate: AddFlashcardDelegate?
     
     var titleLabel: UILabel = {
@@ -99,7 +100,6 @@ class SignInController: UIViewController {
         b.setTitle("Forgot Password?", for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         b.setTitleColor(K.Colors.purple, for: .normal)
-        b.addTarget(self, action: #selector(forgotPasswordClicked), for: .touchUpInside)
         return b
         
     }()
@@ -109,7 +109,6 @@ class SignInController: UIViewController {
         let button = UIButton()
         button.setTitle("Log In", for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
-        button.addTarget(self, action: #selector(logInPressed(_:)), for: .touchUpInside)
         return button
         
     }()
@@ -134,6 +133,8 @@ class SignInController: UIViewController {
     func setup() {
         
         view.backgroundColor = .white
+        logInButton.addTarget(self, action: #selector(logInPressed(_:)), for: .touchUpInside)
+        forgotPasswordButton.addTarget(self, action: #selector(forgotPasswordClicked), for: .touchUpInside)
         
         // Add Center Title
         self.navigationItem.titleView = titleLabel
@@ -201,14 +202,14 @@ class SignInController: UIViewController {
                                     height: nil,
                                     width: nil,
                                     padding: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0))
-                
+        
         logInButton.anchor(top: forgotPasswordButton.bottomAnchor,
-                            bottom: nil,
-                            leading: view.leadingAnchor,
-                            trailing: view.trailingAnchor,
-                            height: 50,
-                            width: nil,
-                            padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
+                           bottom: nil,
+                           leading: view.leadingAnchor,
+                           trailing: view.trailingAnchor,
+                           height: 50,
+                           width: nil,
+                           padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
         
         userAgreementLabel.anchor(top: logInButton.bottomAnchor,
                                   bottom: nil,
@@ -283,31 +284,49 @@ class SignInController: UIViewController {
             FirebaseManager.shared.loadUser()
             
             if self.isModal {
-            
-                guard let tabBarController = self.presentingViewController as? TabBarController else {
+                
+                if let tabBarController = self.presentingViewController as? TabBarController {
                     DispatchQueue.main.async {
                         self.endLoadingScreen()
                     }
-                    return
+                    tabBarController.userSignedIn()
+                    self.dismiss(animated: true, completion: nil)
+                    if self.isForPurchase {
+                        if AdManager.shared.vcBuyPopUp.superview != nil {
+                            AdManager.shared.vcBuyPopUp.buyButton.sendActions(for: .touchUpInside)
+                        } else {
+                            AdManager.shared.videoBuyPopUp.buyButton.sendActions(for: .touchUpInside)
+                        }
+                    } else {
+                        self.delegate?.tapAddFlashcardButton()
+                    }
+                } else if let tabBarController = self.presentingViewController?.presentingViewController as? TabBarController {
+                    DispatchQueue.main.async {
+                        self.endLoadingScreen()
+                    }
+                    tabBarController.userSignedIn()
+                    self.dismiss(animated: true, completion: nil)
+                    if self.isForPurchase {
+                        if AdManager.shared.vcBuyPopUp.superview != nil {
+                            AdManager.shared.vcBuyPopUp.buyButton.sendActions(for: .touchUpInside)
+                        } else {
+                            AdManager.shared.videoBuyPopUp.buyButton.sendActions(for: .touchUpInside)
+                        }
+                    } else {
+                        self.delegate?.tapAddFlashcardButton()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.endLoadingScreen()
+                    }
                 }
-                
-                DispatchQueue.main.async {
-                    self.endLoadingScreen()
-                }
-                tabBarController.userSignedIn()
-                self.dismiss(animated: true, completion: nil)
-                self.delegate?.tapAddFlashcardButton()
-            }
-                
-            else {
-                
+            } else {
                 DispatchQueue.main.async {
                     self.endLoadingScreen()
                 }
                 guard let tabBarController = self.tabBarController as? TabBarController else { return }
                 tabBarController.userSignedIn()
             }
-            
         }
     }
     

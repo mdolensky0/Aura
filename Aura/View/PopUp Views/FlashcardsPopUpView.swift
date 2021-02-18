@@ -117,7 +117,6 @@ class FlashcardsPopUpView: UIView {
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         b.tintColor = .white
         b.backgroundColor = K.DesignColors.primary
-        b.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
         return b
         
     }()
@@ -149,6 +148,7 @@ class FlashcardsPopUpView: UIView {
         container.addSubview(feature5)
         container.addSubview(signUpLabel)
         container.addSubview(buttonBackground)
+        doneButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
         
         blackView.anchor(top: self.topAnchor,
                          bottom: self.bottomAnchor,

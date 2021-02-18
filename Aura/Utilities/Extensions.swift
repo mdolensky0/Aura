@@ -157,6 +157,14 @@ func createButtons(_ attributedString: NSMutableAttributedString) -> [(color: UI
 //MARK:- UIViewController Extensions
 extension UIViewController {
     
+    func goToLoginForPurchase() {
+        let vc = UINavigationController(rootViewController: LoginController())
+        let login = vc.viewControllers[0] as! LoginController
+        login.isModal = true
+        login.isForPurchase = true
+        self.present(vc, animated: true, completion: nil)
+    }
+    
     func setupToHideKeyboardOnTapOnView() {
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(

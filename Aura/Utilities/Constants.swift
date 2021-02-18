@@ -157,19 +157,23 @@ struct K {
         dictionary["1"] = wild1
         
         let wild2 = NSMutableAttributedString(string: "ya")
+        wild2.addAttribute(.foregroundColor, value: K.Colors.blueGrey, range: NSRange(location: 0, length: 1))
         wild2.addAttribute(.foregroundColor, value: K.Colors.lightPink, range: NSRange(location: 1, length: 1))
         dictionary["2"] = wild2
         
         let wild3 = NSMutableAttributedString(string: "yu")
+        wild3.addAttribute(.foregroundColor, value: K.Colors.blueGrey, range: NSRange(location: 0, length: 1))
         wild3.addAttribute(.foregroundColor, value: K.Colors.lightPink, range: NSRange(location: 1, length: 1))
         dictionary["3"] = wild3
         
         let wild4 = NSMutableAttributedString(string: "yew")
+        wild4.addAttribute(.foregroundColor, value: K.Colors.blueGrey, range: NSRange(location: 0, length: 1))
         wild4.addAttribute(.foregroundColor, value: K.Colors.lightGreen, range: NSRange(location: 1, length: 2))
         dictionary["4"] = wild4
         
         
         let wild5 = NSMutableAttributedString(string: "yu")
+        wild5.addAttribute(.foregroundColor, value: K.Colors.blueGrey, range: NSRange(location: 0, length: 1))
         wild5.addAttribute(.foregroundColor, value: K.Colors.lightGreen, range: NSRange(location: 1, length: 1))
         dictionary["5"] = wild5
         

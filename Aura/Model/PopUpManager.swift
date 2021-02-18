@@ -233,33 +233,46 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
             
             // Add Observer
             let interval = CMTime(value: 1, timescale: 2)
-            av.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { (progressTime) in
+            av.timeObserver = av.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { (progressTime) in
                 
                 let seconds = CMTimeGetSeconds(progressTime)
+                let min = Int(seconds / 60)
+                let secs = Int(seconds) % 60
                 
-                if Int(seconds / 60) >= 15 && Int(seconds) % 60 >= 15  {
-                    switch AdManager.shared.funnelProgress {
-                    case .completedVideo1, .seenPartOfVideo2:
-                        AdManager.shared.funnelProgress = .completedVideo2NoBuy
-                    default:
-                        break
-                    }
-                } else if Int(seconds / 60)  >= 9 {
-                    switch AdManager.shared.funnelProgress {
-                    case .hasNotSeenVideo1, .seenPartOfVideo1:
+                switch AdManager.shared.funnelProgress {
+                case .hasNotSeenVideo1:
+                    AdManager.shared.funnelProgress = .seenPartOfVideo1
+                case .seenPartOfVideo1:
+                    if min >= 9 {
                         AdManager.shared.funnelProgress = .completedVideo1
-                    default:
-                        break
                     }
-                } else {
-                    switch AdManager.shared.funnelProgress {
-                    case .hasNotSeenVideo1:
-                        AdManager.shared.funnelProgress = .seenPartOfVideo1
-                    case .completedVideo1:
-                        AdManager.shared.funnelProgress = .seenPartOfVideo2
-                    default:
-                        break
+                case .completedVideo1:
+                    AdManager.shared.funnelProgress = .seenPartOfVideo2
+                case .seenPartOfVideo2:
+                    if min >= 15 && secs >= 15 {
+                        AdManager.shared.funnelProgress = .completedVideo2NoBuy
+                        AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
+                        AdManager.shared.isBuyButtonShowing = true
+                        AdManager.shared.currentLessonIndex = 0
                     }
+                case .completedVideo2NoBuy:
+                    if secs >= 15 && AdManager.shared.isBuyButtonShowing == false {
+                        AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
+                        AdManager.shared.isBuyButtonShowing = true
+                    }
+                    
+                    if let idx = AdManager.shared.currentLessonIndex {
+                        if let duration = av.player?.currentItem?.duration {
+                            let durationSecs = CMTimeGetSeconds(duration)
+                            if durationSecs - seconds <= 15 {
+                                if idx == 0 {
+                                    AdManager.shared.currentLessonIndex = idx + 1
+                                }
+                            }
+                        }
+                    }
+                default:
+                    break
                 }
             })
             
@@ -276,10 +289,14 @@ class PUAVPlayerViewController: AVPlayerViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         handleVideoCloseForCurrentState()
+        player?.pause()
+        player?.removeTimeObserver(timeObserver!)
+        AdManager.shared.removeBuyButton()
     }
     
     var parentView: UIViewController?
     var videoIdx: Int?
+    var timeObserver: Any?
     
     func handleVideoCloseForCurrentState() {
         
@@ -315,6 +332,16 @@ class PUAVPlayerViewController: AVPlayerViewController {
                 parentView?.tabBarController?.selectedIndex = 4
             } else { return }
         }
+    }
+    
+    func goToLogin() {
+        
+        let vc = UINavigationController(rootViewController: LoginController())
+        let login = vc.viewControllers[0] as! LoginController
+        login.isModal = true
+        login.isForPurchase = true
+        self.present(vc, animated: true, completion: nil)
+        
     }
 
 }

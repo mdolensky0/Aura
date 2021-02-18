@@ -55,6 +55,7 @@ class Utilities {
             for delegate in learnMoreDelegates {
                 delegate.updateMyDecksDisplay()
             }
+            updateFunnelForSignIn()
         }
         
     }
@@ -89,6 +90,21 @@ class Utilities {
 //    func playAudioFile(urlString: String, loop: Int = 0, sender: UIButton) {
 //        
 //    }
+    
+    func updateFunnelForSignIn() {
+        guard let funnelProgress = AdManager.shared.funnelProgress else {
+            return
+        }
+        
+        if funnelProgress == .completedVideo2Bought && user == nil {
+            AdManager.shared.funnelProgress = .completedVideo2NoBuy
+            return
+        }
+        
+        if user != nil && user!.purchases["EHDMasterCourse"] == true {
+            AdManager.shared.funnelProgress = .completedVideo2Bought
+        }
+    }
     
     func playSound(_ soundFileName: String, volume: Float = 1) {
         guard let url = Bundle.main.url(forResource: soundFileName, withExtension: "wav") else { return }

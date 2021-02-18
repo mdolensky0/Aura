@@ -29,7 +29,8 @@ class AdManager: NSObject {
     var searchDelegate: AdManagerDelegate?
     var resultDelegate: AdManagerDelegate?
     var learnMoreDelegates = [FirebaseUpdaterDelegate]()
-
+    var lessonDelegate: FirebaseUpdaterDelegate?
+    
     var funnelProgress: FunnelProgress? {
         
         get {
@@ -53,9 +54,41 @@ class AdManager: NSObject {
             for delegate in learnMoreDelegates {
                 delegate.updateSecretsThumbnail()
             }
+            lessonDelegate?.updateLessonsDisplay()
             
         }
     }
+    
+    var currentLessonIndex: Int? {
+        get {
+            
+            guard let idxObject = UserDefaults.standard.object(forKey: "currentLessonNum") else {
+                return nil
+            }
+            
+            guard let idx = idxObject as? Int else {
+                return nil
+            }
+            
+            return idx
+            
+        }
+        
+        set(newValue) {
+            UserDefaults.standard.setValue(newValue, forKey: "currentLessonNum")
+            homeDelegate?.updateSecretsThumbnail()
+            searchDelegate?.updateSecretsThumbnail()
+            resultDelegate?.updateSecretsThumbnail()
+            for delegate in learnMoreDelegates {
+                delegate.updateSecretsThumbnail()
+            }
+        }
+    }
+    
+    let videoBuyPopUp = BuyButtonPopUpView(frame: .zero, isVideoPopUp: true)
+    let vcBuyPopUp = BuyButtonPopUpView(frame: .zero, isVideoPopUp: false)
+    
+    var isBuyButtonShowing = false
     
     func getFunnelThumbnailURLForCurrentUserState() -> String {
         
@@ -76,7 +109,7 @@ class AdManager: NSObject {
             return lessons[0].videos[1].videoThumbnailURL
         case .completedVideo2NoBuy:
             // Return Lessons Intro Thumbnail
-            return lessons[1].videos[0].videoThumbnailURL
+            return fetchVideoThumbnailForLessonNum()
         case .completedVideo2Bought:
             // Return Lesson Video Thumbnail they left off at
             return fetchVideoThumbnailForLessonNum()
@@ -85,6 +118,31 @@ class AdManager: NSObject {
             return lessons[0].videos[0].videoThumbnailURL
         }
         
+    }
+    
+    func shouldVideoBeLocked() -> Bool {
+        
+        guard let idx = currentLessonIndex else {
+            return true
+        }
+        
+        if funnelProgress! == .completedVideo2NoBuy && idx > 0 {
+            return true
+        } else {
+            return false
+        }
+        
+    }
+    
+    func lessonPageToScrollTo() -> Int {
+        switch funnelProgress {
+        case .hasNotSeenVideo1, .seenPartOfVideo1, .completedVideo1, .seenPartOfVideo2:
+            return 0
+        case .completedVideo2NoBuy, .completedVideo2Bought:
+            return 1
+        default:
+            return 0
+        }
     }
     
     func getFunnelLabelTitleForCurrentUserState() -> String {
@@ -98,12 +156,16 @@ class AdManager: NSObject {
             return "Next Step"
         case .seenPartOfVideo2:
             return "Continue Watching"
-        case .completedVideo2NoBuy:
-            return "Sample The EHD Master Course"
+        case .completedVideo2NoBuy where currentLessonIndex! <= 0:
+            return "Sample the EHD Master Course"
+        case .completedVideo2NoBuy where currentLessonIndex! > 0:
+            return "Get the EHD Master Course Now!"
         case .completedVideo2Bought:
             return "Continue Learning"
         case .none:
             return "Where to Start"
+        case .some(.completedVideo2NoBuy):
+            return "Sample the EHD Master Course"
         }
         
     }
@@ -117,7 +179,7 @@ class AdManager: NSObject {
             // Video 2
            return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secrets_3.mp4?alt=media&token=d637f059-443e-47cb-a37a-c783c88654aa"
         case .completedVideo2NoBuy:
-            return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/IntroVideo.m4v?alt=media&token=ce50bace-989b-43e7-9551-7b5a9a0b8802"
+            return fetchVideoURLForLessonNum()
         case .completedVideo2Bought:
             return fetchVideoURLForLessonNum()
         }
@@ -199,21 +261,15 @@ class AdManager: NSObject {
     }
     
     func fetchVideoURLForLessonNum() -> String {
-        if let currLessonNum = UserDefaults.standard.object(forKey: "currentLessonNum") {
+        if let idx = currentLessonIndex {
             
-            if let index = currLessonNum as? Int {
+            if let lessons = Utilities.shared.lessons {
                 
-                if let lessons = Utilities.shared.lessons {
-                    
-                    if index < lessons[1].videos.count {
-                        return lessons[1].videos[index].videoURL
-                    } else {
-                        let idx = lessons[1].videos.count - 1
-                        return lessons[1].videos[idx].videoURL
-                    }
-                    
+                if idx < lessons[1].videos.count {
+                    return lessons[1].videos[idx].videoURL
                 } else {
-                    return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/IntroVideo.m4v?alt=media&token=ce50bace-989b-43e7-9551-7b5a9a0b8802"
+                    let idx = lessons[1].videos.count - 1
+                    return lessons[1].videos[idx].videoURL
                 }
                 
             } else {
@@ -221,7 +277,7 @@ class AdManager: NSObject {
             }
             
         } else {
-            UserDefaults.standard.set(0, forKey: "currentLessonNum")
+            currentLessonIndex = 0
             return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/IntroVideo.m4v?alt=media&token=ce50bace-989b-43e7-9551-7b5a9a0b8802"
         }
     }
@@ -236,21 +292,63 @@ class AdManager: NSObject {
             return ""
         }
         
-        guard let currLessonNum = UserDefaults.standard.object(forKey: "currentLessonNum") else {
-            UserDefaults.standard.set(0, forKey: "currentLessonNum")
+        guard let idx = currentLessonIndex else {
+            currentLessonIndex = 0
             return lessons[1].videos[0].videoThumbnailURL
         }
         
-        guard let idx = currLessonNum as? Int else {
-            return ""
-        }
-        
         if idx >= lessons[1].videos.count {
-            return ""
+            let lastIdx = lessons[1].videos.count - 1
+            return lessons[1].videos[lastIdx].videoThumbnailURL
         }
         
         return lessons[1].videos[idx].videoThumbnailURL
     
     }
     
+    func showBuyButton(inVideo: Bool = true, videoVC: PUAVPlayerViewController?, parentVC: UIViewController?) {
+        
+        let buyPopUp = inVideo ? videoBuyPopUp : vcBuyPopUp
+        buyPopUp.videoVC = videoVC
+        buyPopUp.parentVC = parentVC
+        if let window = UIApplication.shared.keyWindow {
+            
+            window.addSubview(buyPopUp)
+            buyPopUp.translatesAutoresizingMaskIntoConstraints = false
+            buyPopUp.anchor(top: nil,
+                            bottom: window.bottomAnchor,
+                            leading: window.safeAreaLayoutGuide.leadingAnchor,
+                            trailing: window.safeAreaLayoutGuide.trailingAnchor,
+                            height: nil,
+                            width: nil,
+                            padding: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+            
+            if inVideo {
+                buyPopUp.reset()
+            }
+            
+            buyPopUp.transform = CGAffineTransform(translationX: 0, y: 150)
+            
+            UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                buyPopUp.transform = .identity
+            }, completion: nil)
+        }
+    }
+    
+    func removeBuyButton() {
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            if self.videoBuyPopUp.superview != nil {
+                self.videoBuyPopUp.transform = CGAffineTransform(translationX: 0, y: 300)
+            } else {
+                self.vcBuyPopUp.transform = CGAffineTransform(translationX: 0, y: 300)
+            }
+        } completion: { (_) in
+            if self.videoBuyPopUp.superview != nil {
+                self.videoBuyPopUp.removeFromSuperview()
+                self.isBuyButtonShowing = false
+            } else {
+                self.vcBuyPopUp.removeFromSuperview()
+            }
+        }
+    }
 }

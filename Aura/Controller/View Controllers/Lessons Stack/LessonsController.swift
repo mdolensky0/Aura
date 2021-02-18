@@ -72,6 +72,7 @@ class LessonsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         Utilities.shared.lessonsTabDelegate = self
+        AdManager.shared.lessonDelegate = self
         setup()
     }
     
@@ -258,6 +259,12 @@ extension LessonsController: UICollectionViewDataSource {
         
         cell.cellMask.alpha = 0
         
+        if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
+            cell.playView.isHidden = false
+        } else {
+            cell.playView.isHidden = true
+        }
+        
         let currentVideo = Utilities.shared.lessons![scrollViewIndex].videos[indexPath.row]
         
         let thumbnailUrlString = currentVideo.videoThumbnailURL
@@ -301,10 +308,15 @@ extension LessonsController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
+            AdManager.shared.showBuyButton(inVideo: false, videoVC: nil, parentVC: self)
+            return 
+        }
+        
         let av = PUAVPlayerViewController()
         av.videoIdx = indexPath.row
         av.parentView = self
-        UserDefaults.standard.setValue(indexPath.row, forKey: "currentLessonNum")
+        AdManager.shared.currentLessonIndex = indexPath.row
         let urlString = Utilities.shared.lessons![scrollViewIndex].videos[indexPath.row].videoURL
         
         if let url = URL(string: urlString) {
@@ -315,29 +327,57 @@ extension LessonsController: UICollectionViewDelegate {
             
             // Add Observer
             let interval = CMTime(value: 1, timescale: 2)
-            av.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { (progressTime) in
+            av.timeObserver = av.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { (progressTime) in
                 
                 let seconds = CMTimeGetSeconds(progressTime)
+                let min = Int(seconds / 60)
+                let secs = Int(seconds) % 60
                 
-                if Int(seconds / 60) >= 15 && Int(seconds) % 60 >= 15 && (AdManager.shared.funnelProgress! == .completedVideo1 || AdManager.shared.funnelProgress! == .seenPartOfVideo2) {
-                    AdManager.shared.funnelProgress = .completedVideo2NoBuy
-                } else if Int(seconds / 60)  >= 9 && (AdManager.shared.funnelProgress! == .hasNotSeenVideo1 || AdManager.shared.funnelProgress! == .seenPartOfVideo1) {
-                    AdManager.shared.funnelProgress = .completedVideo1
-                } else if AdManager.shared.funnelProgress! == .hasNotSeenVideo1 {
+                switch AdManager.shared.funnelProgress {
+                case .hasNotSeenVideo1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo1
-                } else if AdManager.shared.funnelProgress! == .completedVideo1 {
+                case .seenPartOfVideo1:
+                    if min >= 9 {
+                        AdManager.shared.funnelProgress = .completedVideo1
+                    }
+                case .completedVideo1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo2
-                } else if AdManager.shared.funnelProgress! == .completedVideo2Bought {
-                    if let idx = UserDefaults.standard.object(forKey: "currentLessonNum") as? Int {
+                case .seenPartOfVideo2:
+                    if min >= 15 && secs >= 15 {
+                        AdManager.shared.funnelProgress = .completedVideo2NoBuy
+                        AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
+                        AdManager.shared.isBuyButtonShowing = true
+                        AdManager.shared.currentLessonIndex = 0
+                    }
+                case .completedVideo2NoBuy:
+                    if secs >= 15 && AdManager.shared.isBuyButtonShowing == false {
+                        AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
+                        AdManager.shared.isBuyButtonShowing = true
+                    }
+                    
+                    if let idx = AdManager.shared.currentLessonIndex {
                         if let duration = av.player?.currentItem?.duration {
                             let durationSecs = CMTimeGetSeconds(duration)
                             if durationSecs - seconds <= 15 {
-                                if idx == av.videoIdx && idx + 1 < Utilities.shared.lessons![1].videos.count {
-                                    UserDefaults.standard.set(idx + 1, forKey: "currentLessonNum")
+                                if idx == 0 {
+                                    AdManager.shared.currentLessonIndex = idx + 1
                                 }
                             }
                         }
                     }
+                case .completedVideo2Bought:
+                    if let idx = AdManager.shared.currentLessonIndex {
+                        if let duration = av.player?.currentItem?.duration {
+                            let durationSecs = CMTimeGetSeconds(duration)
+                            if durationSecs - seconds <= 15 {
+                                if idx == av.videoIdx && idx + 1 < Utilities.shared.lessons![1].videos.count {
+                                    AdManager.shared.currentLessonIndex = idx + 1
+                                }
+                            }
+                        }
+                    }
+                default:
+                    break
                 }
             })
             
@@ -375,7 +415,7 @@ extension LessonsController: FirebaseUpdaterDelegate {
 extension LessonsController {
     func playVideo() {
         let av = PUAVPlayerViewController()
-        av.videoIdx = UserDefaults.standard.object(forKey: "currentLessonNum") as? Int ?? 0
+        av.videoIdx = AdManager.shared.currentLessonIndex ?? 0
         av.parentView = self
         let urlString = AdManager.shared.getVideoURLForCurrentUserState()
                 
@@ -387,32 +427,59 @@ extension LessonsController {
             
             // Add Observer
             let interval = CMTime(value: 1, timescale: 2)
-            av.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { (progressTime) in
+            av.timeObserver = av.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { (progressTime) in
                 
                 let seconds = CMTimeGetSeconds(progressTime)
+                let min = Int(seconds / 60)
+                let secs = Int(seconds) % 60
                 
-                if Int(seconds / 60) >= 15 && Int(seconds) % 60 >= 15 && (AdManager.shared.funnelProgress! == .completedVideo1 || AdManager.shared.funnelProgress! == .seenPartOfVideo2) {
-                    AdManager.shared.funnelProgress = .completedVideo2NoBuy
-                } else if Int(seconds / 60)  >= 9 && (AdManager.shared.funnelProgress! == .hasNotSeenVideo1 || AdManager.shared.funnelProgress! == .seenPartOfVideo1) {
-                    AdManager.shared.funnelProgress = .completedVideo1
-                } else if AdManager.shared.funnelProgress! == .hasNotSeenVideo1 {
+                switch AdManager.shared.funnelProgress {
+                case .hasNotSeenVideo1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo1
-                } else if AdManager.shared.funnelProgress! == .completedVideo1 {
+                case .seenPartOfVideo1:
+                    if min >= 9 {
+                        AdManager.shared.funnelProgress = .completedVideo1
+                    }
+                case .completedVideo1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo2
-                } else if AdManager.shared.funnelProgress! == .completedVideo2Bought {
-                    if let idx = UserDefaults.standard.object(forKey: "currentLessonNum") as? Int {
+                case .seenPartOfVideo2:
+                    if min >= 15 && secs >= 15 {
+                        AdManager.shared.funnelProgress = .completedVideo2NoBuy
+                        AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
+                        AdManager.shared.isBuyButtonShowing = true
+                        AdManager.shared.currentLessonIndex = 0
+                    }
+                case .completedVideo2NoBuy:
+                    if secs >= 15 && AdManager.shared.isBuyButtonShowing == false {
+                        AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
+                        AdManager.shared.isBuyButtonShowing = true
+                    }
+                    
+                    if let idx = AdManager.shared.currentLessonIndex {
                         if let duration = av.player?.currentItem?.duration {
                             let durationSecs = CMTimeGetSeconds(duration)
                             if durationSecs - seconds <= 15 {
-                                if idx == av.videoIdx && idx + 1 < Utilities.shared.lessons![1].videos.count {
-                                    UserDefaults.standard.set(idx + 1, forKey: "currentLessonNum")
+                                if idx == 0 {
+                                    AdManager.shared.currentLessonIndex = idx + 1
                                 }
                             }
                         }
                     }
+                case .completedVideo2Bought:
+                    if let idx = AdManager.shared.currentLessonIndex {
+                        if let duration = av.player?.currentItem?.duration {
+                            let durationSecs = CMTimeGetSeconds(duration)
+                            if durationSecs - seconds <= 15 {
+                                if idx == av.videoIdx && idx + 1 < Utilities.shared.lessons![1].videos.count {
+                                    AdManager.shared.currentLessonIndex = idx + 1
+                                }
+                            }
+                        }
+                    }
+                default:
+                    break
                 }
             })
-            
             self.present(av, animated: true) {
                 
                 av.player!.play()
@@ -422,8 +489,8 @@ extension LessonsController {
     
     func scrollToPage(page: Int, animated: Bool) {
         DispatchQueue.main.async {
-            self.scrollViewIndex = 1
-            self.scrollView.setContentOffset(CGPoint(x: self.scrollView.frame.width, y: 0), animated: true)
+            self.scrollViewIndex = page
+            self.scrollView.setContentOffset(CGPoint(x: CGFloat(page) * self.scrollView.frame.width, y: 0), animated: animated)
             self.collectionView.reloadData()
         }
     }

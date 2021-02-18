@@ -12,6 +12,7 @@ import Firebase
 class SignUpController: UIViewController {
     
     var isModal = false
+    var isForPurchase = false
     var delegate: AddFlashcardDelegate?
     
     var titleLabel: UILabel = {
@@ -126,7 +127,6 @@ class SignUpController: UIViewController {
         let button = UIButton()
         button.setTitle("Sign Up", for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
-        button.addTarget(self, action: #selector(signUpPressed(_:)), for: .touchUpInside)
         return button
         
     }()
@@ -151,6 +151,7 @@ class SignUpController: UIViewController {
     func setup() {
         
         view.backgroundColor = .white
+        signUpButton.addTarget(self, action: #selector(signUpPressed(_:)), for: .touchUpInside)
         
         // Add Center Title
         self.navigationItem.titleView = titleLabel
@@ -337,30 +338,48 @@ class SignUpController: UIViewController {
             
             if self.isModal {
                 
-                guard let tabBarController = self.presentingViewController as? TabBarController else {
+                if let tabBarController = self.presentingViewController as? TabBarController {
                     DispatchQueue.main.async {
                         self.endLoadingScreen()
                     }
-                    return
+                    tabBarController.userSignedIn()
+                    self.dismiss(animated: true, completion: nil)
+                    if self.isForPurchase {
+                        if AdManager.shared.vcBuyPopUp.superview != nil {
+                            AdManager.shared.vcBuyPopUp.buyButton.sendActions(for: .touchUpInside)
+                        } else {
+                            AdManager.shared.videoBuyPopUp.buyButton.sendActions(for: .touchUpInside)
+                        }
+                    } else {
+                        self.delegate?.tapAddFlashcardButton()
+                    }
+                } else if let tabBarController = self.presentingViewController?.presentingViewController as? TabBarController {
+                    DispatchQueue.main.async {
+                        self.endLoadingScreen()
+                    }
+                    tabBarController.userSignedIn()
+                    self.dismiss(animated: true, completion: nil)
+                    if self.isForPurchase {
+                        if AdManager.shared.vcBuyPopUp.superview != nil {
+                            AdManager.shared.vcBuyPopUp.buyButton.sendActions(for: .touchUpInside)
+                        } else {
+                            AdManager.shared.videoBuyPopUp.buyButton.sendActions(for: .touchUpInside)
+                        }
+                    } else {
+                        self.delegate?.tapAddFlashcardButton()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.endLoadingScreen()
+                    }
                 }
-                
-                DispatchQueue.main.async {
-                    self.endLoadingScreen()
-                }
-                tabBarController.userSignedIn()
-                self.dismiss(animated: true, completion: nil)
-                self.delegate?.tapAddFlashcardButton()
-            }
-                
-            else {
+            } else {
                 DispatchQueue.main.async {
                     self.endLoadingScreen()
                 }
                 guard let tabBarController = self.tabBarController as? TabBarController else { return }
                 tabBarController.userSignedIn()
             }
-
-            
         }
     }
     

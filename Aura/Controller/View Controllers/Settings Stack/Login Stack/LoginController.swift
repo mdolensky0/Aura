@@ -17,6 +17,7 @@ protocol AddFlashcardDelegate {
 class LoginController: UIViewController {
     
     var isModal = false
+    var isForPurchase = false
     var delegate: AddFlashcardDelegate?
     var auraLabel: UILabel = {
         
@@ -41,7 +42,6 @@ class LoginController: UIViewController {
         let button = UIButton()
         button.setTitle("Sign Up", for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
-        button.addTarget(self, action: #selector(signUpPressed(_:)), for: .touchUpInside)
         return button
         
     }()
@@ -51,7 +51,6 @@ class LoginController: UIViewController {
         let button = UIButton()
         button.setTitle("Log In", for: .normal)
         button.styleHollowbutton(outlineColor: .black)
-        button.addTarget(self, action: #selector(logInPressed(_:)), for: .touchUpInside)
         return button
         
     }()
@@ -71,6 +70,9 @@ class LoginController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
+        if isForPurchase { return }
+        
         if UserDefaults.standard.bool(forKey: "hasLaunchedFlashcards") {
             return
         } else {
@@ -87,6 +89,9 @@ class LoginController: UIViewController {
         self.navigationController?.navigationBar.tintColor = .black
         self.navigationController?.navigationBar.shadowImage = UIImage()
         //self.navigationController?.isNavigationBarHidden = true
+        
+        signUpButton.addTarget(self, action: #selector(signUpPressed(_:)), for: .touchUpInside)
+        logInButton.addTarget(self, action: #selector(logInPressed(_:)), for: .touchUpInside)
         
         if isModal {
             
@@ -162,6 +167,7 @@ class LoginController: UIViewController {
         
         let signUpVC = SignUpController()
         signUpVC.isModal = self.isModal
+        signUpVC.isForPurchase = self.isForPurchase
         signUpVC.delegate = self.delegate
         self.navigationController?.pushViewController(signUpVC, animated: true)
         
@@ -183,6 +189,7 @@ class LoginController: UIViewController {
         
         let logInVC = SignInController()
         logInVC.isModal = self.isModal
+        logInVC.isForPurchase = self.isForPurchase
         logInVC.delegate = self.delegate
         self.navigationController?.pushViewController(logInVC, animated: true)
         

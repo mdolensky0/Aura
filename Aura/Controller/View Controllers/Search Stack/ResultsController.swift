@@ -298,34 +298,53 @@ class ResultsController: UIViewController {
     var introImageView: CustomImageView = {
         let iv = CustomImageView()
         iv.contentMode = .scaleAspectFill
+        iv.backgroundColor = .white
         return iv
+    }()
+    
+    var playImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.tintColor = K.DesignColors.primary
+        iv.backgroundColor = .white
+        iv.contentMode = .scaleAspectFit
+        return iv
+    }()
+    
+    lazy var playView: UIView = {
+        let v = UIView()
+        
+        let container = UIView()
+        container.backgroundColor = .white
+        
+        v.addSubview(container)
+        container.addSubview(playImageView)
+        
+        playImageView.translatesAutoresizingMaskIntoConstraints = false
+        playImageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        playImageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        playImageView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        playImageView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        
+        container.anchor(top: v.topAnchor,
+                             bottom: v.bottomAnchor,
+                             leading: v.leadingAnchor,
+                             trailing: v.trailingAnchor,
+                             height: nil,
+                             width: nil)
+        
+        container.roundCorners(cornerRadius: 30)
+        
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        v.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        return v
+        
+        
     }()
     
     lazy var introVideoView: UIView = {
         
         let container = UIView()
-        
-        let play = UIImageView()
-        play.backgroundColor = .white
-        
-        if #available(iOS 13, *) {
-            play.image = UIImage.init(systemName: "play.fill")
-        } else {
-            play.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
-        }
-        
-        play.tintColor = K.DesignColors.primary
-        play.backgroundColor = UIColor(white: 0.8, alpha: 0.4)
-        play.roundCorners(cornerRadius: 30)
-        play.contentMode = .center
-        
-        play.translatesAutoresizingMaskIntoConstraints = false
-        play.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        play.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        play.alpha = 0.7
-        
-
-        
         container.addSubview(introImageView)
         
         introImageView.anchor(top: container.topAnchor,
@@ -337,10 +356,10 @@ class ResultsController: UIViewController {
     
         introImageView.roundCorners(cornerRadius: 10)
         
-        container.addSubview(play)
+        container.addSubview(playView)
         
-        play.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
-        play.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        playView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        playView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
         
         let b = AnimatedButton(frame: .zero)
         b.addTarget(self, action: #selector(introVideoPressed(_:)), for: .touchUpInside)
@@ -453,6 +472,8 @@ extension ResultsController {
         for v in myDecksScrollView.stackView.subviews {
             v.setShadow(color: .black, opacity: 0.3, offset: CGSize(width: 5, height: 5), radius: 2, cornerRadius: 10)
         }
+        
+        playView.setShadow(color: .black, opacity: 0.7, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 30)
         
     }
     
@@ -843,6 +864,20 @@ extension ResultsController {
         introImageView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState())
         whereToStartLabel.text = AdManager.shared.getFunnelLabelTitleForCurrentUserState()
         
+        if AdManager.shared.shouldVideoBeLocked() {
+            if #available(iOS 13, *) {
+                playImageView.image = UIImage(systemName: "lock.fill")
+            } else {
+                playImageView.image = #imageLiteral(resourceName: "lock.fill").withRenderingMode(.alwaysTemplate)
+            }
+        } else {
+            if #available(iOS 13, *) {
+                playImageView.image = UIImage(systemName: "play.fill")
+            } else {
+                playImageView.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
+            }
+        }
+        
         introVideoView.translatesAutoresizingMaskIntoConstraints = false
         introVideoView.heightAnchor.constraint(equalToConstant: 175).isActive = true
         
@@ -998,10 +1033,17 @@ extension ResultsController {
             
             self.tabBarController?.selectedIndex = 4
 
-            if let vc = self.tabBarController!.viewControllers![4] as? UINavigationController {
-                let vc = vc.viewControllers[0] as! LessonsController
-                vc.scrollToPage(page: 1, animated: false)
-                vc.playVideo()
+            if AdManager.shared.shouldVideoBeLocked() {
+                AdManager.shared.showBuyButton(inVideo: false, videoVC: nil, parentVC: self)
+            } else {
+                self.tabBarController?.selectedIndex = 4
+
+                if let vc = self.tabBarController!.viewControllers![4] as? UINavigationController {
+                    let vc = vc.viewControllers[0] as! LessonsController
+                    let page = AdManager.shared.lessonPageToScrollTo()
+                    vc.scrollToPage(page: page, animated: false)
+                    vc.playVideo()
+                }
             }
         }
     }
@@ -1858,6 +1900,19 @@ extension ResultsController: AdManagerDelegate {
     func updateSecretsThumbnail() {
         introImageView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState())
         whereToStartLabel.text = AdManager.shared.getFunnelLabelTitleForCurrentUserState()
+        
+        if AdManager.shared.shouldVideoBeLocked() {
+            if #available(iOS 13, *) {
+                playImageView.image = UIImage(systemName: "lock.fill")
+            } else {
+                playImageView.image = #imageLiteral(resourceName: "lock.fill").withRenderingMode(.alwaysTemplate)
+            }
+        } else {
+            if #available(iOS 13, *) {
+                playImageView.image = UIImage(systemName: "play.fill")
+            } else {
+                playImageView.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
+            }
+        }
     }
-    
 }
