@@ -41,52 +41,76 @@ class SecretsPopUpView: UIView {
         return l
     }()
     
-    var thumbnailView: CustomImageView = {
+    var introImageView: CustomImageView = {
         let iv = CustomImageView()
         iv.contentMode = .scaleAspectFill
+        iv.backgroundColor = .white
         return iv
+    }()
+    
+    var playImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.tintColor = K.DesignColors.primary
+        iv.backgroundColor = .white
+        iv.contentMode = .scaleAspectFit
+        if #available(iOS 13, *) {
+            iv.image = UIImage(systemName: "play.fill")
+        } else {
+            iv.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
+        }
+        return iv
+    }()
+    
+    lazy var playView: UIView = {
+        let v = UIView()
+        
+        let container = UIView()
+        container.backgroundColor = .white
+        
+        v.addSubview(container)
+        container.addSubview(playImageView)
+        
+        playImageView.translatesAutoresizingMaskIntoConstraints = false
+        playImageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        playImageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        playImageView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        playImageView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        
+        container.anchor(top: v.topAnchor,
+                             bottom: v.bottomAnchor,
+                             leading: v.leadingAnchor,
+                             trailing: v.trailingAnchor,
+                             height: nil,
+                             width: nil)
+        
+        container.roundCorners(cornerRadius: 30)
+        
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        v.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        return v
+        
+        
     }()
     
     lazy var introVideoView: UIView = {
         
         let container = UIView()
+        container.addSubview(introImageView)
         
-        let play = UIImageView()
-        play.backgroundColor = .white
+        introImageView.anchor(top: container.topAnchor,
+                  bottom: container.bottomAnchor,
+                  leading: container.leadingAnchor,
+                  trailing: container.trailingAnchor,
+                  height: nil,
+                  width: nil)
+    
+        introImageView.roundCorners(cornerRadius: 10)
         
-        if #available(iOS 13, *) {
-            play.image = UIImage.init(systemName: "play.fill")
-        } else {
-            play.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
-        }
+        container.addSubview(playView)
         
-        play.tintColor = K.DesignColors.primary
-        play.backgroundColor = UIColor(white: 0.8, alpha: 0.4)
-        play.roundCorners(cornerRadius: 30)
-        play.contentMode = .center
-        
-        play.translatesAutoresizingMaskIntoConstraints = false
-        play.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        play.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        play.alpha = 0.7
-        
-        
-        
-        container.addSubview(thumbnailView)
-        
-        thumbnailView.anchor(top: container.topAnchor,
-                             bottom: container.bottomAnchor,
-                             leading: container.leadingAnchor,
-                             trailing: container.trailingAnchor,
-                             height: nil,
-                             width: nil)
-        
-        thumbnailView.roundCorners(cornerRadius: 10)
-        
-        container.addSubview(play)
-        
-        play.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
-        play.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
+        playView.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        playView.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
         
         let b = AnimatedButton(frame: .zero)
         b.addTarget(self, action: #selector(introVideoPressed(_:)), for: .touchUpInside)
@@ -142,7 +166,7 @@ class SecretsPopUpView: UIView {
         
         self.title.text = titleText
         self.info.text = infoText
-        self.thumbnailView.loadImageUsingCacheWithURLString(urlString: thumbnailURL)
+        self.introImageView.loadImageUsingCacheWithURLString(urlString: thumbnailURL)
         self.watchButton.setTitle(buttonText, for: .normal)
         
         Utilities.shared.popUpDelegate = self
@@ -213,6 +237,9 @@ class SecretsPopUpView: UIView {
         watchButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         watchButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -35).isActive = true
         
+        playView.setShadow(color: .black, opacity: 0.7, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 30)
+
+        
     }
     
     func setupForSmallerScreen() {
@@ -258,10 +285,14 @@ class SecretsPopUpView: UIView {
                               width: nil,
                               padding: UIEdgeInsets(top: 10, left: 20, bottom: 0, right: -20))
         
+        introVideoView.heightAnchor.constraint(equalTo: introVideoView.widthAnchor, multiplier: 0.5).isActive = true
+        
         watchButton.topAnchor.constraint(equalTo: introVideoView.bottomAnchor, constant: 20).isActive = true
         watchButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         watchButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -35).isActive = true
         
+        playView.setShadow(color: .black, opacity: 0.7, offset: CGSize(width: 5, height: 5), radius: 5, cornerRadius: 30)
+
     }
         
     @objc func introVideoPressed(_ sender: UIButton) {
@@ -302,6 +333,6 @@ class SecretsPopUpView: UIView {
 
 extension SecretsPopUpView: FirebaseUpdaterDelegate {
     func updateSecretsThumbnail() {
-        self.thumbnailView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState())
+        self.introImageView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState())
     }
 }

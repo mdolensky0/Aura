@@ -40,6 +40,7 @@ class LessonsController: UIViewController {
         sv.showsHorizontalScrollIndicator = false
         sv.layer.masksToBounds = false
         sv.delegate = self
+        sv.tag = 0
         return sv
         
     }()
@@ -63,6 +64,7 @@ class LessonsController: UIViewController {
         cv.register(VideoCell.self, forCellWithReuseIdentifier: VideoCell.identifier)
         cv.backgroundColor = .white
         cv.allowsSelection = true
+        cv.tag = 1
         return cv
         
     }()
@@ -83,7 +85,14 @@ class LessonsController: UIViewController {
         self.view.backgroundColor = K.DesignColors.background
         
         setupNavBar()
-        self.setupScrollView()
+        if UIScreen.main.bounds.width < 375 {
+            self.setupScrollViewForSmallerScreen()
+        } else if UIScreen.main.bounds.width < 414 {
+            self.setupScrollViewForMediumScreen()
+        } else {
+            self.setupScrollViewForLargerScreen()
+        }
+       
         self.setupCollectionView()
     }
     
@@ -111,7 +120,89 @@ class LessonsController: UIViewController {
         
     }
     
-    func setupScrollView() {
+    func setupScrollViewForLargerScreen() {
+
+        scrollView.addSubview(stackView)
+        
+        stackView.anchor(top: scrollView.topAnchor,
+                         bottom: scrollView.bottomAnchor,
+                         leading: scrollView.leadingAnchor,
+                         trailing: scrollView.trailingAnchor,
+                         height: nil,
+                         width: nil)
+        
+        // Prevent Vertical Scrolling
+        stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
+        
+        // Populate Stack View
+        for lesson in Utilities.shared.lessons! {
+
+            let iv = CustomImageView()
+            iv.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
+            iv.backgroundColor = K.DesignColors.primary
+            iv.contentMode = .scaleAspectFill
+            iv.translatesAutoresizingMaskIntoConstraints = false
+            if UIScreen.main.bounds.width > 320 {
+                iv.heightAnchor.constraint(equalToConstant: 180).isActive = true
+                iv.widthAnchor.constraint(equalToConstant: 280).isActive = true
+            } else {
+                iv.heightAnchor.constraint(equalToConstant: 140).isActive = true
+                iv.widthAnchor.constraint(equalToConstant: 240).isActive = true
+            }
+            
+            iv.roundCorners(cornerRadius: 8)
+            stackView.addCenteredSubview(iv, stackViewParent: scrollView)
+
+        }
+        
+        // Add Scroll View to Main View
+        view.addSubview(scrollView)
+        
+        scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -90).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        scrollView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+    }
+    
+    func setupScrollViewForSmallerScreen() {
+
+        scrollView.addSubview(stackView)
+        
+        stackView.anchor(top: scrollView.topAnchor,
+                         bottom: scrollView.bottomAnchor,
+                         leading: scrollView.leadingAnchor,
+                         trailing: scrollView.trailingAnchor,
+                         height: nil,
+                         width: nil)
+        
+        // Prevent Vertical Scrolling
+        stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
+        
+        // Populate Stack View
+        for lesson in Utilities.shared.lessons! {
+
+            let iv = CustomImageView()
+            iv.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
+            iv.backgroundColor = K.DesignColors.primary
+            iv.contentMode = .scaleAspectFill
+            iv.translatesAutoresizingMaskIntoConstraints = false
+            iv.heightAnchor.constraint(equalToConstant: 140).isActive = true
+            iv.widthAnchor.constraint(equalToConstant: 240).isActive = true
+            iv.roundCorners(cornerRadius: 8)
+            stackView.addCenteredSubview(iv, stackViewParent: scrollView)
+
+        }
+        
+        // Add Scroll View to Main View
+        view.addSubview(scrollView)
+        
+        scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -70).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        scrollView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+    }
+    
+    func setupScrollViewForMediumScreen() {
 
         scrollView.addSubview(stackView)
         
@@ -144,7 +235,7 @@ class LessonsController: UIViewController {
         view.addSubview(scrollView)
         
         scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -90).isActive = true
+        scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -70).isActive = true
         scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         scrollView.heightAnchor.constraint(equalToConstant: 200).isActive = true
     }
@@ -395,6 +486,9 @@ extension LessonsController: UICollectionViewDelegate {
 extension LessonsController: UIScrollViewDelegate {
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        // Don't want this happening when the collectionView scrolls, just the scrollView
+        if scrollView.tag == 1 { return }
         
         scrollViewIndex = Int(targetContentOffset.pointee.x / scrollView.frame.size.width)
         
