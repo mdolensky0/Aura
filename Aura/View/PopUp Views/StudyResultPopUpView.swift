@@ -21,7 +21,7 @@ class StudyResultPopUpView: UIView {
         l.textAlignment = .center
         l.numberOfLines = 1
         l.font = UIFont.systemFont(ofSize: 26, weight: .bold)
-        l.text = "Summary"
+        l.text = NSLocalizedString("Summary", comment: "Summary of the results from the test you took")
         l.textColor = K.DesignColors.primary
         return l
     }()
@@ -30,7 +30,7 @@ class StudyResultPopUpView: UIView {
         let l = UILabel()
         l.textAlignment = .left
         l.numberOfLines = 1
-        l.text = "Number of cards reviewed: "
+        l.text = NSLocalizedString("Number of cards reviewed: ", comment: "")
         l.textColor = K.DesignColors.purpleGrey
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         return l
@@ -40,7 +40,7 @@ class StudyResultPopUpView: UIView {
         let l = UILabel()
         l.textAlignment = .left
         l.numberOfLines = 1
-        l.text = "Number of right answers: "
+        l.text = NSLocalizedString("Number of right answers: ", comment: "")
         l.textColor = K.DesignColors.purpleGrey
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         return l
@@ -50,7 +50,7 @@ class StudyResultPopUpView: UIView {
         let l = UILabel()
         l.textAlignment = .left
         l.numberOfLines = 1
-        l.text = "Number of wrong answers: "
+        l.text = NSLocalizedString("Number of wrong answers: ", comment: "")
         l.textColor = K.DesignColors.purpleGrey
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         return l
@@ -60,7 +60,7 @@ class StudyResultPopUpView: UIView {
         let l = UILabel()
         l.textAlignment = .left
         l.numberOfLines = 1
-        l.text = "Score: "
+        l.text = NSLocalizedString("Score: ", comment: "Test percentage score")
         l.textColor = K.DesignColors.purpleGrey
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
         return l
@@ -71,7 +71,7 @@ class StudyResultPopUpView: UIView {
         b.isFlat = true
         b.backgroundColor = K.DesignColors.primary
         b.tintColor = .white
-        b.setTitle("Continue", for: .normal)
+        b.setTitle(NSLocalizedString("Continue", comment: "Continue studying the flashcards"), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         b.addTarget(self, action: #selector(restart(_:)), for: .touchUpInside)
         return b
@@ -82,7 +82,7 @@ class StudyResultPopUpView: UIView {
         b.isFlat = true
         b.backgroundColor = K.DesignColors.primary
         b.tintColor = .white
-        b.setTitle("Done", for: .normal)
+        b.setTitle(NSLocalizedString("Done", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         b.addTarget(self, action: #selector(done(_:)), for: .touchUpInside)
         return b

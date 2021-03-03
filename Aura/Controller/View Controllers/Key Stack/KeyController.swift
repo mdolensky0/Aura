@@ -15,7 +15,7 @@ class KeyController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "English HD Key"
+        label.text = "English HD \(NSLocalizedString("Key", comment: "Key, or legend of say a map, that explains things"))"
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -51,7 +51,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Vowels",
-                                   explanation: "Each color represents a single vowel sound that a letter or combination of letters can make.",
+                                   explanation: NSLocalizedString("Each color represents a single vowel sound that a letter or combination of letters can make.", comment: ""),
                                    numRows: 5,
                                    numCol: 3,
                                    cornerRadius: 0,
@@ -72,7 +72,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "True Consonants",
-                                   explanation: "Black letters or letter combinations represent our textbook understanding of what each consonant letter sounds like.",
+                                   explanation: NSLocalizedString("Black letters or letter combinations represent our textbook understanding of what each consonant letter sounds like.", comment: ""),
                                    numRows: 1,
                                    numCol: 1,
                                    cornerRadius: 0,
@@ -89,7 +89,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Flip Consonants",
-                                   explanation: "Some consonants in the English language have a secondary sound associated with them, which we refer to as the \"flip\" sound. Gray letters or letter combinations represent this \"flip\" sound.",
+                                   explanation: NSLocalizedString("Some consonants in the English language have a secondary sound associated with them, which we refer to as the \"flip\" sound. Gray letters or letter combinations represent this \"flip\" sound.", comment: ""),
                                    numRows: 1,
                                    numCol: 1,
                                    cornerRadius: 0,
@@ -106,7 +106,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Fluid Consonants",
-                                   explanation: "Certain consonant sounds do not have a dedicated letter to represent them. Each of these colors represents a specific consonant sound, regardless of the letter or letter combination.",
+                                   explanation: NSLocalizedString("Certain consonant sounds do not have a dedicated letter to represent them. Each of these colors represents a specific consonant sound, regardless of the letter or letter combination.", comment: ""),
                                    numRows: 3,
                                    numCol: 2,
                                    cornerRadius: 0,
@@ -124,7 +124,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Silent",
-                                   explanation: "Light Gray indicates that the letter is silent and therefore creates no sound in the particular word.",
+                                   explanation: NSLocalizedString("Light Gray indicates that the letter is silent and therefore creates no sound in the particular word.", comment: ""),
                                    numRows: 1,
                                    numCol: 1,
                                    cornerRadius: 0,
@@ -141,7 +141,7 @@ class KeyController: UIViewController {
         
         let keyView = ColorKeyView(frame: .zero,
                                    title: "Wildcards",
-                                   explanation: "Some letters or letter combinations in English do not sound as they appear. Instead of adding additional colors to represent each of these sounds, yellow is used to represent all outliers to the system as described above. In a given word, tap the yellow letter, or yellow box, to reveal a popup with the correct pronunciation.",
+                                   explanation: NSLocalizedString("Some letters or letter combinations in English do not sound as they appear. Instead of adding additional colors to represent each of these sounds, yellow is used to represent all outliers to the system as described above. In a given word, tap the yellow letter, or yellow box, to reveal a popup with the correct pronunciation.", comment: ""),
                                    numRows: 1,
                                    numCol: 1,
                                    cornerRadius: 0,
@@ -172,7 +172,7 @@ class KeyController: UIViewController {
     let keyTypeLabel: UILabel = {
         
         let label = UILabel()
-        label.text = "Micro View"
+        label.text = NSLocalizedString("Micro View", comment: "view the detailed version of the key")
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -375,7 +375,7 @@ class KeyController: UIViewController {
         
         if !sender.isOn {
             
-            keyTypeLabel.text = "Micro View"
+            keyTypeLabel.text = NSLocalizedString("Micro View", comment: "view the detailed version of the key")
             
             fullKeyView.isHidden = true
             
@@ -395,7 +395,7 @@ class KeyController: UIViewController {
             
         else {
             
-            keyTypeLabel.text = "Macro View"
+            keyTypeLabel.text = NSLocalizedString("Macro View", comment: "look at an overview of the English HD key")
             
             fullKeyView.isHidden = false
             

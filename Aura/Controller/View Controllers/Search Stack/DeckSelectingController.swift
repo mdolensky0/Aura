@@ -28,7 +28,7 @@ class DeckSelectingController: UIViewController {
         button.titleLabel?.backgroundColor = K.DesignColors.primary
         button.setTitleColor(.white, for: .normal)
        
-        button.setTitle("NEW DECK", for: .normal)
+        button.setTitle(NSLocalizedString("NEW DECK", comment: "new flashcard deck to save cards to"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .heavy)
         
         button.roundCorners(cornerRadius: 20)
@@ -63,7 +63,7 @@ class DeckSelectingController: UIViewController {
         button.titleLabel?.backgroundColor = .clear
         button.setTitleColor(.black, for: .normal)
         
-        button.setTitle("cancel", for: .normal)
+        button.setTitle(NSLocalizedString("cancel", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         button.titleLabel?.textAlignment = .left
 
@@ -100,9 +100,9 @@ class DeckSelectingController: UIViewController {
         view.backgroundColor = .clear
         
         let text = wordArray.joined(separator: " ")
-        let attText1 = NSMutableAttributedString(string: "Add ")
+        let attText1 = NSMutableAttributedString(string: NSLocalizedString("Add ", comment: "Add (word) to your flashcard deck"))
         let attText2 = NSMutableAttributedString(string: "\"\(text)\" ")
-        let attText3 = NSMutableAttributedString(string: "to deck")
+        let attText3 = NSMutableAttributedString(string: NSLocalizedString("to deck", comment: "Add (word) to your flashcard deck"))
         
         attText1.addAttribute(.font, value: UIFont.systemFont(ofSize: 16, weight: .regular), range: .init(location: 0, length: attText1.length))
         attText2.addAttribute(.font, value: UIFont.systemFont(ofSize: 16, weight: .bold), range: .init(location: 0, length: attText2.length))
@@ -196,10 +196,10 @@ class DeckSelectingController: UIViewController {
         var textField = UITextField()
         
         // Main Alert
-        let alert = UIAlertController(title: "Add New Flashcard Deck", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("Add New Flashcard Deck", comment: ""), message: "", preferredStyle: .alert)
         
         // Action: Create New Deck
-        let action = UIAlertAction(title: "Add Deck", style: .default) { (action) in
+        let action = UIAlertAction(title: NSLocalizedString("Add Deck", comment: ""), style: .default) { (action) in
             
             if textField.text != nil && textField.text!.count > 0 {
                 
@@ -218,13 +218,13 @@ class DeckSelectingController: UIViewController {
         }
         
         // Action: Cancel
-        let action1 = UIAlertAction(title: "Cancel", style: .default) { (action) in
+        let action1 = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default) { (action) in
             return
         }
         
         // Add TextField to alert
         alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "Deck Name"
+            alertTextField.placeholder = NSLocalizedString("Deck Name", comment: "")
             textField = alertTextField
         }
         
@@ -252,7 +252,7 @@ extension DeckSelectingController: UITableViewDataSource {
         guard let decks = Utilities.shared.user?.decks else { return cell }
         
         cell.nameLabel.text = decks[indexPath.row].name
-        cell.numCardsLabel.text = "\(decks[indexPath.row].numberOfCards) cards"
+        cell.numCardsLabel.text = "\(decks[indexPath.row].numberOfCards) \(NSLocalizedString("cards", comment: "flashcards"))"
 
         return cell
     }
@@ -265,9 +265,9 @@ extension DeckSelectingController: UITableViewDelegate {
     
     func presentAlert(deckIndex idx: Int) {
         
-        let alert = UIAlertController(title: "", message: "This card already exists in this deck. Would you like to add a duplicate?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "", message: NSLocalizedString("This card already exists in this deck. Would you like to add a duplicate?", comment: ""), preferredStyle: .alert)
         
-        let add = UIAlertAction(title: "Add", style: .default) { (action) in
+        let add = UIAlertAction(title: NSLocalizedString("Add", comment: ""), style: .default) { (action) in
             
             self.addNewCard(deckIndex: idx)
             
@@ -275,13 +275,13 @@ extension DeckSelectingController: UITableViewDelegate {
                 
                 if let window = UIApplication.shared.keyWindow {
                     
-                    window.displayCheck(text: "Added Card")
+                    window.displayCheck(text: NSLocalizedString("Card Added", comment: "added flashcard"))
                     
                 }
             }
         }
         
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { (action) in
             
             return
             
@@ -337,7 +337,7 @@ extension DeckSelectingController: UITableViewDelegate {
             
             if let window = UIApplication.shared.keyWindow {
                 
-                window.displayCheck(text: "Added Card")
+                window.displayCheck(text: NSLocalizedString("Card Added", comment: ""))
                 
             }
         }

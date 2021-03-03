@@ -16,7 +16,7 @@ class FlashCardController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Decks"
+        label.text = NSLocalizedString("Decks", comment: "")
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -52,7 +52,7 @@ class FlashCardController: UIViewController {
         
         
         let label = UILabel()
-        label.text = "Create New Deck"
+        label.text = NSLocalizedString("Create New Deck", comment: "")
         if UIScreen.main.bounds.width > 320 {
             label.font = UIFont.systemFont(ofSize: 30, weight: .regular)
         } else {
@@ -132,7 +132,7 @@ class FlashCardController: UIViewController {
     var popularFlashcardLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "Popular Flashcards"
+        l.text = NSLocalizedString("Popular Flashcards", comment: "")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -143,7 +143,7 @@ class FlashCardController: UIViewController {
     var myDecksLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "My Decks"
+        l.text = NSLocalizedString("My Decks", comment: "")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -263,10 +263,10 @@ class FlashCardController: UIViewController {
         var textField = UITextField()
         
         // Main Alert
-        let alert = UIAlertController(title: "Add New Flashcard Deck", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("Add New Flashcard Deck", comment: ""), message: "", preferredStyle: .alert)
         
         // Action: Create New Deck
-        let action = UIAlertAction(title: "Add Deck", style: .default) { (action) in
+        let action = UIAlertAction(title: NSLocalizedString("Add Deck", comment: ""), style: .default) { (action) in
             
             if textField.text != nil && textField.text!.count > 0 {
                 
@@ -282,13 +282,13 @@ class FlashCardController: UIViewController {
         }
         
         // Action: Cancel
-        let action1 = UIAlertAction(title: "Cancel", style: .default) { (action) in
+        let action1 = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .default) { (action) in
             return
         }
         
         // Add TextField to alert
         alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "Deck Name"
+            alertTextField.placeholder = NSLocalizedString("Deck Name", comment: "")
             textField = alertTextField
         }
         
@@ -348,7 +348,11 @@ extension FlashCardController: MyDeckScrollViewDelegate, PopularDeckScrollViewDe
     }
     
     func showPurchasePopUp(deckIndex: Int) {
-        print("puchasing deck \(deckIndex)")
+        print("purchase?")
+        let alert = UIAlertController(title: NSLocalizedString("Coming Soon!", comment: ""), message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: NSLocalizedString("OK", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .cancel, handler: nil)
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
     }
     
 }

@@ -62,7 +62,7 @@ class ResultsController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Results"
+        label.text = NSLocalizedString("Results", comment: "The results you get from doing something")
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -264,7 +264,7 @@ class ResultsController: UIViewController {
         
         let label = UILabel()
         label.backgroundColor = .clear
-        label.text = "Related Searches"
+        label.text = NSLocalizedString("Related Searches", comment: "Other searches you may want to search. Usually individual words from a sentence")
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textAlignment = .left
         return label
@@ -274,7 +274,7 @@ class ResultsController: UIViewController {
     var myDecksLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "My Decks"
+        l.text = NSLocalizedString("My Decks", comment: "")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -287,7 +287,7 @@ class ResultsController: UIViewController {
     var whereToStartLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "Where to start"
+        l.text = NSLocalizedString("Where to Start", comment: "")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -967,7 +967,7 @@ extension ResultsController {
     @objc func cancelButtonPressed() {
         textView.text = ""
         textView.textColor = .lightGray
-        textView.text = "Enter text"
+        textView.text = NSLocalizedString("Enter text", comment: "")
         cancelButton.isHidden = true
     }
         
@@ -1129,7 +1129,7 @@ extension ResultsController: UITextViewDelegate {
             
             if textView.text.isEmpty || textView.text == "" {
                 textView.textColor = .lightGray
-                textView.text = "Enter text"
+                textView.text = NSLocalizedString("Enter text", comment: "")
                 self.cancelButton.isHidden = true
             }
             

@@ -27,7 +27,7 @@ class TestController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Deck Name"
+        label.text = NSLocalizedString("Deck Name", comment: "")
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center

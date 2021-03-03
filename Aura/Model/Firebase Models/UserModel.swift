@@ -14,6 +14,7 @@ struct User: Codable {
     var decks: [DeckModel]
     var prevSearches: [SearchAndResult]
     var purchases: [String : Bool]
+    @DecodableDefault.EmptyMap var purchaseIDs : [String: String]
 }
 
 struct SearchAndResult: Codable {

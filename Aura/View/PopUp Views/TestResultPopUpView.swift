@@ -32,7 +32,7 @@ class TestResultPopUpView: UIView {
         let l = UILabel()
         l.textAlignment = .center
         l.numberOfLines = 1
-        l.text = "Great Job!"
+        l.text = NSLocalizedString("Great Job!", comment: "")
         l.textColor = K.DesignColors.purpleGrey
         l.font = UIFont.systemFont(ofSize: 36, weight: .bold)
         return l
@@ -42,7 +42,7 @@ class TestResultPopUpView: UIView {
         let l = UILabel()
         l.textAlignment = .center
         l.numberOfLines = 0
-        l.text = "You got a perfect score!"
+        l.text = NSLocalizedString("You got a perfect score!", comment: "")
         l.textColor = K.DesignColors.purpleGrey
         l.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         return l
@@ -53,7 +53,7 @@ class TestResultPopUpView: UIView {
         b.isFlat = true
         b.backgroundColor = K.DesignColors.primary
         b.tintColor = .white
-        b.setTitle("Restart", for: .normal)
+        b.setTitle(NSLocalizedString("Restart", comment: "take test again"), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         b.addTarget(self, action: #selector(restart(_:)), for: .touchUpInside)
         return b
@@ -64,7 +64,7 @@ class TestResultPopUpView: UIView {
         b.isFlat = true
         b.backgroundColor = K.DesignColors.primary
         b.tintColor = .white
-        b.setTitle("Done", for: .normal)
+        b.setTitle(NSLocalizedString("Done", comment: "finished, don't want to continue doing this"), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         b.addTarget(self, action: #selector(done(_:)), for: .touchUpInside)
         return b
@@ -140,17 +140,17 @@ class TestResultPopUpView: UIView {
         scoreLabel.text = percentText
         
         if score == 100 {
-            mainLabel.text = "Great Job!"
-            subLabel.text = "You got a perfect score!"
+            mainLabel.text = NSLocalizedString("Great Job!", comment: "")
+            subLabel.text = NSLocalizedString("You got a perfect score!", comment: "")
         } else if score > 80 {
-            mainLabel.text = "Awesome!"
-            subLabel.text = "Almost there"
+            mainLabel.text = NSLocalizedString("Awesome!", comment: "great score, good job, nice job, awesome job")
+            subLabel.text = NSLocalizedString("Almost there", comment: "almost there as in you are close to mastering the words you tested yourself on")
         } else if score > 70 {
-            mainLabel.text = "Nice!"
-            subLabel.text = "Keep up the good work!"
+            mainLabel.text = NSLocalizedString("Nice!", comment: "nice job, you are improving but still not awesome yet")
+            subLabel.text = NSLocalizedString("Keep up the good work!", comment: "")
         } else {
-            mainLabel.text = "You got this!"
-            subLabel.text = "Keep studying"
+            mainLabel.text = NSLocalizedString("You got this!", comment: "you didn't do so well but I want to encourage you to keep trying")
+            subLabel.text = NSLocalizedString("Keep studying", comment: "")
         }
         
     }

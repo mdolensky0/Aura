@@ -13,7 +13,7 @@ class Page8: UIView {
     // MARK: - Subviews
     var mainHeader: UILabel = {
         let l = UILabel()
-        l.text = "Search Result Example"
+        l.text = NSLocalizedString("Search Result Example", comment: "Below is an example of what a search result will look like")
         l.numberOfLines = 1
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 24, weight: .bold)
@@ -73,8 +73,8 @@ class Page8: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Sound it out: ")
-        let text2 = NSMutableAttributedString(string: "Need help sounding a word out? Tap these boxes to hear the sound corresponding to the associated letters.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Sound it out: ", comment: "Sound out the word"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Need help sounding a word out? Tap these boxes to hear the sound of the color corresponding to the associated letters.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))
@@ -104,8 +104,8 @@ class Page8: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Sound it out: ")
-        let text2 = NSMutableAttributedString(string: "You may tap the letter as well to hear its corresponding sound.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Sound it out: ", comment: "Sound out the word"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("You may tap the letter as well to hear its corresponding sound.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))

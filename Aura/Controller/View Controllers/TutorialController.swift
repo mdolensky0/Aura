@@ -21,7 +21,7 @@ class TutorialController: UIViewController {
     
     let previousButton: UIButton = {
         let b = UIButton(type: .system)
-        b.setTitle("PREV", for: .normal)
+        b.setTitle(NSLocalizedString("PREV", comment: "abbreviation for previous, go to prev page"), for: .normal)
         b.setTitleColor(K.DesignColors.purpleGrey, for: .normal)
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         b.addTarget(self, action: #selector(prevPressed), for: .touchUpInside)
@@ -30,7 +30,7 @@ class TutorialController: UIViewController {
     
     let nextButton: UIButton = {
         let b = UIButton(type: .system)
-        b.setTitle("NEXT", for: .normal)
+        b.setTitle(NSLocalizedString("NEXT", comment: "go to next page"), for: .normal)
         b.setTitleColor(K.DesignColors.primary, for: .normal)
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         b.addTarget(self, action: #selector(nextPressed), for: .touchUpInside)
@@ -39,7 +39,7 @@ class TutorialController: UIViewController {
     
     let skipButton: UIButton = {
         let b = UIButton(type: .system)
-        b.setTitle("skip", for: .normal)
+        b.setTitle(NSLocalizedString("skip", comment: "skip, don't for example watch this video even though you should"), for: .normal)
         b.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1), for: .normal)
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         b.addTarget(self, action: #selector(skipPressed), for: .touchUpInside)
@@ -132,7 +132,7 @@ class TutorialController: UIViewController {
     @objc func prevPressed() {
         
         if pageControl.currentPage == pages.count - 1 {
-            nextButton.setTitle("NEXT", for: .normal)
+            nextButton.setTitle(NSLocalizedString("NEXT", comment: "go to next page"), for: .normal)
         }
         
         let prevIndex = max(pageControl.currentPage - 1, 0)
@@ -144,7 +144,7 @@ class TutorialController: UIViewController {
         
         if pageControl.currentPage + 1 == pages.count - 1 {
             
-            nextButton.setTitle("DONE", for: .normal)
+            nextButton.setTitle(NSLocalizedString("DONE", comment: "done with this tutorial"), for: .normal)
             let nextIndex = min(pageControl.currentPage + 1, pages.count - 1)
             pageControl.currentPage = nextIndex
             scrollView.setContentOffset( CGPoint(x: view.frame.width * CGFloat(nextIndex), y: 0.0), animated: true)
@@ -171,9 +171,9 @@ class TutorialController: UIViewController {
         scrollView.setContentOffset(CGPoint(x: view.frame.width * CGFloat(idx), y: 0.0), animated: true)
         
         if idx == pages.count - 1 {
-            nextButton.setTitle("DONE", for: .normal)
+            nextButton.setTitle(NSLocalizedString("DONE", comment: "done with this tutorial"), for: .normal)
         } else {
-            nextButton.setTitle("NEXT", for: .normal)
+            nextButton.setTitle(NSLocalizedString("NEXT", comment: "go to next page"), for: .normal)
         }
     }
 }
@@ -185,9 +185,9 @@ extension TutorialController: UIScrollViewDelegate {
         pageControl.currentPage = idx
         
         if idx == pages.count - 1 {
-            nextButton.setTitle("DONE", for: .normal)
+            nextButton.setTitle(NSLocalizedString("DONE", comment: "done with this tutorial"), for: .normal)
         } else {
-            nextButton.setTitle("NEXT", for: .normal)
+            nextButton.setTitle(NSLocalizedString("NEXT", comment: "go to next page"), for: .normal)
         }
     }
 }

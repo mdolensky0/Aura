@@ -12,7 +12,7 @@ class Page11: UIView {
 
     var mainHeader: UILabel = {
         let l = UILabel()
-        l.text = "One more thing!"
+        l.text = NSLocalizedString("One more thing!", comment: "One more thing to tell you about")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -23,7 +23,7 @@ class Page11: UIView {
     
     var step1Header: UILabel = {
         let l = UILabel()
-        l.text = "English HD Key"
+        l.text = NSLocalizedString("English HD Key", comment: "Key as in the key to a map that explains what everything is")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -37,9 +37,9 @@ class Page11: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Get the full explanation of\nEnglish HD in the ")
-        let text2 = NSMutableAttributedString(string: "Key Tab")
-        let text3 = NSMutableAttributedString(string: ".")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Get the full explanation of\nEnglish HD in the ", comment: "Get the full explanation of\nEnglish HD in the Key Tab."))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Key Tab", comment: "Get the full explanation of\nEnglish HD in the Key Tab."))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString(".", comment: "period at the end of a sentance"))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.DesignColors.primary, range: .init(location: 0, length: text2.length))
@@ -59,7 +59,7 @@ class Page11: UIView {
     
     var step2Header: UILabel = {
         let l = UILabel()
-        l.text = "Lessons"
+        l.text = NSLocalizedString("Lessons", comment: "Course video lessons")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -73,9 +73,9 @@ class Page11: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Master English HD by accessing\nthe video lessons in the ")
-        let text2 = NSMutableAttributedString(string: "Lessons Tab")
-        let text3 = NSMutableAttributedString(string: ".")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Master English HD by accessing\nthe video lessons in the ", comment: "Master English HD by accessing\nthe video lessons in the Lessons Tab."))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Lessons Tab", comment: "Master English HD by accessing\nthe video lessons in the Lessons Tab."))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString(".", comment: "period at the end of a sentance"))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.Colors.pink, range: .init(location: 0, length: text2.length))

@@ -223,8 +223,9 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
         
         let av = PUAVPlayerViewController()
         av.parentView = parentView
+        av.popUpVideoName = AdManager.shared.getVideoNameCurrentUserState()
         let urlString = AdManager.shared.getVideoURLForCurrentUserState()
-                
+        
         if let url = URL(string: urlString) {
             
             let player = AVPlayer(url: url)
@@ -240,15 +241,15 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
                 let secs = Int(seconds) % 60
                 
                 switch AdManager.shared.funnelProgress {
-                case .hasNotSeenVideo1:
+                case .hasNotSeenVideo1 where av.popUpVideoName! == .secret1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo1
-                case .seenPartOfVideo1:
+                case .seenPartOfVideo1 where av.popUpVideoName! == .secret1:
                     if min >= 9 {
                         AdManager.shared.funnelProgress = .completedVideo1
                     }
-                case .completedVideo1:
+                case .completedVideo1 where av.popUpVideoName! == .secret2:
                     AdManager.shared.funnelProgress = .seenPartOfVideo2
-                case .seenPartOfVideo2:
+                case .seenPartOfVideo2 where av.popUpVideoName! == .secret2:
                     if min >= 15 && secs >= 15 {
                         AdManager.shared.funnelProgress = .completedVideo2NoBuy
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
@@ -259,6 +260,10 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
                     if secs >= 15 && AdManager.shared.isBuyButtonShowing == false {
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
                         AdManager.shared.isBuyButtonShowing = true
+                    }
+                    
+                    if av.popUpVideoName != .other {
+                        break
                     }
                     
                     if let idx = AdManager.shared.currentLessonIndex {
@@ -285,6 +290,12 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
         
 }
 
+enum PopUpVideoName {
+    case secret1
+    case secret2
+    case other
+}
+
 class PUAVPlayerViewController: AVPlayerViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -297,6 +308,7 @@ class PUAVPlayerViewController: AVPlayerViewController {
     var parentView: UIViewController?
     var videoIdx: Int?
     var timeObserver: Any?
+    var popUpVideoName: PopUpVideoName?
     
     func handleVideoCloseForCurrentState() {
         
@@ -326,6 +338,14 @@ class PUAVPlayerViewController: AVPlayerViewController {
         }
         
         if let _ = parentView as? DeckSelectingController {
+            if funnelProgress == .completedVideo1 {
+                AdManager.shared.showAdPopUP(parentVC: parentView!)
+            } else if funnelProgress == .completedVideo2Bought {
+                parentView?.tabBarController?.selectedIndex = 4
+            } else { return }
+        }
+        
+        if let _ = parentView as? LessonsController {
             if funnelProgress == .completedVideo1 {
                 AdManager.shared.showAdPopUP(parentVC: parentView!)
             } else if funnelProgress == .completedVideo2Bought {

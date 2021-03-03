@@ -12,7 +12,7 @@ class Page9: UIView {
     
     var mainHeader: UILabel = {
         let l = UILabel()
-        l.text = "And you can translate too!"
+        l.text = NSLocalizedString("And you can translate too!", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -23,7 +23,7 @@ class Page9: UIView {
     
     var step1Header: UILabel = {
         let l = UILabel()
-        l.text = "Step 1:"
+        l.text = NSLocalizedString("Step 1:", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -37,9 +37,9 @@ class Page9: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Select the language you want to translate\nto or from by clicking on the ")
-        let text2 = NSMutableAttributedString(string: "input text")
-        let text3 = NSMutableAttributedString(string: ".")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Select the language you want to translate\nto or from by clicking on the ", comment: "Select the language you want to translate\nto or from by clicking on the input text."))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("input text", comment: "Select the language you want to translate\nto or from by clicking on the input text."))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString(".", comment: "period at the end of a sentance"))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.DesignColors.primary, range: .init(location: 0, length: text2.length))
@@ -59,7 +59,7 @@ class Page9: UIView {
     
     var step2Header: UILabel = {
         let l = UILabel()
-        l.text = "Step 2:"
+        l.text = NSLocalizedString("Step 2:", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -73,9 +73,9 @@ class Page9: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Swap the order of translation by\nselecting the ")
-        let text2 = NSMutableAttributedString(string: "arrows button")
-        let text3 = NSMutableAttributedString(string: ".")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Swap the order of translation by\nselecting the ", comment: "Swap the order of translation by selecting the arrows button."))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("arrows button", comment: "Swap the order of translation by selecting the arrows button."))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString(".", comment: "period at the end of a sentance"))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.Colors.pink, range: .init(location: 0, length: text2.length))
@@ -93,7 +93,7 @@ class Page9: UIView {
     
     var step3Header: UILabel = {
         let l = UILabel()
-        l.text = "Step 3:"
+        l.text = NSLocalizedString("Step 3:", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -107,7 +107,7 @@ class Page9: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Type in the text and click search, or\nuse the audio to search with speech.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Type in the text and click search, or\nuse the mic button to search with speech.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         
@@ -312,9 +312,9 @@ class Page9: UIView {
                            width: nil,
                            padding: UIEdgeInsets(top: 8, left: 40, bottom: 0, right: -40))
         
-        let text1 = NSMutableAttributedString(string: "Select the language you want to translate to or from by clicking on the ")
-        let text2 = NSMutableAttributedString(string: "input text")
-        let text3 = NSMutableAttributedString(string: ".")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Select the language you want to translate to or from by clicking on the ", comment: "Select the language you want to translate\nto or from by clicking on the input text."))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("input text", comment: "Select the language you want to translate\nto or from by clicking on the input text."))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString(".", comment: "period at the end of a sentance"))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.DesignColors.primary, range: .init(location: 0, length: text2.length))
@@ -346,9 +346,9 @@ class Page9: UIView {
                            width: nil,
                            padding: UIEdgeInsets(top: 8, left: 40, bottom: 0, right: -40))
         
-        let text4 = NSMutableAttributedString(string: "Swap the order of translation by selecting the ")
-        let text5 = NSMutableAttributedString(string: "arrows button")
-        let text6 = NSMutableAttributedString(string: ".")
+        let text4 = NSMutableAttributedString(string: NSLocalizedString("Swap the order of translation by selecting the ", comment: "Swap the order of translation by selecting the arrows button."))
+        let text5 = NSMutableAttributedString(string: NSLocalizedString("arrows button", comment: "Swap the order of translation by selecting the arrows button."))
+        let text6 = NSMutableAttributedString(string: NSLocalizedString(".", comment: "period at the end of a sentance"))
         
         text4.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text4.length))
         text5.addAttribute(.foregroundColor, value: K.Colors.pink, range: .init(location: 0, length: text5.length))
@@ -378,7 +378,7 @@ class Page9: UIView {
                            width: nil,
                            padding: UIEdgeInsets(top: 8, left: 40, bottom: 0, right: -40))
         
-        let text7 = NSMutableAttributedString(string: "Type in the text and click search, or use the audio to search with speech.")
+        let text7 = NSMutableAttributedString(string: NSLocalizedString("Type in the text and click search, or use the mic button to search with speech.", comment: ""))
         
         text7.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text7.length))
         

@@ -109,7 +109,7 @@ class MyDecksScrollView: HorizontalScrollView {
             titleLabel.lineBreakMode = .byTruncatingTail
             
             let numCardsLabel = UILabel()
-            numCardsLabel.text = "\(deck.numberOfCards) Cards"
+            numCardsLabel.text = "\(deck.numberOfCards) \(NSLocalizedString("Cards", comment: "flashcards, number of words they have saved in this flashcard deck"))"
             numCardsLabel.textColor = .gray
             numCardsLabel.textAlignment = .left
             numCardsLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)

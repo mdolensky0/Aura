@@ -61,7 +61,7 @@ class HomeController: UIViewController {
     var whereToStartLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "Where to start"
+        l.text = NSLocalizedString("Where to Start", comment: "")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -77,7 +77,7 @@ class HomeController: UIViewController {
         container.backgroundColor = .white
         
         let l = UILabel()
-        l.text = "Search"
+        l.text = NSLocalizedString("Search", comment: "")
         l.textAlignment = .left
         l.textColor = K.DesignColors.primary
         l.font = UIFont.systemFont(ofSize: 17, weight: .medium)
@@ -221,7 +221,7 @@ class HomeController: UIViewController {
     var popularFlashcardLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "Popular Flashcards"
+        l.text = NSLocalizedString("Popular Flashcards", comment: "popular flashcard decks for sale")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -234,7 +234,7 @@ class HomeController: UIViewController {
     var lessonsLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "Lessons"
+        l.text = NSLocalizedString("Lessons", comment: "Course video lessons")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -247,7 +247,7 @@ class HomeController: UIViewController {
     var myDecksLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "My Decks"
+        l.text = NSLocalizedString("My Decks", comment: "The flashcard decks I have created")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -270,6 +270,7 @@ class HomeController: UIViewController {
 //        UserDefaults.standard.setValue(false, forKey: "hasEnteredDeckController")
 //        UserDefaults.standard.set(false, forKey: "hasLaunchedFlashcards")
 //        UserDefaults.standard.set(false, forKey: "hasSeenDeckSelector")
+//        UserDefaults.standard.set(false, forKey: "hasClickedLock")
     }
     
     override func viewDidLayoutSubviews() {
@@ -595,6 +596,10 @@ extension HomeController: MyDeckScrollViewDelegate, PopularDeckScrollViewDelegat
     
     func showPurchasePopUp(deckIndex: Int) {
         print("purchase?")
+        let alert = UIAlertController(title: NSLocalizedString("Coming Soon!", comment: "You cannot purchase this yet, it is coming soon"), message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: NSLocalizedString("OK", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .cancel, handler: nil)
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func goToLesson(lessonIndex: Int) {

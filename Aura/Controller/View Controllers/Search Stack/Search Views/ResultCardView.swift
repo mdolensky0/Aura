@@ -525,22 +525,22 @@ class ResultCardView: UIView {
     
     @objc func reportErrorButtonPressed(_ sender: UIButton) {
         
-        let alert = UIAlertController(title: "Request an Edit", message: "Please select the type of edit you wish to request regarding this result", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("Request an Edit", comment: "request that we review a words coloring or translation and change it if neccessary"), message: NSLocalizedString("Please select the type of edit you wish to request regarding this result", comment: ""), preferredStyle: .alert)
         
-        let translationAction = UIAlertAction(title: "Translation Edit", style: .destructive) { (action) in
+        let translationAction = UIAlertAction(title: NSLocalizedString("Translation Edit", comment: "request we edit the translation"), style: .destructive) { (action) in
             
             let translationErr = TranslationError(englishText: self.topLabel.text!, nativeText: self.bottomLabel.text!)
             FirebaseManager.shared.writeTranslationError(translation: translationErr)
             
         }
         
-        let colorAction = UIAlertAction(title: "Coloring Edit", style: .destructive) { (action) in
+        let colorAction = UIAlertAction(title: NSLocalizedString("Coloring Edit", comment: "request we edit the coloring of a word"), style: .destructive) { (action) in
             
             FirebaseManager.shared.writeColorError(text: self.topLabel.text!)
             
         }
         
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { (action) in
             return
         }
         

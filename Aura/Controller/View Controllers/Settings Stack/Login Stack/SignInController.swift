@@ -20,7 +20,7 @@ class SignInController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 15)
-        label.text = "Log In"
+        label.text = NSLocalizedString("Log In", comment: "")
         label.numberOfLines = 2
         label.textColor = .black
         label.textAlignment = .center
@@ -55,7 +55,7 @@ class SignInController: UIViewController {
         textField.roundCorners(cornerRadius: 4)
         textField.textColor = .black
         textField.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textField.placeholder = "Email"
+        textField.placeholder = NSLocalizedString("Email", comment: "")
         textField.setBorder(color: K.Colors.purple)
         
         return textField
@@ -71,7 +71,7 @@ class SignInController: UIViewController {
         textField.roundCorners(cornerRadius: 4)
         textField.textColor = .black
         textField.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textField.placeholder = "Password"
+        textField.placeholder = NSLocalizedString("Password", comment: "")
         textField.setBorder(color: K.Colors.purple)
         textField.isSecureTextEntry = true
         return textField
@@ -82,7 +82,7 @@ class SignInController: UIViewController {
         
         let l = UILabel()
         
-        let attText = NSMutableAttributedString(string: "By creating an account you're agreeing to our Terms & Privacy Policy")
+        let attText = NSMutableAttributedString(string: NSLocalizedString("By creating an account you're agreeing to our Terms & Privacy Policy", comment: ""))
         attText.addAttribute(.foregroundColor, value: K.Colors.purple, range: NSRange(location: 46, length: 5))
         attText.addAttribute(.foregroundColor, value: K.Colors.purple, range: NSRange(location: 54, length: 14))
         attText.addAttribute(.font, value: UIFont.systemFont(ofSize: 13), range: NSRange(location: 0, length: attText.length))
@@ -97,7 +97,7 @@ class SignInController: UIViewController {
     var forgotPasswordButton: UIButton = {
         
         let b = UIButton()
-        b.setTitle("Forgot Password?", for: .normal)
+        b.setTitle(NSLocalizedString("Forgot Password?", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         b.setTitleColor(K.Colors.purple, for: .normal)
         return b
@@ -107,7 +107,7 @@ class SignInController: UIViewController {
     var logInButton: UIButton = {
         
         let button = UIButton()
-        button.setTitle("Log In", for: .normal)
+        button.setTitle(NSLocalizedString("Log In", comment: ""), for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
         return button
         
@@ -245,7 +245,7 @@ class SignInController: UIViewController {
         // Get email and password
         guard let email = emailTextField.text, let password = passwordTextField.text else {
             
-            showError("Error retrieving input")
+            showError(NSLocalizedString("Error retrieving input, try again", comment: ""))
             return
             
         }
@@ -253,7 +253,7 @@ class SignInController: UIViewController {
         // Check that all fields are filled out
         if email.count == 0 || password.count == 0 {
             
-            showError("Please fill out all fields")
+            showError(NSLocalizedString("Please fill out all fields", comment: ""))
             
         }
         

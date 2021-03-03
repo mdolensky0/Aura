@@ -17,7 +17,7 @@ class TabBarController: UITabBarController {
         
         let vc = HomeController()
         
-        vc.tabBarItem = UITabBarItem(title: "Home",
+        vc.tabBarItem = UITabBarItem(title: NSLocalizedString("Home", comment: "Home page"),
                                      image: UIImage(named: "Home1"),
                                      selectedImage: UIImage(contentsOfFile: "Home1"))
         
@@ -32,7 +32,7 @@ class TabBarController: UITabBarController {
         
         let vc = SearchController()
         
-        vc.tabBarItem = UITabBarItem(title: "Search",
+        vc.tabBarItem = UITabBarItem(title: NSLocalizedString("Search", comment: "Search page"),
                                      image: UIImage(named: "Search1"),
                                      selectedImage: UIImage(contentsOfFile: "Search1"))
         
@@ -47,7 +47,7 @@ class TabBarController: UITabBarController {
         
         let vc = KeyController()
         
-        vc.tabBarItem = UITabBarItem(title: "Key",
+        vc.tabBarItem = UITabBarItem(title: NSLocalizedString("Key", comment: "Key, or legend of say a map, that explains things"),
                                      image: UIImage(named: "Key1"),
                                      selectedImage: UIImage(contentsOfFile: "Key1"))
        
@@ -61,7 +61,7 @@ class TabBarController: UITabBarController {
         
         let vc = LoginController()
         
-        vc.tabBarItem = UITabBarItem(title: "Flashcards",
+        vc.tabBarItem = UITabBarItem(title: NSLocalizedString("Flashcards", comment: "flashcards for studying"),
                                      image: UIImage(named: "Flashcard1"),
                                      selectedImage: UIImage(contentsOfFile: "Flashcard1"))
        
@@ -73,7 +73,7 @@ class TabBarController: UITabBarController {
         
         let vc = FlashCardController()
         
-        vc.tabBarItem = UITabBarItem(title: "Flashcards",
+        vc.tabBarItem = UITabBarItem(title: NSLocalizedString("Flashcards", comment: "flashcards for studying"),
                                      image: UIImage(named: "Flashcard1"),
                                      selectedImage: UIImage(contentsOfFile: "Flashcard1"))
         
@@ -88,7 +88,7 @@ class TabBarController: UITabBarController {
         
         let vc = LessonsController()
         
-        vc.tabBarItem = UITabBarItem(title: "Lessons",
+        vc.tabBarItem = UITabBarItem(title: NSLocalizedString("Lessons", comment: "Course video lessons"),
                                      image: UIImage(named: "Lessons1"),
                                      selectedImage: UIImage(contentsOfFile: "Lessons1"))
        

@@ -134,19 +134,19 @@ class SpeechToTextController: UIViewController {
                 case .denied:
                     self.micButton.isEnabled = false
                     self.micButton.backgroundColor = .gray
-                    self.transcriptionOutputLabel.text = "Must allow access to speech recognition in settings"
+                    self.transcriptionOutputLabel.text = NSLocalizedString("Must allow access to speech recognition in settings", comment: "")
                 case .restricted:
                     self.micButton.isEnabled = false
                     self.micButton.backgroundColor = .gray
-                    self.transcriptionOutputLabel.text = "Must allow access to speech recognition in settings"
+                    self.transcriptionOutputLabel.text = NSLocalizedString("Must allow access to speech recognition in settings", comment: "")
                 case .notDetermined:
                     self.micButton.isEnabled = false
                     self.micButton.backgroundColor = .gray
-                    self.transcriptionOutputLabel.text = "Must allow access to speech recognition in settings"
+                    self.transcriptionOutputLabel.text = NSLocalizedString("Must allow access to speech recognition in settings", comment: "")
                 default:
                     self.micButton.isEnabled = false
                     self.micButton.backgroundColor = .gray
-                    self.transcriptionOutputLabel.text = "Must allow access to speech recognition in settings"
+                    self.transcriptionOutputLabel.text = NSLocalizedString("Must allow access to speech recognition in settings", comment: "")
                 }
             }
         }
@@ -254,7 +254,7 @@ class SpeechToTextController: UIViewController {
         try audioEngine.start()
         
         // Let the user know to start talking.
-        transcriptionOutputLabel.text = "Go ahead, I'm listening..."
+        transcriptionOutputLabel.text = NSLocalizedString("Go ahead, I'm listening...", comment: "listening to your speech and creating text from what you say")
     }
     
     // MARK: - Selector Functions

@@ -12,7 +12,7 @@ class Page7: UIView {
 
     var mainHeader: UILabel = {
         let l = UILabel()
-        l.text = "Get the pronunciation of any word or sentence"
+        l.text = NSLocalizedString("Get the pronunciation of any word or sentence", comment: "")
         l.numberOfLines = 2
         l.lineBreakMode = .byWordWrapping
         l.textAlignment = .left
@@ -23,7 +23,7 @@ class Page7: UIView {
     
     var step1Header: UILabel = {
         let l = UILabel()
-        l.text = "Step 1:"
+        l.text = NSLocalizedString("Step 1:", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -37,14 +37,14 @@ class Page7: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Set the ")
-        let text2 = NSMutableAttributedString(string: "Input ")
-        let text3 = NSMutableAttributedString(string: "to ")
-        let text4 = NSMutableAttributedString(string: "English ")
-        let text5 = NSMutableAttributedString(string: "and leave\nthe ")
-        let text6 = NSMutableAttributedString(string: "Output ")
-        let text7 = NSMutableAttributedString(string: "as ")
-        let text8 = NSMutableAttributedString(string: "Am. English HD.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Set the ", comment: "Set the input to English and leave the output as Am. English HD."))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Input ", comment: "Set the input to English and leave the output as Am. English HD."))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString("to ", comment: "Set the input to English and leave the output as Am. English HD."))
+        let text4 = NSMutableAttributedString(string: NSLocalizedString("English ", comment: "Set the input to English and leave the output as Am. English HD."))
+        let text5 = NSMutableAttributedString(string: NSLocalizedString("and leave\nthe ", comment: "Set the input to English and leave the output as Am. English HD."))
+        let text6 = NSMutableAttributedString(string: NSLocalizedString("Output ", comment: "Set the input to English and leave the output as Am. English HD."))
+        let text7 = NSMutableAttributedString(string: NSLocalizedString("as ", comment: "Set the input to English and leave the output as Am. English HD."))
+        let text8 = NSMutableAttributedString(string: NSLocalizedString("Am. English HD.", comment: "Set the input to English and leave the output as Am. English HD."))
         
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
@@ -92,7 +92,7 @@ class Page7: UIView {
     
     var step2Header: UILabel = {
         let l = UILabel()
-        l.text = "Step 2:"
+        l.text = NSLocalizedString("Step 2:", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -106,11 +106,11 @@ class Page7: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Enter the word into the ")
-        let text2 = NSMutableAttributedString(string: "text box ")
-        let text3 = NSMutableAttributedString(string: "or tap\nthe ")
-        let text4 = NSMutableAttributedString(string: "audio button ")
-        let text5 = NSMutableAttributedString(string: "to search with speech.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Enter the word into the ", comment: "Enter the word into the text box or tap the mic button to search with speech"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("text box ", comment: "Enter the word into the text box or tap the mic button to search with speech"))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString("or tap\nthe ", comment: "Enter the word into the text box or tap the mic button to search with speech"))
+        let text4 = NSMutableAttributedString(string: NSLocalizedString("mic button ", comment: "Enter the word into the text box or tap the mic button to search with speech"))
+        let text5 = NSMutableAttributedString(string: NSLocalizedString("to search with speech.", comment: "Enter the word into the text box or tap the mic button to search with speech"))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.Colors.orange, range: .init(location: 0, length: text2.length))
@@ -137,7 +137,7 @@ class Page7: UIView {
     
     var step3Header: UILabel = {
         let l = UILabel()
-        l.text = "Step 3:"
+        l.text = NSLocalizedString("Step 3:", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -151,22 +151,19 @@ class Page7: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Click ")
-        let text2 = NSMutableAttributedString(string: "Search ")
-        let text3 = NSMutableAttributedString(string: "and watch your input\n")
-        let text4 = NSMutableAttributedString(string: "transform into English HD ")
-        let text5 = NSMutableAttributedString(string: "to search\nwith speech.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Click ", comment: "Click Search and watch your input transform into English HD transform into English HD."))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Search ", comment: "Click Search and watch your input transform into English HD transform into English HD."))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString("and watch your input\n", comment: "Click Search and watch your input transform into English HD."))
+        let text4 = NSMutableAttributedString(string: NSLocalizedString("transform into English HD ", comment: "Click Search and watch your input transform into English HD."))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.Colors.blue, range: .init(location: 0, length: text2.length))
         text3.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text3.length))
         text4.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text4.length))
-        text5.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text5.length))
         
         text1.append(text2)
         text1.append(text3)
         text1.append(text4)
-        text1.append(text5)
         
         if UIScreen.main.bounds.height > 667 {
             text1.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .regular), range: .init(location: 0, length: text1.length))

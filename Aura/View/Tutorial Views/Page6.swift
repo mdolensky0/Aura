@@ -12,7 +12,7 @@ class Page6: UIView {
     
     var whatHeader: UILabel = {
         let l = UILabel()
-        l.text = "What is English HD?"
+        l.text = NSLocalizedString("What is English HD?", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -25,7 +25,7 @@ class Page6: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "English HD is a coloring system that uses\ncolors to represent individual sounds.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("English HD is a coloring system that uses\ncolors to represent individual sounds.", comment: ""))
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text1.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .regular), range: .init(location: 0, length: text1.length))
         l.attributedText = text1
@@ -35,7 +35,7 @@ class Page6: UIView {
     
     var whyHeader: UILabel = {
         let l = UILabel()
-        l.text = "Why is it important?"
+        l.text = NSLocalizedString("Why is it important?", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -48,7 +48,7 @@ class Page6: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "As seen in the previous example, letters and\nletter combinations in English can make many\ndifferent sounds. This coloring system was\ncreated to help you visually see the different\nsounds in addition to hearing them.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("As seen in the previous example, letters and\nletter combinations in English can make many\ndifferent sounds. This coloring system was\ncreated to help you visually see the different\nsounds in addition to hearing them.", comment: ""))
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text1.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .regular), range: .init(location: 0, length: text1.length))
         l.attributedText = text1
@@ -58,7 +58,7 @@ class Page6: UIView {
     
     var resultHeader: UILabel = {
         let l = UILabel()
-        l.text = "Results"
+        l.text = NSLocalizedString("Results", comment: "The results you get from doing something")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -71,7 +71,7 @@ class Page6: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Master the colors. Master the sounds. Master\nthe words. You will be sounding like a native\nspeaker in no time.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Master the colors. Master the sounds. Master\nthe words. You will be sounding like a native\nspeaker in no time.", comment: ""))
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text1.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .regular), range: .init(location: 0, length: text1.length))
         l.attributedText = text1
@@ -81,7 +81,7 @@ class Page6: UIView {
     
     var almostHeader: UILabel = {
         let l = UILabel()
-        l.text = "Almost there!"
+        l.text = NSLocalizedString("Almost there!", comment: "Almost done going through the app tutorial")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -94,7 +94,7 @@ class Page6: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Let's see how you can search any words in\nEnglish HD using Aura!")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Let's see how you can search any word in\nEnglish HD using Aura!", comment: ""))
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text1.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .regular), range: .init(location: 0, length: text1.length))
         l.attributedText = text1
@@ -215,22 +215,22 @@ class Page6: UIView {
     
     func setupConstraintsForSmallPhones() {
         
-        let text1 = NSMutableAttributedString(string: "English HD is a coloring system that uses colors to represent individual sounds.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("English HD is a coloring system that uses colors to represent individual sounds.", comment: ""))
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text1.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .regular), range: .init(location: 0, length: text1.length))
         whatText.attributedText = text1
         
-        let text2 = NSMutableAttributedString(string: "As seen in the previous example, letters and letter combinations in English can make many different sounds. This coloring system was created to help you visually see the different sounds in addition to hearing them.")
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("As seen in the previous example, letters and letter combinations in English can make many different sounds. This coloring system was created to help you visually see the different sounds in addition to hearing them.", comment: ""))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))
         text2.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .regular), range: .init(location: 0, length: text2.length))
         whyText.attributedText = text2
         
-        let text3 = NSMutableAttributedString(string: "Master the colors. Master the sounds. Master the words. You will be sounding like a native speaker in no time.")
+        let text3 = NSMutableAttributedString(string: NSLocalizedString("Master the colors. Master the sounds. Master the words. You will be sounding like a native speaker in no time.", comment: ""))
         text3.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text3.length))
         text3.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .regular), range: .init(location: 0, length: text3.length))
         resultText.attributedText = text3
         
-        let text4 = NSMutableAttributedString(string: "Let's see how you can search any words in English HD using Aura!")
+        let text4 = NSMutableAttributedString(string: NSLocalizedString("Let's see how you can search any word in English HD using Aura!", comment: ""))
         text4.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text4.length))
         text4.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .regular), range: .init(location: 0, length: text4.length))
         almostText.attributedText = text4

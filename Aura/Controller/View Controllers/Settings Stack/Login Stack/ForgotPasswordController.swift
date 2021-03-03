@@ -18,7 +18,7 @@ class ForgotPasswordController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Reset Password"
+        label.text = NSLocalizedString("Reset Password", comment: "")
         label.numberOfLines = 2
         label.textColor = .black
         label.textAlignment = .center
@@ -35,7 +35,7 @@ class ForgotPasswordController: UIViewController {
         textField.roundCorners(cornerRadius: 4)
         textField.textColor = .black
         textField.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textField.placeholder = "Email"
+        textField.placeholder = NSLocalizedString("Email", comment: "")
         textField.setBorder(color: K.Colors.purple)
         return textField
         
@@ -44,7 +44,7 @@ class ForgotPasswordController: UIViewController {
     var explanationLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "A link will be sent to your email address to reset your password if your account exists"
+        l.text = NSLocalizedString("A link will be sent to your email address to reset your password if your account exists", comment: "")
         l.textAlignment = .center
         l.backgroundColor = .white
         l.textColor = .black
@@ -57,7 +57,7 @@ class ForgotPasswordController: UIViewController {
     var resetButton: UIButton = {
         
         let button = UIButton()
-        button.setTitle("Reset Password", for: .normal)
+        button.setTitle(NSLocalizedString("Reset Password", comment: ""), for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
         button.addTarget(self, action: #selector(resetPressed(_:)), for: .touchUpInside)
         return button
@@ -171,7 +171,7 @@ class ForgotPasswordController: UIViewController {
                 
                 if let window = UIApplication.shared.keyWindow {
                     
-                    window.displayCheck(text: "Sent")
+                    window.displayCheck(text: NSLocalizedString("Sent", comment: "email sent"))
                     
                 }
                 

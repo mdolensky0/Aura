@@ -18,7 +18,7 @@ class SwipeTutorialView: UIView {
     
     let title: UILabel = {
         let l = UILabel()
-        l.text = "Directions"
+        l.text = NSLocalizedString("Directions", comment: "Instructions how to do this activity")
         l.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         l.textAlignment = .center
         l.numberOfLines = 1
@@ -27,7 +27,7 @@ class SwipeTutorialView: UIView {
     
     lazy var info1: UILabel = {
         let l = UILabel()
-        l.text = "Flip the flashcard by pressing the center button or tapping on the card."
+        l.text = NSLocalizedString("Flip the flashcard by pressing the center button or tapping on the card.", comment: "Flip as in turn over the flashcard from front to back or back to front")
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .regular)
         l.numberOfLines = 0
         return l
@@ -35,7 +35,7 @@ class SwipeTutorialView: UIView {
     
     lazy var info2: UILabel = {
         let l = UILabel()
-        l.text = "Press the ❌ button or swipe left if you got it wrong."
+        l.text = NSLocalizedString("Press the ❌ button or swipe left if you got it wrong.", comment: "")
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .regular)
         l.numberOfLines = 0
         return l
@@ -43,7 +43,7 @@ class SwipeTutorialView: UIView {
     
     lazy var info3: UILabel = {
         let l = UILabel()
-        l.text = "Press the ✅ button or swipe right if you got it right."
+        l.text = NSLocalizedString("Press the ✅ button or swipe right if you got it right.", comment: "")
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .regular)
         l.numberOfLines = 0
         return l
@@ -60,7 +60,7 @@ class SwipeTutorialView: UIView {
     let okButton: AnimatedButton = {
         let b = AnimatedButton()
         b.isFlat = true
-        b.setTitle("OK", for: .normal)
+        b.setTitle(NSLocalizedString("OK", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), for: .normal)
         b.backgroundColor = K.DesignColors.primary
         b.tintColor = .white
         b.translatesAutoresizingMaskIntoConstraints = false

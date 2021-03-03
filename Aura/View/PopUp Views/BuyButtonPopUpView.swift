@@ -26,7 +26,7 @@ class BuyButtonPopUpView: UIView {
     
     let mainTitle: UILabel = {
         let l = UILabel()
-        l.text = "Get the English HD Master Course Now!"
+        l.text = NSLocalizedString("Get the English HD Master Course Now!", comment: "")
         l.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         l.textAlignment = .center
         l.numberOfLines = 1
@@ -37,7 +37,7 @@ class BuyButtonPopUpView: UIView {
     
     let featuresHeader: UILabel = {
         let l = UILabel()
-        l.text = "Features"
+        l.text = NSLocalizedString("Features", comment: "")
         l.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         l.textAlignment = .left
         l.numberOfLines = 1
@@ -47,7 +47,7 @@ class BuyButtonPopUpView: UIView {
     
     let feature1: UILabel = {
         let l = UILabel()
-        l.text = "• 10+ hours of video lessons"
+        l.text = NSLocalizedString("• Study approximately 15 minutes a\n   day with over 60+ lessons", comment: "")
         l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         l.textAlignment = .left
         l.numberOfLines = 0
@@ -56,7 +56,7 @@ class BuyButtonPopUpView: UIView {
     
     let feature2: UILabel = {
         let l = UILabel()
-        l.text = "• 1500 pre-made flashcards to study"
+        l.text = NSLocalizedString("• 500+ pre-made flashcards to study", comment: "")
         l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         l.textAlignment = .left
         l.numberOfLines = 0
@@ -65,7 +65,7 @@ class BuyButtonPopUpView: UIView {
     
     let feature3: UILabel = {
         let l = UILabel()
-        l.text = "• Lifetime access to all future content\n   that will be added to the course"
+        l.text = NSLocalizedString("• Lifetime access to all future content\n   that will be added to the course", comment: "")
         l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         l.textAlignment = .left
         l.numberOfLines = 0
@@ -75,7 +75,7 @@ class BuyButtonPopUpView: UIView {
     let buyButton: AnimatedButton = {
         
         let b = AnimatedButton()
-        b.setTitle("Purchase", for: .normal)
+        b.setTitle(NSLocalizedString("Purchase", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         b.tintColor = .white
         b.backgroundColor = K.DesignColors.primary
@@ -287,18 +287,16 @@ class BuyButtonPopUpView: UIView {
                 
                 if Utilities.shared.isUserSignedIn {
                     if Utilities.shared.user?.purchases["EHDMasterCourse"] == true {
-                        let alert = UIAlertController(title: "You already have Purchased the EHD Master Course", message: nil, preferredStyle: .alert)
-                        let action = UIAlertAction(title: "Ok", style: .cancel) { (action) in }
+                        let alert = UIAlertController(title: NSLocalizedString("You already have Purchased the English HD Master Course", comment: ""), message: nil, preferredStyle: .alert)
+                        let action = UIAlertAction(title: NSLocalizedString("Ok", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .cancel) { (action) in
+                            self.closeButton.sendActions(for: .touchUpInside)
+                        }
                         alert.addAction(action)
                         self.videoVC?.present(alert, animated: true, completion: nil)
                     } else {
-                        let alert = UIAlertController(title: "EHD Master Course Coming Soon!", message: nil, preferredStyle: .alert)
-                        let action = UIAlertAction(title: "Ok", style: .cancel) { (action) in }
-                        alert.addAction(action)
-                        self.videoVC?.present(alert, animated: true, completion: nil)
                         // Handle Purchase
-//                        PurchasingManager.shared.fetchProducts(productIdentifier: "EHDMasterCourse", parentVC: self.videoVC)
-//                        self.videoVC?.startLoadingScreen()
+                        PurchasingManager.shared.fetchProducts(productIdentifier: "com.iai.Aura.EHDMasterCourse", parentVC: self.videoVC)
+                        self.videoVC?.startLoadingScreen()
                     }
                 } else {
                     // Sign In Then Handle Purchase
@@ -307,18 +305,16 @@ class BuyButtonPopUpView: UIView {
             } else {
                 if Utilities.shared.isUserSignedIn {
                     if Utilities.shared.user?.purchases["EHDMasterCourse"] == true {
-                        let alert = UIAlertController(title: "You already have Purchased the EHD Master Course", message: nil, preferredStyle: .alert)
-                        let action = UIAlertAction(title: "Ok", style: .cancel) { (action) in }
+                        let alert = UIAlertController(title: NSLocalizedString("You already have Purchased the English HD Master Course", comment: ""), message: nil, preferredStyle: .alert)
+                        let action = UIAlertAction(title: NSLocalizedString("Ok", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .cancel) { (action) in
+                            self.closeButton.sendActions(for: .touchUpInside)
+                        }
                         alert.addAction(action)
                         self.parentVC?.present(alert, animated: true, completion: nil)
                     } else {
-                        let alert = UIAlertController(title: "EHD Master Course Coming Soon!", message: nil, preferredStyle: .alert)
-                        let action = UIAlertAction(title: "Ok", style: .cancel) { (action) in }
-                        alert.addAction(action)
-                        self.parentVC?.present(alert, animated: true, completion: nil)
                         // Handle Purchase
-//                        PurchasingManager.shared.fetchProducts(productIdentifier: "EHDMasterCourse", parentVC: self.parentVC)
-//                        self.parentVC?.startLoadingScreen()
+                        PurchasingManager.shared.fetchProducts(productIdentifier: "com.iai.Aura.EHDMasterCourse", parentVC: self.parentVC)
+                        self.parentVC?.startLoadingScreen()
                     }
                 } else {
                     // Sign In Then Handle Purchase

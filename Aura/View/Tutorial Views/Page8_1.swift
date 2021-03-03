@@ -13,7 +13,7 @@ class Page8_1: UIView {
     // MARK: - Subviews
     var mainHeader: UILabel = {
         let l = UILabel()
-        l.text = "Search Result Example"
+        l.text = NSLocalizedString("Search Result Example", comment: "")
         l.numberOfLines = 1
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 24, weight: .bold)
@@ -87,8 +87,8 @@ class Page8_1: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Play: ")
-        let text2 = NSMutableAttributedString(string: "Check your pronunciation by listening to the audio of a native speaker.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Play: ", comment: "Refering to the play button that you press to start the audio"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Check your pronunciation by listening to the audio of a native speaker.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))
@@ -147,8 +147,8 @@ class Page8_1: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Repeat: ")
-        let text2 = NSMutableAttributedString(string: "Play the audio once or hear it 5 times in a row to better listen and practice.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Repeat: ", comment: "repeat the audio over and over"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Play the audio once or hear it 5 times in a row to better listen and practice.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))
@@ -207,8 +207,8 @@ class Page8_1: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Flashcards: ")
-        let text2 = NSMutableAttributedString(string: "Save this result as a flashcard to study later with the click of a button.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Flashcards: ", comment: "flashcards for studying"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Save this result as a flashcard to study later with the click of a button.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))
@@ -267,8 +267,8 @@ class Page8_1: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Edit: ")
-        let text2 = NSMutableAttributedString(string: "Request an edit if you think there is an issue with the result.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Edit: ", comment: "Edit the result of the colored word"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Request an edit if you think there is an issue with the result.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))

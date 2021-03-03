@@ -103,7 +103,15 @@ class Utilities {
         
         if user != nil && user!.purchases["EHDMasterCourse"] == true {
             AdManager.shared.funnelProgress = .completedVideo2Bought
+            return
         }
+        
+        // For testing I can change a purchase back to false
+//        if user != nil && user!.purchases["EHDMasterCourse"] == false {
+//            AdManager.shared.funnelProgress = .completedVideo2NoBuy
+//            return
+//        }
+        
     }
     
     func playSound(_ soundFileName: String, volume: Float = 1) {
@@ -155,7 +163,7 @@ class Utilities {
         
         didSet {
             
-            self.settingsLauncher.signInLabel.text = isUserSignedIn ? "Sign Out" : "Sign Up / Log In"
+            self.settingsLauncher.signInLabel.text = isUserSignedIn ? NSLocalizedString("Sign Out", comment: "Sign out(Log out) of your user account") : NSLocalizedString("Sign Up / Log In", comment: "Sign up or login to create a new user account")
             
         }
         
@@ -165,25 +173,25 @@ class Utilities {
     func signUserOut(alertIn vc: UIViewController) {
         
         // Logout Alert
-        let alert = UIAlertController(title: "Logout", message: "Are you sure you want to logout", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("Logout", comment: "Log out of your user account"), message: NSLocalizedString("Are you sure you want to logout", comment: "Checking to make sure they actually want to log out before we log them out of their account"), preferredStyle: .alert)
         
         // Alert Actions
-        let actionOk = UIAlertAction(title: "OK", style: .default) { (action) in
+        let actionOk = UIAlertAction(title: NSLocalizedString("OK", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .default) { (action) in
             return
         }
         
-        let actionNo = UIAlertAction(title: "No", style: .cancel) { (action) in
+        let actionNo = UIAlertAction(title: NSLocalizedString("No", comment: "No I don't want to perform this action (for example sign out)"), style: .cancel) { (action) in
             return
         }
         
-        let actionYes = UIAlertAction(title: "Yes", style: .default) { (action) in
+        let actionYes = UIAlertAction(title: NSLocalizedString("Yes", comment: "Yes I do want to perform this action (for example sign out)"), style: .default) { (action) in
             
             // Sign Out
             do {
                 
                 try Auth.auth().signOut()
                 
-                let signedOutAlert = UIAlertController(title: "Success", message: "Successfully signed out", preferredStyle: .alert)
+                let signedOutAlert = UIAlertController(title: NSLocalizedString("Success", comment: "The action I just performed was a success (for example logging out)"), message: NSLocalizedString("Successfully signed out", comment: "I clicked the sign out button and I was successfully signed out"), preferredStyle: .alert)
                 
                 signedOutAlert.addAction(actionOk)
                 vc.present(signedOutAlert, animated: true, completion: nil)
@@ -201,7 +209,7 @@ class Utilities {
             
             catch let signOutError as NSError {
                 
-                let errorAlert = UIAlertController(title: "Error Signing Out", message: signOutError.localizedDescription, preferredStyle: .alert)
+                let errorAlert = UIAlertController(title: NSLocalizedString("Error Signing Out", comment: "Something went wrong and we were unable to sign you out"), message: signOutError.localizedDescription, preferredStyle: .alert)
                 errorAlert.addAction(actionOk)
                 vc.present(errorAlert, animated: true, completion: nil)
                 

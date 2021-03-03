@@ -17,7 +17,7 @@ protocol AltTranslationDelegate {
 class AltTranslationsView: UIView {
     
     // MARK: Data
-    let baseTitleText = "Others ways to say"
+    let baseTitleText = NSLocalizedString("Others ways to say", comment: "alternative translations of a given word")
     var searchedText = ""
     var dictionaryResult = [String : [DictionaryResult]]()
     var dictionaryKeys = [String]()

@@ -40,7 +40,7 @@ class LoginController: UIViewController {
     var signUpButton: UIButton = {
         
         let button = UIButton()
-        button.setTitle("Sign Up", for: .normal)
+        button.setTitle(NSLocalizedString("Sign Up", comment: "sign up for a new account"), for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
         return button
         
@@ -49,7 +49,7 @@ class LoginController: UIViewController {
     var logInButton: UIButton = {
         
         let button = UIButton()
-        button.setTitle("Log In", for: .normal)
+        button.setTitle(NSLocalizedString("Log In", comment: "log in to your existing account"), for: .normal)
         button.styleHollowbutton(outlineColor: .black)
         return button
         

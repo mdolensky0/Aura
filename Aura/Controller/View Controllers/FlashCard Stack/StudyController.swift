@@ -27,7 +27,7 @@ class StudyController: UIViewController, TestManagerDelegate {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Deck Name"
+        label.text = NSLocalizedString("Deck Name", comment: "")
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -233,7 +233,7 @@ class StudyController: UIViewController, TestManagerDelegate {
     let doneButton: UIButton = {
         let b = UIButton()
         b.backgroundColor = K.DesignColors.primary
-        b.setTitle("DONE", for: .normal)
+        b.setTitle(NSLocalizedString("DONE", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         b.tintColor = .white
         b.addTarget(self, action: #selector(donePressed(_:)), for: .touchUpInside)
@@ -255,7 +255,7 @@ class StudyController: UIViewController, TestManagerDelegate {
     let keyTypeLabel: UILabel = {
         
         let label = UILabel()
-        label.text = "Front to Back"
+        label.text = NSLocalizedString("Front to Back", comment: "")
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -333,7 +333,7 @@ class StudyController: UIViewController, TestManagerDelegate {
         
         // Change Back Bar Button
         self.navigationItem.hidesBackButton = true
-        let newBackButton = UIBarButtonItem(title: "done", style: UIBarButtonItem.Style.plain, target: self, action: #selector(donePressed(_:)))
+        let newBackButton = UIBarButtonItem(title: NSLocalizedString("done", comment: ""), style: UIBarButtonItem.Style.plain, target: self, action: #selector(donePressed(_:)))
         self.navigationItem.leftBarButtonItem = newBackButton
         
         // Configure self.view
@@ -901,7 +901,7 @@ class StudyController: UIViewController, TestManagerDelegate {
         
         if !sender.isOn {
             
-            keyTypeLabel.text = "Front to Back"
+            keyTypeLabel.text = NSLocalizedString("Front to Back", comment: "")
             isReverse = true
             
             if isFront {
@@ -914,7 +914,7 @@ class StudyController: UIViewController, TestManagerDelegate {
         
         else {
             
-            keyTypeLabel.text = "Back to Front"
+            keyTypeLabel.text = NSLocalizedString("Back to Front", comment: "")
             isReverse = false
             
             if !isFront {

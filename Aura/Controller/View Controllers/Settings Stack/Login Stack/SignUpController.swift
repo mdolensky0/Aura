@@ -20,7 +20,7 @@ class SignUpController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 15)
-        label.text = "Sign Up"
+        label.text = NSLocalizedString("Sign Up", comment: "")
         label.numberOfLines = 2
         label.textColor = .black
         label.textAlignment = .center
@@ -55,7 +55,7 @@ class SignUpController: UIViewController {
         textField.roundCorners(cornerRadius: 4)
         textField.textColor = .black
         textField.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textField.placeholder = "Email"
+        textField.placeholder = NSLocalizedString("Email", comment: "")
         textField.setBorder(color: K.Colors.purple)
         
         return textField
@@ -71,7 +71,7 @@ class SignUpController: UIViewController {
         textField.roundCorners(cornerRadius: 4)
         textField.textColor = .black
         textField.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textField.placeholder = "Password"
+        textField.placeholder = NSLocalizedString("Password", comment: "")
         textField.setBorder(color: K.Colors.purple)
         textField.isSecureTextEntry = true
         return textField
@@ -81,7 +81,7 @@ class SignUpController: UIViewController {
     var passwordRequirementsLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "Password must be 8 characters long"
+        l.text = NSLocalizedString("Password must be 8 characters long", comment: "")
         l.textAlignment = .center
         l.backgroundColor = .white
         l.textColor = .black
@@ -94,7 +94,7 @@ class SignUpController: UIViewController {
         
         let l = UILabel()
         
-        let attText = NSMutableAttributedString(string: "By creating an account you're agreeing to our Terms & Privacy Policy")
+        let attText = NSMutableAttributedString(string: NSLocalizedString("By creating an account you're agreeing to our Terms & Privacy Policy", comment: ""))
         attText.addAttribute(.foregroundColor, value: K.Colors.purple, range: NSRange(location: 46, length: 5))
         attText.addAttribute(.foregroundColor, value: K.Colors.purple, range: NSRange(location: 54, length: 14))
         attText.addAttribute(.font, value: UIFont.systemFont(ofSize: 13), range: NSRange(location: 0, length: attText.length))
@@ -115,7 +115,7 @@ class SignUpController: UIViewController {
         textField.roundCorners(cornerRadius: 4)
         textField.textColor = .black
         textField.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textField.placeholder = "Retype Password"
+        textField.placeholder = NSLocalizedString("Retype Password", comment: "")
         textField.setBorder(color: K.Colors.purple)
         textField.isSecureTextEntry = true
         return textField
@@ -125,7 +125,7 @@ class SignUpController: UIViewController {
     var signUpButton: UIButton = {
         
         let button = UIButton()
-        button.setTitle("Sign Up", for: .normal)
+        button.setTitle(NSLocalizedString("Sign Up", comment: ""), for: .normal)
         button.styleFilledButton(fillColor: K.Colors.purple)
         return button
         
@@ -274,7 +274,7 @@ class SignUpController: UIViewController {
               let password = passwordTextField.text,
               let rePassword = reTypePasswordTextField.text else {
                 
-                showError("Error retrieving input, try again")
+                showError(NSLocalizedString("Error retrieving input, try again", comment: ""))
                 return
                 
         }
@@ -282,14 +282,14 @@ class SignUpController: UIViewController {
         // Check that all fields are filled out
         if email.count == 0 || password.count == 0 || rePassword.count == 0 {
             
-            showError("Please fill out all fields")
+            showError(NSLocalizedString("Please fill out all fields", comment: ""))
             return
             
         }
         
         // Check for a valid email
         if !Utilities.shared.isEmailValid(email) {
-            showError("Invalid Email. Please check that the email you entered is a valid email address")
+            showError(NSLocalizedString("Invalid Email. Please check that the email you entered is a valid email address", comment: ""))
             return
             
         }
@@ -297,7 +297,7 @@ class SignUpController: UIViewController {
         // Check for a valid password
         if !Utilities.shared.isPasswordValid(password) {
             
-            showError("Password must contain at least 8 characters")
+            showError(NSLocalizedString("Password must contain at least 8 characters", comment: ""))
             return
             
         }
@@ -305,7 +305,7 @@ class SignUpController: UIViewController {
         // Make sure passwords match
         if password != rePassword {
             
-            showError("Passwords do not match")
+            showError(NSLocalizedString("Passwords do not match", comment: ""))
             return
             
         }

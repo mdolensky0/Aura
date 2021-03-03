@@ -37,12 +37,16 @@ class PurchasingManager: NSObject {
         
         guard let myProduct = myProduct else {
             print("my product is nil")
-            parentVC?.endLoadingScreen()
+            DispatchQueue.main.async {
+                self.parentVC?.endLoadingScreen()
+            }
             return
         }
         
         if SKPaymentQueue.canMakePayments() {
-            parentVC?.endLoadingScreen()
+            DispatchQueue.main.async {
+                self.parentVC?.endLoadingScreen()
+            }
             let payment = SKPayment(product: myProduct)
             SKPaymentQueue.default().add(self)
             SKPaymentQueue.default().add(payment)
@@ -50,21 +54,22 @@ class PurchasingManager: NSObject {
         
     }
     
-    func handlePurchase() {
+    func handlePurchase(transactionID: String) {
         AdManager.shared.funnelProgress = .completedVideo2Bought
         Utilities.shared.user?.purchases["EHDMasterCourse"] = true
+        Utilities.shared.user?.purchaseIDs["EHDMasterCourse"] = transactionID
         if let user = Utilities.shared.user {
             FirebaseManager.shared.updateUser(user: user)
         }
         AdManager.shared.removeBuyButton()
         if let window = UIApplication.shared.keyWindow {
-            window.displayCheck(text: "Success!")
+            window.displayCheck(text: NSLocalizedString("Success!", comment: "Success, whatever action you just performed worked successfully"))
         }
     }
     
     func showError(error: String) {
-        let alert = UIAlertController(title: "Unable To Process this Purchase", message: error, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .cancel) { (action) in }
+        let alert = UIAlertController(title: NSLocalizedString("Unable To Process this Purchase", comment: "Something went wrong and we could not process the purchase for this course try again later"), message: error, preferredStyle: .alert)
+        let action = UIAlertAction(title: NSLocalizedString("Ok", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .cancel) { (action) in }
         alert.addAction(action)
         DispatchQueue.main.async {
             self.parentVC?.present(alert, animated: true, completion: nil)
@@ -84,7 +89,7 @@ extension PurchasingManager: SKProductsRequestDelegate {
             DispatchQueue.main.async {
                 self.parentVC?.endLoadingScreen()
             }
-            showError(error: "Unable to fetch product. Please try again later")
+            showError(error: NSLocalizedString("Unable to fetch product. Please try again later", comment: "Could not connect to the apple store to get the course you want to purchase, try again later"))
             return
         }
         
@@ -109,7 +114,7 @@ extension PurchasingManager: SKProductsRequestDelegate {
         print("Product fetch request failed")
         DispatchQueue.main.async {
             self.parentVC?.endLoadingScreen()
-            self.showError(error: "Unable to fetch product. Please try again later")
+            self.showError(error: NSLocalizedString("Unable to fetch product. Please try again later", comment: "Could not connect to the apple store to get the course you want to purchase, try again later"))
         }
     }
     
@@ -136,7 +141,21 @@ extension PurchasingManager: SKPaymentTransactionObserver {
             case .purchased, .restored:
                 
                 // Unlock their in app purchase
-                handlePurchase()
+                guard let transactionID = transaction.original?.transactionIdentifier else {
+                    showError(error: NSLocalizedString("Could not retrieve transaction identifier", comment: ""))
+                    SKPaymentQueue.default().finishTransaction(transaction)
+                    SKPaymentQueue.default().remove(self)
+                    return
+                }
+                
+                if transactionID != Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier] {
+                    showError(error: NSLocalizedString("Could not restore purchase. The current signed in account does not match the account used when purchasing this product.", comment: ""))
+                    SKPaymentQueue.default().finishTransaction(transaction)
+                    SKPaymentQueue.default().remove(self)
+                    return
+                }
+                
+                handlePurchase(transactionID: transactionID)
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
                 break

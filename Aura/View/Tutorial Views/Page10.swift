@@ -12,7 +12,7 @@ class Page10: UIView {
 
     var mainHeader: UILabel = {
         let l = UILabel()
-        l.text = "Translation Result"
+        l.text = NSLocalizedString("Translation Result", comment: "")
         l.numberOfLines = 2
         l.lineBreakMode = .byWordWrapping
         l.textAlignment = .left

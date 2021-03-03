@@ -59,7 +59,7 @@ class SettingsLauncher: NSObject {
         
         // Label Subview
         let l = UILabel()
-        l.text = "Sign Up / Log In"
+        l.text = NSLocalizedString("Sign Up / Log In", comment: "")
         l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         l.textAlignment = .left
         return l
@@ -108,7 +108,7 @@ class SettingsLauncher: NSObject {
         
         // Label Subview
         let l = UILabel()
-        l.text = "App Tutorial"
+        l.text = NSLocalizedString("App Tutorial", comment: "directions on how to use the app")
         l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         l.textAlignment = .left
         
@@ -149,7 +149,7 @@ class SettingsLauncher: NSObject {
         
         // Label Subview
         let l = UILabel()
-        l.text = "Contact"
+        l.text = NSLocalizedString("Contact", comment: "Contact us via email")
         l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         l.textAlignment = .left
         
@@ -253,7 +253,7 @@ class SettingsLauncher: NSObject {
         
         if Auth.auth().currentUser != nil {
             
-            signInLabel.text = "Sign Out"
+            signInLabel.text = NSLocalizedString("Sign Out", comment: "")
             
         }
         
@@ -324,7 +324,7 @@ class SettingsLauncher: NSObject {
         
         // Label Subview
         let voiceGender = UserDefaults.standard.object(forKey: K.UserDefaultKeys.voiceGender) as? String
-        genderLabel.text = voiceGender! == "FEMALE" ? "Audio Gender: Female" : "Audio Gender: Male"
+        genderLabel.text = voiceGender! == "FEMALE" ? NSLocalizedString("Audio Gender: Female", comment: "") : NSLocalizedString("Audio Gender: Male", comment: "")
         genderLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         genderLabel.textAlignment = .left
         
@@ -605,7 +605,7 @@ class SettingsLauncher: NSObject {
                     
                     // Update Toggle
                     self.toggle.setOn(true, animated: true)
-                    self.genderLabel.text = "Audio Gender: Female"
+                    self.genderLabel.text = NSLocalizedString("Audio Gender: Female", comment: "")
                     
                 }
                     
@@ -614,7 +614,7 @@ class SettingsLauncher: NSObject {
                     UserDefaults.standard.set("MALE", forKey: K.UserDefaultKeys.voiceGender)
                     
                     self.toggle.setOn(false, animated: true)
-                    self.genderLabel.text = "Audio Gender: Male"
+                    self.genderLabel.text = NSLocalizedString("Audio Gender: Male", comment: "")
 
                 }
             }

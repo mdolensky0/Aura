@@ -41,7 +41,7 @@ class SearchController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Search"
+        label.text = NSLocalizedString("Search", comment: "")
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -111,7 +111,7 @@ class SearchController: UIViewController {
         
         let textView = UITextView()
         textView.returnKeyType = .search
-        textView.text = "Enter text"
+        textView.text = NSLocalizedString("Enter text", comment: "enter the text you want to  search here")
         textView.textColor = .lightGray
         textView.font = .systemFont(ofSize: 17)
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 50)
@@ -411,7 +411,7 @@ extension SearchController {
         
         let headerLabel = UILabel()
         headerLabel.backgroundColor = K.DesignColors.background
-        headerLabel.text = "Previous Searches"
+        headerLabel.text = NSLocalizedString("Previous Searches", comment: "Search History")
         headerLabel.font = .systemFont(ofSize: 17, weight: .bold)
         headerLabel.textAlignment = .left
         
@@ -521,7 +521,7 @@ extension SearchController {
     @objc func cancelButtonPressed() {
         textView.text = ""
         textView.textColor = .lightGray
-        textView.text = "Enter text"
+        textView.text = NSLocalizedString("Enter text", comment: "enter the text you want to  search here")
         cancelButton.isHidden = true
     }
     
@@ -568,7 +568,7 @@ extension SearchController: UITextViewDelegate {
             
             if textView.text.isEmpty || textView.text == "" {
                 textView.textColor = .lightGray
-                textView.text = "Enter text"
+                textView.text = NSLocalizedString("Enter text", comment: "enter the text you want to  search here")
                 self.cancelButton.isHidden = true
             }
             

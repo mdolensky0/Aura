@@ -14,7 +14,7 @@ class Page1: UIView {
     let titleLabel: UILabel = {
         let l = UILabel()
         
-        let attText = NSMutableAttributedString(string: "Welcome to Aura!")
+        let attText = NSMutableAttributedString(string: NSLocalizedString("Welcome to Aura!", comment: ""))
         
         attText.addAttribute(.font, value: UIFont.systemFont(ofSize: 34, weight: .bold), range: .init(location: 0, length: attText.length))
         attText.addAttribute(.foregroundColor, value: K.Colors.purple, range: .init(location: 11, length: 2))
@@ -32,7 +32,7 @@ class Page1: UIView {
     let label1: UILabel = {
         
         let l = UILabel()
-        l.text = "Learn English."
+        l.text = NSLocalizedString("Learn English HD.", comment: "")
         l.textAlignment = .center
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         return l
@@ -42,7 +42,7 @@ class Page1: UIView {
     let label2: UILabel = {
         
         let l = UILabel()
-        l.text = "Sound Native."
+        l.text = NSLocalizedString("Sound Native.", comment: "Sound like a fluent native english speaker")
         l.textAlignment = .center
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         return l
@@ -52,7 +52,7 @@ class Page1: UIView {
     let label3: UILabel = {
         
         let l = UILabel()
-        l.text = "Be Confident."
+        l.text = NSLocalizedString("Be Confident.", comment: "Be confident when speaking english")
         l.textAlignment = .center
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         return l
@@ -62,7 +62,7 @@ class Page1: UIView {
     let label4: UILabel = {
         
         let l = UILabel()
-        l.text = "Be Understood."
+        l.text = NSLocalizedString("Be Understood.", comment: "Be understood by native speakers when you speak english")
         l.textAlignment = .center
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         return l

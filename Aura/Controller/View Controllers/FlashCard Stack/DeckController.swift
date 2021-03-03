@@ -25,7 +25,7 @@ class DeckController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Deck Name"
+        label.text = NSLocalizedString("Deck Name", comment: "")
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -78,7 +78,7 @@ class DeckController: UIViewController {
         
         let button = AnimatedButton(frame: .zero)
         button.backgroundColor = K.DesignColors.primary
-        button.setTitle("Study Loop", for: .normal)
+        button.setTitle(NSLocalizedString("Study Loop", comment: "An infinite loop through all your flashcards that you can study until you want to stop"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .bold)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(startLoop(_:)), for: .touchUpInside)
@@ -91,7 +91,7 @@ class DeckController: UIViewController {
         
         let b = AnimatedButton(frame: .zero)
         b.backgroundColor = K.DesignColors.primary
-        b.setTitle("Test Yourself", for: .normal)
+        b.setTitle(NSLocalizedString("Test Yourself", comment: "A one time run through all of your cards in the deck testing you on each of them"), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 26, weight: .bold)
         b.setTitleColor(.white, for: .normal)
         b.addTarget(self, action: #selector(takeTest(_:)), for: .touchUpInside)
@@ -103,7 +103,7 @@ class DeckController: UIViewController {
         let l = UILabel()
         l.textAlignment = .right
         l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        l.text = "Number of cards:"
+        l.text = NSLocalizedString("Number of cards:", comment: "number of flashcards in the flashcard deck")
         return l
         
     }()
@@ -119,7 +119,7 @@ class DeckController: UIViewController {
         let l = UILabel()
         l.textAlignment = .right
         l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        l.text = "Average study score:"
+        l.text = NSLocalizedString("Average study score:", comment: "(num of questions right) / (total number of questions seen) since the beginning")
         return l
         
     }()
@@ -134,7 +134,7 @@ class DeckController: UIViewController {
         let l = UILabel()
         l.textAlignment = .right
         l.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        l.text = "Previous test score:"
+        l.text = NSLocalizedString("Previous test score:", comment: "The last score you got when you took the test")
         return l
         
     }()
@@ -169,7 +169,7 @@ class DeckController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 24, weight: .regular)
         label.textAlignment = .center
         label.textColor = K.Colors.darkGrey
-        label.text = "There are no flashcards in the deck yet.\n\nTo add flashcards search a word and then press the + icon"
+        label.text = NSLocalizedString("There are no flashcards in the deck yet.\n\nTo add flashcards search a word and then press the + icon", comment: "")
         return label
     
     }()
@@ -255,7 +255,7 @@ class DeckController: UIViewController {
         self.navigationController?.navigationBar.topItem?.title = " "
         
         // Add Edit Button
-        let editButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
+        let editButton = UIBarButtonItem(title: NSLocalizedString("Edit", comment: "edit the deck name"), style: .plain, target: self, action: #selector(editButtonPressed))
             
         self.navigationItem.rightBarButtonItems = [editButton]
         
@@ -414,13 +414,13 @@ class DeckController: UIViewController {
         
         let headerLabel = UILabel()
         headerLabel.backgroundColor = .clear
-        headerLabel.text = "Cards"
+        headerLabel.text = NSLocalizedString("Cards", comment: "")
         headerLabel.font = .systemFont(ofSize: 17, weight: .bold)
         headerLabel.textAlignment = .left
         
         let cardScoreLabel = UILabel()
         cardScoreLabel.backgroundColor = .clear
-        cardScoreLabel.text = "Retention Rate"
+        cardScoreLabel.text = NSLocalizedString("Retention Rate", comment: "How well you know each individual flashcard. Basically an individual average percent taken from the study loop.")
         cardScoreLabel.font = .systemFont(ofSize: 17, weight: .bold)
         cardScoreLabel.textAlignment = .right
         
@@ -613,9 +613,9 @@ class DeckController: UIViewController {
     
     @objc func takeTest(_ sender: UIButton) {
         
-        let alert = UIAlertController(title: "Flashcard Orientation", message: "Test Yourself by seeing the front of the flashcard first or back", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("Flashcard Orientation", comment: "do you want to be shown the front or back of the flashcard first"), message: NSLocalizedString("Test Yourself by seeing the front, or back, of the flashcard first", comment: ""), preferredStyle: .alert)
         
-        let action1 = UIAlertAction(title: "Front to Back", style: .default) { (_) in
+        let action1 = UIAlertAction(title: NSLocalizedString("Front to Back", comment: "see front first and test yourself on back of flashcard"), style: .default) { (_) in
             alert.dismiss(animated: true, completion: nil)
             let vc = TestController()
             vc.myDeck = self.myDeck
@@ -623,7 +623,7 @@ class DeckController: UIViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
-        let action2 = UIAlertAction(title: "Back to Front", style: .default) { (_) in
+        let action2 = UIAlertAction(title: NSLocalizedString("Back to Front", comment: "see back of flashcard first and test on front"), style: .default) { (_) in
             alert.dismiss(animated: true, completion: nil)
             let vc = TestController()
             vc.isReverse = false
@@ -632,7 +632,7 @@ class DeckController: UIViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { (_) in
             // Do Nothing
         }
         
@@ -722,7 +722,7 @@ extension DeckController: SwipeTableViewCellDelegate {
         
             guard orientation == .right else { return nil }
 
-            let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            let deleteAction = SwipeAction(style: .destructive, title: NSLocalizedString("Delete", comment: "")) { action, indexPath in
                 
                 // Update Current Card Index
                 self.currentCardIndex = (self.currentCardIndex == self.myDeck.cards.count - 1) ? (self.currentCardIndex - 1): self.currentCardIndex

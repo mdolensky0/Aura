@@ -68,7 +68,7 @@ extension SupportedLanguagesVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if supportedLanguages.count == 0 {
-            tableView.setEmptyView(title: "Unable to fetch supported Languages", message: "check network connection")
+            tableView.setEmptyView(title: NSLocalizedString("Unable to fetch supported Languages", comment: "cannot get supported languages for translation"), message: NSLocalizedString("check network connection", comment: ""))
         }
         
         

@@ -56,7 +56,7 @@ class EditLauncher: NSObject {
         
         // Label Subview
         let l = UILabel()
-        l.text = "Edit Deck Name"
+        l.text = NSLocalizedString("Edit Deck Name", comment: "")
         l.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         l.textAlignment = .left
         
@@ -97,7 +97,7 @@ class EditLauncher: NSObject {
         
         // Label Subview
         let l = UILabel()
-        l.text = "Delete Deck"
+        l.text = NSLocalizedString("Delete Deck", comment: "")
         l.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         l.textAlignment = .left
         
@@ -321,9 +321,9 @@ class EditLauncher: NSObject {
     
     func presentDeleteDeckAlert() {
         
-        let alert = UIAlertController(title: "Delete Deck", message: "Are you sure you want to delete this entire deck?", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("Delete Deck", comment: ""), message: NSLocalizedString("Are you sure you want to delete this entire deck?", comment: ""), preferredStyle: .alert)
         
-        let actionOK = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+        let actionOK = UIAlertAction(title: NSLocalizedString("Delete", comment: ""), style: .destructive) { (action) in
             
             if var user = Utilities.shared.user {
                 
@@ -337,7 +337,7 @@ class EditLauncher: NSObject {
             }
         }
         
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { (action) in
             return
         }
         
@@ -352,10 +352,10 @@ class EditLauncher: NSObject {
         var textField = UITextField()
         
         // Main Alert
-        let alert = UIAlertController(title: "Change Deck Name", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("Change Deck Name", comment: ""), message: "", preferredStyle: .alert)
         
         // Action: Save New Name
-        let action = UIAlertAction(title: "Save", style: .default) { (action) in
+        let action = UIAlertAction(title: NSLocalizedString("Save", comment: "save changes"), style: .default) { (action) in
             
             if textField.text != nil && textField.text!.count > 0 {
                 
@@ -373,7 +373,7 @@ class EditLauncher: NSObject {
                     
                     if let window = UIApplication.shared.keyWindow {
                         
-                        window.displayCheck(text: "Saved")
+                        window.displayCheck(text: NSLocalizedString("Saved", comment: "changes saved"))
                         
                     }
                 }
@@ -381,13 +381,13 @@ class EditLauncher: NSObject {
         }
         
         // Action: Cancel
-        let action1 = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        let action1 = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { (action) in
             return
         }
         
         // Add TextField to alert
         alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "Enter new name"
+            alertTextField.placeholder = NSLocalizedString("Enter new name", comment: "Enter a new title for the flashcard deck name")
             textField = alertTextField
         }
         

@@ -12,7 +12,7 @@ class Page2: UIView {
     
     var whyHeader: UILabel = {
         let l = UILabel()
-        l.text = "Why Aura?"
+        l.text = NSLocalizedString("Why Aura?", comment: "Why use the Aura App")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -25,9 +25,9 @@ class Page2: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Aura is the only app that uses\n")
-        let text2 = NSMutableAttributedString(string: "American English HD")
-        let text3 = NSMutableAttributedString(string: ",\nthe best system to teach\nproper American English\npronunciation.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Aura is the only app that uses\n", comment: "Aura is the only app that uses American English HD, the best system to teach proper American English pronunciation"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("American English HD", comment: "Aura is the only app that uses American English HD, the best system to teach proper American English pronunciation"))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString(",\nthe best system to teach\nproper American English\npronunciation.", comment: "Aura is the only app that uses American English HD, the best system to teach proper American English pronunciation"))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text2.length))
@@ -47,7 +47,7 @@ class Page2: UIView {
     
     var ehdHeader: UILabel = {
         let l = UILabel()
-        l.text = "What is American English HD?"
+        l.text = NSLocalizedString("What is American English HD?", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -60,7 +60,7 @@ class Page2: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Let us show you with\nan example...")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Let us show you with\nan example...", comment: ""))
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text1.addAttribute(.font, value: UIFont.systemFont(ofSize: 17, weight: .regular), range: .init(location: 0, length: text1.length))
         l.attributedText = text1

@@ -15,24 +15,24 @@ import UIKit
 class SearchStatusView: UIView {
     
     // Error Messages
-    let success = "Success!"
+    let success = NSLocalizedString("Success!", comment: "Success, whatever action you just performed worked successfully")
     
-    let nilTranslation = [("Unable to translate", ["Check network connection."])]
+    let nilTranslation = [(NSLocalizedString("Unable to translate", comment: "Cannot translate the text that you searched"), [NSLocalizedString("Check network connection.", comment: "Check your internet connection")])]
     
-    let emptyTranslationNoExistingWordModels = [("No translation found", ["Check input/output language parameters.", "Check spelling."]),
-    ("Unable to color any words", ["Check spelling.", "Some words may not exist in the database yet."])]
+    let emptyTranslationNoExistingWordModels = [(NSLocalizedString("No translation found", comment: "Cannot find a translation for the word you searched"), [NSLocalizedString("Check input/output language parameters.", comment: "If you select translate from english to japanese and then you search in japanses this will lead to an issue"), NSLocalizedString("Check spelling.", comment: "You may have misspelled the word you are searching, check your spelling")]),
+    (NSLocalizedString("Unable to color any words", comment: ""), [NSLocalizedString("Check spelling.", comment: "You may have misspelled the word you are searching, check your spelling"), NSLocalizedString("Some words may not exist in the database yet.", comment: "The words you searched may not exist in our database and that is why it is not colored")])]
     
     
-    let emptyTranslationMissingSomeWordModels = [("No translation found", ["Check input/output language parameters.", "Check spelling."]),
-    ("Unable to color some words", ["Check spelling.", "Some words may not exist in the database yet."])]
+    let emptyTranslationMissingSomeWordModels = [(NSLocalizedString("No translation found", comment: "Cannot find a translation for the word you searched"), [NSLocalizedString("Check input/output language parameters.", comment: "If you select translate from english to japanese and then you search in japanses this will lead to an issue"), NSLocalizedString("Check spelling.", comment: "You may have misspelled the word you are searching, check your spelling")]),
+    (NSLocalizedString("Unable to color some words", comment: ""), [NSLocalizedString("Check spelling.", comment: "You may have misspelled the word you are searching, check your spelling"), NSLocalizedString("Some words may not exist in the database yet.", comment: "The words you searched may not exist in our database and that is why it is not colored")])]
     
-    let emptyTranslationWithAllWordModels = [("No translation found", ["Check input/output language parameters."])]
+    let emptyTranslationWithAllWordModels = [(NSLocalizedString("No translation found", comment: "Cannot find a translation for the word you searched"), [NSLocalizedString("Check input/output language parameters.", comment: "If you select translate from english to japanese and then you search in japanses this will lead to an issue")])]
     
-    let noExistingWordModels = [("Unable to color any words", ["Check input/output language parameters.", "Check spelling.", "Check network connection.", "Some words may not exist in the database yet.", "Incorrect translation. We're working to improve this"])]
+    let noExistingWordModels = [(NSLocalizedString("Unable to color any words", comment: ""), [NSLocalizedString("Check input/output language parameters.", comment: "If you select translate from english to japanese and then you search in japanses this will lead to an issue"), NSLocalizedString("Check spelling.", comment: "You may have misspelled the word you are searching, check your spelling"), NSLocalizedString("Check network connection.", comment: "Check your internet connection"), NSLocalizedString("Some words may not exist in the database yet.", comment: "The words you searched may not exist in our database and that is why it is not colored"), NSLocalizedString("Incorrect translation. We're working to improve this", comment: "")])]
     
-    let missingSomeWordModels = [("Unable to color some words", ["Check input/output language parameters.", "Check spelling.", "Check network connection.", "Some words may not exist in the database yet.", "Incorrect translation. We're working to improve this"])]
+    let missingSomeWordModels = [(NSLocalizedString("Unable to color some words", comment: ""), [NSLocalizedString("Check input/output language parameters.", comment: "If you select translate from english to japanese and then you search in japanses this will lead to an issue"), NSLocalizedString("Check spelling.", comment: "You may have misspelled the word you are searching, check your spelling"), NSLocalizedString("Check network connection.", comment: "Check your internet connection"), NSLocalizedString("Some words may not exist in the database yet.", comment: "The words you searched may not exist in our database and that is why it is not colored"), NSLocalizedString("Incorrect translation. We're working to improve this", comment: "")])]
     
-    let colorError = [("Warning: we detected a word that may be colored incorrectly", ["We will try and fix this as soon as possible!"])]
+    let colorError = [(NSLocalizedString("Warning: we detected a word that may be colored incorrectly", comment: ""), [NSLocalizedString("We will try and fix this as soon as possible!", comment: "")])]
     
     // Subviews
     let errLabel: UILabel = {

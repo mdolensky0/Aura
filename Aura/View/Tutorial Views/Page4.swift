@@ -15,7 +15,7 @@ class Page4: UIView {
     // MARK: - Subviews
     var questionHeader: UILabel = {
         let l = UILabel()
-        l.text = "Let's look at the word \'banana\'"
+        l.text = NSLocalizedString("Let's look at the word \'banana\'", comment: "Let's take for example the word banana")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .center
@@ -28,8 +28,8 @@ class Page4: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Question: ")
-        let text2 = NSMutableAttributedString(string: "Which sound from below does the\nunderlined \'a\' in \'banana\' make? Drag the \'a\'\nand drop it in the circle below to check your\nanswer. Tap the \'a\' below if you need to hear\nthe sound.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Question: ", comment: "Informing that there is a question below it"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Which sound from below does the\nunderlined \'a\' in \'banana\' make? Drag the \'a\'\nand drop it in the circle below to check your\nanswer. Tap the \'a\' below if you need to hear\nthe sound.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))
@@ -60,7 +60,7 @@ class Page4: UIView {
         
     var answerLabel: UILabel = {
         let l = UILabel()
-        l.text = "Answer:"
+        l.text = NSLocalizedString("Answer:", comment: "")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .center
@@ -93,7 +93,7 @@ class Page4: UIView {
     
     var solutionLabel: UILabel = {
         let l = UILabel()
-        l.text = "Try Again"
+        l.text = NSLocalizedString("Try Again", comment: "You got the question wrong, try again")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .center
@@ -423,8 +423,8 @@ class Page4: UIView {
         
         questionHeader.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         
-        let text1 = NSMutableAttributedString(string: "Question: ")
-        let text2 = NSMutableAttributedString(string: "Which sound from below does the\nunderlined \'a\' in \'banana\' make? Drag the \'a\'\nand drop it in the circle below to check your\nanswer. Tap the \'a\' below if you need to hear\nthe sound.")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Question: ", comment: "Informing that there is a question below it"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Which sound from below does the\nunderlined \'a\' in \'banana\' make? Drag the \'a\'\nand drop it in the circle below to check your\nanswer. Tap the \'a\' below if you need to hear\nthe sound.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))
@@ -487,11 +487,11 @@ class Page4: UIView {
     func showSolutionLabel(isRight: Bool) {
         if isRight {
             solutionLabel.backgroundColor = UIColor(red: 0, green: 162/255, blue: 3/255, alpha: 0.3)
-            solutionLabel.text = "Correct!"
+            solutionLabel.text = NSLocalizedString("Correct!", comment: "You got the answer to the question right")
             solutionLabel.textColor = UIColor(red: 0, green: 88/255, blue: 0, alpha: 1)
         } else {
             solutionLabel.backgroundColor = UIColor(red: 162/255, green: 0, blue: 0, alpha: 0.3)
-            solutionLabel.text = "Try Again!"
+            solutionLabel.text = NSLocalizedString("Try Again", comment: "You got the question wrong, try again")
             solutionLabel.textColor = K.DesignColors.error
         }
         

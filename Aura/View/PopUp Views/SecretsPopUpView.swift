@@ -18,14 +18,14 @@ class SecretsPopUpView: UIView {
     var delegate: SecretsTutorialDelegate?
     let fontSize: CGFloat = UIScreen.main.bounds.height > 667 ? 17 : 15
     
-    var titleText = "Welcome to Aura!"
+    var titleText = NSLocalizedString("Welcome to Aura!", comment: "")
     var infoText = ""
     var thumbnailURL: String?
     var buttonText = ""
     
     let title: UILabel = {
         let l = UILabel()
-        l.text = "Welcome to Aura!"
+        l.text = NSLocalizedString("Welcome to Aura!", comment: "")
         l.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         l.textAlignment = .center
         l.numberOfLines = 1
@@ -35,7 +35,7 @@ class SecretsPopUpView: UIView {
     
     lazy var info: UILabel = {
         let l = UILabel()
-        l.text = "Get started with Aura by checking out this tutorial video"
+        l.text = NSLocalizedString("Get started with this tutorial video. Learn how to use this app and discover the 3 Secrets of English HD", comment: "")
         l.font = UIFont.systemFont(ofSize: fontSize, weight: .regular)
         l.numberOfLines = 0
         return l
@@ -130,7 +130,7 @@ class SecretsPopUpView: UIView {
     let watchButton: AnimatedButton = {
         let b = AnimatedButton()
         b.isFlat = true
-        b.setTitle("Watch Tutorial", for: .normal)
+        b.setTitle(NSLocalizedString("Watch Tutorial", comment: "Click this button to watch the tutorial video"), for: .normal)
         b.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         b.backgroundColor = K.DesignColors.primary
         b.tintColor = .white
@@ -143,7 +143,7 @@ class SecretsPopUpView: UIView {
     
     let skipButton: UIButton = {
         let b = UIButton(type: .system)
-        b.setTitle("skip", for: .normal)
+        b.setTitle(NSLocalizedString("skip", comment: "skip, don't for example watch this video even though you should"), for: .normal)
         b.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1), for: .normal)
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         b.addTarget(self, action: #selector(dismiss(_:)), for: .touchUpInside)

@@ -25,7 +25,7 @@ class FlashcardsPopUpView: UIView {
     
     let mainTitle: UILabel = {
         let l = UILabel()
-        l.text = "Flashcards"
+        l.text = NSLocalizedString("Flashcards", comment: "flashcards for studying")
         l.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         l.textAlignment = .center
         l.numberOfLines = 1
@@ -36,7 +36,7 @@ class FlashcardsPopUpView: UIView {
     
     let subTitle: UILabel = {
         let l = UILabel()
-        l.text = "Studying Made Easy"
+        l.text = NSLocalizedString("Studying Made Easy", comment: "")
         l.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         l.textAlignment = .center
         l.numberOfLines = 1
@@ -47,7 +47,7 @@ class FlashcardsPopUpView: UIView {
     
     let featuresHeader: UILabel = {
         let l = UILabel()
-        l.text = "Features"
+        l.text = NSLocalizedString("Features", comment: "features that for example a course contains (ex. 10 hours of videos)")
         l.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         l.textAlignment = .left
         l.numberOfLines = 1
@@ -57,7 +57,7 @@ class FlashcardsPopUpView: UIView {
     
     let feature1: UILabel = {
         let l = UILabel()
-        l.text = "• Save flashcards with the touch\n   of a button!"
+        l.text = NSLocalizedString("• Save flashcards with the touch\n   of a button!", comment: "")
         l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         l.textAlignment = .left
         l.numberOfLines = 0
@@ -66,7 +66,7 @@ class FlashcardsPopUpView: UIView {
     
     let feature2: UILabel = {
         let l = UILabel()
-        l.text = "• Create as many decks as you want!"
+        l.text = NSLocalizedString("• Create as many decks as you want!", comment: "decks of flashcards to study")
         l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         l.textAlignment = .left
         l.numberOfLines = 0
@@ -75,7 +75,7 @@ class FlashcardsPopUpView: UIView {
     
     let feature3: UILabel = {
         let l = UILabel()
-        l.text = "• Save as many flashcards as you\n   want to your decks!"
+        l.text = NSLocalizedString("• Save as many flashcards as you\n   want to your decks!", comment: "")
         l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         l.textAlignment = .left
         l.numberOfLines = 0
@@ -84,7 +84,7 @@ class FlashcardsPopUpView: UIView {
     
     let feature4: UILabel = {
         let l = UILabel()
-        l.text = "• Study and test yourself to see\n   your improvement!"
+        l.text = NSLocalizedString("• Study and test yourself to see\n   your improvement!", comment: "")
         l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         l.textAlignment = .left
         l.numberOfLines = 0
@@ -93,7 +93,7 @@ class FlashcardsPopUpView: UIView {
     
     let feature5: UILabel = {
         let l = UILabel()
-        l.text = "• Keep track of your study and testing\n   scores so you know what to focus on!"
+        l.text = NSLocalizedString("• Keep track of your study and testing\n   scores so you know what to focus on!", comment: "")
         l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         l.textAlignment = .left
         l.numberOfLines = 0
@@ -102,7 +102,8 @@ class FlashcardsPopUpView: UIView {
     
     let signUpLabel: UILabel = {
         let l = UILabel()
-        l.text = "Sign up, so we may store your\nflashcards, and get access to\nall of this for free!"
+        l.text = NSLocalizedString("Create a free account to make your own personalized English HD Flashcard Decks", comment: "")
+        
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textAlignment = .center
         l.textColor = K.DesignColors.primary
@@ -113,7 +114,7 @@ class FlashcardsPopUpView: UIView {
     let doneButton: AnimatedButton = {
         
         let b = AnimatedButton()
-        b.setTitle("DONE", for: .normal)
+        b.setTitle(NSLocalizedString("DONE", comment: ""), for: .normal)
         b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         b.tintColor = .white
         b.backgroundColor = K.DesignColors.primary
@@ -431,7 +432,7 @@ class FlashcardsPopUpView: UIView {
                          padding: UIEdgeInsets(top: 10, left: 40, bottom: 0, right: -20))
         
         feature5.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        feature5.text = "• Keep track of your study\n   and testing scores so you\n   know what to focus on!"
+        feature5.text = NSLocalizedString("• Keep track of your study\n   and testing scores so you\n   know what to focus on!", comment: "")
         feature5.anchor(top: feature4.bottomAnchor,
                          bottom: nil,
                          leading: container.leadingAnchor,

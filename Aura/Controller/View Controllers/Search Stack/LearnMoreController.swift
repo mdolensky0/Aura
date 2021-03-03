@@ -43,7 +43,7 @@ class LearnMoreController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Search"
+        label.text = NSLocalizedString("Search", comment: "")
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -110,7 +110,7 @@ class LearnMoreController: UIViewController {
         
         let label = UILabel()
         label.backgroundColor = .clear
-        label.text = "Related Searches"
+        label.text = NSLocalizedString( "Related Searches", comment: "")
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textAlignment = .left
         return label
@@ -120,7 +120,7 @@ class LearnMoreController: UIViewController {
     var myDecksLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "My Decks"
+        l.text = NSLocalizedString("My Decks", comment: "")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -133,7 +133,7 @@ class LearnMoreController: UIViewController {
     var whereToStartLabel: UILabel = {
         
         let l = UILabel()
-        l.text = "Where to start"
+        l.text = NSLocalizedString("Where to Start", comment: "")
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         l.textColor = .black
@@ -1216,6 +1216,6 @@ extension LearnMoreController: AdManagerDelegate {
                 playImageView.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
             }
         }
-    } 
+    }
 }
 

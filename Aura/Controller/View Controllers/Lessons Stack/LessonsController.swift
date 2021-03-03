@@ -14,6 +14,15 @@ class LessonsController: UIViewController {
     
     //MARK: - Data
     var scrollViewIndex = 0
+    var headerTitles = ["Introduction", "Vowels", "BOT", "BAT", "BOUT", "BOOT", "BUT", "BOOK",
+                        "BEAT", "BIT", "BET", "BAIT", "BITE", "BOAT", "BOYD", "True & Flip Consonants",
+                        "B", "C", "D", "F", "G", "H", "K", "L", "M", "N", "P", "QU", "R", "S", "T","TH",
+                        "V", "W", "X", "Z", "Fluid Consonants", "MISSION", "VISION", "CHOKE", "JOKE",
+                        "YOU", "Silents", "Wildcards", "Bonus"]
+    var numSections = 45
+    var numRowsPerSection = [5, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,
+                             3, 5, 5, 5, 3, 3, 3, 5, 3, 5, 3, 3, 5, 5, 5, 5,
+                             3, 3, 5, 5, 1, 3, 3, 3, 3, 3, 3, 1, 4]
     
     //MARK: - Views / Subviews
     
@@ -22,7 +31,7 @@ class LessonsController: UIViewController {
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
         label.backgroundColor = .clear
         label.font = UIFont(name: K.Fonts.avenirBlack, size: 17)
-        label.text = "Lessons"
+        label.text = NSLocalizedString("Lessons", comment: "Course video lessons")
         label.numberOfLines = 2
         label.textColor = .white
         label.textAlignment = .center
@@ -62,6 +71,9 @@ class LessonsController: UIViewController {
         cv.dataSource = self
         cv.delegate = self
         cv.register(VideoCell.self, forCellWithReuseIdentifier: VideoCell.identifier)
+        cv.register(HeaderCollectionReusableView.self,
+                    forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                    withReuseIdentifier: HeaderCollectionReusableView.identifier)
         cv.backgroundColor = .white
         cv.allowsSelection = true
         cv.tag = 1
@@ -73,6 +85,7 @@ class LessonsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //populateLessonsDB()
         Utilities.shared.lessonsTabDelegate = self
         AdManager.shared.lessonDelegate = self
         setup()
@@ -180,7 +193,7 @@ class LessonsController: UIViewController {
         
         // Populate Stack View
         for lesson in Utilities.shared.lessons! {
-
+            
             let iv = CustomImageView()
             iv.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
             iv.backgroundColor = K.DesignColors.primary
@@ -190,7 +203,7 @@ class LessonsController: UIViewController {
             iv.widthAnchor.constraint(equalToConstant: 240).isActive = true
             iv.roundCorners(cornerRadius: 8)
             stackView.addCenteredSubview(iv, stackViewParent: scrollView)
-
+            
         }
         
         // Add Scroll View to Main View
@@ -203,7 +216,7 @@ class LessonsController: UIViewController {
     }
     
     func setupScrollViewForMediumScreen() {
-
+        
         scrollView.addSubview(stackView)
         
         stackView.anchor(top: scrollView.topAnchor,
@@ -218,7 +231,7 @@ class LessonsController: UIViewController {
         
         // Populate Stack View
         for lesson in Utilities.shared.lessons! {
-
+            
             let iv = CustomImageView()
             iv.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
             iv.backgroundColor = K.DesignColors.primary
@@ -228,7 +241,7 @@ class LessonsController: UIViewController {
             iv.widthAnchor.constraint(equalToConstant: 280).isActive = true
             iv.roundCorners(cornerRadius: 8)
             stackView.addCenteredSubview(iv, stackViewParent: scrollView)
-
+            
         }
         
         // Add Scroll View to Main View
@@ -250,7 +263,7 @@ class LessonsController: UIViewController {
         // Populate Stack View
         print(Utilities.shared.lessons!.count)
         for lesson in Utilities.shared.lessons! {
-
+            
             let iv = CustomImageView()
             iv.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
             iv.backgroundColor = K.DesignColors.primary
@@ -260,7 +273,7 @@ class LessonsController: UIViewController {
             iv.widthAnchor.constraint(equalToConstant: 280).isActive = true
             iv.roundCorners(cornerRadius: 8)
             stackView.addCenteredSubview(iv, stackViewParent: scrollView)
-
+            
         }
         
         scrollViewIndex = 0
@@ -287,76 +300,67 @@ class LessonsController: UIViewController {
     //MARK: - Selector Functions
     
     @objc func settingsButtonTapped() {
-    
+        
         Utilities.shared.settingsLauncher.parentVC = self
         Utilities.shared.settingsLauncher.showSettings()
-                
+        
     }
-    
-    func populateLessonsDB() {
-        
-        let video1 = VideoModel(videoTitle: "Lesson 1",
-                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson1.png?alt=media&token=b729c5f5-8683-49df-b7d5-2bc7c6905ada",
-                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson1.MOV?alt=media&token=27f58b35-ef23-4d08-855c-e7b9f0117415",
-                                duration: "10 minutes, 37 seconds")
-        
-        let video2 = VideoModel(videoTitle: "Lesson 2",
-                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson2.png?alt=media&token=ccad6042-8c16-4fa7-ab8e-e3c3e7fb1486",
-                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson2.MOV?alt=media&token=f98a570c-5d61-46c7-832b-f5e06234806e",
-                                duration: "8 minutes, 15 seconds")
-        
-        let video3 = VideoModel(videoTitle: "Lesson 3",
-                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson3.png?alt=media&token=b1c9aae4-cedd-447f-8c6f-dda53ff8bb4d",
-                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson3.MOV?alt=media&token=1c7bf585-9df8-4ff3-8a65-9db7bfdb03fe",
-                                duration: "9 minutes, 40 seconds")
-        
-        let video4 = VideoModel(videoTitle: "Lesson 4",
-                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson4.png?alt=media&token=e68a71c9-118e-422c-88f3-74fd7b107aa1",
-                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson4.MOV?alt=media&token=60340113-b672-4fdc-81b0-c2414c6e3358",
-                                duration: "6 minutes, 32 seconds")
-        
-        let video5 = VideoModel(videoTitle: "Lesson 5",
-                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson5.png?alt=media&token=6598a8c6-8846-4141-b9d4-27a6f7decbca",
-                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson5.MOV?alt=media&token=ec65bf0d-a286-4d15-bd0b-512455ae48cf",
-                                duration: "7 minutes, 24 seconds")
-        
-        let video6 = VideoModel(videoTitle: "Lesson 6",
-                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson6.png?alt=media&token=ad34e7d9-4535-4173-8f4e-ac26cf39fc3c",
-                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson6.MOV?alt=media&token=e8242a5b-3057-4df8-904d-4506a6b838a1",
-                                duration: "10 minutes, 23 seconds")
-        
-        let videos = [video1, video2, video3, video4, video5, video6]
-        
-        let lesson1 = LessonModel(lessonTitle: "Lessons", lessonThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Lesson1Thumbnail.png?alt=media&token=133e14e3-39d3-4d0d-b7c9-cd1fd51d9e06", videos: videos)
-        
-        FirebaseManager.shared.updateLesson(lesson: lesson1)
-    }
-    
 }
 
 //MARK: - Collection View Data Source
 
 extension LessonsController: UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return Utilities.shared.lessons![scrollViewIndex].videos.count
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if scrollViewIndex == 1 {
+            return numSections
+        } else {
+            return 1
+        }
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        if scrollViewIndex == 1 {
+            if section == 45 {
+                // For all the bonus videos we add
+                return (Utilities.shared.lessons![scrollViewIndex].videos.count - 148)
+            } else {
+                return numRowsPerSection[section]
+            }
+           
+        } else {
+            return Utilities.shared.lessons![scrollViewIndex].videos.count
+        }
+        
+        
+        
+    }
+    
+    func getVideoIndex(section: Int, row: Int) -> Int {
+        let rowsArray = numRowsPerSection[0..<section]
+        let index = rowsArray.reduce(0, +)
+        return index + row
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let index = getVideoIndex(section: indexPath.section, row: indexPath.row)
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VideoCell.identifier, for: indexPath) as! VideoCell
         
         cell.cellMask.alpha = 0
         
-        if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
+        if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.section > 0 {
             cell.playView.isHidden = false
-        } else {
+        } else if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
+            cell.playView.isHidden = false
+        }else {
             cell.playView.isHidden = true
         }
         
-        let currentVideo = Utilities.shared.lessons![scrollViewIndex].videos[indexPath.row]
+        let currentVideo = Utilities.shared.lessons![scrollViewIndex].videos[index]
         
         let thumbnailUrlString = currentVideo.videoThumbnailURL
         
@@ -369,6 +373,27 @@ extension LessonsController: UICollectionViewDataSource {
         cell.videoLengthLabel.text = currentVideo.duration
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        
+        
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                     withReuseIdentifier: HeaderCollectionReusableView.identifier,
+                                                                     for: indexPath) as! HeaderCollectionReusableView
+        
+        if scrollViewIndex != 1 {
+            header.configure(title: "")
+        } else {
+            header.configure(title: headerTitles[indexPath.section])
+        }
+        
+        return header
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.size.width, height: 40)
     }
     
 }
@@ -399,16 +424,48 @@ extension LessonsController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
-            AdManager.shared.showBuyButton(inVideo: false, videoVC: nil, parentVC: self)
-            return 
+        if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.section > 0 {
+            
+            if !UserDefaults.standard.bool(forKey: "hasClickedLock") {
+                AdManager.shared.showAdPopUP(parentVC: self)
+                UserDefaults.standard.set(true, forKey: "hasClickedLock")
+                return
+            } else {
+                AdManager.shared.showBuyButton(inVideo: false, videoVC: nil, parentVC: self)
+                return
+            }
+            
+        } else if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
+            
+            if !UserDefaults.standard.bool(forKey: "hasClickedLock") {
+                AdManager.shared.showAdPopUP(parentVC: self)
+                UserDefaults.standard.set(true, forKey: "hasClickedLock")
+                return
+            } else {
+                AdManager.shared.showBuyButton(inVideo: false, videoVC: nil, parentVC: self)
+                return
+            }
+            
         }
         
         let av = PUAVPlayerViewController()
-        av.videoIdx = indexPath.row
+        
+        if scrollViewIndex == 0 && indexPath.row == 0 {
+            av.popUpVideoName = .secret1
+        } else if scrollViewIndex == 0 && indexPath.row == 1 {
+            av.popUpVideoName = .secret2
+        } else {
+            av.popUpVideoName = .other
+        }
+        
+        let index = getVideoIndex(section: indexPath.section, row: indexPath.row)
+        
+        av.videoIdx = index
         av.parentView = self
-        AdManager.shared.currentLessonIndex = indexPath.row
-        let urlString = Utilities.shared.lessons![scrollViewIndex].videos[indexPath.row].videoURL
+        if av.popUpVideoName == .other {
+            AdManager.shared.currentLessonIndex = index
+        }
+        let urlString = Utilities.shared.lessons![scrollViewIndex].videos[index].videoURL
         
         if let url = URL(string: urlString) {
             
@@ -425,15 +482,15 @@ extension LessonsController: UICollectionViewDelegate {
                 let secs = Int(seconds) % 60
                 
                 switch AdManager.shared.funnelProgress {
-                case .hasNotSeenVideo1:
+                case .hasNotSeenVideo1 where av.popUpVideoName! == .secret1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo1
-                case .seenPartOfVideo1:
+                case .seenPartOfVideo1 where av.popUpVideoName! == .secret1:
                     if min >= 9 {
                         AdManager.shared.funnelProgress = .completedVideo1
                     }
-                case .completedVideo1:
+                case .completedVideo1 where av.popUpVideoName! == .secret2:
                     AdManager.shared.funnelProgress = .seenPartOfVideo2
-                case .seenPartOfVideo2:
+                case .seenPartOfVideo2 where av.popUpVideoName! == .secret2:
                     if min >= 15 && secs >= 15 {
                         AdManager.shared.funnelProgress = .completedVideo2NoBuy
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
@@ -444,6 +501,10 @@ extension LessonsController: UICollectionViewDelegate {
                     if secs >= 15 && AdManager.shared.isBuyButtonShowing == false {
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
                         AdManager.shared.isBuyButtonShowing = true
+                    }
+                    
+                    if av.popUpVideoName != .other {
+                        break
                     }
                     
                     if let idx = AdManager.shared.currentLessonIndex {
@@ -457,6 +518,11 @@ extension LessonsController: UICollectionViewDelegate {
                         }
                     }
                 case .completedVideo2Bought:
+                    
+                    if av.popUpVideoName != .other {
+                        break
+                    }
+                    
                     if let idx = AdManager.shared.currentLessonIndex {
                         if let duration = av.player?.currentItem?.duration {
                             let durationSecs = CMTimeGetSeconds(duration)
@@ -511,6 +577,7 @@ extension LessonsController {
         let av = PUAVPlayerViewController()
         av.videoIdx = AdManager.shared.currentLessonIndex ?? 0
         av.parentView = self
+        av.popUpVideoName = AdManager.shared.getVideoNameCurrentUserState()
         let urlString = AdManager.shared.getVideoURLForCurrentUserState()
                 
         if let url = URL(string: urlString) {
@@ -528,15 +595,15 @@ extension LessonsController {
                 let secs = Int(seconds) % 60
                 
                 switch AdManager.shared.funnelProgress {
-                case .hasNotSeenVideo1:
+                case .hasNotSeenVideo1 where av.popUpVideoName! == .secret1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo1
-                case .seenPartOfVideo1:
+                case .seenPartOfVideo1 where av.popUpVideoName! == .secret1:
                     if min >= 9 {
                         AdManager.shared.funnelProgress = .completedVideo1
                     }
-                case .completedVideo1:
+                case .completedVideo1 where av.popUpVideoName! == .secret2:
                     AdManager.shared.funnelProgress = .seenPartOfVideo2
-                case .seenPartOfVideo2:
+                case .seenPartOfVideo2 where av.popUpVideoName! == .secret2:
                     if min >= 15 && secs >= 15 {
                         AdManager.shared.funnelProgress = .completedVideo2NoBuy
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
@@ -588,5 +655,798 @@ extension LessonsController {
             self.collectionView.reloadData()
         }
     }
+}
 
+extension LessonsController {
+    func populateLessonsDB() {
+        
+        let video1_0 = VideoModel(videoTitle: "Introduction",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.0_THUMB.png?alt=media&token=43d8ed9c-8f6c-4045-a379-3e583eaa7d89",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.0_MAIN_INTRO.m4v?alt=media&token=8b59dada-7ea5-4eda-98a4-063dc1929731",
+                                duration: "3 minutes, 22 seconds")
+        
+        let video1_1 = VideoModel(videoTitle: "How to Listen",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.1_THUMB.png?alt=media&token=900b781f-fa09-40fe-b70d-735d41ad535a",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.1_LISTEN_INTRO.m4v?alt=media&token=ffa5a62d-00db-4f6c-8ae2-5cea7bdc39b3",
+                                duration: "1 minute, 33 seconds")
+        
+        let video1_2 = VideoModel(videoTitle: "How to Mimic",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.2_THUMB.png?alt=media&token=6a234c74-154f-4a87-89a1-4801df2209c6",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.2_MIMIC_INTRO.m4v?alt=media&token=2f638176-dee3-4f43-bff0-5ba1cf5ae4a2",
+                                duration: "2 minutes, 21 seconds")
+        
+        let video1_3 = VideoModel(videoTitle: "How to Rehearse",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.3_THUMB.png?alt=media&token=15b6657d-e168-4221-9f1d-d6530b126b1c",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.3_REHEARSE_INTRO.m4v?alt=media&token=27487645-2e40-4969-b61b-98778bf2b95c",
+                                duration: "3 minutes, 55 seconds")
+        
+        let video1_4 = VideoModel(videoTitle: "What are Vowels & Consonants",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.4_THUMB.png?alt=media&token=1a36ec10-f17c-4b57-82b7-a8a16bf2b50d",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.4_CLASSROOM_INTRO.mp4?alt=media&token=22a9e3a5-bd2d-4632-b53b-ab5e1d4477a9",
+                                duration: "1 minute, 48 seconds")
+        
+        let video2_0 = VideoModel(videoTitle: "Vowels Introduction",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2.0_THUMB.png?alt=media&token=92f348a2-2a0a-4b58-82ad-040812094393",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2.0_CLASSROOM_VOWEL_INTRO.mp4?alt=media&token=4c84ef66-a2ef-4345-a264-8fdc3217ccc1",
+                                duration: "0 minutes, 58 seconds")
+        
+        let video3_0 = VideoModel(videoTitle: "KY Classroom - BOT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3.0_THUMB.png?alt=media&token=732b36c8-0cd5-4dde-bd44-5ea43013bd4b",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3.0_CLASSROOM_VOWELS_BOT.mp4?alt=media&token=afea33f1-c753-48cd-a9c6-1c370f693f74",
+                                duration: "0 minutes, 11 seconds")
+        
+        let video3_1 = VideoModel(videoTitle: "Listen - BOT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3%2C1_THUMB.png?alt=media&token=d25b62db-02e9-455e-b05e-83d51f15f0b6",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3.1_BOT_LISTEN.mp4?alt=media&token=2f21acb3-73df-45b6-ae49-8a98900ad23b",
+                                duration: "1 minute, 39 seconds")
+        
+        let video3_2 = VideoModel(videoTitle: "Mimic - BOT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3.2_THUMB.png?alt=media&token=700b8b36-2e47-4fb6-8d7a-cd5727101416",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3.2_BOT_MIMIC.mp4?alt=media&token=05a85a4f-1dd8-422b-bec0-00882ff584c9",
+                                duration: "1 minute, 38 seconds")
+        
+        let video4_0 = VideoModel(videoTitle: "KY Classroom - BAT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4.0_THUMB.png?alt=media&token=bb8ce75d-a709-49ac-a798-b73d044af793",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4.0_CLASSROOM_VOWELS_BAT.mp4?alt=media&token=e8adf9f8-d42f-46bd-86f9-52366ecaf131",
+                                duration: "0 minutes, 35 seconds")
+        
+        let video4_1 = VideoModel(videoTitle: "Listen - BAT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4.1_THUMB.png?alt=media&token=d9f07578-580d-4e31-8469-361b2ae61dd0",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4.1_BAT_LISTEN.mp4?alt=media&token=cc612027-cb04-4e01-ac62-8b49902e0d21",
+                                duration: "1 minute, 10 seconds")
+        
+        let video4_2 = VideoModel(videoTitle: "Mimic - BAT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4.2_THUMB.png?alt=media&token=a950172b-638e-4ec4-9113-0e709b4ba283",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4.2_BAT_MIMIC.mp4?alt=media&token=a0cfc773-1cb5-49fc-ac87-aae4b93e9ae6",
+                                duration: "1 minute, 9 seconds")
+        
+        let video5_0 = VideoModel(videoTitle: "KY Classroom - BOUT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5.0_THUMB.png?alt=media&token=fe8d682e-4e8f-4b06-aa29-2e2fd945a5c0",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5.0_CLASSROOM%20VOWELS_BOUT.mp4?alt=media&token=27b5d2c3-1409-47d1-905b-11a921fc39b6",
+                                duration: "0 minutes, 26 seconds")
+        
+        let video5_1 = VideoModel(videoTitle: "Listen - BOUT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5.1_THUMB.png?alt=media&token=c6c21788-7428-4cc5-9e51-242cde270dae",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5.1_BOUT_LISTEN.mp4?alt=media&token=01cf69e6-870a-4261-b4c1-2c696661aa6e",
+                                duration: "1 minute, 16 seconds")
+        
+        let video5_2 = VideoModel(videoTitle: "Mimic - BOUT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5.2_THUMB.png?alt=media&token=5578010f-9f06-4c6d-b881-9475b7950db3",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5.2_BOUT_MIMIC.mp4?alt=media&token=aad85665-2375-42f4-9aa2-889b5b0b29a3",
+                                duration: "1 minute, 15 seconds")
+        
+        let video6_0 = VideoModel(videoTitle: "KY Classroom - BOOT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6.0_THUMB.png?alt=media&token=a16e01c0-45c0-4311-a64e-f7c13b769244",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6.0_CLASSROOM%20VOWELS_BOOT.mp4?alt=media&token=fbfde34f-6ff2-474f-817f-2e12b460fe94",
+                                duration: "0 minutes, 14 seconds")
+        
+        let video6_1 = VideoModel(videoTitle: "Listen - BOOT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6.1_THUMB.png?alt=media&token=23ae46ba-a5c9-450e-abef-da2852626c25",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6.1_BOOT_LISTEN.mp4?alt=media&token=d1016878-7007-4d1f-a7a8-d52f578e9d24",
+                                duration: "1 minute, 53 seconds")
+        
+        let video6_2 = VideoModel(videoTitle: "Mimic - BOOT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6.2_THUMB.png?alt=media&token=0f276559-b080-4ecc-857e-6a27979338f7",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6.2_BOOT_MIMIC.mp4?alt=media&token=0268b5e0-461f-49ed-9e09-b011f82bdc4c",
+                                duration: "1 minute, 52 seconds")
+        
+        let video7_0 = VideoModel(videoTitle: "KY Classroom - BUT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7.0_THUMB.png?alt=media&token=5abeb9bf-fbe9-4ae3-bf26-d8074b348427",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7.0_CLASSROOM_VOWELS_BUT.mp4?alt=media&token=b530e8b9-f82e-4d4c-831d-abeb6ce43150",
+                                duration: "0 minutes, 39 seconds")
+        
+        let video7_1 = VideoModel(videoTitle: "Listen - BUT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7.1_THUMB.png?alt=media&token=45bf4a9a-d6bb-4018-8138-971b9f8a2fee",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7.1_BUT_LISTEN.mp4?alt=media&token=6f26185e-4675-44f5-8f77-51aee1ef3ee5",
+                                duration: "2 minutes, 48 seconds")
+        
+        let video7_2 = VideoModel(videoTitle: "Mimic - BUT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7.2_THUMB.png?alt=media&token=0266e9b8-cf31-4b67-af0f-61675dd1c672",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7.2_BUT_MIMIC.mp4?alt=media&token=40384ada-5703-424e-8fcf-6942953160f0",
+                                duration: "2 minutes, 47 seconds")
+        
+        let video8_0 = VideoModel(videoTitle: "KY Classroom - BOOK",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/8.0_THUMB.png?alt=media&token=e5f9e09f-9fba-4deb-87f8-0d19c92dfa6e",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/8.0_CLASSROOM_VOWELS_BOOK.mp4?alt=media&token=0755e298-ec6d-42fe-a5ae-1aa50f648109",
+                                duration: "0 minutes, 33 seconds")
+        
+        let video8_1 = VideoModel(videoTitle: "Listen - BOOK",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/8.1_THUMB.png?alt=media&token=a9abe6e0-739c-47bb-bdff-d0a811b0ea39",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/8.1_BOOK_LISTEN.mp4?alt=media&token=dfcda9f8-7ce6-406f-a1e0-5f1ef08c4eed",
+                                duration: "1 minute, 16 seconds")
+        
+        let video8_2 = VideoModel(videoTitle: "Mimic - BOOK",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/8.2_THUMB.png?alt=media&token=2c837d8b-6bf9-41a6-9143-06a47c84f2cf",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/8.2_BOOK_MIMIC.mp4?alt=media&token=d3a767a1-37df-42be-b7cd-d7a45324d6ee",
+                                duration: "1 minute, 15 seconds")
+        
+        let video9_0 = VideoModel(videoTitle: "KY Classroom - BEAT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/9.0_THUMB.png?alt=media&token=5d56d259-304a-416f-a270-db7233117c45",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/9.0_CLASSROOM_VOWELS_BEAT.mp4?alt=media&token=dbe0f185-b1b4-46c5-ba3f-07d651d43946",
+                                duration: "0 minutes, 12 seconds")
+        
+        let video9_1 = VideoModel(videoTitle: "Listen - BEAT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/9.1_THUMB.png?alt=media&token=30ae4f65-1c5b-48e8-a8ab-54f65e0a0557",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/9.1_BEAT_LISTEN.mp4?alt=media&token=88caddc6-95b4-4624-bfd2-003e993aef70",
+                                duration: "2 minutes, 14 seconds")
+        
+        let video9_2 = VideoModel(videoTitle: "Mimic - BEAT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/9.2_THUMB.png?alt=media&token=df6d9be5-926a-4389-a792-92974f56407c",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/9.2_BEAT_MIMIC.mp4?alt=media&token=d5a2af13-aa0e-4241-a47a-1adb9e74f5e4",
+                                duration: "2 minutes, 13 seconds")
+        
+        let video10_0 = VideoModel(videoTitle: "KY Classroom - BIT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/10.0_THUMB.png?alt=media&token=5a98bf3e-4017-4d1b-8b8a-dfab9e5ac0dd",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/10.0_CLASSROOM_VOWELS_BIT.mp4?alt=media&token=9a1348b9-7d95-458e-bebd-5c3b97943d9e",
+                                duration: "0 minutes, 20 seconds")
+        
+        let video10_1 = VideoModel(videoTitle: "Listen - BIT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/10.1_THUMB.png?alt=media&token=f317d0fa-e151-41e1-8906-0b8a01083cae",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/10.1_BIT_LISTEN.mp4?alt=media&token=70a5f4ac-54e0-425c-8246-19386cc43622",
+                                duration: "2 minutes, 37 seconds")
+        
+        let video10_2 = VideoModel(videoTitle: "Mimic - BIT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/10.2_THUMB.png?alt=media&token=ca491c9e-d3ff-4b21-aae1-5a34497b3e7f",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/10.2_BIT_MIMIC.mp4?alt=media&token=91363fdf-63f1-4642-b221-dba907300527",
+                                duration: "2 minutes, 36 seconds")
+        
+        let video11_0 = VideoModel(videoTitle: "KY Classroom - BET",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/11.0_THUMB.png?alt=media&token=284b192d-035d-4907-842a-500c32a37a53",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/11.0_CLASSROOM_VOWELS_BET.mp4?alt=media&token=4f8fddf5-dca0-4845-a5dd-fd4915fd96ef",
+                                duration: "0 minutes, 6 seconds")
+        
+        let video11_1 = VideoModel(videoTitle: "Listen - BET",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/11.1_THUMB.png?alt=media&token=79362689-c6ee-4a17-b1d0-273b839417e9",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/11.1_BET_LISTEN.mp4?alt=media&token=13239749-b881-4878-a4a6-35ca5acba41b",
+                                duration: "1 minute, 50 seconds")
+        
+        let video11_2 = VideoModel(videoTitle: "Mimic - BET",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/11.2_THUMB.png?alt=media&token=0ca2d74a-080f-4664-9e28-639d796dd5ff",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/11.2_BET_MIMIC.mp4?alt=media&token=5e942f35-6af7-411f-b5b2-db29a27327af",
+                                duration: "1 minute, 49 seconds")
+        
+        let video12_0 = VideoModel(videoTitle: "KY Classroom - BAIT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/12.0_THUMB.png?alt=media&token=e1ee3b40-dd2c-4d32-81e7-2d0daaa4efff",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/12.0_CLASSROOM_VOWELS_BAIT.mp4?alt=media&token=9fd4cd57-5e53-4fac-9d8a-8d5c81869fd2",
+                                duration: "0 minutes, 25 seconds")
+        
+        let video12_1 = VideoModel(videoTitle: "Listen - BAIT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/12.1_THUMB.png?alt=media&token=30538172-d1d7-4dac-b409-4f1095768fc6",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/12.1_BAIT_LISTEN.mp4?alt=media&token=312525ad-c4e7-4ad3-9872-e5c942fb9dad",
+                                duration: "1 minute, 56 seconds")
+        
+        let video12_2 = VideoModel(videoTitle: "Mimic - BAIT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/12.2_THUMB.png?alt=media&token=309d1df6-bf51-4dc1-9b78-cfe28b534e9e",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/12.2_BAIT_MIMIC.mp4?alt=media&token=5b91b694-920e-4920-a293-ab7a140790d6",
+                                duration: "1 minute, 55 seconds")
+        
+        let video13_0 = VideoModel(videoTitle: "KY Classroom - BITE",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/13.0_THUMB.png?alt=media&token=ab3dd92b-a3fa-49c3-b6c8-3e45669b8d3e",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/13.0_CLASSROOM_VOWELS_BITE.mp4?alt=media&token=b342627a-ed0b-4565-a7b9-2892119f504a",
+                                duration: "0 minutes, 18 seconds")
+        
+        let video13_1 = VideoModel(videoTitle: "Listen - BITE",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/13.1_THUMB.png?alt=media&token=46f7a158-f0fc-48a6-b590-a30c5a716825",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/13.1_BITE_LISTEN.mp4?alt=media&token=e0b4cb47-634d-48d9-8f71-c5094697673c",
+                                duration: "2 minutes, 8 seconds")
+        
+        let video13_2 = VideoModel(videoTitle: "Mimic - BITE",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/13.2_THUMB.png?alt=media&token=02890e50-91a9-4a59-bb62-f2ac621780ed",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/13.2_BITE_MIMIC.mp4?alt=media&token=57126d38-491c-42f9-a285-4f18b0ccf61f",
+                                duration: "2 minutes, 7 seconds")
+        
+        let video14_0 = VideoModel(videoTitle: "KY Classroom - BOAT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/14.0_THUMB.png?alt=media&token=8fffac8f-0f5b-4ab7-b69d-57c0034fe5b3",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/14.0_CLASSROOM_VOWELS_BOAT.mp4?alt=media&token=28a5c934-de58-425f-a934-fc122f22a826",
+                                duration: "0 minutes, 48 seconds")
+        
+        let video14_1 = VideoModel(videoTitle: "Listen - BOAT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/14.1_THUMB.png?alt=media&token=47825488-a5f6-48f7-b229-b732864c6c8b",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/14.1_BOAT_LISTEN.mp4?alt=media&token=1590ee2a-8032-4323-8792-ed12fea5a4f8",
+                                duration: "1 minute, 27 seconds")
+        
+        let video14_2 = VideoModel(videoTitle: "Mimic - BOAT",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/14.2_THUMB.png?alt=media&token=2d555014-278f-4676-b36b-6e9a207473f5",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/14.2_BOAT_MIMIC.mp4?alt=media&token=a888a9f3-ea73-4d3e-8fa0-53780ce736e1",
+                                duration: "1 minute, 26 seconds")
+        
+        let video15_0 = VideoModel(videoTitle: "KY Classroom - BOYD",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/15.0_THUMB.png?alt=media&token=144ec891-345d-4089-acfd-f32e302af1d1",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/15.0_CLASSROOM_VOWELS_BOYD.mp4?alt=media&token=8c453e2a-fae8-41d5-8262-5fb5543666c0",
+                                duration: "0 minutes, 16 seconds")
+        
+        let video15_1 = VideoModel(videoTitle: "Listen - BOYD",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/15.1_THUMB.png?alt=media&token=1ecf79c5-fdd3-4064-a25c-85a5bc1d4a98",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/15.1_BOYD_LISTEN.mp4?alt=media&token=9586b6fc-3618-4090-93a7-3afe3ef46257",
+                                duration: "1 minute, 21 seconds")
+        
+        let video15_2 = VideoModel(videoTitle: "Mimic - BOYD",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/15.2_THUMB.png?alt=media&token=caa636a7-d5ca-4fab-8562-67f074fc6910",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/15.2_BOYD_MIMIC.mp4?alt=media&token=3be11386-eb16-4013-b5f0-84c0c97feec3",
+                                duration: "1 minute, 20 seconds")
+        
+        let video16_0 = VideoModel(videoTitle: "Consonants Intro - True & Flip",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/16.0_THUMB.png?alt=media&token=6e2be227-80f2-478a-bf75-ab2884f083c1",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/16.0_CLASSROOM_%20CONSONANTS_INTRO.mp4?alt=media&token=54bf607d-f4d6-4aea-ae91-834d0743bcae",
+                                duration: "3 minutes, 24 seconds")
+        
+        let video17_0 = VideoModel(videoTitle: "KY Classroom - B",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/17.0_THUMB.png?alt=media&token=02639b73-8898-42b3-a924-5cbfd9bc73f0",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/17.0_CLASSROOM_CONSONANTS%20B.mp4?alt=media&token=c6fcb9c1-1c81-48fe-b6b4-35c2778fb515",
+                                duration: "0 minutes, 10 seconds")
+        
+        let video17_1 = VideoModel(videoTitle: "Listen - True B",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/17.1_THUMB.png?alt=media&token=9f6210ae-8c3e-4e33-8fdf-0a171f01526e",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/17.1_TRUE_B_LISTEN.mp4?alt=media&token=01e4c37b-50fb-4a41-bd38-6b1d0a16cb36",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video17_2 = VideoModel(videoTitle: "Mimic - True B",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/17.2_THUMB.png?alt=media&token=cb53d909-e419-4291-956d-9feb002a574d",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/17.2_TRUE_B_MIMIC.mp4?alt=media&token=a5b5609a-d1dc-4192-9a9f-3b21e3bb4e68",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video18_0 = VideoModel(videoTitle: "KY Classroom - C",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.0_THUMB.png?alt=media&token=96009987-35d8-41fe-9d65-84c811ad36f5",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.0_CLASSROOM_CONSONANTS_C.mp4?alt=media&token=9ce3da08-2070-47ce-ba21-8ca9a784cdb4",
+                                duration: "0 minutes, 24 seconds")
+        
+        let video18_1 = VideoModel(videoTitle: "Listen - True C",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.1_THUMB.png?alt=media&token=dc9dfcab-5e9f-40f0-8518-c355edd28945",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.1_TRUE_C_LISTEN.mp4?alt=media&token=e548c4d5-28f8-42b1-bd09-209b3d5834c6",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video18_2 = VideoModel(videoTitle: "Mimic - True C",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.2_THUMB.png?alt=media&token=ae76c5d7-e8d0-41f5-8db1-3bc7be198506",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.2_TRUE_C_MIMIC.mp4?alt=media&token=60ef9668-3e08-4804-b941-ee0d2930374a",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video18_3 = VideoModel(videoTitle: "Listen - Flip C",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.3_THUMB.png?alt=media&token=585a838e-9f19-4cd9-a0c1-46a7e13b40e6",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.3_FLIP_C_LISTEN.mp4?alt=media&token=5637d129-ff5e-41a9-af6b-d6818ff21422",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video18_4 = VideoModel(videoTitle: "Mimic - Flip C",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.4_THUMB.png?alt=media&token=27c03ac5-66bd-4351-8102-4b2adca223bf",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/18.4_FLIP_C_MIMIC.mp4?alt=media&token=e2d7c246-be7c-4cb3-ab69-f198048a5df2",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video19_0 = VideoModel(videoTitle: "KY Classroom - D",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.0_THUMB.png?alt=media&token=5a7d59c1-4e42-4fe2-bd4b-7b6edc908e3f",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.0_CLASSROOM_CONSONANTS_D.mp4?alt=media&token=03fdcd4b-7942-453e-ab6f-bf323e15833f",
+                                duration: "0 minutes, 23 seconds")
+        
+        let video19_1 = VideoModel(videoTitle: "Listen - True D",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.1_THUMB.png?alt=media&token=69d13629-a99d-4f5d-85c4-53832ab78ff6",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.1_TRUE_D_LISTEN.mp4?alt=media&token=73381e62-1bc9-4d0b-b498-79971233676b",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video19_2 = VideoModel(videoTitle: "Mimic - True D",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.2_THUMB.png?alt=media&token=eebae020-033e-4769-a111-01fe8e5b0e12",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.2_TRUE_D_MIMIC.mp4?alt=media&token=1d15b1d7-6c00-4e1a-a14d-b77d01e9085a",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video19_3 = VideoModel(videoTitle: "Listen - Flip D",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.3_THUMB.png?alt=media&token=79a6e46c-db15-4bb8-8ce5-b3176b9ec4d7",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.3_FLIP_D_LISTEN.mp4?alt=media&token=167b4558-2873-4884-9ed7-4ae833c8f648",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video19_4 = VideoModel(videoTitle: "Mimic - Flip D",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.4_THUMB.png?alt=media&token=9ce21831-b8d7-4713-a9d8-522b48e361da",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/19.4_FLIP_D_MIMIC.mp4?alt=media&token=06e1f167-9dd7-4346-9907-d85e5d4a1087",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video20_0 = VideoModel(videoTitle: "KY Classroom - F",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.0_THUMB.png?alt=media&token=e309c446-b550-4084-afed-60622fdb8ef4",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.0_CLASSROOM_CONSONANTS_F.mp4?alt=media&token=94420078-c571-42ac-a94f-70fa8e494cb9",
+                                duration: "0 minutes, 57 seconds")
+        
+        let video20_1 = VideoModel(videoTitle: "Listen - True F",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.1_THUMB.png?alt=media&token=794c0a66-e430-4871-abbb-e6478e6cb875",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.1_TRUE_F_LISTEN.mp4?alt=media&token=d456bf7f-ab1a-40f5-8446-96228962b794",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video20_2 = VideoModel(videoTitle: "Mimic - True F",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.2_THUMB.png?alt=media&token=144e09f6-c21d-48de-92d4-409f7ed19df3",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.2_TRUE_F_MIMIC.mp4?alt=media&token=b48ad785-4961-4220-a2a4-39409a508475",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video20_3 = VideoModel(videoTitle: "Listen - Flip F",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.3_THUMB.png?alt=media&token=8f5b3bae-2743-43cd-ade5-78c4f67ea29b",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.3_FLIP_F_LISTEN.mp4?alt=media&token=dc767408-f664-48c0-ae01-25be0e1b6bfb",
+                                duration: "0 minutes, 34 seconds")
+        
+        let video20_4 = VideoModel(videoTitle: "Mimic - Flip F",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.4_THUMB.png?alt=media&token=738cbf2d-1e26-4935-9c5f-0171585c79e4",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/20.4_FLIP_F_MIMIC.mp4?alt=media&token=ea60fd30-19b3-4481-a77a-d7ccf5b2dad7",
+                                duration: "0 minutes, 33 seconds")
+        
+        let video21_0 = VideoModel(videoTitle: "KY Classroom - G",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/21.0_THUMB.png?alt=media&token=011be652-017c-48b1-ba17-5033ede27ca7",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/21.0_CLASSROOM_CONSONANTS_G.mp4?alt=media&token=1a78294b-a4d0-4903-9bd3-53c55c5097c1",
+                                duration: "0 minutes, 11 seconds")
+        
+        let video21_1 = VideoModel(videoTitle: "Listen - True G",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/21.1_THUMB.png?alt=media&token=c0e6f40b-7226-4bb8-bc6d-993d23fbc929",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/21.1_TRUE_G_LISTEN.mp4?alt=media&token=17ca4336-fbf5-43df-b7f0-544d9edb07b7",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video21_2 = VideoModel(videoTitle: "Mimic - True G",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/21.2_THUMB.png?alt=media&token=a9f1a8d2-b5dd-47eb-9f80-f0476852d461",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/21.2_TRUE_G_MIMIC.mp4?alt=media&token=c71e73d2-50f4-43bf-8d8e-bfc045d8bd1b",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video22_0 = VideoModel(videoTitle: "KY Classroom - H",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/22.0_THUMB.png?alt=media&token=187ef582-eb3f-41ca-b3be-91d1e3cd831b",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/22.0_CLASSROOM_CONSONANTS_H.mp4?alt=media&token=5a1f9777-7c0d-4936-ba04-188cf3ddbf8a",
+                                duration: "0 minutes, 15 seconds")
+        
+        let video22_1 = VideoModel(videoTitle: "Listen - True H",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/22.1_THUMB.png?alt=media&token=9a555c72-b718-44bc-95ac-0a2d7fcf1a1f",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/22.1_TRUE_H_LISTEN.mp4?alt=media&token=802d4097-8673-4fa8-9baa-cf6ca57bde69",
+                                duration: "0 minutes, 42 seconds")
+        
+        
+        let video22_2 = VideoModel(videoTitle: "Mimic - True H",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/22.2_THUMB.png?alt=media&token=a1c15ddc-84bd-4480-97a9-648218d90186",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/22.2_TRUE_H_MIMIC.mp4?alt=media&token=ab7d3c11-964e-4897-8b87-eb4d0ee91221",
+                                duration: "0 minutes, 41 seconds")
+        
+        let video23_0 = VideoModel(videoTitle: "KY Classroom - K",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/23.0_THUMB.png?alt=media&token=d2041e46-adfa-4629-b696-b008467cbe93",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/23.0_CLASSROOM_CONSONANTS_K.mp4?alt=media&token=c4e20afb-d783-4c17-a4bb-fa4a9359dda8",
+                                duration: "0 minutes, 12 seconds")
+        
+        let video23_1 = VideoModel(videoTitle: "Listen - True K",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/23.1_THUMB.png?alt=media&token=ea6b681c-97ef-4065-aa43-f8e3fb77aade",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/23.1_TRUE_K_LISTEN.mp4?alt=media&token=d32cfb6c-948d-4926-a638-02d15bd725e2",
+                                duration: "0 minutes, 49 seconds")
+        
+        let video23_2 = VideoModel(videoTitle: "Mimic - True K",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/23.2_THUMB.png?alt=media&token=f046cc9b-ae71-40a3-964a-67aecfd688d3",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/23.2_TRUE_K_MIMIC.mp4?alt=media&token=8ea65fc3-8d94-4fac-80e9-c8e1c7b76728",
+                                duration: "0 minutes, 48 seconds")
+        
+        let video24_0 = VideoModel(videoTitle: "KY Classroom - L",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.0_THUMB.png?alt=media&token=1d3cbf5e-ef1c-4fbb-a82d-8675ab8fd7d8",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.0_CLASSROOM_CONSONANTS_L.mp4?alt=media&token=e0ae54ba-5a00-4cf0-8d7f-9cdf7716e50d",
+                                duration: "1 minute, 24 seconds")
+        
+        let video24_1 = VideoModel(videoTitle: "Listen - True L",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.1_THUMB.png?alt=media&token=37533f60-4cb7-4a1c-8b1f-b6e2f2ee12b6",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.1_TRUE_L_LISTEN.mp4?alt=media&token=902fe1a6-bd25-4cf5-877d-bd79c3718deb",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video24_2 = VideoModel(videoTitle: "Mimic - True L",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.2_THUMB.png?alt=media&token=d67bad41-a9ac-46e2-8fd5-2e350ae3a4a0",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.2_TRUE_L_MIMIC.mp4?alt=media&token=471e0e69-c463-44a7-938a-1457d2c8626c",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video24_3 = VideoModel(videoTitle: "Listen - Flip L",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.3_THUMB.png?alt=media&token=6aa72086-5140-4620-ad44-89e5ecbcf1cb",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.3_FLIP_L_LISTEN.mp4?alt=media&token=82aca982-f24b-40b1-ac7f-fc5d16e2b9f8",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video24_4 = VideoModel(videoTitle: "Mimic - Flip L",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.4_THUMB.png?alt=media&token=af5dafb2-c8e5-4b19-8841-80485488a1d7",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/24.4_FLIP_L_MIMIC.mp4?alt=media&token=f4009e76-dcb2-4693-b49c-0ca2b0ffb372",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video25_0 = VideoModel(videoTitle: "KY Classroom - M",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/25.0_THUMB.png?alt=media&token=0e3c16f1-339e-415b-9366-fb13c89f7368",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/25.0_CLASSROOM_CONSONANTS_M.mp4?alt=media&token=537e705f-a443-469f-941f-87d2ddd10065",
+                                duration: "0 minutes, 7 seconds")
+        
+        let video25_1 = VideoModel(videoTitle: "Listen - True M",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/25.1_THUMB.png?alt=media&token=0ba8d020-f48c-40b6-8a72-0ab4ab0e0244",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/25.1_TRUE_M_LISTEN.mp4?alt=media&token=0a418343-ee8b-479e-8a13-84f8f6883e94",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video25_2 = VideoModel(videoTitle: "Mimic - True M",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/25.2_THUMB.png?alt=media&token=3c0a9a36-1089-4cea-b8c0-e73f4ffa9c4e",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/25.2_TRUE_M_MIMIC.mp4?alt=media&token=cee2af04-b3a7-473e-ab60-3af8b61cf0a5",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video26_0 = VideoModel(videoTitle: "KY Classroom - N",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.0_THUMB.png?alt=media&token=a8e021b1-33f0-4ee2-857b-400fd09fa5de",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.0_CLASSROOM_CONSONANTS_N.mp4?alt=media&token=45df793f-1519-40f5-b73c-52b70f0f7d52",
+                                duration: "0 minutes, 44 seconds")
+        
+        let video26_1 = VideoModel(videoTitle: "Listen - True N",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.1_THUMB.png?alt=media&token=e4e138ab-6ff6-4bdb-9217-3b670f8f2af3",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.1_TRUE_N_LISTEN.mp4?alt=media&token=72edbbbb-9936-45b1-be24-6b5fbe0469a7",
+                                duration: "0 minutes, 46 seconds")
+        
+        
+        let video26_2 = VideoModel(videoTitle: "Mimic - True N",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.2_THUMB.png?alt=media&token=12518c58-758b-4ad3-ad8b-32c90c23cd45",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.2_TRUE_N_MIMIC.mp4?alt=media&token=a9747de7-a3a9-4a04-8e05-9ad4e44c3194",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video26_3 = VideoModel(videoTitle: "Listen - Flip N",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.3_THUMB.png?alt=media&token=3f4bfb22-05f3-4cee-a220-cf16717a85c9",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.3_FLIP_N_LISTEN.mp4?alt=media&token=d07b5fc6-1cac-4406-b884-b08874d8f70e",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video26_4 = VideoModel(videoTitle: "Mimic - Flip N",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.4_THUMB.png?alt=media&token=8916d6d5-d574-4a6c-b074-9f9b3bff36cf",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/26.4_FLIP_N_MIMIC.mp4?alt=media&token=2b75de06-4959-4dfd-9dad-d6bdc328c22a",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video27_0 = VideoModel(videoTitle: "KY Classroom - P",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/27.0_THUMB.png?alt=media&token=4a4667a8-fd40-4b57-b1f1-121c595a3ab5",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/27.0_CLASSROOM_CONSONANTS_P.mp4?alt=media&token=4dcece48-f9ea-4f53-934c-3e06dff5888b",
+                                duration: "0 minutes, 27 seconds")
+        
+        let video27_1 = VideoModel(videoTitle: "Listen - True P",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/27.1_THUMB.png?alt=media&token=695f5d96-b620-46ad-a2e4-fe15aa279d61",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/27.1_TRUE_P_LISTEN.mp4?alt=media&token=6b38bb4a-bc8d-4043-80a7-a29a8500f881",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video27_2 = VideoModel(videoTitle: "Mimic - True P",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/27.2_THUMB.png?alt=media&token=4ee4a912-b516-4909-8539-4978377641d0",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/27.2_TRUE_P_MIMIC.mp4?alt=media&token=8ed69f4d-1be9-4186-951f-56506485de3b",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video28_0 = VideoModel(videoTitle: "KY Classroom - QU",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/28.0_THUMB.png?alt=media&token=f871d878-7d65-41e3-b988-9b2afd15195c",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/28.0_CLASSROOM_CONSONANTS_Qu.mp4?alt=media&token=2c516122-d7bc-4fa8-b4d3-ba27b77e3d3a",
+                                duration: "0 minutes, 29 seconds")
+        
+        let video28_1 = VideoModel(videoTitle: "Listen - QU",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/28.1_THUMB.png?alt=media&token=f213135f-9fff-4a72-9833-550224ce9453",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/28.1_TRUE_QU_LISTEN.mp4?alt=media&token=2e4ecc4a-c092-4a47-afa1-37b0396e7d9c",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video28_2 = VideoModel(videoTitle: "Mimic - QU",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/28.2_THUMB.png?alt=media&token=ff8d8917-effc-422d-9494-ea2d49c94c04",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/28.2_TRUE_QU_MIMIC.mp4?alt=media&token=fa95e6df-a7ce-4bbb-bf16-a3b6e59f149b",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video29_0 = VideoModel(videoTitle: "KY Classroom - R",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.0_THUMB.png?alt=media&token=c499c4f3-b3ac-4990-8013-a5e7663c4831",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.0_CLASSROOM_CONSONANTS_R.mp4?alt=media&token=be9534b5-60fc-4ca2-acb7-5d732e3dc119",
+                                duration: "0 minutes, 56 seconds")
+        
+        let video29_1 = VideoModel(videoTitle: "Listen - True R",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.1_THUMB.png?alt=media&token=731f1cc6-9e75-4cd3-a5b7-03a112881eef",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.1_TRUE_R_LISTEN.mp4?alt=media&token=dd976385-ffc2-4822-84e7-5b3e5b09aa71",
+                                duration: "0 minutes, 40 seconds")
+        
+        let video29_2 = VideoModel(videoTitle: "Mimic - True R",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.2_THUMB.png?alt=media&token=b97d4946-b593-4953-b81d-63203903fe84",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.2_TRUE_R_MIMIC.mp4?alt=media&token=b9552298-3400-48aa-b037-7b11eca4c4b0",
+                                duration: "0 minutes, 39 seconds")
+        
+        let video29_3 = VideoModel(videoTitle: "Listen - Flip R",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.3_THUMB.png?alt=media&token=f4075ff9-b51d-4e4b-9e1e-9ad602fbaab6",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.3_FLIP_R_LISTEN.mp4?alt=media&token=a98ff012-cf4d-4eb0-a81e-3d3087024547",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video29_4 = VideoModel(videoTitle: "Mimic - Flip R",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.4_THUMB.png?alt=media&token=a287aed9-d90c-486b-8182-88153a96a39d",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/29.4_FLIP_R_MIMIC.mp4?alt=media&token=82c197cd-60fd-4fe4-a81d-3e2e0c26479b",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video30_0 = VideoModel(videoTitle: "KY Classroom - S",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.0_THUMB.png?alt=media&token=1a1eaffc-60e0-45cd-88ab-d0f01d34e04e",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.0_CLASSROOM_CONSONANTS_S.mp4?alt=media&token=2de61bd0-6be8-43fb-a43c-fa096190322b",
+                                duration: "0 minutes, 30 seconds")
+        
+        let video30_1 = VideoModel(videoTitle: "Listen - True S",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.1_THUMB.png?alt=media&token=a983e951-8e9e-4f0d-b9b6-cefd60edc9e7",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.1_TRUE_S_LISTEN.mp4?alt=media&token=6b3357a2-9153-47e3-bc93-72a171bc0830",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video30_2 = VideoModel(videoTitle: "Mimic - True S",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.2_THUMB.png?alt=media&token=a65e87e7-6172-48aa-9aa6-cc616d94f622",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.2_TRUE_S_MIMIC.mp4?alt=media&token=ccb73f7c-b00a-41f4-ac89-f9d5e140650b",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video30_3 = VideoModel(videoTitle: "Listen - Flip S",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.3_THUMB.png?alt=media&token=d8faa21f-359a-4b99-b56b-5d0a2c098a98",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.3_FLIP_S_LISTEN.mp4?alt=media&token=dba6085d-9486-4ccc-af4d-ad847a0fab5d",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video30_4 = VideoModel(videoTitle: "Mimic - Flip S",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.4_THUMB.png?alt=media&token=e5e1427e-1cf5-413e-9235-c8607b5eeed7",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/30.4_FLIP_S_MIMIC.mp4?alt=media&token=1e8c40ad-91f3-471a-b046-c221fcf7af2c",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video31_0 = VideoModel(videoTitle: "KY Classroom - T",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.0_THUMB.png?alt=media&token=c56f48fc-87b5-4cf0-a8bf-ede743193f3b",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.0_CLASSROOM_CONSONANTS_T.mp4?alt=media&token=a0dd4175-145a-4e22-8795-096f2e509b45",
+                                duration: "0 minutes, 25 seconds")
+        
+        let video31_1 = VideoModel(videoTitle: "Listen - True T",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.1_THUMB.png?alt=media&token=7980fc9c-58f3-4657-a1a4-68e2dffd6389",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.1_TRUE_T_LISTEN.mp4?alt=media&token=6a57104b-160d-4f2a-ace4-9161f563397e",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video31_2 = VideoModel(videoTitle: "Mimic - True T",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.2_THUMB.png?alt=media&token=b503a3a2-43ac-4397-ad57-ad79636811ce",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.2_TRUE_T_MIMIC.mp4?alt=media&token=3c4a1e60-563f-4d4a-8921-7684128691b1",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video31_3 = VideoModel(videoTitle: "Listen - Flip T",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.3_THUMB.png?alt=media&token=1c725a1f-aa26-410e-ab85-e0c9ea258761",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.3_FLIP_T_LISTEN.mp4?alt=media&token=fbe9c68b-21c2-42ad-82d8-9e9df0e76c91",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video31_4 = VideoModel(videoTitle: "Mimic - Flip T",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.4_THUMB.png?alt=media&token=94783cfe-0d43-4a06-8c64-90b79ff8650c",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/31.4_FLIP_T_MIMIC.mp4?alt=media&token=a4b5de6d-e513-4c51-af61-4d2687ed2539",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video32_0 = VideoModel(videoTitle: "KY Classroom - TH",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.0_THUMB.png?alt=media&token=72408a84-7a7f-462c-a68f-4d335a68cbcd",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.0_CLASSROOM_CONSONANTS_Th.mp4?alt=media&token=df2bbd38-80cb-443c-9622-38a219e26f3a",
+                                duration: "1 minute, 1 second")
+        
+        let video32_1 = VideoModel(videoTitle: "Listen - True TH",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.1_THUMB.png?alt=media&token=4713ab10-611e-4298-8de8-2f2f66264da7",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.1_TRUE_TH_LISTEN.mp4?alt=media&token=a4cf06b9-6bf8-4a32-8ba9-eee84053d36c",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video32_2 = VideoModel(videoTitle: "Mimic - True TH",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.2_THUMB.png?alt=media&token=940812c1-2d0a-444a-800c-fbb3c6fb6687",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.2_TRUE_TH_MIMIC.mp4?alt=media&token=ab072541-ffe2-45df-a7f8-dcb0455b3875",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video32_3 = VideoModel(videoTitle: "Listen - Flip TH",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.3_THUMB.png?alt=media&token=df81a50e-3e59-4231-b655-2eb06bad887c",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.3_FLIP_TH_LISTEN.mp4?alt=media&token=fc79233f-0570-425f-9064-ff5efe71a79d",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video32_4 = VideoModel(videoTitle: "Mimic - Flip TH",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.4_THUMB.png?alt=media&token=b16a8ef6-0ad7-4677-a584-279d34a415c7",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/32.4_FLIP_TH_MIMIC.mp4?alt=media&token=4ed95d8f-f23a-4bb6-a3b4-831af7edb912",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video33_0 = VideoModel(videoTitle: "KY Classroom - V",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/33.0_THUMB.png?alt=media&token=678c8bfd-7827-4eaf-9688-0ac3608ddf5c",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/33.0_CLASSROOM_CONSONANTS_V.mp4?alt=media&token=b42c77c2-b1d0-44a1-8acb-b1a3abfb942a",
+                                duration: "0 minutes, 33 seconds")
+        
+        let video33_1 = VideoModel(videoTitle: "Listen - True V",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/33.1_THUMB.png?alt=media&token=b29c202c-0762-467f-bf8a-baa42547a4ab",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/33.1_TRUE_V_LISTEN.mp4?alt=media&token=3163a346-8c87-4507-a477-73f2a5ecf881",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video33_2 = VideoModel(videoTitle: "Mimic - True V",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/33.2_THUMB.png?alt=media&token=1fbffc7d-55dd-48db-85b6-585bc1ca8ba4",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/33.2_TRUE_V_MIMIC.mp4?alt=media&token=09ece034-44ca-42c0-a3a1-a5f5742f06aa",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video34_0 = VideoModel(videoTitle: "KY Classroom - W",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/34.0_THUMB.png?alt=media&token=ea371f3e-91ab-4c97-9531-0e8cff6ead30",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/34.0_CLASSROOM_CONSONANTS_W.mp4?alt=media&token=905d8b58-a61b-45bb-a784-ebac013eab8b",
+                                duration: "0 minutes, 41 seconds")
+        
+        let video34_1 = VideoModel(videoTitle: "Listen - True W",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/34.1_THUMB.png?alt=media&token=c20fbdd4-7219-4757-bdea-dbf92de84613",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/34.1_TRUE_W_LISTEN.mp4?alt=media&token=21446aec-d758-40f1-8890-1d8ec8dba09b",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video34_2 = VideoModel(videoTitle: "Mimic - True W",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/34.2_THUMB.png?alt=media&token=dc74d9c5-6937-4967-8f2c-c91856f8f7f2",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/34.2_TRUE_W_MIMIC.mp4?alt=media&token=7ed423a6-a4bf-4c02-b107-d1b7c7933678",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video35_0 = VideoModel(videoTitle: "KY Classroom - X",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.0_THUMB.png?alt=media&token=d9314278-6414-4d1f-816e-1e9ed8b55a74",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.0_CLASSROOM_CONSONANTS_X.mp4?alt=media&token=a4bf2b13-4759-4722-a3a0-6f362fdc3223",
+                                duration: "0 minutes, 34 seconds")
+        
+        let video35_1 = VideoModel(videoTitle: "Listen - True X",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.1_THUMB.png?alt=media&token=3d212034-d111-4b28-a634-b32793606218",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.1_TRUE_X_LISTEN.mp4?alt=media&token=a241e7b4-9472-4c6f-bb66-e0101fb66792",
+                                duration: "0 minutes, 40 seconds")
+        
+        let video35_2 = VideoModel(videoTitle: "Mimic - True X",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.2_THUMB.png?alt=media&token=c380a577-55dc-45ea-9777-fabf60f06d34",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.2_TRUE_X_MIMIC.mp4?alt=media&token=28ffea5a-9209-46e4-8659-5ec1417be69f",
+                                duration: "0 minutes, 39 seconds")
+        
+        let video35_3 = VideoModel(videoTitle: "Listen - Flip X",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.3_THUMB.png?alt=media&token=159acc22-3cf9-46a7-a0ff-cc468f799ed8",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.3_FLIP_X_LISTEN.mp4?alt=media&token=4ca3ce74-b64a-4045-9825-bccf774706b7",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video35_4 = VideoModel(videoTitle: "Mimic - Flip X",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.4_THUMB.png?alt=media&token=0667634a-9471-4539-a332-b53b94b10ab2",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/35.4_FLIP_X_MIMIC.mp4?alt=media&token=e9d0dbb8-0d02-4217-a3d3-38d16af05e04",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video36_0 = VideoModel(videoTitle: "KY Classroom - Z",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.0_THUMB.png?alt=media&token=0a5ef699-92b2-447b-ba49-cdfe8422329f",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.0_CLASSROOM_CONSONANTS_Z.mp4?alt=media&token=676ebb5a-8e8a-4768-9a6a-8bfc36ee6c97",
+                                duration: "0 minutes, 22 seconds")
+        
+        let video36_1 = VideoModel(videoTitle: "Listen - True Z",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.1_THUMB.png?alt=media&token=1e21c1d4-3315-4898-b241-6f3c68b63676",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.1_TRUE_Z_LISTEN.mp4?alt=media&token=dcebd5a4-f116-4508-9192-d786ae5f3d07",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video36_2 = VideoModel(videoTitle: "Mimic - True Z",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.2_THUMB.png?alt=media&token=9ec8bb55-3294-4ff7-b9df-b4336f9b8a1e",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.2_TRUE_Z_MIMIC.mp4?alt=media&token=dcbb4a18-14ef-4267-a421-ac13e223e907",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video36_3 = VideoModel(videoTitle: "Listen - Flip Z",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.3_THUMB.png?alt=media&token=7e96c8b3-3566-46e6-b860-8fcf4c0abf82",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.3_FLIP_Z_LISTEN.mp4?alt=media&token=6e6442c8-40c3-469d-9c96-5aed0bd9aca3",
+                                duration: "0 minutes, 46 seconds")
+        
+        let video36_4 = VideoModel(videoTitle: "Mimic - Flip Z",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.4_THUMB.png?alt=media&token=3834264e-2ca0-4ee4-b835-6c6061e6402f",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/36.4_FLIP_Z_MIMIC.mp4?alt=media&token=f8c394e0-813d-4126-ae82-c56449111c70",
+                                duration: "0 minutes, 45 seconds")
+        
+        let video37_0 = VideoModel(videoTitle: "Consonants Intro - Fluid",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/37.0_THUMB.png?alt=media&token=7bca321f-2789-4572-9e81-b35412bc4373",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/37.0_CLASSROOM_FLUID_INTRO.mp4?alt=media&token=6750c375-d2f7-47f5-97be-7d8a54557e4a",
+                                duration: "0 minutes, 41 seconds")
+        
+        let video38_0 = VideoModel(videoTitle: "KY Classroom - MISSION",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/38.0_THUMB.png?alt=media&token=c650c364-4a0b-4abf-ac35-9f479c31fe5c",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/38.0_CLASSROOM_FLUID_MISSION.mp4?alt=media&token=f17c3664-cdb0-43b3-afd3-bfb6b5d7e0bd",
+                                duration: "0 minutes, 15 seconds")
+        
+        let video38_1 = VideoModel(videoTitle: "Listen - MISSION",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/38.1_THUMB.png?alt=media&token=7eabd067-9b1d-4fab-ba85-1a654197e477",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/38.1_FLUID_MISSION_LISTEN.mp4?alt=media&token=e4d35e28-079b-45a3-b281-d3dd310bf30c",
+                                duration: "1 minute, 33 seconds")
+        
+        let video38_2 = VideoModel(videoTitle: "Mimic - MISSION",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/38.2_THUMB.png?alt=media&token=f1253854-8eda-449d-9111-472fc49de692",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/38.2_FLUID_MISSION_MIMIC.mp4?alt=media&token=7bc78806-0cb9-4240-aea2-d7225a6ff134",
+                                duration: "1 minute, 32 seconds")
+        
+        let video39_0 = VideoModel(videoTitle: "KY Classroom - VISION",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/39.0_THUMB.png?alt=media&token=ad52669e-e12f-49c4-949d-e2ce1a882a2c",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/39.0_CLASSROOM_FLUID_VISION.mp4?alt=media&token=b249f64a-14ab-4eb4-bad6-8805680fb280",
+                                duration: "0 minutes, 38 seconds")
+        
+        let video39_1 = VideoModel(videoTitle: "Listen - VISION",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/39.1_THUMB.png?alt=media&token=cb4e1ecc-61cc-48c7-9bf8-0b5576727ce7",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/39.1_FLUID_VISION_LISTEN.mp4?alt=media&token=d1e7bc3f-979f-468c-9410-10e2af27bb84",
+                                duration: "1 minute, 15 seconds")
+        
+        let video39_2 = VideoModel(videoTitle: "Mimic - VISION",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/39.2_THUMB.png?alt=media&token=355fa91d-0ed8-4c0d-955f-1bd96408f625",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/39.2_FLUID_VISION_MIMIC.mp4?alt=media&token=143dbec9-6dc2-4261-a0ab-0676cd968521",
+                                duration: "1 minute, 14 seconds")
+        
+        let video40_0 = VideoModel(videoTitle: "KY Classroom - CHOKE",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/40.0_THUMB.png?alt=media&token=c8fe0a76-8966-4d59-9816-3f36502c058b",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/40.0_CLASSROOM_FLUID_CHOKE.mp4?alt=media&token=a9980e97-2522-4ed0-b15f-8713936a5d7b",
+                                duration: "0 minutes, 14 seconds")
+        
+        let video40_1 = VideoModel(videoTitle: "Listen - CHOKE",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/40.1_THUMB.png?alt=media&token=9094e4db-0198-4f70-8fc5-81d5f2a1ba64",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/40.1_FLUID_CHOKE_LISTEN.mp4?alt=media&token=330754ea-b571-420b-bb1f-80fa9872e6de",
+                                duration: "1 minute, 27 seconds")
+        
+        let video40_2 = VideoModel(videoTitle: "Mimic - CHOKE",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/40.2_THUMB.png?alt=media&token=7725b2b2-fe80-46f8-a0b3-46ae5495d837",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/40.2_FLUID_CHOKE_MIMIC.mp4?alt=media&token=488fb3b3-8fe6-4f38-bab1-bd159ea0425a",
+                                duration: "1 minute, 26 seconds")
+        
+        let video41_0 = VideoModel(videoTitle: "KY Classroom - JOKE",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/41.0_THUMB.png?alt=media&token=424e2603-389f-49f8-9469-2ce3dbb2c229",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/41.0_CLASSROOM_FLUID_JOKE.mp4?alt=media&token=5177caf1-9a75-4798-ac97-2f4b1a9f8c19",
+                                duration: "0 minutes, 20 seconds")
+        
+        let video41_1 = VideoModel(videoTitle: "Listen - JOKE",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/41.1_THUMB.png?alt=media&token=8c2d1591-569f-4c56-98be-008ac4d1d776",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/41.1_FLUID_JOKE_LISTEN.mp4?alt=media&token=9574dcf9-b730-4e8f-815a-3ed4e83f5be8",
+                                duration: "1 minute, 33 seconds")
+        
+        let video41_2 = VideoModel(videoTitle: "Mimic - JOKE",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/41.2_THUMB.png?alt=media&token=d053d12d-93ab-48ba-9a11-f12973748589",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/41.2_FLUID_JOKE_MIMIC.mp4?alt=media&token=8b652453-ee6f-47d3-967e-4b6e66e9f869",
+                                duration: "1 minute, 32 seconds")
+        
+        let video42_0 = VideoModel(videoTitle: "KY Classroom - YOU",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/42.0_THUMB.png?alt=media&token=225e1bc2-1a4f-4cf1-ba9b-d851f353e52d",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/42.0_CLASSROOM_FLUID_YOKE.mp4?alt=media&token=34b04069-7a18-407b-8820-03dfd6877f2b",
+                                duration: "0 minutes, 40 seconds")
+        
+        let video42_1 = VideoModel(videoTitle: "Listen - YOU",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/42.1_THUMB.png?alt=media&token=d3f4909f-59e7-431f-bada-54b2c57984bf",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/42.1_FLUID_YOKE_LISTEN.mp4?alt=media&token=65be0744-6e07-4b93-958e-d8518ac85674",
+                                duration: "1 minute, 39 seconds")
+        
+        let video42_2 = VideoModel(videoTitle: "Mimic - YOU",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/42.2_THUMB.png?alt=media&token=5ea1e033-6f16-434e-8557-7c9b27e01815",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/42.2_FLUID_YOKE_MIMIC.mp4?alt=media&token=a06463ce-882e-4ad9-9282-88104c4feed2",
+                                duration: "1 minute, 38 seconds")
+        
+        let video43_0 = VideoModel(videoTitle: "KY Classroom - Silents",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/43.0_THUMB.png?alt=media&token=3ea677a0-a44f-4c8e-a876-1d63fd8aca68",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/43.0_CLASSROOM_SILENT.mp4?alt=media&token=8a6924bf-5251-4e31-9665-45ccbe3736d0",
+                                duration: "0 minutes, 32 seconds")
+        
+        let video43_1 = VideoModel(videoTitle: "Listen - Silents",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/43.1_THUMB.png?alt=media&token=73b33c0f-6f39-4a7b-b902-3a05ef347cff",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/43.1_SILENT_LISTEN.mp4?alt=media&token=775bc249-5afa-405b-b779-e7868d730a45",
+                                duration: "0 minutes, 41 seconds")
+        
+        let video43_2 = VideoModel(videoTitle: "Mimic - Silents",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/43.2_THUMB.png?alt=media&token=645cb746-8c1d-4e28-ae8b-bae20c653eec",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/43.2_SILENT_MIMIC.mp4?alt=media&token=1ff7b955-5834-411b-a879-f896ea7c1b8b",
+                                duration: "0 minutes, 40 seconds")
+        
+        let video44_0 = VideoModel(videoTitle: "KY Classroom - Wildcards",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/44.0_THUMB.png?alt=media&token=4955f46d-9205-4035-a88f-fc5f2f0b63bf",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/44.0_CLASSROOM_WILDCARDS.mp4?alt=media&token=f2ce4cce-ddad-4b2a-be9d-801e54b62140",
+                                duration: "1 minutes, 21 seconds")
+        
+        let video45_0 = VideoModel(videoTitle: "KY Classroom - AN & AM",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/45.0_THUMB.png?alt=media&token=e6e51147-8b7f-4e44-b517-f8157602a056",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/45.0_BONUS_AN_AM.mp4?alt=media&token=802da2c7-a34c-41c7-9881-d2c3a901c29e",
+                                duration: "1 minute, 32 seconds")
+        
+        let video45_1 = VideoModel(videoTitle: "KY Classroom - L & R",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/45.1_THUMB.png?alt=media&token=9dc73308-aa68-48b8-8fe4-19aec350797c",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/45.1_BONUS_L%26R.mp4?alt=media&token=422e3fdc-3fea-469d-9a0e-f0233d52d3de",
+                                duration: "1 minute, 13 seconds")
+        
+        let video45_2 = VideoModel(videoTitle: "KY Classroom - R Colored Vowels",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/45.2_THUMB.png?alt=media&token=1f727191-11da-4ffb-a3a5-9039d88bb182",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/45.2_BONUS_R_COLORED_VOWELS.mp4?alt=media&token=8a7388d3-d606-461f-a1e0-a304fee63467",
+                                duration: "2 minutes, 0 seconds")
+        
+        let video46_0 = VideoModel(videoTitle: "Summary",
+                                videoThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/46.0_THUMB.png?alt=media&token=5bdd388e-4762-4d3f-8ec8-465cf899d20b",
+                                videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/46.0_OUTRO.mp4?alt=media&token=f438cb4b-2a7d-4e5d-9a9f-536d33038ffc",
+                                duration: "0 minutes, 56 seconds")
+        
+        let videos = [video1_0, video1_1, video1_2, video1_3, video1_4, video2_0, video3_0, video3_1, video3_2,
+                      video4_0, video4_1, video4_2, video5_0, video5_1, video5_2, video6_0, video6_1, video6_2,
+                      video7_0, video7_1, video7_2, video8_0, video8_1, video8_2, video9_0, video9_1, video9_2,
+                      video10_0, video10_1, video10_2, video11_0, video11_1, video11_2, video12_0, video12_1,
+                      video12_2, video13_0, video13_1, video13_2, video14_0, video14_1, video14_2, video15_0,
+                      video15_1, video15_2, video16_0, video17_0, video17_1, video17_2, video18_0, video18_1,
+                      video18_2, video18_3, video18_4, video19_0, video19_1, video19_2, video19_3, video19_4,
+                      video20_0, video20_1, video20_2, video20_3, video20_4, video21_0, video21_1, video21_2,
+                      video22_0, video22_1, video22_2, video23_0, video23_1, video23_2, video24_0, video24_1,
+                      video24_2, video24_3, video24_4, video25_0, video25_1, video25_2, video26_0, video26_1,
+                      video26_2, video26_3, video26_4, video27_0, video27_1, video27_2, video28_0, video28_1,
+                      video28_2, video29_0, video29_1, video29_2, video29_3, video29_4, video30_0, video30_1,
+                      video30_2, video30_3, video30_4, video31_0, video31_1, video31_2, video31_3, video31_4,
+                      video32_0, video32_1, video32_2, video32_3, video32_4, video33_0, video33_1, video33_2,
+                      video34_0, video34_1, video34_2, video35_0, video35_1, video35_2, video35_3, video35_4,
+                      video36_0, video36_1, video36_2, video36_3, video36_4, video37_0, video38_0, video38_1,
+                      video38_2, video39_0, video39_1, video39_2, video40_0, video40_1, video40_2, video41_0,
+                      video41_1, video41_2, video42_0, video42_1, video42_2, video43_0, video43_1, video43_2,
+                      video44_0, video45_0, video45_1, video45_2, video46_0
+        ]
+        
+        let lesson1 = LessonModel(lessonTitle: "EHD  Master Course",
+                                  lessonThumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/MasterCourseThumbnail.png?alt=media&token=99ade6c0-597d-4d8b-bdca-2b17f4a97819",
+                                  videos: videos)
+        
+        FirebaseManager.shared.updateLesson(lesson: lesson1)
+    }
 }

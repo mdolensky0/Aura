@@ -149,23 +149,23 @@ class AdManager: NSObject {
         
         switch funnelProgress {
         case .hasNotSeenVideo1:
-            return "Where to Start"
+            return NSLocalizedString("Where to Start", comment: "Start of using this app by watching this video")
         case .seenPartOfVideo1:
-            return "Continue Watching"
+            return NSLocalizedString("Continue Watching", comment: "Finish watching this video that you already started")
         case .completedVideo1:
-            return "Next Step"
+            return NSLocalizedString("Next Step", comment: "What is the next step that I should perform to learn more about this app")
         case .seenPartOfVideo2:
-            return "Continue Watching"
+            return NSLocalizedString("Continue Watching", comment: "Finish watching this video that you already started")
         case .completedVideo2NoBuy where currentLessonIndex! <= 0:
-            return "Sample the EHD Master Course"
+            return NSLocalizedString("Sample the English HD Master Course", comment: "Try out watching a video from the course for free")
         case .completedVideo2NoBuy where currentLessonIndex! > 0:
-            return "Get the EHD Master Course Now!"
+            return NSLocalizedString("Get the English HD Master Course Now!", comment: "Purchase the course now")
         case .completedVideo2Bought:
-            return "Continue Learning"
+            return NSLocalizedString("Continue Learning", comment: "Continue watching videos where you left off in the course to keep learning")
         case .none:
-            return "Where to Start"
+            return NSLocalizedString("Where to Start", comment: "Start of using this app by watching this video")
         case .some(.completedVideo2NoBuy):
-            return "Sample the EHD Master Course"
+            return NSLocalizedString("Sample the English HD Master Course", comment: "Try out watching a video from the course for free")
         }
         
     }
@@ -174,10 +174,10 @@ class AdManager: NSObject {
         switch funnelProgress {
         case .none, .hasNotSeenVideo1, .seenPartOfVideo1:
             // Video 1
-            return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secrets_1_2.mp4?alt=media&token=7a1c0674-0023-4c0a-bee5-9416341ed787"
+            return NSLocalizedString("https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secrets_1_2.mp4?alt=media&token=7a1c0674-0023-4c0a-bee5-9416341ed787", comment: "Secrets Video 1 Link")
         case .completedVideo1, .seenPartOfVideo2:
             // Video 2
-           return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secrets_3.mp4?alt=media&token=d637f059-443e-47cb-a37a-c783c88654aa"
+           return NSLocalizedString("https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secrets_3.mp4?alt=media&token=d637f059-443e-47cb-a37a-c783c88654aa", comment: "Secrets Video 2 Link")
         case .completedVideo2NoBuy:
             return fetchVideoURLForLessonNum()
         case .completedVideo2Bought:
@@ -185,28 +185,41 @@ class AdManager: NSObject {
         }
     }
     
+    func getVideoNameCurrentUserState() -> PopUpVideoName {
+        switch funnelProgress {
+        case .none, .hasNotSeenVideo1, .seenPartOfVideo1:
+            return .secret1
+        case .completedVideo1, .seenPartOfVideo2:
+            return .secret2
+        case .completedVideo2NoBuy:
+            return .other
+        case .completedVideo2Bought:
+            return .other
+        }
+    }
+    
     func getSecretsVideoPopUpManagerForCurrentFunnelState() -> SecretsVideoPopUpManager {
         switch funnelProgress {
         case .hasNotSeenVideo1:
-            return SecretsVideoPopUpManager(title: "Welcome to Aura!",
-                                            info: "Get started with this tutorial video to learn all about this app",
+            return SecretsVideoPopUpManager(title: NSLocalizedString("Welcome to Aura!", comment: ""),
+                                            info: NSLocalizedString("Get started with this tutorial video. Learn how to use this app and discover the 3 Secrets of English HD", comment: ""),
                                             thumbnailURL: getFunnelThumbnailURLForCurrentUserState(),
-                                            buttonText: "Watch Tutorial")
+                                            buttonText: NSLocalizedString("Watch Tutorial", comment: "Click this button to watch the tutorial video"))
         case .seenPartOfVideo1:
-            return SecretsVideoPopUpManager(title: "Finish the tutorial!",
-                                            info: "We recommend finishing this video to help you better understand the features in this app and how to use them",
+            return SecretsVideoPopUpManager(title: NSLocalizedString("Finish the tutorial!", comment: "Finish watching the tutorial video"),
+                                            info: NSLocalizedString("We recommend finishing this video to help you better understand the features in this app and how to use them", comment: ""),
                                             thumbnailURL: getFunnelThumbnailURLForCurrentUserState(),
-                                            buttonText: "Finish Tutorial")
+                                            buttonText: NSLocalizedString("Finish Tutorial", comment: "Click this button to finish watching the tutorial video"))
         case .completedVideo1:
-            return SecretsVideoPopUpManager(title: "Discover Secret 3!",
-                                            info: "Learn about the free and amazing flashcard section where learning and practing is made easy.",
+            return SecretsVideoPopUpManager(title: NSLocalizedString("Discover Secret 3!", comment: "In the video below, learn about the 3rd secret to why you can easily learn english"),
+                                            info: NSLocalizedString("Learn how our flashcard feature will make learning English HD a breeze", comment: ""),
                                             thumbnailURL: getFunnelThumbnailURLForCurrentUserState(),
-                                            buttonText: "Watch Video")
+                                            buttonText: NSLocalizedString("Watch Video", comment: "Click this button to watch the video"))
         default:
-            return SecretsVideoPopUpManager(title: "Finish Learning about Flashcards",
-                                            info: "We recommend finishing this video to help you better understand the features in this app and how to use them",
+            return SecretsVideoPopUpManager(title: NSLocalizedString("Finish Learning about Flashcards", comment: "Finish watching the video below to learn about our flashcards section of the app"),
+                                            info: NSLocalizedString("We recommend finishing this video to help you better understand the features in this app and how to use them", comment: ""),
                                             thumbnailURL: getFunnelThumbnailURLForCurrentUserState(),
-                                            buttonText: "Finish Video")
+                                            buttonText: NSLocalizedString("Finish Video", comment: "Click here to finish watching this video"))
         }
     }
     
@@ -273,12 +286,12 @@ class AdManager: NSObject {
                 }
                 
             } else {
-                return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/IntroVideo.m4v?alt=media&token=ce50bace-989b-43e7-9551-7b5a9a0b8802"
+                return NSLocalizedString("https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.0_MAIN_INTRO.m4v?alt=media&token=8b59dada-7ea5-4eda-98a4-063dc1929731", comment: "EHD Course Intro Video")
             }
             
         } else {
             currentLessonIndex = 0
-            return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/IntroVideo.m4v?alt=media&token=ce50bace-989b-43e7-9551-7b5a9a0b8802"
+            return NSLocalizedString("https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.0_MAIN_INTRO.m4v?alt=media&token=8b59dada-7ea5-4eda-98a4-063dc1929731", comment: "EHD Course Intro Video")
         }
     }
     

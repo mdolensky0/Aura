@@ -15,7 +15,7 @@ class Page3: UIView {
     // MARK: - Subviews
     var questionHeader: UILabel = {
         let l = UILabel()
-        l.text = "What sound does \'a\' make?"
+        l.text = NSLocalizedString("What sound does \'a\' make?", comment: "What sound does the letter 'a' make")
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .left
@@ -28,8 +28,8 @@ class Page3: UIView {
         l.numberOfLines = 0
         l.textAlignment = .left
         
-        let text1 = NSMutableAttributedString(string: "Hint: ")
-        let text2 = NSMutableAttributedString(string: "Tap each \'a\' to hear a possible sound\nthat it can make in American English")
+        let text1 = NSMutableAttributedString(string: NSLocalizedString("Hint: ", comment: "Here is a hint to help you answer this question"))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("Tap each \'a\' to hear a possible sound\nthat it can make in American English", comment: "Tap the letters of all the a's on the screen to hear their different sounds"))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))

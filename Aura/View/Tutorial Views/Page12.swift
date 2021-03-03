@@ -14,14 +14,13 @@ class Page12: UIView {
     let titleLabel: UILabel = {
         let l = UILabel()
         
-        let attText = NSMutableAttributedString(string: "Congratulations!\nYou are now an expert")
+        let attText = NSMutableAttributedString(string: NSLocalizedString("Congratulations!\nYou now know the basics of this app", comment: "You learned everything you need to for using the app"))
         
         attText.addAttribute(.font, value: UIFont.systemFont(ofSize: 28, weight: .bold), range: .init(location: 0, length: attText.length))
         
         l.attributedText = attText
         l.textAlignment = .center
-        l.numberOfLines = 2
-        l.adjustsFontSizeToFitWidth = true
+        l.numberOfLines = 0
         
         return l
     }()
@@ -29,7 +28,7 @@ class Page12: UIView {
     let label1: UILabel = {
         
         let l = UILabel()
-        l.text = "Start your journey to English Mastery!"
+        l.text = NSLocalizedString("Start your journey to English HD Mastery!", comment: "")
         l.textAlignment = .center
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         return l
@@ -77,6 +76,7 @@ class Page12: UIView {
         v.translatesAutoresizingMaskIntoConstraints = false
         v.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         v.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        v.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor).isActive = true
     }
 
 }
