@@ -263,12 +263,12 @@ class HomeController: UIViewController {
         //getMatches(for: "ɪ", letterCombo: "oi")
         
         // FOR TESTING
-        AdManager.shared.funnelProgress = .hasNotSeenVideo1
+//        AdManager.shared.funnelProgress = .hasNotSeenVideo1
 //        AdManager.shared.currentLessonIndex = 0
 //        UserDefaults.standard.set(false, forKey: "hasLaunchedHome")
 //        UserDefaults.standard.setValue(5, forKey: "searchCount")
-        UserDefaults.standard.setValue(false, forKey: "hasEnteredDeckController")
-        UserDefaults.standard.set(false, forKey: "hasLaunchedFlashcards")
+//        UserDefaults.standard.setValue(false, forKey: "hasEnteredDeckController")
+//        UserDefaults.standard.set(false, forKey: "hasLaunchedFlashcards")
 //        UserDefaults.standard.set(false, forKey: "hasSeenDeckSelector")
 //        UserDefaults.standard.set(false, forKey: "hasClickedLock")
     }
