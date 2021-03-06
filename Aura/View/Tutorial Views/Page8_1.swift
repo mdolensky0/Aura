@@ -208,7 +208,7 @@ class Page8_1: UIView {
         l.textAlignment = .left
         
         let text1 = NSMutableAttributedString(string: NSLocalizedString("Flashcards: ", comment: "flashcards for studying"))
-        let text2 = NSMutableAttributedString(string: NSLocalizedString("Save this result as a flashcard to study later with the click of a button.", comment: ""))
+        let text2 = NSMutableAttributedString(string: NSLocalizedString("With the click of a button, you can easily save this result as a flashcard to study later.", comment: ""))
         
         text1.addAttribute(.foregroundColor, value: UIColor.black, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text2.length))
@@ -393,7 +393,7 @@ class Page8_1: UIView {
         
         reportErrorView.translatesAutoresizingMaskIntoConstraints = false
         reportErrorView.centerXAnchor.constraint(equalTo: playView.centerXAnchor).isActive = true
-        reportErrorView.topAnchor.constraint(equalTo: addFlashcardView.bottomAnchor, constant: 30).isActive = true
+        reportErrorView.topAnchor.constraint(equalTo: addFlashcardView.bottomAnchor, constant: 44).isActive = true
         
         editText.anchor(top: reportErrorView.topAnchor,
                         bottom: nil,
@@ -476,7 +476,7 @@ class Page8_1: UIView {
         
         reportErrorView.translatesAutoresizingMaskIntoConstraints = false
         reportErrorView.centerXAnchor.constraint(equalTo: playView.centerXAnchor).isActive = true
-        reportErrorView.topAnchor.constraint(equalTo: addFlashcardView.bottomAnchor, constant: 30).isActive = true
+        reportErrorView.topAnchor.constraint(equalTo: addFlashcardView.bottomAnchor, constant: 44).isActive = true
         
         editText.anchor(top: reportErrorView.topAnchor,
                         bottom: nil,
@@ -571,7 +571,7 @@ class Page8_1: UIView {
         
         reportErrorView.translatesAutoresizingMaskIntoConstraints = false
         reportErrorView.centerXAnchor.constraint(equalTo: playView.centerXAnchor).isActive = true
-        reportErrorView.topAnchor.constraint(equalTo: addFlashcardView.bottomAnchor, constant: 30).isActive = true
+        reportErrorView.topAnchor.constraint(equalTo: addFlashcardView.bottomAnchor, constant: 44).isActive = true
         
         editText.anchor(top: reportErrorView.topAnchor,
                         bottom: nil,

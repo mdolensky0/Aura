@@ -110,8 +110,8 @@ class KeyController: UIViewController {
                                    numRows: 3,
                                    numCol: 2,
                                    cornerRadius: 0,
-                                   colors: [K.Colors.brownPurple, K.Colors.brownYellow,
-                                            K.Colors.brownRed, K.Colors.tan,
+                                   colors: [K.Colors.tan, K.Colors.brownPurple,
+                                            K.Colors.brownRed, K.Colors.brownYellow,
                                             K.Colors.blueGrey, .white])
         
         keyView.explanationLabel.font = UIFont.systemFont(ofSize: 16, weight: .light)
@@ -309,12 +309,12 @@ class KeyController: UIViewController {
         // Add Scroll Views to Main Stack View
         mainStackView.addArrangedSubview(vowelKey)
         mainStackView.addArrangedSubview(vowelScrollView)
-        mainStackView.addArrangedSubview(fluidConsonantsKey)
-        mainStackView.addArrangedSubview(fluidScrollView)
         mainStackView.addArrangedSubview(trueConsonantsKey)
         mainStackView.addArrangedSubview(trueScrollView)
         mainStackView.addArrangedSubview(flipConsonantsKey)
         mainStackView.addArrangedSubview(flipScrollView)
+        mainStackView.addArrangedSubview(fluidConsonantsKey)
+        mainStackView.addArrangedSubview(fluidScrollView)
         mainStackView.addArrangedSubview(silentKey)
         mainStackView.addArrangedSubview(silentScrollView)
         mainStackView.addArrangedSubview(wildcardKey)

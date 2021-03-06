@@ -145,7 +145,7 @@ class Utilities {
         // 3 - One Special Character in Password
         // NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-z])(?=.*[$@$#!%*?&])[A-Za-z\\d$@$#!%*?&]{8,}")
         
-        // Password Must be 8 characters long
+        // Password must contain at least 8 characters
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^.{8,}$")
         return passwordTest.evaluate(with: password)
     }

@@ -82,13 +82,28 @@ class SignInController: UIViewController {
         
         let l = UILabel()
         
-        let attText = NSMutableAttributedString(string: NSLocalizedString("By creating an account you're agreeing to our Terms & Privacy Policy", comment: ""))
-        attText.addAttribute(.foregroundColor, value: K.Colors.purple, range: NSRange(location: 46, length: 5))
-        attText.addAttribute(.foregroundColor, value: K.Colors.purple, range: NSRange(location: 54, length: 14))
-        attText.addAttribute(.font, value: UIFont.systemFont(ofSize: 13), range: NSRange(location: 0, length: attText.length))
-        l.attributedText = attText
+        let attText1 = NSMutableAttributedString(string: NSLocalizedString("By creating an account you're agreeing to our ", comment: "By creating an account you're agreeing to our Terms & Privacy Policy"))
+        let attText2 = NSMutableAttributedString(string: NSLocalizedString("Terms", comment: "By creating an account you're agreeing to our Terms & Privacy Policy"))
+        let attText3 = NSMutableAttributedString(string: NSLocalizedString(" & ", comment: "By creating an account you're agreeing to our Terms & Privacy Policy"))
+        let attText4 = NSMutableAttributedString(string: NSLocalizedString("Privacy Policy", comment: "By creating an account you're agreeing to our Terms & Privacy Policy"))
+        let attText5 = NSMutableAttributedString(string: NSLocalizedString(".     ", comment: "By creating an account you're agreeing to our Terms & Privacy Policy"))
+        
+        attText2.addAttribute(.foregroundColor, value: K.Colors.purple, range: NSRange(location: 0, length: attText2.length))
+        attText4.addAttribute(.foregroundColor, value: K.Colors.lightPink, range: NSRange(location: 0, length: attText4.length))
+        
+        attText1.append(attText2)
+        attText1.append(attText3)
+        attText1.append(attText4)
+        attText1.append(attText5)
+       
+        attText1.addAttribute(.font, value: UIFont.systemFont(ofSize: 13), range: NSRange(location: 0, length: attText1.length))
+        
+        l.isUserInteractionEnabled = true
+        l.attributedText = attText1
         l.textAlignment = .center
         l.backgroundColor = .white
+        l.lineBreakMode = .byWordWrapping
+        l.baselineAdjustment = .none
         l.numberOfLines = 0
         return l
         
@@ -179,6 +194,7 @@ class SignInController: UIViewController {
                          width: nil,
                          padding: UIEdgeInsets(top: -10, left: 0, bottom: 0, right: 0))
         
+        emailTextField.delegate = self
         emailTextField.anchor(top: auraLabel.bottomAnchor,
                               bottom: nil,
                               leading: view.leadingAnchor,
@@ -187,6 +203,7 @@ class SignInController: UIViewController {
                               width: nil,
                               padding: UIEdgeInsets(top: 20, left: 30, bottom: 0, right: -30))
         
+        passwordTextField.delegate = self
         passwordTextField.anchor(top: emailTextField.bottomAnchor,
                                  bottom: nil,
                                  leading: view.leadingAnchor,
@@ -226,6 +243,26 @@ class SignInController: UIViewController {
                         height: nil,
                         width: nil,
                         padding: UIEdgeInsets(top: 12, left: 40, bottom: 0, right: -40))
+        
+        userAgreementLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(termsAndPrivacyPressed(_:))))
+    }
+    
+    @objc func termsAndPrivacyPressed(_ gesture: UITapGestureRecognizer) {
+        // Get Letter Index and Color
+        guard let index = gesture.indexForTapAttributedTextInLabel(label: self.userAgreementLabel) else { return }
+        guard let color = userAgreementLabel.attributedText?.attribute(.foregroundColor, at: index, effectiveRange: nil) as? UIColor else { return }
+        
+        if color == K.Colors.purple {
+            let vc = UserAgreementVC()
+            vc.titleLabel.text = "Terms & Conditions"
+            vc.textView.attributedText = vc.terms.htmlToAttributedString
+            present(vc, animated: true, completion: nil)
+        } else if color == K.Colors.lightPink {
+            let vc = UserAgreementVC()
+            vc.titleLabel.text = "Privacy Policy"
+            vc.textView.attributedText = vc.privacyPolicy.htmlToAttributedString
+            present(vc, animated: true, completion: nil)
+        } else { return }
     }
     
     @objc func logInPressed(_ sender: UIButton) {
@@ -351,4 +388,11 @@ class SignInController: UIViewController {
         
     }
     
+}
+
+extension SignInController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true;
+    }
 }

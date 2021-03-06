@@ -58,6 +58,9 @@ class PurchasingManager: NSObject {
         AdManager.shared.funnelProgress = .completedVideo2Bought
         Utilities.shared.user?.purchases["EHDMasterCourse"] = true
         Utilities.shared.user?.purchaseIDs["EHDMasterCourse"] = transactionID
+        
+        transferCourseDecksToUser()
+        
         if let user = Utilities.shared.user {
             FirebaseManager.shared.updateUser(user: user)
         }
@@ -65,6 +68,16 @@ class PurchasingManager: NSObject {
         if let window = UIApplication.shared.keyWindow {
             window.displayCheck(text: NSLocalizedString("Success!", comment: "Success, whatever action you just performed worked successfully"))
         }
+    }
+    
+    func transferCourseDecksToUser() {
+        guard let decks = Utilities.shared.superUser?.decks else {
+            print("could not retrieve super user decks")
+            return
+        }
+        
+        let courseDecks = decks.filter {K.EHDMasterCourseDeckTitle.contains($0.name)}
+        Utilities.shared.user?.decks.append(contentsOf: courseDecks)
     }
     
     func showError(error: String) {

@@ -14,12 +14,20 @@ class Page1: UIView {
     let titleLabel: UILabel = {
         let l = UILabel()
         
-        let attText = NSMutableAttributedString(string: NSLocalizedString("Welcome to Aura!", comment: ""))
+        // INDEX OUT OF RANGE
+        let attText = NSMutableAttributedString(string: NSLocalizedString("Welcome to ", comment: "Welcome to Aura!"))
+        let attText1 = NSMutableAttributedString(string: NSLocalizedString("Aura", comment: "Welcome to Aura!"))
+        let attText2 = NSMutableAttributedString(string: NSLocalizedString("!", comment: "Welcome to Aura!"))
         
+        attText1.addAttribute(.foregroundColor, value: K.Colors.purple, range: .init(location: 0, length: 2))
+        attText1.addAttribute(.foregroundColor, value: K.Colors.darkGrey, range: .init(location: 2, length: 1))
+        attText1.addAttribute(.foregroundColor, value: K.Colors.lightPink, range: .init(location: 3, length: 1))
+        
+        attText.append(attText1)
+        attText.append(attText2)
+
         attText.addAttribute(.font, value: UIFont.systemFont(ofSize: 34, weight: .bold), range: .init(location: 0, length: attText.length))
-        attText.addAttribute(.foregroundColor, value: K.Colors.purple, range: .init(location: 11, length: 2))
-        attText.addAttribute(.foregroundColor, value: K.Colors.darkGrey, range: .init(location: 13, length: 1))
-        attText.addAttribute(.foregroundColor, value: K.Colors.lightPink, range: .init(location: 14, length: 1))
+        
         
         l.attributedText = attText
         l.textAlignment = .center

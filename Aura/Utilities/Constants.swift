@@ -115,18 +115,18 @@ struct K {
                               ("BOYD", K.Colors.turquoise)]
         
         // Info for fluidConsonantsKey cards
-        static let fluidSoundAndColor = [("VISION", K.Colors.brownPurple), ("JOKE", K.Colors.brownYellow),
-                              ("CHOKE", K.Colors.brownRed), ("MISSION", K.Colors.tan),
+        static let fluidSoundAndColor = [("MISSION", K.Colors.tan), ("VISION", K.Colors.brownPurple),
+                              ("CHOKE", K.Colors.brownRed), ("JOKE", K.Colors.brownYellow),
                               ("Y", K.Colors.blueGrey)]
         
         // Info for trueConsonantsKey cards
-        static let trueSoundAndText = [("B", "b"), ("K", "c"), ("D", "d"), ("F", "f"), ("G", "g"), ("H", "h"), ("K", "k"),
-                                ("L", "l"), ("M", "m"), ("N", "n"), ("P", "p"), ("R", "r"), ("S", "s"), ("T", "t"),
-                                ("V", "v"), ("W", "w"), ("KS", "x"), ("Z", "z"), ("Q", "qu"), ("TH", "th")]
+        static let trueSoundAndText = [("B", "Bb"), ("K", "Cc"), ("D", "Dd"), ("F", "Ff"), ("G", "Gg"), ("H", "Hh"), ("K", "Kk"),
+                                ("L", "Ll"), ("M", "Mm"), ("N", "Nn"), ("P", "Pp"), ("Q", "qu"), ("R", "Rr"), ("S", "Ss"), ("T", "Tt"),
+                                ("TH", "th"), ("V", "Vv"), ("W", "Ww"), ("KS", "Xx"), ("Z", "Zz")]
         
         // Info for flipConsonantsKey cards
-        static let flipSoundAndText = [("S", "c"), ("T", "d"), ("V", "f"), ("DarkL", "l"), ("NSoft", "n"), ("DarkR", "r"),
-                                ("Z", "s"), ("D", "t"), ("GZ", "x"), ("S", "z"), ("THunvoiced", "th")]
+        static let flipSoundAndText = [("S", "Cc"), ("T", "Dd"), ("V", "Ff"), ("DarkL", "Ll"), ("NSoft", "Nn"), ("DarkR", "Rr"),
+                                ("Z", "Ss"), ("D", "Tt"), ("THunvoiced", "th"), ("GZ", "Xx"), ("S", "Zz")]
         
         // Might Use to give the full key view sound options
         static let colorToSoundDictionary = [K.Colors.green: "BOT", K.Colors.red: "BAT", K.Colors.blue: "BOUT",
@@ -146,6 +146,18 @@ struct K {
         static let langName = "langName"
         
     }
+    
+    static let EHDMasterCourseDeckTitle = ["Vowel - BOT", "Vowel - BAT", "Vowel - BOUT", "Vowel - BOOT",
+                                           "Vowel - BUT", "Vowel - BOOK", "Vowel - BEAT", "Vowel - BIT",
+                                           "Vowel - BET", "Vowel - BAIT", "Vowel - BITE", "Vowel - BOAT",
+                                           "Vowel - BOYD", "True - B", "True - C", "True - D", "True - F",
+                                           "True - G", "True - H", "True - K", "True - L", "True - M",
+                                           "True - N", "True - P", "True - QU", "True - R", "True - S",
+                                           "True - T", "True - TH", "True - V", "True - W", "True - X",
+                                           "True - Z", "Flip - C", "Flip - D", "Flip - F", "Flip - L",
+                                           "Flip - N", "Flip - R", "Flip - S", "Flip - T", "Flip - TH",
+                                           "Flip - X", "Flip - Z", "Fluid - MISSION", "Fluid - VISION",
+                                           "Fluid - CHOKE", "Fluid - JOKE", "Fluid - YOU", "Silents", "Wildcards"]
     
     
     // Number Identifiers for Wildcards

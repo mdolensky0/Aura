@@ -31,6 +31,7 @@ class Page12: UIView {
         l.text = NSLocalizedString("Start your journey to English HD Mastery!", comment: "")
         l.textAlignment = .center
         l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.numberOfLines = 0
         return l
         
     }()

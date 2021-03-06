@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import MessageUI
 
 class SettingsLauncher: NSObject {
     
@@ -17,6 +18,8 @@ class SettingsLauncher: NSObject {
     let width: CGFloat = UIScreen.main.bounds.width * 0.85
     let initialCenterX: CGFloat = ((UIScreen.main.bounds.width) * 0.85) / 2.0
     let initialCenterY: CGFloat = UIScreen.main.bounds.height / 2.0
+    
+    var tabBarVC: UITabBarController?
     
     // Views
     var blackView: UIView = {
@@ -663,7 +666,9 @@ class SettingsLauncher: NSObject {
             }) { (_ ) in
                 
                 // Run Tutorial
-                print("contact")
+                self.handleDismiss()
+                let vc = SendEmailViewController()
+                self.tabBarVC!.selectedViewController!.present(vc, animated: true, completion: nil)
                 
             }
         }

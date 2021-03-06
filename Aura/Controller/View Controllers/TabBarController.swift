@@ -103,6 +103,7 @@ class TabBarController: UITabBarController {
         super.viewDidLoad()
         
         Utilities.shared.tabController = self
+        Utilities.shared.settingsLauncher.tabBarVC = self
         setupTabBar()
     }
     

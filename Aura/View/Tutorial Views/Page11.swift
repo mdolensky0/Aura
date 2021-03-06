@@ -39,7 +39,7 @@ class Page11: UIView {
         
         let text1 = NSMutableAttributedString(string: NSLocalizedString("Get the full explanation of\nEnglish HD in the ", comment: "Get the full explanation of\nEnglish HD in the Key Tab."))
         let text2 = NSMutableAttributedString(string: NSLocalizedString("Key Tab", comment: "Get the full explanation of\nEnglish HD in the Key Tab."))
-        let text3 = NSMutableAttributedString(string: NSLocalizedString(".", comment: "period at the end of a sentance"))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString(".  ", comment: "Get the full explanation of\nEnglish HD in the Key Tab."))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.DesignColors.primary, range: .init(location: 0, length: text2.length))
@@ -75,7 +75,7 @@ class Page11: UIView {
         
         let text1 = NSMutableAttributedString(string: NSLocalizedString("Master English HD by accessing\nthe video lessons in the ", comment: "Master English HD by accessing\nthe video lessons in the Lessons Tab."))
         let text2 = NSMutableAttributedString(string: NSLocalizedString("Lessons Tab", comment: "Master English HD by accessing\nthe video lessons in the Lessons Tab."))
-        let text3 = NSMutableAttributedString(string: NSLocalizedString(".", comment: "period at the end of a sentance"))
+        let text3 = NSMutableAttributedString(string: NSLocalizedString(".    ", comment: "Master English HD by accessing\nthe video lessons in the Lessons Tab."))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.Colors.pink, range: .init(location: 0, length: text2.length))

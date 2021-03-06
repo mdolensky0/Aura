@@ -154,7 +154,7 @@ class Page7: UIView {
         let text1 = NSMutableAttributedString(string: NSLocalizedString("Click ", comment: "Click Search and watch your input transform into English HD transform into English HD."))
         let text2 = NSMutableAttributedString(string: NSLocalizedString("Search ", comment: "Click Search and watch your input transform into English HD transform into English HD."))
         let text3 = NSMutableAttributedString(string: NSLocalizedString("and watch your input\n", comment: "Click Search and watch your input transform into English HD."))
-        let text4 = NSMutableAttributedString(string: NSLocalizedString("transform into English HD ", comment: "Click Search and watch your input transform into English HD."))
+        let text4 = NSMutableAttributedString(string: NSLocalizedString("transform into English HD.", comment: "Click Search and watch your input transform into English HD."))
         
         text1.addAttribute(.foregroundColor, value: UIColor.gray, range: .init(location: 0, length: text1.length))
         text2.addAttribute(.foregroundColor, value: K.Colors.blue, range: .init(location: 0, length: text2.length))

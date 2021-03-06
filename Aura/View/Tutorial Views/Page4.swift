@@ -19,7 +19,7 @@ class Page4: UIView {
         l.numberOfLines = 1
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .center
-        l.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        l.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         return l
     }()
     

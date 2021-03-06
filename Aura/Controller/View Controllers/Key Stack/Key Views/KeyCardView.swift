@@ -42,7 +42,7 @@ class KeyCardView: UIView {
         let label = UILabel()
         label.numberOfLines = 1
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 140, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 100, weight: .medium)
         label.backgroundColor = .white
         label.textColor = .black
         return label
@@ -161,7 +161,7 @@ class KeyCardView: UIView {
             textLabel.text = self.text
             textLabel.translatesAutoresizingMaskIntoConstraints = false
             textLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-            textLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
+            textLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 40).isActive = true
             textLabel.bottomAnchor.constraint(lessThanOrEqualTo: soundBackgroundView.topAnchor, constant: -20).isActive = true
         }
         

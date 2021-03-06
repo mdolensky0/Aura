@@ -35,6 +35,11 @@
 		1DA7B31F253F45860068330B /* TutorialController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA7B31E253F45860068330B /* TutorialController.swift */; };
 		1DB0A6FC25E4375D0027A989 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1DB0A6FE25E4375D0027A989 /* Localizable.strings */; };
 		1DB0A70325EEC6230027A989 /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB0A70225EEC6230027A989 /* HeaderCollectionReusableView.swift */; };
+		1DB7430525F04B0500D69976 /* DeckCreater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB7430425F04B0500D69976 /* DeckCreater.swift */; };
+		1DB7430825F05FE200D69976 /* flashcards.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1DB7430725F05FE200D69976 /* flashcards.txt */; };
+		1DB7430B25F2BCFA00D69976 /* SendEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB7430A25F2BCFA00D69976 /* SendEmailViewController.swift */; };
+		1DB7430E25F2D21E00D69976 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DB7430D25F2D21E00D69976 /* MessageUI.framework */; };
+		1DB7431125F2E7D300D69976 /* UserAgreementVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB7431025F2E7D300D69976 /* UserAgreementVC.swift */; };
 		1DD2BAF825322CD000811F89 /* AnimatedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2BAF725322CD000811F89 /* AnimatedButton.swift */; };
 		1DED0736255F274300AB45A7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DED0735255F274300AB45A7 /* StoreKit.framework */; };
 		7D03998C252662690070DB8E /* UITextFieldPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998B252662680070DB8E /* UITextFieldPadding.swift */; };
@@ -193,6 +198,11 @@
 		1DB0A70025E437630027A989 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1DB0A70225EEC6230027A989 /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		1DB0A70525EEF3410027A989 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		1DB7430425F04B0500D69976 /* DeckCreater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckCreater.swift; sourceTree = "<group>"; };
+		1DB7430725F05FE200D69976 /* flashcards.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = flashcards.txt; path = ../../flashcards.txt; sourceTree = "<group>"; };
+		1DB7430A25F2BCFA00D69976 /* SendEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendEmailViewController.swift; sourceTree = "<group>"; };
+		1DB7430D25F2D21E00D69976 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		1DB7431025F2E7D300D69976 /* UserAgreementVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreementVC.swift; sourceTree = "<group>"; };
 		1DD2BAF725322CD000811F89 /* AnimatedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedButton.swift; sourceTree = "<group>"; };
 		1DED0735255F274300AB45A7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		7D03998B252662680070DB8E /* UITextFieldPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPadding.swift; sourceTree = "<group>"; };
@@ -326,6 +336,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DB7430E25F2D21E00D69976 /* MessageUI.framework in Frameworks */,
 				BE768A4362EDA1278661841E /* Pods_Aura.framework in Frameworks */,
 				1DED0736255F274300AB45A7 /* StoreKit.framework in Frameworks */,
 			);
@@ -337,6 +348,7 @@
 		0F311CFEE6AC64418DA6DD74 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1DB7430D25F2D21E00D69976 /* MessageUI.framework */,
 				1DED0735255F274300AB45A7 /* StoreKit.framework */,
 				B452EF264FBDFE7ADE98D3D4 /* Pods_Aura.framework */,
 			);
@@ -588,6 +600,7 @@
 			children = (
 				7D99A37524D9ECA6006C977E /* Login Stack */,
 				7D6BF28125100E7B0086C438 /* SettingsLauncher.swift */,
+				1DB7430A25F2BCFA00D69976 /* SendEmailViewController.swift */,
 			);
 			path = "Settings Stack";
 			sourceTree = "<group>";
@@ -653,6 +666,7 @@
 				7D99A37324D9EC91006C977E /* SignUpController.swift */,
 				7D99A37124D9EC7A006C977E /* SignInController.swift */,
 				7D03998F2526AB8A0070DB8E /* ForgotPasswordController.swift */,
+				1DB7431025F2E7D300D69976 /* UserAgreementVC.swift */,
 			);
 			path = "Login Stack";
 			sourceTree = "<group>";
@@ -690,6 +704,7 @@
 				7DFBA8D024B418A200618332 /* LaunchScreen.storyboard */,
 				7DFBA8D324B418A200618332 /* Info.plist */,
 				7D530E3E24E9C81E00C0C209 /* GoogleService-Info.plist */,
+				1DB7430725F05FE200D69976 /* flashcards.txt */,
 				1D3B667D255DB8CC0078B9DA /* finalWordAndIPA.txt */,
 				1DB0A6FE25E4375D0027A989 /* Localizable.strings */,
 			);
@@ -732,6 +747,7 @@
 				7D15DB6924C2A8A6009ACDB4 /* Coloring Models */,
 				1DA7B30D253DEF4A0068330B /* PopUpManager.swift */,
 				1D90A9B425CB2C5100802D3C /* AdManager.swift */,
+				1DB7430425F04B0500D69976 /* DeckCreater.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -851,6 +867,7 @@
 				7D15DBCB24C2AD5F009ACDB4 /* N.wav in Resources */,
 				7D15DBA624C2AD5F009ACDB4 /* B.wav in Resources */,
 				7D15DB9D24C2AD5F009ACDB4 /* DarkL.wav in Resources */,
+				1DB7430825F05FE200D69976 /* flashcards.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -909,6 +926,7 @@
 				7D05654B25003C5900025467 /* VideoCell.swift in Sources */,
 				7D15DB6B24C2ABDB009ACDB4 /* SoundButton.swift in Sources */,
 				7D53A71F252FFDD200BDC593 /* HorizontalScrollView.swift in Sources */,
+				1DB7431125F2E7D300D69976 /* UserAgreementVC.swift in Sources */,
 				1D999FBC25475C0500A635DE /* FlashcardsPopUpView.swift in Sources */,
 				1D8D3DD3254CB7CC00563D8C /* SwipeTutorialView.swift in Sources */,
 				7D66D8A224B424B20019BFF0 /* FlashCardController.swift in Sources */,
@@ -976,6 +994,7 @@
 				7D66D89824B41EFB0019BFF0 /* Constants.swift in Sources */,
 				1D90A9B825CB315400802D3C /* SecretsPopUpView.swift in Sources */,
 				7DCAC7A324F6E1100013D134 /* SearchStatus.swift in Sources */,
+				1DB7430525F04B0500D69976 /* DeckCreater.swift in Sources */,
 				7D7ECFF82509A867008573A7 /* AzureTranslationModel.swift in Sources */,
 				1DA7B313253DF5E70068330B /* TestResultPopUpView.swift in Sources */,
 				7D77098524B566300009B93B /* Extensions.swift in Sources */,
@@ -983,6 +1002,7 @@
 				7D77098C24B7A2B20009B93B /* ResultsController.swift in Sources */,
 				7D15DB5E24C2A49F009ACDB4 /* FirebaseManager.swift in Sources */,
 				7D15DBD024C62EEE009ACDB4 /* SupportedLanguagesVC.swift in Sources */,
+				1DB7430B25F2BCFA00D69976 /* SendEmailViewController.swift in Sources */,
 				7D99A36E24D3B948006C977E /* KeyCardScrollView.swift in Sources */,
 				7D15DBD824CA1D47009ACDB4 /* SearchInfo.swift in Sources */,
 				7D1B10752512D9E80000BFE3 /* LessonModel.swift in Sources */,

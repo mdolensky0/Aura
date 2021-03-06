@@ -167,7 +167,7 @@ class DeckController: UIViewController {
         label.numberOfLines = 0
         label.backgroundColor = .clear
         label.font = UIFont.systemFont(ofSize: 24, weight: .regular)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.textColor = K.Colors.darkGrey
         label.text = NSLocalizedString("There are no flashcards in the deck yet.\n\nTo add flashcards search a word and then press the + icon", comment: "")
         return label

@@ -157,6 +157,7 @@ class FlashCardController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        //DeckCreater.shared.createDeck(deckName: "California Slang", translationLang: "ja")
     }
     
     override func viewDidLayoutSubviews() {
