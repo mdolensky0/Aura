@@ -19,6 +19,18 @@ class LoginController: UIViewController {
     var isModal = false
     var isForPurchase = false
     var delegate: AddFlashcardDelegate?
+    
+    var purchaseLabel: UILabel = {
+        let l = UILabel()
+        l.text = NSLocalizedString("Before you purchase, create an account", comment: "")
+        l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        l.numberOfLines = 1
+        l.adjustsFontSizeToFitWidth = true
+        l.textAlignment = .center
+        l.isHidden = true
+        return l
+    }()
+    
     var auraLabel: UILabel = {
         
         let label = UILabel()
@@ -114,8 +126,10 @@ class LoginController: UIViewController {
         let container = UIView()
         
         container.addSubview(auraLabel)
+        container.addSubview(purchaseLabel)
         container.addSubview(signUpButton)
         container.addSubview(logInButton)
+        
         
         auraLabel.anchor(top: container.topAnchor,
                          bottom: nil,
@@ -124,7 +138,15 @@ class LoginController: UIViewController {
                          height: nil,
                          width: nil)
         
-        signUpButton.anchor(top: auraLabel.bottomAnchor,
+        purchaseLabel.anchor(top: auraLabel.bottomAnchor,
+                             bottom: nil,
+                             leading: container.leadingAnchor,
+                             trailing: container.trailingAnchor,
+                             height: 50,
+                             width: nil,
+                             padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        
+        signUpButton.anchor(top: purchaseLabel.bottomAnchor,
                             bottom: nil,
                             leading: container.leadingAnchor,
                             trailing: container.trailingAnchor,
@@ -148,7 +170,16 @@ class LoginController: UIViewController {
         container.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -60).isActive = true
         
         
-                
+        if isForPurchase {
+            purchaseLabel.isHidden = false
+            purchaseLabel.numberOfLines = 1
+        } else if !isModal {
+            purchaseLabel.isHidden = false
+            purchaseLabel.text = NSLocalizedString("Create a free account to make your own personalized English HD Flashcard Decks", comment: "")
+            purchaseLabel.numberOfLines = 0
+        } else {
+            purchaseLabel.isHidden = true
+        }
     }
     
     @objc func signUpPressed(_ sender: UIButton) {

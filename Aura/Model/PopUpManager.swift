@@ -67,7 +67,7 @@ class PopUpManager: NSObject {
             v.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
             v.centerXAnchor.constraint(equalTo: window.centerXAnchor).isActive = true
             
-            UIView.animate(withDuration: 0.5, delay: 1, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.5, delay: 0.3, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.blackView.alpha = 1
                 v.alpha = 1
             }, completion: nil)
