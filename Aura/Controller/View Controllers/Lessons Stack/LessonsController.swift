@@ -148,7 +148,7 @@ class LessonsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        populateLessonsDB()
+//        populateLessonsDB()
         NetworkManager.shared.lessonsDelegate = self
         Utilities.shared.lessonsTabDelegate = self
         AdManager.shared.lessonDelegate = self
