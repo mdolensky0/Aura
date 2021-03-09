@@ -219,6 +219,18 @@ extension UIViewController {
         loadingView?.removeFromSuperview()
         loadingView = nil
     }
+    
+    func showCannotSearchAlert() {
+        let alert = UIAlertController(title: NSLocalizedString("Connect to the internet", comment: "Cannot connect to the internet"),
+                                      message: NSLocalizedString("In order to search, you must be connected to the internet", comment: ""),
+                                      preferredStyle: .alert)
+        let action = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .default) { (_) in
+            return
+        }
+        
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 fileprivate var loadingView: UIView?

@@ -38,6 +38,8 @@ class LearnMoreController: UIViewController {
     
     //MARK: - Views
     
+    var networkConnection = true
+    
     var centerTitle: UILabel = {
         
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
@@ -230,6 +232,7 @@ class LearnMoreController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = K.DesignColors.background
+        NetworkManager.shared.learnMoreDelegates.append(self)
         Utilities.shared.learnMoreDelegates.append(self)
         AdManager.shared.learnMoreDelegates.append(self)
         setupView()
@@ -273,6 +276,7 @@ class LearnMoreController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         if isMovingFromParent {
+            NetworkManager.shared.learnMoreDelegates.removeLast()
             Utilities.shared.learnMoreDelegates.removeLast()
             AdManager.shared.learnMoreDelegates.removeLast()
         }
@@ -288,6 +292,10 @@ extension LearnMoreController {
         self.setupToHideKeyboardOnTapOnView()
         setupNavBar()
         setupScrollView()
+        
+        if !NetworkManager.shared.isConnected {
+            networkConnection = false
+        }
     }
     
     func setupShadows() {
@@ -570,32 +578,18 @@ extension LearnMoreController {
     }
     
     //MARK:- Selector Functions
-        
-    @objc func alternativesButtonPressed(_ sender: QueryButton) {
-        
-        UIView.animate(withDuration: 0.2) {
-            sender.superview?.transform = .identity
-            sender.superview?.superview?.layer.shadowOpacity = 0.3
-        }
-        
-        let searchType = (searchInfo.searchType == .englishToNative) ? SearchType.nativeToEnglish : SearchType.englishToNative
-        
-        let newSearchInfo = SearchInfo(searchType: searchType,
-                                       sourceLanguageCode: searchInfo.targetLanguageCode,
-                                       sourceLanguageName: searchInfo.targetLanguageName,
-                                       targetLanguageCode: searchInfo.sourceLanguageCode,
-                                       targetLanguageName: searchInfo.sourceLanguageName)
-        
-        startSearchSequence(searchText: sender.queryText, newSearchInfo)
-        
-    }
-    
+            
     @objc func learnMoreButtonPressed(_ sender: QueryButton) {
         
         UIView.animate(withDuration: 0.2) {
              sender.superview?.transform = .identity
              sender.superview?.superview?.layer.shadowOpacity = 0.3
          }
+        
+        if networkConnection == false {
+            self.showCannotSearchAlert()
+            return
+        }
         
         let sourceCode = (searchInfo.searchType == .englishToNative) ? searchInfo.sourceLanguageCode : searchInfo.targetLanguageCode
         let sourceName = (searchInfo.searchType == .englishToNative) ? searchInfo.sourceLanguageName : searchInfo.targetLanguageName
@@ -1108,6 +1102,11 @@ extension LearnMoreController: AltTranslationDelegate {
     
     func searchBackTranslation(backTranslation: String, searchInfo: SearchInfo) {
         
+        if networkConnection == false {
+            self.showCannotSearchAlert()
+            return
+        }
+        
         startSearchSequence(searchText: backTranslation, searchInfo)
     }
 
@@ -1219,3 +1218,16 @@ extension LearnMoreController: AdManagerDelegate {
     }
 }
 
+extension LearnMoreController: NetworkConnectionUpdater {
+    
+    func setInterfaceForNetworkConnection() {
+        networkConnection = true
+        updateSecretsThumbnail()
+        updateMyDecksDisplay()
+    }
+    
+    func setInterfaceForNoNetworkConnection() {
+        networkConnection = false
+    }
+    
+}

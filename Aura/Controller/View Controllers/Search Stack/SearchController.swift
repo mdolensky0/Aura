@@ -36,6 +36,69 @@ class SearchController: UIViewController {
 
     // Main Views and Buttons
     
+    var noNetworkConnectionView: UIView = {
+        let v = UIView()
+        v.backgroundColor = .white
+        
+        let container = UIView()
+        
+        let l = UILabel()
+        l.text = NSLocalizedString("Connect to the internet", comment: "Cannot connect to the internet")
+        l.textAlignment = .center
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .gray
+        
+        let l1 = UILabel()
+        l1.text = NSLocalizedString("You're offline. Check your connection", comment: "Cannot connect to the internet")
+        l1.textAlignment = .center
+        l1.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        l1.textColor = .gray
+        
+        let iv = UIImageView()
+        if #available(iOS 13, *) {
+            iv.image = UIImage(systemName: "icloud.slash")
+        } else {
+            iv.image = #imageLiteral(resourceName: "wifi.slash").withRenderingMode(.alwaysTemplate)
+        }
+        iv.tintColor = K.DesignColors.lightVariant
+        iv.contentMode = .scaleAspectFit
+        
+        container.addSubview(iv)
+        container.addSubview(l)
+        container.addSubview(l1)
+        
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.topAnchor.constraint(equalTo: container.topAnchor).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        iv.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        
+        l.anchor(top: iv.bottomAnchor,
+                 bottom: nil,
+                 leading: container.leadingAnchor,
+                 trailing: container.trailingAnchor,
+                 height: nil,
+                 width: nil,
+                 padding: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0))
+        
+        l1.anchor(top: l.bottomAnchor,
+                  bottom: container.bottomAnchor,
+                  leading: container.leadingAnchor,
+                  trailing: container.trailingAnchor,
+                  height: nil,
+                  width: nil,
+                  padding: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0))
+        
+        v.addSubview(container)
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.centerXAnchor.constraint(equalTo: v.centerXAnchor).isActive = true
+        container.centerYAnchor.constraint(equalTo: v.centerYAnchor, constant: -8).isActive = true
+        
+        v.isHidden = true
+        
+        return v
+    }()
+    
     var titleLabel: UILabel = {
         
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
@@ -199,7 +262,7 @@ class SearchController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        NetworkManager.shared.searchDelegate = self
         Utilities.shared.searchHistoryDelegate = self
         setupView()
         view.backgroundColor = K.DesignColors.background
@@ -234,6 +297,19 @@ extension SearchController {
         setupLanguageSelectionView()
         setupTextView()
         setupTableView()
+        
+        view.addSubview(noNetworkConnectionView)
+        noNetworkConnectionView.anchor(top: textView.topAnchor,
+                                       bottom: textView.bottomAnchor,
+                                       leading: textView.leadingAnchor,
+                                       trailing: textView.trailingAnchor,
+                                       height: nil,
+                                       width: nil)
+        
+        if !NetworkManager.shared.isConnected {
+            noNetworkConnectionView.isHidden = false
+            view.bringSubviewToFront(noNetworkConnectionView)
+        }
     }
     
     func setupShadows() {
@@ -632,6 +708,11 @@ extension SearchController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        if noNetworkConnectionView.isHidden == false {
+            showCannotSearchAlert()
+            return 
+        }
         
         if let searchAndResult = Utilities.shared.user?.prevSearches[indexPath.row] {
             
@@ -1153,6 +1234,19 @@ extension SearchController: SpeechToTextDelegate {
         if shouldPerformSearch {
             startSearchSequence(searchText: transcription, searchInfo)
         }
+    }
+    
+}
+
+extension SearchController: NetworkConnectionUpdater {
+    
+    func setInterfaceForNetworkConnection() {
+        noNetworkConnectionView.isHidden = true
+    }
+    
+    func setInterfaceForNoNetworkConnection() {
+        noNetworkConnectionView.isHidden = false
+        view.bringSubviewToFront(noNetworkConnectionView)
     }
     
 }

@@ -40,6 +40,7 @@
 		1DB7430B25F2BCFA00D69976 /* SendEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB7430A25F2BCFA00D69976 /* SendEmailViewController.swift */; };
 		1DB7430E25F2D21E00D69976 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DB7430D25F2D21E00D69976 /* MessageUI.framework */; };
 		1DB7431125F2E7D300D69976 /* UserAgreementVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB7431025F2E7D300D69976 /* UserAgreementVC.swift */; };
+		1DB7431625F583AD00D69976 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB7431525F583AD00D69976 /* NetworkManager.swift */; };
 		1DD2BAF825322CD000811F89 /* AnimatedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2BAF725322CD000811F89 /* AnimatedButton.swift */; };
 		1DED0736255F274300AB45A7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DED0735255F274300AB45A7 /* StoreKit.framework */; };
 		7D03998C252662690070DB8E /* UITextFieldPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998B252662680070DB8E /* UITextFieldPadding.swift */; };
@@ -203,6 +204,7 @@
 		1DB7430A25F2BCFA00D69976 /* SendEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendEmailViewController.swift; sourceTree = "<group>"; };
 		1DB7430D25F2D21E00D69976 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		1DB7431025F2E7D300D69976 /* UserAgreementVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreementVC.swift; sourceTree = "<group>"; };
+		1DB7431525F583AD00D69976 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		1DD2BAF725322CD000811F89 /* AnimatedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedButton.swift; sourceTree = "<group>"; };
 		1DED0735255F274300AB45A7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		7D03998B252662680070DB8E /* UITextFieldPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPadding.swift; sourceTree = "<group>"; };
@@ -436,6 +438,7 @@
 				7D7ECFF52509A7B9008573A7 /* AzureTranslateManager.swift */,
 				7D7ECFF9250C0135008573A7 /* TextToSpeechManager.swift */,
 				1DA47CA225B8C84100B546B1 /* PurchasingManager.swift */,
+				1DB7431525F583AD00D69976 /* NetworkManager.swift */,
 			);
 			path = "Object Managers";
 			sourceTree = "<group>";
@@ -1001,6 +1004,7 @@
 				7D2F9A0124DF3F77009E2139 /* DeckModel.swift in Sources */,
 				7D77098C24B7A2B20009B93B /* ResultsController.swift in Sources */,
 				7D15DB5E24C2A49F009ACDB4 /* FirebaseManager.swift in Sources */,
+				1DB7431625F583AD00D69976 /* NetworkManager.swift in Sources */,
 				7D15DBD024C62EEE009ACDB4 /* SupportedLanguagesVC.swift in Sources */,
 				1DB7430B25F2BCFA00D69976 /* SendEmailViewController.swift in Sources */,
 				7D99A36E24D3B948006C977E /* KeyCardScrollView.swift in Sources */,
@@ -1177,7 +1181,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1200,7 +1204,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
+				MARKETING_VERSION = 1.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

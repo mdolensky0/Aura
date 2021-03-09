@@ -12,6 +12,69 @@ class HomeController: UIViewController {
 
     var mainScrollView = VerticalScrollView(frame: .zero)
     
+    var noNetworkConnectionView: UIView = {
+        let v = UIView()
+        v.backgroundColor = .white
+        
+        let container = UIView()
+        
+        let l = UILabel()
+        l.text = NSLocalizedString("Connect to the internet", comment: "Cannot connect to the internet")
+        l.textAlignment = .center
+        l.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        l.textColor = .gray
+        
+        let l1 = UILabel()
+        l1.text = NSLocalizedString("You're offline. Check your connection", comment: "Cannot connect to the internet")
+        l1.textAlignment = .center
+        l1.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        l1.textColor = .gray
+        
+        let iv = UIImageView()
+        if #available(iOS 13, *) {
+            iv.image = UIImage(systemName: "icloud.slash")
+        } else {
+            iv.image = #imageLiteral(resourceName: "wifi.slash").withRenderingMode(.alwaysTemplate)
+        }
+        iv.tintColor = K.DesignColors.lightVariant
+        iv.contentMode = .scaleAspectFit
+        
+        container.addSubview(iv)
+        container.addSubview(l)
+        container.addSubview(l1)
+        
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.topAnchor.constraint(equalTo: container.topAnchor).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 160).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 160).isActive = true
+        iv.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        
+        l.anchor(top: iv.bottomAnchor,
+                 bottom: nil,
+                 leading: container.leadingAnchor,
+                 trailing: container.trailingAnchor,
+                 height: nil,
+                 width: nil,
+                 padding: UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0))
+        
+        l1.anchor(top: l.bottomAnchor,
+                  bottom: container.bottomAnchor,
+                  leading: container.leadingAnchor,
+                  trailing: container.trailingAnchor,
+                  height: nil,
+                  width: nil,
+                  padding: UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0))
+        
+        v.addSubview(container)
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.centerXAnchor.constraint(equalTo: v.centerXAnchor).isActive = true
+        container.centerYAnchor.constraint(equalTo: v.centerYAnchor, constant: -30).isActive = true
+        
+        v.isHidden = true
+        
+        return v
+    }()
+    
     var titleLabel: UILabel = {
         
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
@@ -309,10 +372,19 @@ class HomeController: UIViewController {
     
     func setup() {
         
+        NetworkManager.shared.homeDelegate = self
         Utilities.shared.homeDelegate = self
         AdManager.shared.homeDelegate = self
         
         view.backgroundColor = K.DesignColors.background
+        view.addSubview(noNetworkConnectionView)
+        
+        noNetworkConnectionView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                                       bottom: view.bottomAnchor,
+                                       leading: view.leadingAnchor,
+                                       trailing: view.trailingAnchor,
+                                       height: nil,
+                                       width: nil)
         
         // Add Center Title
         self.navigationItem.titleView = titleLabel
@@ -420,6 +492,11 @@ class HomeController: UIViewController {
         popularFlashcardScrollView.updateVisibility()
         if popularFlashcardScrollView.decks.count == 0 {
             popularFlashcardLabel.superview?.isHidden = true
+        }
+        
+        if !NetworkManager.shared.isConnected {
+            noNetworkConnectionView.isHidden = false
+            view.bringSubviewToFront(noNetworkConnectionView)
         }
     }
     
@@ -603,7 +680,15 @@ extension HomeController: MyDeckScrollViewDelegate, PopularDeckScrollViewDelegat
     }
     
     func goToLesson(lessonIndex: Int) {
-        print("going to lesson")
+        let tabVC = self.tabBarController
+        tabVC?.selectedIndex = 4
+        
+        let vc = tabVC!.viewControllers![4] as! UINavigationController
+        let lessonVC = vc.children.first as! LessonsController
+        lessonVC.scrollViewIndex = lessonIndex
+        lessonVC.scrollToPage(page: lessonIndex, animated: true)
+        
+        
     }
     
 }
@@ -741,6 +826,23 @@ extension HomeController: AdManagerDelegate {
                 playImageView.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
             }
         }
+    }
+    
+}
+
+extension HomeController: NetworkConnectionUpdater {
+    
+    func setInterfaceForNetworkConnection() {
+        noNetworkConnectionView.isHidden = true
+        updateLessonsDisplay()
+        updateSecretsThumbnail()
+        updateMyDecksDisplay()
+        updatePopularDecksDisplay()
+    }
+    
+    func setInterfaceForNoNetworkConnection() {
+        noNetworkConnectionView.isHidden = false
+        view.bringSubviewToFront(noNetworkConnectionView)
     }
     
 }

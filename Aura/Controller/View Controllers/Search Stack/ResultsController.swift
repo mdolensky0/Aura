@@ -57,6 +57,69 @@ class ResultsController: UIViewController {
         
 //MARK: - Views
     
+    var noNetworkConnectionView: UIView = {
+        let v = UIView()
+        v.backgroundColor = .white
+        
+        let container = UIView()
+        
+        let l = UILabel()
+        l.text = NSLocalizedString("Connect to the internet", comment: "Cannot connect to the internet")
+        l.textAlignment = .center
+        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.textColor = .gray
+        
+        let l1 = UILabel()
+        l1.text = NSLocalizedString("You're offline. Check your connection", comment: "Cannot connect to the internet")
+        l1.textAlignment = .center
+        l1.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        l1.textColor = .gray
+        
+        let iv = UIImageView()
+        if #available(iOS 13, *) {
+            iv.image = UIImage(systemName: "icloud.slash")
+        } else {
+            iv.image = #imageLiteral(resourceName: "wifi.slash").withRenderingMode(.alwaysTemplate)
+        }
+        iv.tintColor = K.DesignColors.lightVariant
+        iv.contentMode = .scaleAspectFit
+        
+        container.addSubview(iv)
+        container.addSubview(l)
+        container.addSubview(l1)
+        
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.topAnchor.constraint(equalTo: container.topAnchor).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        iv.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        
+        l.anchor(top: iv.bottomAnchor,
+                 bottom: nil,
+                 leading: container.leadingAnchor,
+                 trailing: container.trailingAnchor,
+                 height: nil,
+                 width: nil,
+                 padding: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0))
+        
+        l1.anchor(top: l.bottomAnchor,
+                  bottom: container.bottomAnchor,
+                  leading: container.leadingAnchor,
+                  trailing: container.trailingAnchor,
+                  height: nil,
+                  width: nil,
+                  padding: UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0))
+        
+        v.addSubview(container)
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.centerXAnchor.constraint(equalTo: v.centerXAnchor).isActive = true
+        container.centerYAnchor.constraint(equalTo: v.centerYAnchor, constant: -8).isActive = true
+        
+        v.isHidden = true
+        
+        return v
+    }()
+    
     var centerTitle: UILabel = {
        
         let label = UILabel(frame: CGRect(x: 10, y: 0, width: 50, height: 30))
@@ -384,6 +447,7 @@ class ResultsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = K.DesignColors.background
+        NetworkManager.shared.resultDelegate = self
         AdManager.shared.resultDelegate = self
         Utilities.shared.resultsDelegate = self
         setupView()
@@ -443,6 +507,19 @@ extension ResultsController {
         setupLanguageSelectionView()
         setupTextView()
         setupScrollView()
+        
+        textViewBackgroundView.addSubview(noNetworkConnectionView)
+        noNetworkConnectionView.anchor(top: textViewBackgroundView.topAnchor,
+                                       bottom: textViewBackgroundView.bottomAnchor,
+                                       leading: textViewBackgroundView.leadingAnchor,
+                                       trailing: textViewBackgroundView.trailingAnchor,
+                                       height: nil,
+                                       width: nil)
+        
+        if !NetworkManager.shared.isConnected {
+            noNetworkConnectionView.isHidden = false
+            view.bringSubviewToFront(noNetworkConnectionView)
+        }
     }
     
     func setupShadows() {
@@ -970,31 +1047,17 @@ extension ResultsController {
         textView.text = NSLocalizedString("Enter text", comment: "")
         cancelButton.isHidden = true
     }
-        
-    @objc func alternativesButtonPressed(_ sender: QueryButton) {
+            
+    @objc func learnMoreButtonPressed(_ sender: QueryButton) {
         
         UIView.animate(withDuration: 0.2) {
             sender.superview?.transform = .identity
             sender.superview?.superview?.layer.shadowOpacity = 0.3
         }
         
-        let searchType = (searchInfo.searchType == .englishToNative) ? SearchType.nativeToEnglish : SearchType.englishToNative
-    
-        let newSearchInfo = SearchInfo(searchType: searchType,
-                                       sourceLanguageCode: searchInfo.targetLanguageCode,
-                                       sourceLanguageName: searchInfo.targetLanguageName,
-                                       targetLanguageCode: searchInfo.sourceLanguageCode,
-                                       targetLanguageName: searchInfo.sourceLanguageName)
-        
-        startSearchSequence(searchText: sender.queryText, newSearchInfo, isLearnMore: true)
-        
-    }
-    
-    @objc func learnMoreButtonPressed(_ sender: QueryButton) {
-        
-        UIView.animate(withDuration: 0.2) {
-            sender.superview?.transform = .identity
-            sender.superview?.superview?.layer.shadowOpacity = 0.3
+        if noNetworkConnectionView.isHidden == false {
+            self.showCannotSearchAlert()
+            return
         }
         
         let sourceCode = (searchInfo.searchType == .englishToNative) ? searchInfo.sourceLanguageCode : searchInfo.targetLanguageCode
@@ -1746,6 +1809,11 @@ extension ResultsController: AltTranslationDelegate {
     
     func searchBackTranslation(backTranslation: String, searchInfo: SearchInfo) {
         
+        if noNetworkConnectionView.isHidden == false {
+            self.showCannotSearchAlert()
+            return
+        }
+        
         startSearchSequence(searchText: backTranslation, searchInfo, isLearnMore: true)
         self.textView.text = backTranslation
     }
@@ -1915,4 +1983,19 @@ extension ResultsController: AdManagerDelegate {
             }
         }
     }
+}
+
+extension ResultsController: NetworkConnectionUpdater {
+    
+    func setInterfaceForNetworkConnection() {
+        noNetworkConnectionView.isHidden = true
+        updateSecretsThumbnail()
+        updateMyDecksDisplay()
+    }
+    
+    func setInterfaceForNoNetworkConnection() {
+        noNetworkConnectionView.isHidden = false
+        view.bringSubviewToFront(noNetworkConnectionView)
+    }
+    
 }

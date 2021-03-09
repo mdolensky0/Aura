@@ -67,8 +67,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window?.makeKeyAndVisible()
                         
         }
+        
+        NetworkManager.shared.startMonitoring()
                 
         return true
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        NetworkManager.shared.stopMonitoring()
+        print("background")
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        NetworkManager.shared.startMonitoring()
+        print("foreground")
     }
 
     // MARK: UISceneSession Lifecycle

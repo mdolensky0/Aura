@@ -223,7 +223,7 @@ class FirebaseManager {
             try self.db.collection(K.FBConstants.lessonsCollectionName).document(lesson.lessonTitle).setData(from: lesson)
             
         } catch let error {
-            print("Error weriting deck to Firestore: \(error)")
+            print("Error writing deck to Firestore: \(error)")
         }
         
     }
