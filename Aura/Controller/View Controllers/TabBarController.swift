@@ -124,13 +124,16 @@ class TabBarController: UITabBarController {
                 self.setupViewControllers()
                 self.setupTabBarCustomizations()
             }
-            
         }
                     
         else {
             setupViewControllers()
             setupTabBarCustomizations()
         }
+        
+        FirebaseManager.shared.loadLessons()
+        FirebaseManager.shared.loadSuperUser()
+        
     }
 
     func setupViewControllers() {

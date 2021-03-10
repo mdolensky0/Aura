@@ -310,6 +310,11 @@ class StudyController: UIViewController, TestManagerDelegate {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        // Update Firebase
+        //FirebaseManager.shared.updateUser(user: Utilities.shared.user!)
+    }
+    
     //MARK: - Setup
     func setup() {
         
@@ -627,7 +632,7 @@ class StudyController: UIViewController, TestManagerDelegate {
         isFront = isReverse ? false : true
         currentCard.updateSubviewVisibilities(isFront: isFront)
         
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             self.flashcardBackground.alpha = 1
             
         }
@@ -777,7 +782,7 @@ class StudyController: UIViewController, TestManagerDelegate {
         // Animate Card Left
         UIView.animate(withDuration: 0.4) {
             self.flashcardBackground.transform = CGAffineTransform(
-                translationX: -250, y: 50)
+                translationX: -350, y: 50)
                 .rotated(by: -0.6)
                 .scaledBy(x: 0.4, y: 0.4)
             self.flashcardBackground.alpha = 0
@@ -797,7 +802,7 @@ class StudyController: UIViewController, TestManagerDelegate {
         // Animate Card Left
         UIView.animate(withDuration: 0.4) {
             self.flashcardBackground.transform = CGAffineTransform(
-                translationX: +250, y: 50)
+                translationX: +350, y: 50)
                 .rotated(by: 0.6)
                 .scaledBy(x: 0.4, y: 0.4)
             self.flashcardBackground.alpha = 0
@@ -847,9 +852,6 @@ class StudyController: UIViewController, TestManagerDelegate {
             
             Utilities.shared.user!.decks[myDeckIndex].avgScore = (Double(deckNumRight) / Double(deckNumSeen)) * 100.0
             
-            // Update Firebase
-            FirebaseManager.shared.updateUser(user: Utilities.shared.user!)
-            
             // Place Card in Back of Queue
             let oldCard = myQueue.remove(at: 0)
             myQueue.append(oldCard)
@@ -874,10 +876,7 @@ class StudyController: UIViewController, TestManagerDelegate {
             let deckNumSeen = Utilities.shared.user!.decks[myDeckIndex].numSeen
             
             Utilities.shared.user!.decks[myDeckIndex].avgScore = (Double(deckNumRight) / Double(deckNumSeen)) * 100.0
-            
-            // Update Firebase
-            FirebaseManager.shared.updateUser(user: Utilities.shared.user!)
-            
+                        
             // Place Card 8 cards back or at end if small deck
             let oldCard = myQueue.remove(at: 0)
             

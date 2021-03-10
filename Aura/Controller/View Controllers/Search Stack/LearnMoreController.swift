@@ -14,6 +14,7 @@ class LearnMoreController: UIViewController {
     
     //MARK: - Data
     
+    var shouldRefresh: Bool = false
     var bottomLabelText = ""
     var searchInput = ""
     var searchOutput = ""
@@ -239,6 +240,10 @@ class LearnMoreController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
+        if shouldRefresh {
+            updateMyDecksDisplay()
+        }
         
         if searchStatus != .success {
             
@@ -1156,6 +1161,13 @@ extension LearnMoreController {
 extension LearnMoreController: FirebaseUpdaterDelegate {
     
     func updateMyDecksDisplay() {
+        
+        if !isShowing() {
+            self.shouldRefresh = true
+            return
+        }
+        
+        self.shouldRefresh = false
         
         guard let decks = Utilities.shared.user?.decks else {
             

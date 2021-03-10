@@ -595,7 +595,7 @@ class TestController: UIViewController {
         isFront = isReverse ? false : true
         currentCard.updateSubviewVisibilities(isFront: isFront)
         
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             self.flashcardBackground.alpha = 1
             
         }
@@ -743,7 +743,7 @@ class TestController: UIViewController {
         // Animate Card Left
         UIView.animate(withDuration: 0.4) {
             self.flashcardBackground.transform = CGAffineTransform(
-                translationX: -250, y: 50)
+                translationX: -350, y: 50)
                 .rotated(by: -0.6)
                 .scaledBy(x: 0.4, y: 0.4)
             self.flashcardBackground.alpha = 0
@@ -763,7 +763,7 @@ class TestController: UIViewController {
         // Animate Card Left
         UIView.animate(withDuration: 0.4) {
             self.flashcardBackground.transform = CGAffineTransform(
-                translationX: +250, y: 50)
+                translationX: +350, y: 50)
                 .rotated(by: 0.6)
                 .scaledBy(x: 0.4, y: 0.4)
             self.flashcardBackground.alpha = 0

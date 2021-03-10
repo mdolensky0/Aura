@@ -12,6 +12,7 @@ import Speech
 class SearchController: UIViewController {
     
     // Data
+    var shouldRefresh: Bool = false
     var bottomLabelText = ""
     var searchInput = ""
     var searchOutput = ""
@@ -284,6 +285,12 @@ class SearchController: UIViewController {
             
         } else { tableView.isHidden = true }
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if shouldRefresh {
+            updateSearchHistory()
+        }
     }
 }
 
@@ -1207,6 +1214,13 @@ extension SearchController {
 extension SearchController: AddSearchHistoryDelegate {
     
     func updateSearchHistory() {
+        
+        if !isShowing() {
+            self.shouldRefresh = true
+            return
+        }
+        
+        self.shouldRefresh = false
         
         DispatchQueue.main.async {
             self.tableView.reloadData()

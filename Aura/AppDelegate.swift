@@ -73,13 +73,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func applicationDidEnterBackground(_ application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
+        if let user = Utilities.shared.user {
+            FirebaseManager.shared.updateUser(user: user)
+        }
+        
         NetworkManager.shared.stopMonitoring()
         print("background")
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         NetworkManager.shared.startMonitoring()
+        FirebaseManager.shared.loadUser()
+        FirebaseManager.shared.loadLessons()
+        FirebaseManager.shared.loadSuperUser()
         print("foreground")
     }
 

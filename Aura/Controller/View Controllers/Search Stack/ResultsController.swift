@@ -21,6 +21,7 @@ class ResultsController: UIViewController {
     
 //MARK: - Data
     
+    var shouldRefresh: Bool = false
     var bottomLabelText = ""
     var searchInput = ""
     var searchOutput = ""
@@ -467,6 +468,10 @@ class ResultsController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
+        if shouldRefresh {
+            updateMyDecksDisplay()
+        }
         
         if searchStatus != .success {
             
@@ -1923,6 +1928,13 @@ extension ResultsController: SpeechToTextDelegate {
 extension ResultsController: FirebaseUpdaterDelegate {
     
     func updateMyDecksDisplay() {
+        
+        if !isShowing() {
+            self.shouldRefresh = true
+            return
+        }
+        
+        self.shouldRefresh = false
         
         guard let decks = Utilities.shared.user?.decks else {
             

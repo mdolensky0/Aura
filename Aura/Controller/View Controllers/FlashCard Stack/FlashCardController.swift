@@ -11,6 +11,7 @@ import UIKit
 class FlashCardController: UIViewController {
 
     // MARK: - Views
+    var shouldRefresh: Bool = true
     
     var noNetworkConnectionView: UIView = {
         let v = UIView()
@@ -239,6 +240,10 @@ class FlashCardController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         
+        if shouldRefresh {
+            updateMyDecksDisplay()
+        }
+        
         if UserDefaults.standard.bool(forKey: "hasEnteredDeckController") {
             return
         } else {
@@ -389,6 +394,13 @@ class FlashCardController: UIViewController {
 extension FlashCardController: FirebaseUpdaterDelegate {
     
     func updateMyDecksDisplay() {
+        
+        if !isShowing() {
+            self.shouldRefresh = true
+            return
+        }
+        
+        self.shouldRefresh = false
         
         guard let decks = Utilities.shared.user?.decks else {
             

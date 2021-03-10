@@ -11,6 +11,7 @@ import UIKit
 class HomeController: UIViewController {
 
     var mainScrollView = VerticalScrollView(frame: .zero)
+    var shouldRefresh: Bool = false
     
     var noNetworkConnectionView: UIView = {
         let v = UIView()
@@ -360,7 +361,11 @@ class HomeController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-                
+         
+        if shouldRefresh {
+            updateMyDecksDisplay()
+        }
+        
         if UserDefaults.standard.bool(forKey: "hasLaunchedHome") {
             return
         } else {
@@ -696,6 +701,13 @@ extension HomeController: MyDeckScrollViewDelegate, PopularDeckScrollViewDelegat
 extension HomeController: FirebaseUpdaterDelegate {
     
     func updateMyDecksDisplay() {
+        
+        if !isShowing() {
+            self.shouldRefresh = true
+            return
+        }
+        
+        self.shouldRefresh = false
         
         guard let decks = Utilities.shared.user?.decks else {
             

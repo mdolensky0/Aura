@@ -231,6 +231,18 @@ extension UIViewController {
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
+    
+    func isShowing() -> Bool {
+        guard let navVC = self.tabBarController?.selectedViewController as? UINavigationController else {
+            return false
+        }
+        
+        if self == navVC.visibleViewController {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 fileprivate var loadingView: UIView?

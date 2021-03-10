@@ -335,11 +335,9 @@ class LessonsController: UIViewController {
         
         for view in stackView.subviews {
             view.removeFromSuperview()
-            print("removed")
         }
         
         // Populate Stack View
-        print(Utilities.shared.lessons!.count)
         for lesson in Utilities.shared.lessons! {
             
             let iv = CustomImageView()
