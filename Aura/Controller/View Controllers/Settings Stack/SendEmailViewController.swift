@@ -197,7 +197,7 @@ class SendEmailViewController: UIViewController {
             sender.transform = .identity
         } completion: { (_) in
             
-            let recipient = ["imaginativai.support@gmail.com"]
+            let recipient = ["imaginativai.aura.help@gmail.com"]
             let mc = MFMailComposeViewController()
             mc.mailComposeDelegate = self
             mc.setToRecipients(recipient)
