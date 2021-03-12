@@ -172,6 +172,10 @@ class Utilities {
     
     func signUserOut(alertIn vc: UIViewController) {
         
+        if let user = Utilities.shared.user {
+            FirebaseManager.shared.updateUser(user: user)
+        }
+        
         // Logout Alert
         let alert = UIAlertController(title: NSLocalizedString("Logout", comment: "Log out of your user account"), message: NSLocalizedString("Are you sure you want to logout", comment: "Checking to make sure they actually want to log out before we log them out of their account"), preferredStyle: .alert)
         

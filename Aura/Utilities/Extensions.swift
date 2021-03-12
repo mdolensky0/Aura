@@ -237,7 +237,7 @@ extension UIViewController {
             return false
         }
         
-        if self == navVC.visibleViewController {
+        if self == navVC.topViewController {
             return true
         } else {
             return false
