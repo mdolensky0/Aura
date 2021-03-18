@@ -123,10 +123,14 @@ class AdManager: NSObject {
     func shouldVideoBeLocked() -> Bool {
         
         guard let idx = currentLessonIndex else {
-            return true
+            return false
         }
         
-        if funnelProgress! == .completedVideo2NoBuy && idx > 0 {
+        guard let funnelProgress = funnelProgress else {
+            return false
+        }
+        
+        if funnelProgress == .completedVideo2NoBuy && idx > 0 {
             return true
         } else {
             return false
