@@ -46,7 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }else{
             UserDefaults.standard.set(true, forKey: "hasAlreadyLaunched")
-            AdManager.shared.funnelProgress = .hasNotSeenVideo1
             RealmPopulater.populateRealm()
             RealmPopulater.addWildcardsToRealm()
             print("1st time")
