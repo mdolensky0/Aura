@@ -155,9 +155,13 @@ extension PurchasingManager: SKPaymentTransactionObserver {
                 
                 // Unlock their in app purchase
                 if let originalTransactionID = transaction.original?.transactionIdentifier {
-                    print(originalTransactionID, Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier])
                     if  originalTransactionID != Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier] {
                         showError(error: NSLocalizedString("Could not restore purchase. The current signed in account does not match the account used when purchasing this product.", comment: ""))
+                        SKPaymentQueue.default().finishTransaction(transaction)
+                        SKPaymentQueue.default().remove(self)
+                        return
+                    } else {
+                        handlePurchase(transactionID: originalTransactionID)
                         SKPaymentQueue.default().finishTransaction(transaction)
                         SKPaymentQueue.default().remove(self)
                         return
