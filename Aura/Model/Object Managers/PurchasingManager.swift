@@ -57,7 +57,7 @@ class PurchasingManager: NSObject {
     func handlePurchase(transactionID: String) {
         AdManager.shared.funnelProgress = .completedVideo2Bought
         Utilities.shared.user?.purchases["EHDMasterCourse"] = true
-        Utilities.shared.user?.purchaseIDs["EHDMasterCourse"] = transactionID
+        Utilities.shared.user?.purchaseIDs["com.iai.Aura.EHDMasterCourse"] = transactionID
         
         transferCourseDecksToUser()
         
@@ -154,15 +154,18 @@ extension PurchasingManager: SKPaymentTransactionObserver {
             case .purchased, .restored:
                 
                 // Unlock their in app purchase
-                guard let transactionID = transaction.original?.transactionIdentifier else {
-                    showError(error: NSLocalizedString("Could not retrieve transaction identifier", comment: ""))
-                    SKPaymentQueue.default().finishTransaction(transaction)
-                    SKPaymentQueue.default().remove(self)
-                    return
+                if let originalTransactionID = transaction.original?.transactionIdentifier {
+                    print(originalTransactionID, Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier])
+                    if  originalTransactionID != Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier] {
+                        showError(error: NSLocalizedString("Could not restore purchase. The current signed in account does not match the account used when purchasing this product.", comment: ""))
+                        SKPaymentQueue.default().finishTransaction(transaction)
+                        SKPaymentQueue.default().remove(self)
+                        return
+                    }
                 }
                 
-                if Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier] != nil && transactionID != Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier] {
-                    showError(error: NSLocalizedString("Could not restore purchase. The current signed in account does not match the account used when purchasing this product.", comment: ""))
+                guard let transactionID = transaction.transactionIdentifier else {
+                    showError(error: NSLocalizedString("Could not retrieve transaction identifier", comment: ""))
                     SKPaymentQueue.default().finishTransaction(transaction)
                     SKPaymentQueue.default().remove(self)
                     return
