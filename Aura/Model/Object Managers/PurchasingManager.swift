@@ -161,7 +161,7 @@ extension PurchasingManager: SKPaymentTransactionObserver {
                     return
                 }
                 
-                if transactionID != Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier] {
+                if Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier] != nil && transactionID != Utilities.shared.user?.purchaseIDs[myProduct!.productIdentifier] {
                     showError(error: NSLocalizedString("Could not restore purchase. The current signed in account does not match the account used when purchasing this product.", comment: ""))
                     SKPaymentQueue.default().finishTransaction(transaction)
                     SKPaymentQueue.default().remove(self)
