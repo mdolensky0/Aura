@@ -542,6 +542,7 @@ extension LessonsController: UICollectionViewDelegate {
         av.parentView = self
         if av.popUpVideoName == .other {
             AdManager.shared.currentLessonIndex = index
+            AnalyticsManager.shared.logStartedCourseVideo(videoIndex: index)
         }
         let urlString = Utilities.shared.lessons![scrollViewIndex].videos[index].videoURL
         
@@ -562,15 +563,19 @@ extension LessonsController: UICollectionViewDelegate {
                 switch AdManager.shared.funnelProgress {
                 case .hasNotSeenVideo1 where av.popUpVideoName! == .secret1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo1
+                    AnalyticsManager.shared.logFunnelChange(funnelProgress: .seenPartOfVideo1)
                 case .seenPartOfVideo1 where av.popUpVideoName! == .secret1:
                     if min >= 9 {
                         AdManager.shared.funnelProgress = .completedVideo1
+                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo1)
                     }
                 case .completedVideo1 where av.popUpVideoName! == .secret2:
                     AdManager.shared.funnelProgress = .seenPartOfVideo2
+                    AnalyticsManager.shared.logFunnelChange(funnelProgress: .seenPartOfVideo2)
                 case .seenPartOfVideo2 where av.popUpVideoName! == .secret2:
                     if min >= 15 && secs >= 15 {
                         AdManager.shared.funnelProgress = .completedVideo2NoBuy
+                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo2NoBuy)
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
                         AdManager.shared.isBuyButtonShowing = true
                         AdManager.shared.currentLessonIndex = 0
@@ -591,6 +596,7 @@ extension LessonsController: UICollectionViewDelegate {
                             if durationSecs - seconds <= 15 {
                                 if idx == 0 {
                                     AdManager.shared.currentLessonIndex = idx + 1
+                                    AnalyticsManager.shared.logFinishedCourseVideo(videoIndex: 0)
                                 }
                             }
                         }
@@ -607,6 +613,7 @@ extension LessonsController: UICollectionViewDelegate {
                             if durationSecs - seconds <= 15 {
                                 if idx == av.videoIdx && idx + 1 < Utilities.shared.lessons![1].videos.count {
                                     AdManager.shared.currentLessonIndex = idx + 1
+                                    AnalyticsManager.shared.logFinishedCourseVideo(videoIndex: idx)
                                 }
                             }
                         }
@@ -675,15 +682,19 @@ extension LessonsController {
                 switch AdManager.shared.funnelProgress {
                 case .hasNotSeenVideo1 where av.popUpVideoName! == .secret1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo1
+                    AnalyticsManager.shared.logFunnelChange(funnelProgress: .seenPartOfVideo1)
                 case .seenPartOfVideo1 where av.popUpVideoName! == .secret1:
                     if min >= 9 {
                         AdManager.shared.funnelProgress = .completedVideo1
+                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo1)
                     }
                 case .completedVideo1 where av.popUpVideoName! == .secret2:
                     AdManager.shared.funnelProgress = .seenPartOfVideo2
+                    AnalyticsManager.shared.logFunnelChange(funnelProgress: .seenPartOfVideo2)
                 case .seenPartOfVideo2 where av.popUpVideoName! == .secret2:
                     if min >= 15 && secs >= 15 {
                         AdManager.shared.funnelProgress = .completedVideo2NoBuy
+                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo2NoBuy)
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
                         AdManager.shared.isBuyButtonShowing = true
                         AdManager.shared.currentLessonIndex = 0
@@ -700,6 +711,7 @@ extension LessonsController {
                             if durationSecs - seconds <= 15 {
                                 if idx == 0 {
                                     AdManager.shared.currentLessonIndex = idx + 1
+                                    AnalyticsManager.shared.logFinishedCourseVideo(videoIndex: 0)
                                 }
                             }
                         }
@@ -710,6 +722,7 @@ extension LessonsController {
                             let durationSecs = CMTimeGetSeconds(duration)
                             if durationSecs - seconds <= 15 {
                                 if idx == av.videoIdx && idx + 1 < Utilities.shared.lessons![1].videos.count {
+                                    AnalyticsManager.shared.logFinishedCourseVideo(videoIndex: idx)
                                     AdManager.shared.currentLessonIndex = idx + 1
                                 }
                             }

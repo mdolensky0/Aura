@@ -67,6 +67,7 @@ class TutorialController: UIViewController {
     // MARK: - INIT
     override func viewDidLoad() {
         super.viewDidLoad()
+        AnalyticsManager.shared.logTutorialBegin()
         setup()
     }
     
@@ -150,7 +151,7 @@ class TutorialController: UIViewController {
             scrollView.setContentOffset( CGPoint(x: view.frame.width * CGFloat(nextIndex), y: 0.0), animated: true)
         
         } else if pageControl.currentPage == pages.count - 1 {
-            
+            AnalyticsManager.shared.logTutorialComplete()
             self.dismiss(animated: true, completion: nil)
         
         } else {
@@ -163,7 +164,13 @@ class TutorialController: UIViewController {
     }
     
     @objc func skipPressed() {
+        if pageControl.currentPage == pages.count - 1 {
+            AnalyticsManager.shared.logTutorialComplete()
+        } else {
+            AnalyticsManager.shared.logTutorialSkipped()
+        }
         self.dismiss(animated: true, completion: nil)
+        
     }
     
     @objc func changePage(_ sender: UIPageControl) {

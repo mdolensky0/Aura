@@ -283,18 +283,22 @@ class AdManager: NSObject {
             if let lessons = Utilities.shared.lessons {
                 
                 if idx < lessons[1].videos.count {
+                    AnalyticsManager.shared.logStartedCourseVideo(videoIndex: idx)
                     return lessons[1].videos[idx].videoURL
                 } else {
                     let idx = lessons[1].videos.count - 1
+                    AnalyticsManager.shared.logStartedCourseVideo(videoIndex: idx)
                     return lessons[1].videos[idx].videoURL
                 }
                 
             } else {
+                AnalyticsManager.shared.logStartedCourseVideo(videoIndex: 0)
                 return NSLocalizedString("https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.0_MAIN_INTRO.m4v?alt=media&token=8b59dada-7ea5-4eda-98a4-063dc1929731", comment: "EHD Course Intro Video")
             }
             
         } else {
             currentLessonIndex = 0
+            AnalyticsManager.shared.logStartedCourseVideo(videoIndex: 0)
             return NSLocalizedString("https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1.0_MAIN_INTRO.m4v?alt=media&token=8b59dada-7ea5-4eda-98a4-063dc1929731", comment: "EHD Course Intro Video")
         }
     }
@@ -325,6 +329,7 @@ class AdManager: NSObject {
     
     func showBuyButton(inVideo: Bool = true, videoVC: PUAVPlayerViewController?, parentVC: UIViewController?) {
         
+        AnalyticsManager.shared.logBuyButtonSeen()
         let buyPopUp = inVideo ? videoBuyPopUp : vcBuyPopUp
         buyPopUp.videoVC = videoVC
         buyPopUp.parentVC = parentVC

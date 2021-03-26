@@ -1061,6 +1061,8 @@ class ResultCardView: UIView {
     
     @objc func addFlashcardButtonPressed(_ sender: UIButton) {
         
+        AnalyticsManager.shared.logAddFlashcardPressed()
+        
         UIView.animate(withDuration: 0.2) {
             sender.transform = .identity
             sender.superview?.layer.shadowOpacity = 0.5

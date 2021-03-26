@@ -599,6 +599,7 @@ class DeckController: UIViewController {
     }
         
     @objc func startLoop(_ sender: UIButton) {
+        AnalyticsManager.shared.logStudyLoopPressed()
         
         UIView.animate(withDuration: 0.2) {
             sender.superview?.transform = .identity
@@ -612,6 +613,7 @@ class DeckController: UIViewController {
     }
     
     @objc func takeTest(_ sender: UIButton) {
+        AnalyticsManager.shared.logTestPressed()
         
         let alert = UIAlertController(title: NSLocalizedString("Flashcard Orientation", comment: "do you want to be shown the front or back of the flashcard first"), message: NSLocalizedString("Test Yourself by seeing the front, or back, of the flashcard first", comment: ""), preferredStyle: .alert)
         

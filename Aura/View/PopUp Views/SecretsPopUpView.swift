@@ -297,6 +297,8 @@ class SecretsPopUpView: UIView {
         
     @objc func introVideoPressed(_ sender: UIButton) {
         
+        AnalyticsManager.shared.logClickedVideoPopUp(videoTitle: titleText)
+        
         UIView.animate(withDuration: 0.2) {
             
             sender.superview?.transform = .identity
@@ -310,6 +312,8 @@ class SecretsPopUpView: UIView {
     
     @objc func watchButtonPressed(_ sender: UIButton) {
         
+        AnalyticsManager.shared.logClickedVideoPopUp(videoTitle: titleText)
+        
         UIView.animate(withDuration: 0.2) {
             
             sender.transform = .identity
@@ -321,6 +325,8 @@ class SecretsPopUpView: UIView {
     }
     
     @objc func dismiss(_ sender: UIButton) {
+        
+        AnalyticsManager.shared.logSkippedVideoPopUp(videoTitle: titleText)
         
         UIView.animate(withDuration: 0.3) {
             sender.transform = .identity

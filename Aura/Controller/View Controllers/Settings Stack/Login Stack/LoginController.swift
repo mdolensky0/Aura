@@ -83,6 +83,8 @@ class LoginController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         
+        AnalyticsManager.shared.logLoginImpression()
+        
         if isForPurchase { return }
         
         if UserDefaults.standard.bool(forKey: "hasLaunchedFlashcards") {

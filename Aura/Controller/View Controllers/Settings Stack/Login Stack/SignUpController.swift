@@ -370,6 +370,7 @@ class SignUpController: UIViewController {
             self.reTypePasswordTextField.text = ""
             
             Utilities.shared.isUserSignedIn = true
+            AnalyticsManager.shared.logSignUp()
             
             FirebaseManager.shared.createUser()
             

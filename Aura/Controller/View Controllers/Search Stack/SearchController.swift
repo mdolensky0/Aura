@@ -827,6 +827,8 @@ extension SearchController {
     
     func startSearchSequence(searchText: String,_ searchInfo: SearchInfo, ipaIndex: Int = 0) {
         
+        AnalyticsManager.shared.logSearch(searchTerm: searchText)
+        
         //Update Search Count
         AdManager.shared.updateSearchCount()
         

@@ -56,6 +56,7 @@ class PurchasingManager: NSObject {
     
     func handlePurchase(transactionID: String) {
         AdManager.shared.funnelProgress = .completedVideo2Bought
+        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo2Bought)
         Utilities.shared.user?.purchases["EHDMasterCourse"] = true
         Utilities.shared.user?.purchaseIDs["com.iai.Aura.EHDMasterCourse"] = transactionID
         
@@ -78,6 +79,18 @@ class PurchasingManager: NSObject {
         
         let courseDecks = decks.filter {K.EHDMasterCourseDeckTitle.contains($0.name)}
         Utilities.shared.user?.decks.append(contentsOf: courseDecks)
+    }
+    
+    func transferCourseDecksToUser(user: User) -> User? {
+        guard let decks = Utilities.shared.superUser?.decks else {
+            print("could not retrieve super user decks")
+            return nil
+        }
+        
+        var updatedUser = user
+        let courseDecks = decks.filter {K.EHDMasterCourseDeckTitle.contains($0.name)}
+        updatedUser.decks.append(contentsOf: courseDecks)
+        return updatedUser
     }
     
     func showError(error: String) {

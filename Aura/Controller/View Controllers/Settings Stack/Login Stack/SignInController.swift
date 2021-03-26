@@ -317,6 +317,7 @@ class SignInController: UIViewController {
             self.passwordTextField.text = ""
             
             Utilities.shared.isUserSignedIn = true
+            AnalyticsManager.shared.logLogin()
             
             FirebaseManager.shared.loadUser()
             

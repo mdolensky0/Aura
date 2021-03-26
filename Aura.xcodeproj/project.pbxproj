@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D12E34E260D9B6600C55374 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D12E34D260D9B6600C55374 /* AnalyticsManager.swift */; };
 		1D3B667E255DB8CC0078B9DA /* finalWordAndIPA.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1D3B667D255DB8CC0078B9DA /* finalWordAndIPA.txt */; };
 		1D44851925365FDC00E42C39 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D44851825365FDC00E42C39 /* TestController.swift */; };
 		1D8D3DD0254C909800563D8C /* StudyResultPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8D3DCF254C909800563D8C /* StudyResultPopUpView.swift */; };
@@ -163,11 +164,11 @@
 		7DFBA8CF24B418A200618332 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFBA8CE24B418A200618332 /* Assets.xcassets */; };
 		7DFBA8D224B418A200618332 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DFBA8D024B418A200618332 /* LaunchScreen.storyboard */; };
 		7DFF962724DC9679008A93A9 /* ResultCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF962624DC9679008A93A9 /* ResultCardView.swift */; };
-		BE768A4362EDA1278661841E /* Pods_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B452EF264FBDFE7ADE98D3D4 /* Pods_Aura.framework */; };
+		7EFF310776B3EB688F57EF60 /* Pods_Aura.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BACBD2F1520752D55EE0C53F /* Pods_Aura.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A46EE129FAF371A9E33436A /* Pods-Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.debug.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.debug.xcconfig"; sourceTree = "<group>"; };
+		1D12E34D260D9B6600C55374 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		1D3B667D255DB8CC0078B9DA /* finalWordAndIPA.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = finalWordAndIPA.txt; path = ../../finalWordAndIPA.txt; sourceTree = "<group>"; };
 		1D44851825365FDC00E42C39 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
 		1D8D3DCF254C909800563D8C /* StudyResultPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyResultPopUpView.swift; sourceTree = "<group>"; };
@@ -208,6 +209,7 @@
 		1DB7431A25F806DB00D69976 /* Aura.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aura.entitlements; sourceTree = "<group>"; };
 		1DD2BAF725322CD000811F89 /* AnimatedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedButton.swift; sourceTree = "<group>"; };
 		1DED0735255F274300AB45A7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		41B027E80BEA395A6BD67C90 /* Pods-Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.release.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.release.xcconfig"; sourceTree = "<group>"; };
 		7D03998B252662680070DB8E /* UITextFieldPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPadding.swift; sourceTree = "<group>"; };
 		7D03998F2526AB8A0070DB8E /* ForgotPasswordController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordController.swift; sourceTree = "<group>"; };
 		7D05654A25003C5900025467 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
@@ -330,8 +332,8 @@
 		7DFBA8D124B418A200618332 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7DFBA8D324B418A200618332 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7DFF962624DC9679008A93A9 /* ResultCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCardView.swift; sourceTree = "<group>"; };
-		B452EF264FBDFE7ADE98D3D4 /* Pods_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CB9C8C9C6952C5D008F66A5B /* Pods-Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.release.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.release.xcconfig"; sourceTree = "<group>"; };
+		8332648F0710D44BD311CBE9 /* Pods-Aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.debug.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.debug.xcconfig"; sourceTree = "<group>"; };
+		BACBD2F1520752D55EE0C53F /* Pods_Aura.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Aura.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,8 +342,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DB7430E25F2D21E00D69976 /* MessageUI.framework in Frameworks */,
-				BE768A4362EDA1278661841E /* Pods_Aura.framework in Frameworks */,
 				1DED0736255F274300AB45A7 /* StoreKit.framework in Frameworks */,
+				7EFF310776B3EB688F57EF60 /* Pods_Aura.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,7 +355,7 @@
 			children = (
 				1DB7430D25F2D21E00D69976 /* MessageUI.framework */,
 				1DED0735255F274300AB45A7 /* StoreKit.framework */,
-				B452EF264FBDFE7ADE98D3D4 /* Pods_Aura.framework */,
+				BACBD2F1520752D55EE0C53F /* Pods_Aura.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -403,8 +405,8 @@
 		4DB00D3AE7894B3D91C610EC /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0A46EE129FAF371A9E33436A /* Pods-Aura.debug.xcconfig */,
-				CB9C8C9C6952C5D008F66A5B /* Pods-Aura.release.xcconfig */,
+				8332648F0710D44BD311CBE9 /* Pods-Aura.debug.xcconfig */,
+				41B027E80BEA395A6BD67C90 /* Pods-Aura.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -440,6 +442,7 @@
 				7D7ECFF9250C0135008573A7 /* TextToSpeechManager.swift */,
 				1DA47CA225B8C84100B546B1 /* PurchasingManager.swift */,
 				1DB7431525F583AD00D69976 /* NetworkManager.swift */,
+				1D12E34D260D9B6600C55374 /* AnalyticsManager.swift */,
 			);
 			path = "Object Managers";
 			sourceTree = "<group>";
@@ -764,11 +767,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7DFBA8D624B418A200618332 /* Build configuration list for PBXNativeTarget "Aura" */;
 			buildPhases = (
-				D31B8E79BE8E1C7F1E5D2B5D /* [CP] Check Pods Manifest.lock */,
+				E3BAB9617B39A4BDF0F6BDD3 /* [CP] Check Pods Manifest.lock */,
 				7DFBA8BE24B4189500618332 /* Sources */,
 				7DFBA8BF24B4189500618332 /* Frameworks */,
 				7DFBA8C024B4189500618332 /* Resources */,
-				9078142982F417AAF1561D06 /* [CP] Embed Pods Frameworks */,
+				9157A2C345C96DA2C5DD223D /* [CP] Embed Pods Frameworks */,
+				1D12E349260D789600C55374 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -879,7 +883,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9078142982F417AAF1561D06 /* [CP] Embed Pods Frameworks */ = {
+		1D12E349260D789600C55374 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
+		9157A2C345C96DA2C5DD223D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -896,7 +919,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Aura/Pods-Aura-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D31B8E79BE8E1C7F1E5D2B5D /* [CP] Check Pods Manifest.lock */ = {
+		E3BAB9617B39A4BDF0F6BDD3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1017,6 +1040,7 @@
 				7D15DB5224C29517009ACDB4 /* MappingModel.swift in Sources */,
 				1DA47CA325B8C84100B546B1 /* PurchasingManager.swift in Sources */,
 				1D999FA92543461A00A635DE /* Page7.swift in Sources */,
+				1D12E34E260D9B6600C55374 /* AnalyticsManager.swift in Sources */,
 				1DB0A70325EEC6230027A989 /* HeaderCollectionReusableView.swift in Sources */,
 				1D999FB92543ABAC00A635DE /* Page12.swift in Sources */,
 				7D600BF324D107DF002EA266 /* KeyCardView.swift in Sources */,
@@ -1171,12 +1195,13 @@
 		};
 		7DFBA8D724B418A200618332 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A46EE129FAF371A9E33436A /* Pods-Aura.debug.xcconfig */;
+			baseConfigurationReference = 8332648F0710D44BD311CBE9 /* Pods-Aura.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Aura/Aura.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = A55DN9AQUL;
 				INFOPLIST_FILE = Aura/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1184,7 +1209,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14;
+				MARKETING_VERSION = 1.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1195,7 +1220,7 @@
 		};
 		7DFBA8D824B418A200618332 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CB9C8C9C6952C5D008F66A5B /* Pods-Aura.release.xcconfig */;
+			baseConfigurationReference = 41B027E80BEA395A6BD67C90 /* Pods-Aura.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Aura/Aura.entitlements;
@@ -1208,7 +1233,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14;
+				MARKETING_VERSION = 1.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

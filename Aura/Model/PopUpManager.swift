@@ -243,15 +243,19 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
                 switch AdManager.shared.funnelProgress {
                 case .hasNotSeenVideo1 where av.popUpVideoName! == .secret1:
                     AdManager.shared.funnelProgress = .seenPartOfVideo1
+                    AnalyticsManager.shared.logFunnelChange(funnelProgress: .seenPartOfVideo1)
                 case .seenPartOfVideo1 where av.popUpVideoName! == .secret1:
                     if min >= 9 {
                         AdManager.shared.funnelProgress = .completedVideo1
+                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo1)
                     }
                 case .completedVideo1 where av.popUpVideoName! == .secret2:
                     AdManager.shared.funnelProgress = .seenPartOfVideo2
+                    AnalyticsManager.shared.logFunnelChange(funnelProgress: .seenPartOfVideo2)
                 case .seenPartOfVideo2 where av.popUpVideoName! == .secret2:
                     if min >= 15 && secs >= 15 {
                         AdManager.shared.funnelProgress = .completedVideo2NoBuy
+                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo2NoBuy)
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
                         AdManager.shared.isBuyButtonShowing = true
                         AdManager.shared.currentLessonIndex = 0
@@ -272,6 +276,7 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
                             if durationSecs - seconds <= 15 {
                                 if idx == 0 {
                                     AdManager.shared.currentLessonIndex = idx + 1
+                                    AnalyticsManager.shared.logFinishedCourseVideo(videoIndex: 0)
                                 }
                             }
                         }

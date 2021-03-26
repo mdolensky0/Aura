@@ -197,6 +197,36 @@ class FirebaseManager {
         }
     }
     
+    func addCourseDecksToUser(uid: String) {
+        let docRef = db.collection(K.FBConstants.usersCollectionName).document(uid)
+        docRef.getDocument { (querySnapshot, error) in
+            
+            if let error = error {
+                print("error getting user: \(error)")
+            } else {
+                
+                let result = Result {
+                    try querySnapshot?.data(as: User.self)
+                }
+                
+                switch result {
+                case .success(let user):
+                    if let user = user {
+                        let updatedUser = PurchasingManager.shared.transferCourseDecksToUser(user: user)
+                        if let updatedUser = updatedUser {
+                            self.updateUser(user: updatedUser)
+                        }
+                    } else {
+                        print("Nil SuperUser Loaded")
+                    }
+                case .failure(let error):
+                    print("Error decoding super user: \(error)")
+                
+                }
+            }
+        }
+    }
+    
     func updateUser(user: User) {
         
         

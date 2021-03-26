@@ -277,6 +277,9 @@ class BuyButtonPopUpView: UIView {
     }
     
     @objc func buyPressed(_ sender: AnimatedButton) {
+        
+        AnalyticsManager.shared.logBuyButtonPressed()
+        
         UIView.animate(withDuration: 0.3) {
             sender.superview?.transform = .identity
             sender.superview?.layer.shadowOpacity = 0.3

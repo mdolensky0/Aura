@@ -370,6 +370,7 @@ class HomeController: UIViewController {
             return
         } else {
             AdManager.shared.funnelProgress = .hasNotSeenVideo1
+            AnalyticsManager.shared.logFunnelChange(funnelProgress: .hasNotSeenVideo1)
             AdManager.shared.showAdPopUP(parentVC: self)
             UserDefaults.standard.set(true, forKey: "hasLaunchedHome")
         }

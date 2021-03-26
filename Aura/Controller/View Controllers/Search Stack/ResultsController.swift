@@ -1293,6 +1293,8 @@ extension ResultsController {
     
     func startSearchSequence(searchText: String,_ searchInfo: SearchInfo, ipaIndex: Int = 0, isLearnMore: Bool = false) {
         
+        AnalyticsManager.shared.logSearch(searchTerm: searchText)
+        
         //Update Search Count
         AdManager.shared.updateSearchCount()
         

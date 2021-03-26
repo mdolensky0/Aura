@@ -728,6 +728,8 @@ extension LearnMoreController {
     
     func startSearchSequence(searchText: String,_ searchInfo: SearchInfo, ipaIndex: Int = 0) {
         
+        AnalyticsManager.shared.logSearch(searchTerm: searchText)
+        
         //Update Search Input Variable
         self.searchInput = searchText
         

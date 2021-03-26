@@ -223,6 +223,7 @@ class FlashCardController: UIViewController {
         super.viewDidLoad()
         setup()
         //DeckCreater.shared.createDeck(deckName: "California Slang", translationLang: "ja")
+        //FirebaseManager.shared.addCourseDecksToUser(uid: "")
     }
     
     override func viewDidLayoutSubviews() {
