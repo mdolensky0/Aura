@@ -160,10 +160,7 @@ extension PurchasingManager: SKPaymentTransactionObserver {
             }
             
             switch transaction.transactionState {
-            case.purchasing:
-                
-                break
-            
+    
             case .purchased, .restored:
                 
                 // Unlock their in app purchase
@@ -193,12 +190,25 @@ extension PurchasingManager: SKPaymentTransactionObserver {
                 SKPaymentQueue.default().remove(self)
                 break
             
-            case .failed, .deferred:
+            case .failed:
                 
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
+                if let transactionError = transaction.error as NSError?,
+                      let localizedDescription = transaction.error?.localizedDescription,
+                        transactionError.code != SKError.paymentCancelled.rawValue {
+                        showError(error: localizedDescription)
+                      }
                 break
             
+            case .deferred:
+                SKPaymentQueue.default().finishTransaction(transaction)
+                SKPaymentQueue.default().remove(self)
+                break
+                
+            case .purchasing:
+                break
+                
             default:
                 
                 SKPaymentQueue.default().finishTransaction(transaction)

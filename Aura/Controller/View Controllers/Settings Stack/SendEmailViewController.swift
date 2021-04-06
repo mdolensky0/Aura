@@ -196,14 +196,22 @@ class SendEmailViewController: UIViewController {
         UIView.animate(withDuration: 0.2) {
             sender.transform = .identity
         } completion: { (_) in
-            
-            let recipient = ["imaginativeai.aura.help@gmail.com"]
-            let mc = MFMailComposeViewController()
-            mc.mailComposeDelegate = self
-            mc.setToRecipients(recipient)
-            mc.setSubject(self.subjectTextField.text!)
-            mc.setMessageBody("Name: \(self.nameTextField.text!)\n\nEmail: \(self.emailTextField.text!)\n\nBody:\n\(self.bodyTextView.text!)", isHTML: false)
-            self.present(mc, animated: true, completion: nil)
+            if MFMailComposeViewController.canSendMail() {
+                let recipient = ["imaginativeai.aura.help@gmail.com"]
+                let mc = MFMailComposeViewController()
+                mc.mailComposeDelegate = self
+                mc.setToRecipients(recipient)
+                mc.setSubject(self.subjectTextField.text!)
+                mc.setMessageBody("Name: \(self.nameTextField.text!)\n\nEmail: \(self.emailTextField.text!)\n\nBody:\n\(self.bodyTextView.text!)", isHTML: false)
+                self.present(mc, animated: true, completion: nil)
+            } else {
+                let alert = UIAlertController(title: NSLocalizedString("Unable to access the mail app", comment: ""),
+                                              message: NSLocalizedString("If you need to contact us, please send an email to imaginativeai.aura.help@gmail.com", comment: ""),
+                                              preferredStyle: .alert)
+                let action = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .default, handler: nil)
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
     
