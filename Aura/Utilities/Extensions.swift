@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import StoreKit
 
 //MARK:- UIView Extensions
 extension UIView {
@@ -242,6 +243,30 @@ extension UIViewController {
         } else {
             return false
         }
+    }
+    
+    func promptForRating() {
+        let alert = UIAlertController(title: NSLocalizedString("Feedback", comment: ""),
+                                      message: NSLocalizedString("Are you enjoying the app?", comment: ""),
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Yes, I love it!", comment: ""),
+                                      style: .default,
+                                      handler: { _ in
+            SKStoreReviewController.requestReview()
+        }))
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment: ""),
+                                      style: .cancel,
+                                      handler: nil))
+        
+        alert.addAction(UIAlertAction(title: NSLocalizedString("No, it could be better", comment: ""),
+                                      style: .default,
+                                      handler: { [weak self]_ in
+            self?.present(SendEmailViewController(), animated: true, completion: nil)
+        }))
+        
+        present(alert, animated: true, completion: nil)
     }
 }
 

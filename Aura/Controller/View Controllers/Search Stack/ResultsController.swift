@@ -494,6 +494,7 @@ class ResultsController: UIViewController {
         }
         
         AdManager.shared.showPopUpAfterSearch(parentVC: self)
+        showRatingIfNeccessary()
         
     }
         
@@ -966,6 +967,27 @@ extension ResultsController {
         mainStackView.addArrangedSubview(whereToStartLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         mainStackView.addArrangedSubview(introVideoView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         
+    }
+    
+    func showRatingIfNeccessary() {
+                
+        if let numSearchesForRating = UserDefaults.standard.object(forKey: "numSearchesForRating") as? Int {
+            if numSearchesForRating == 14 {
+                UserDefaults.standard.set(0, forKey: "numSearchesForRating")
+                if let numTimesRatingPromptSeen = UserDefaults.standard.object(forKey: "numTimesRatingPromptSeen") as? Int {
+                    if numTimesRatingPromptSeen == 3 { return }
+                    UserDefaults.standard.set(numTimesRatingPromptSeen + 1, forKey: "numTimesRatingPromptSeen")
+                    self.promptForRating()
+                } else {
+                    UserDefaults.standard.set(1, forKey: "numTimesRatingPromptSeen")
+                    self.promptForRating()
+                }
+            } else {
+                UserDefaults.standard.set(numSearchesForRating + 1, forKey: "numSearchesForRating")
+            }
+        } else {
+            UserDefaults.standard.set(1, forKey: "numSearchesForRating")
+        }
     }
     
     //MARK:- Selector Functions
@@ -1752,6 +1774,7 @@ extension ResultsController {
         }
         
         AdManager.shared.showPopUpAfterSearch(parentVC: self)
+        showRatingIfNeccessary()
         
     }
     
