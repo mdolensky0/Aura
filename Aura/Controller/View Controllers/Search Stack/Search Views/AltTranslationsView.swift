@@ -156,7 +156,7 @@ extension AltTranslationsView: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
-        return dictionaryResult.count
+        return dictionaryKeys.count
     
     }
     
