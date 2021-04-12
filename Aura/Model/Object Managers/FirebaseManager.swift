@@ -262,7 +262,7 @@ class FirebaseManager {
         
         var lessons = [LessonModel]()
         
-        db.collection(K.FBConstants.lessonsCollectionName).order(by: "lessonTitle", descending: true).addSnapshotListener { (querySnapshot, err) in
+        db.collection(K.FBConstants.lessonsCollectionName).order(by: "lessonTitle", descending: false).addSnapshotListener { (querySnapshot, err) in
             
             if let err = err {
                 

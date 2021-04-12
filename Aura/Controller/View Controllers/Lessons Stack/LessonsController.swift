@@ -388,7 +388,7 @@ class LessonsController: UIViewController {
 extension LessonsController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if scrollViewIndex == 0 {
+        if scrollViewIndex == 1 {
             return numSections
         } else {
             return 1
@@ -398,7 +398,7 @@ extension LessonsController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if scrollViewIndex == 0 {
+        if scrollViewIndex == 1 {
             if section == 45 {
                 // For all the bonus videos we add
                 if let lessons = Utilities.shared.lessons, lessons.count > 0 {
@@ -430,9 +430,9 @@ extension LessonsController: UICollectionViewDataSource {
         
         cell.cellMask.alpha = 0
         
-        if scrollViewIndex == 0 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.section > 0 {
+        if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.section > 0 {
             cell.playView.isHidden = false
-        } else if scrollViewIndex == 0 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
+        } else if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
             cell.playView.isHidden = false
         }else {
             cell.playView.isHidden = true
@@ -461,7 +461,7 @@ extension LessonsController: UICollectionViewDataSource {
                                                                      withReuseIdentifier: HeaderCollectionReusableView.identifier,
                                                                      for: indexPath) as! HeaderCollectionReusableView
         
-        if scrollViewIndex != 0 {
+        if scrollViewIndex != 1 {
             header.configure(title: "")
         } else {
             header.configure(title: headerTitles[indexPath.section])
@@ -502,7 +502,7 @@ extension LessonsController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if scrollViewIndex == 0 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.section > 0 {
+        if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.section > 0 {
             
             if !UserDefaults.standard.bool(forKey: "hasClickedLock") {
                 AdManager.shared.showAdPopUP(parentVC: self)
@@ -513,7 +513,7 @@ extension LessonsController: UICollectionViewDelegate {
                 return
             }
             
-        } else if scrollViewIndex == 0 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
+        } else if scrollViewIndex == 1 && AdManager.shared.funnelProgress != .completedVideo2Bought && indexPath.row > 0 {
             
             if !UserDefaults.standard.bool(forKey: "hasClickedLock") {
                 AdManager.shared.showAdPopUP(parentVC: self)
@@ -528,9 +528,9 @@ extension LessonsController: UICollectionViewDelegate {
         
         let av = PUAVPlayerViewController()
         
-        if scrollViewIndex == 1 && indexPath.row == 0 {
+        if scrollViewIndex == 0 && indexPath.row == 0 {
             av.popUpVideoName = .secret1
-        } else if scrollViewIndex == 1 && indexPath.row == 1 {
+        } else if scrollViewIndex == 0 && indexPath.row == 1 {
             av.popUpVideoName = .secret2
         } else {
             av.popUpVideoName = .other
