@@ -164,6 +164,42 @@ class FirebaseManager {
             }
         }
     }
+    
+    func loadUserWhoPurchased() {
+        let docRef = db.collection(K.FBConstants.usersCollectionName).whereField("purchases", in: [["EHDMasterCourse":true]])
+        
+        docRef.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting User Document: \(error)")
+            }
+            
+            guard let querySnapshot = querySnapshot else {
+                print("nil")
+                return
+            }
+            
+            var count = 0
+            for document in querySnapshot.documents {
+                
+                let result = Result {
+                    try document.data(as: User.self)
+                }
+                
+                switch result {
+                case .success(let user):
+                    if let user = user {
+                        print(user.UID)
+                        count += 1
+                    } else {
+                        print("Nil User Model")
+                    }
+                case .failure(let error):
+                    print("Error decoding User Model: \(error)")
+                }
+            }
+            print(count)
+        }
+    }
                 
     func loadSuperUser() {
         

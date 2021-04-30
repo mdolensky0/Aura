@@ -335,6 +335,7 @@ class HomeController: UIViewController {
 //        UserDefaults.standard.set(false, forKey: "hasLaunchedFlashcards")
 //        UserDefaults.standard.set(false, forKey: "hasSeenDeckSelector")
 //        UserDefaults.standard.set(false, forKey: "hasClickedLock")
+//        FirebaseManager.shared.loadUserWhoPurchased()
     }
     
     override func viewDidLayoutSubviews() {
