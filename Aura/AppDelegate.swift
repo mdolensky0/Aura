@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Configure Firebase
         FirebaseApp.configure()
+        RCManager.shared.configure(expirationDuration: K.RCConstants.minimumFetchTime)
 
         _ = Firestore.firestore()
         _ = Storage.storage()

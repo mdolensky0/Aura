@@ -359,10 +359,10 @@ protocol LessonsScrollViewDelegate {
 
 class LessonsScrollView: HorizontalScrollView {
     
-    var lessons = [LessonModel]()
+    var lessons = [VideoGroup]()
     var lessonsScrollViewDelegate: LessonsScrollViewDelegate?
     
-    convenience init(frame: CGRect, lessons: [LessonModel]) {
+    convenience init(frame: CGRect, lessons: [VideoGroup]) {
         self.init(frame: frame)
         self.lessons = lessons
         addLessonViews()
@@ -398,7 +398,7 @@ class LessonsScrollView: HorizontalScrollView {
             background.widthAnchor.constraint(equalToConstant: 200).isActive = true
             background.heightAnchor.constraint(equalToConstant: 100).isActive = true
             
-            iv.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
+            iv.loadImageUsingCacheWithURLString(urlString: lesson.thumbnailURL)
             iv.backgroundColor = K.DesignColors.primary
             iv.contentMode = .scaleAspectFill
             iv.translatesAutoresizingMaskIntoConstraints = false

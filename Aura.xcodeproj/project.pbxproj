@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1D12E34E260D9B6600C55374 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D12E34D260D9B6600C55374 /* AnalyticsManager.swift */; };
 		1D3B667E255DB8CC0078B9DA /* finalWordAndIPA.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1D3B667D255DB8CC0078B9DA /* finalWordAndIPA.txt */; };
+		1D3D21212640F21C0012A26B /* VideoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3D21202640F21C0012A26B /* VideoGroup.swift */; };
 		1D44851925365FDC00E42C39 /* TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D44851825365FDC00E42C39 /* TestController.swift */; };
 		1D8D3DD0254C909800563D8C /* StudyResultPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8D3DCF254C909800563D8C /* StudyResultPopUpView.swift */; };
 		1D8D3DD3254CB7CC00563D8C /* SwipeTutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8D3DD2254CB7CC00563D8C /* SwipeTutorialView.swift */; };
@@ -42,6 +43,7 @@
 		1DB7430E25F2D21E00D69976 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DB7430D25F2D21E00D69976 /* MessageUI.framework */; };
 		1DB7431125F2E7D300D69976 /* UserAgreementVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB7431025F2E7D300D69976 /* UserAgreementVC.swift */; };
 		1DB7431625F583AD00D69976 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB7431525F583AD00D69976 /* NetworkManager.swift */; };
+		1DB81F262644D53600505740 /* RCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB81F252644D53600505740 /* RCManager.swift */; };
 		1DD2BAF825322CD000811F89 /* AnimatedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2BAF725322CD000811F89 /* AnimatedButton.swift */; };
 		1DED0736255F274300AB45A7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DED0735255F274300AB45A7 /* StoreKit.framework */; };
 		7D03998C252662690070DB8E /* UITextFieldPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998B252662680070DB8E /* UITextFieldPadding.swift */; };
@@ -170,6 +172,7 @@
 /* Begin PBXFileReference section */
 		1D12E34D260D9B6600C55374 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		1D3B667D255DB8CC0078B9DA /* finalWordAndIPA.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = finalWordAndIPA.txt; path = ../../finalWordAndIPA.txt; sourceTree = "<group>"; };
+		1D3D21202640F21C0012A26B /* VideoGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoGroup.swift; sourceTree = "<group>"; };
 		1D44851825365FDC00E42C39 /* TestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestController.swift; sourceTree = "<group>"; };
 		1D8D3DCF254C909800563D8C /* StudyResultPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyResultPopUpView.swift; sourceTree = "<group>"; };
 		1D8D3DD2254CB7CC00563D8C /* SwipeTutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTutorialView.swift; sourceTree = "<group>"; };
@@ -207,6 +210,7 @@
 		1DB7431025F2E7D300D69976 /* UserAgreementVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgreementVC.swift; sourceTree = "<group>"; };
 		1DB7431525F583AD00D69976 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		1DB7431A25F806DB00D69976 /* Aura.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aura.entitlements; sourceTree = "<group>"; };
+		1DB81F252644D53600505740 /* RCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCManager.swift; sourceTree = "<group>"; };
 		1DD2BAF725322CD000811F89 /* AnimatedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedButton.swift; sourceTree = "<group>"; };
 		1DED0735255F274300AB45A7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		41B027E80BEA395A6BD67C90 /* Pods-Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.release.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.release.xcconfig"; sourceTree = "<group>"; };
@@ -443,6 +447,7 @@
 				1DA47CA225B8C84100B546B1 /* PurchasingManager.swift */,
 				1DB7431525F583AD00D69976 /* NetworkManager.swift */,
 				1D12E34D260D9B6600C55374 /* AnalyticsManager.swift */,
+				1DB81F252644D53600505740 /* RCManager.swift */,
 			);
 			path = "Object Managers";
 			sourceTree = "<group>";
@@ -456,6 +461,7 @@
 				7D1B10742512D9E80000BFE3 /* LessonModel.swift */,
 				7D214220251E865100787DD6 /* TranslationError.swift */,
 				1DA7B3092538E6820068330B /* DefaultDecoding.swift */,
+				1D3D21202640F21C0012A26B /* VideoGroup.swift */,
 			);
 			path = "Firebase Models";
 			sourceTree = "<group>";
@@ -986,6 +992,7 @@
 				1D999FB62543A94E00A635DE /* Page11.swift in Sources */,
 				7D15DB5C24C2A49F009ACDB4 /* RealmManager.swift in Sources */,
 				1D999FB02543A17C00A635DE /* Page9.swift in Sources */,
+				1DB81F262644D53600505740 /* RCManager.swift in Sources */,
 				7D15DB6224C2A701009ACDB4 /* WordModel.swift in Sources */,
 				1DD2BAF825322CD000811F89 /* AnimatedButton.swift in Sources */,
 				7DFBA8CA24B4189500618332 /* TabBarController.swift in Sources */,
@@ -1007,6 +1014,7 @@
 				1D999FBF25478ED500A635DE /* Page8_1.swift in Sources */,
 				7D530E3724E4E87300C0C209 /* NoScrollTableView.swift in Sources */,
 				7DBB68A825279CE00008EA37 /* SpeechToTextController.swift in Sources */,
+				1D3D21212640F21C0012A26B /* VideoGroup.swift in Sources */,
 				1D999FB32543A7B800A635DE /* Page10.swift in Sources */,
 				7D66D8A024B4249B0019BFF0 /* LoginController.swift in Sources */,
 				7D530E3324E3841000C0C209 /* FlashcardDetailsView.swift in Sources */,
@@ -1209,7 +1217,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.18;
+				MARKETING_VERSION = 1.19;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1233,7 +1241,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.18;
+				MARKETING_VERSION = 1.19;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

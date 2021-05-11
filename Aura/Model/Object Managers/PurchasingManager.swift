@@ -55,19 +55,27 @@ class PurchasingManager: NSObject {
     }
     
     func handlePurchase(transactionID: String) {
-        AdManager.shared.funnelProgress = .completedVideo2Bought
-        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo2Bought)
-        Utilities.shared.user?.purchases["EHDMasterCourse"] = true
-        Utilities.shared.user?.purchaseIDs["com.iai.Aura.EHDMasterCourse"] = transactionID
+        switch myProduct?.productIdentifier {
         
-        transferCourseDecksToUser()
+        case K.productIdentifiers.ehdMasterCourse:
+            AdManager.shared.funnelProgress = .completedVideo1Bought
+            AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo1Bought)
+            Utilities.shared.user?.purchases[K.productNames.ehdMasterCourse] = true
+            Utilities.shared.user?.purchaseIDs[K.productIdentifiers.ehdMasterCourse] = transactionID
+            
+            transferCourseDecksToUser()
+            
+            if let user = Utilities.shared.user {
+                FirebaseManager.shared.updateUser(user: user)
+            }
+            AdManager.shared.removeBuyButton()
+            if let window = UIApplication.shared.keyWindow {
+                window.displayCheck(text: NSLocalizedString("Success!", comment: "Success, whatever action you just performed worked successfully"))
+            }
+            break
         
-        if let user = Utilities.shared.user {
-            FirebaseManager.shared.updateUser(user: user)
-        }
-        AdManager.shared.removeBuyButton()
-        if let window = UIApplication.shared.keyWindow {
-            window.displayCheck(text: NSLocalizedString("Success!", comment: "Success, whatever action you just performed worked successfully"))
+        default:
+            break
         }
     }
     

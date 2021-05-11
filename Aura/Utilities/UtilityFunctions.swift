@@ -69,7 +69,7 @@ class Utilities {
         
     }
     
-    var lessons: [LessonModel]? {
+    var lessons: [VideoGroup]? {
         didSet {
             self.homeDelegate?.updateLessonsDisplay()
             self.homeDelegate?.updateSecretsThumbnail()
@@ -96,18 +96,18 @@ class Utilities {
             return
         }
         
-        if funnelProgress == .completedVideo2Bought && user == nil {
-            AdManager.shared.funnelProgress = .completedVideo2NoBuy
+        if funnelProgress == .completedVideo1Bought && user == nil {
+            AdManager.shared.funnelProgress = .completedVideo1NoBuy
             return
         }
         
-        if user != nil && user!.purchases["EHDMasterCourse"] == true {
-            AdManager.shared.funnelProgress = .completedVideo2Bought
+        if user != nil && user!.purchases[K.productNames.ehdMasterCourse] == true {
+            AdManager.shared.funnelProgress = .completedVideo1Bought
             return
         }
         
         // For testing I can change a purchase back to false
-//        if user != nil && user!.purchases["EHDMasterCourse"] == false {
+//        if user != nil && user!.purchases[K.productNames.ehdMasterCourse] == false {
 //            AdManager.shared.funnelProgress = .completedVideo2NoBuy
 //            return
 //        }

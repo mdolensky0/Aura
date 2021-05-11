@@ -116,7 +116,7 @@ class TestResultPopUpManager: PopUpManager, TestResultPopUpDelegate {
     
 }
 
-// MARK: - Test Result Pop Up Class
+// MARK: - Study Result Pop Up Class
 class StudyResultPopUpManager: PopUpManager, TestResultPopUpDelegate {
     
     var popUpView = StudyResultPopUpView()
@@ -153,6 +153,7 @@ class StudyResultPopUpManager: PopUpManager, TestResultPopUpDelegate {
     
 }
 
+// MARK: - Swipe Tutorial Pop Up Class
 class SwipeTutorialPopUpManager: PopUpManager, SwipeTutorialDelegate {
     
     lazy var popUpView: SwipeTutorialView = {
@@ -176,6 +177,7 @@ class SwipeTutorialPopUpManager: PopUpManager, SwipeTutorialDelegate {
     }
 }
 
+// MARK: - Secrets Video Pop Up Manager
 class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
     
     var popUpView = SecretsPopUpView()
@@ -183,16 +185,19 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
     
     convenience init(title: String, info: String, thumbnailURL: String, buttonText: String) {
         self.init()
-        popUpView = SecretsPopUpView(frame: .zero,
-                                     titleText: title,
-                                     infoText: info,
-                                     thumbnailURL: thumbnailURL,
-                                     buttonText: buttonText)
+        popUpView = SecretsPopUpView(
+            frame: .zero,
+            titleText: title,
+            infoText: info,
+            thumbnailURL: thumbnailURL,
+            buttonText: buttonText
+        )
         popUpView.delegate = self
     }
     
     override func showPopUpFadingIn() {
         showPopUpFadingIn(v: popUpView)
+        print("\nPopping Up\n")
     }
     
     func dismiss(didSkip: Bool) {
@@ -223,9 +228,18 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
         
         let av = PUAVPlayerViewController()
         av.parentView = parentView
-        av.popUpVideoName = AdManager.shared.getVideoNameCurrentUserState()
         let urlString = AdManager.shared.getVideoURLForCurrentUserState()
         
+        let position = AdManager.shared.getPositionForCurrentUserState()
+        
+        guard let videoGroups = Utilities.shared.lessons else {
+            return
+        }
+        
+        guard let lesson = videoGroups.first(where: {$0.baseID == AdManager.shared.currentVideoPosition.baseID}) else {
+            return
+        }
+                
         if let url = URL(string: urlString) {
             
             let player = AVPlayer(url: url)
@@ -241,79 +255,79 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
                 let secs = Int(seconds) % 60
                 
                 switch AdManager.shared.funnelProgress {
-                case .hasNotSeenVideo1 where av.popUpVideoName! == .secret1:
+                
+                case .hasNotSeenVideo1 where lesson.baseID == K.FBConstants.baseCourseIDs[0]:
                     AdManager.shared.funnelProgress = .seenPartOfVideo1
                     AnalyticsManager.shared.logFunnelChange(funnelProgress: .seenPartOfVideo1)
-                case .seenPartOfVideo1 where av.popUpVideoName! == .secret1:
-                    if min >= 9 {
-                        AdManager.shared.funnelProgress = .completedVideo1
-                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo1)
-                    }
-                case .completedVideo1 where av.popUpVideoName! == .secret2:
-                    AdManager.shared.funnelProgress = .seenPartOfVideo2
-                    AnalyticsManager.shared.logFunnelChange(funnelProgress: .seenPartOfVideo2)
-                case .seenPartOfVideo2 where av.popUpVideoName! == .secret2:
-                    if min >= 15 && secs >= 15 {
-                        AdManager.shared.funnelProgress = .completedVideo2NoBuy
-                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo2NoBuy)
+                
+                case .seenPartOfVideo1 where lesson.baseID == K.FBConstants.baseCourseIDs[0]:
+                    if min >= K.FunnelConstants.minuteToShowBuyBtn && secs >= K.FunnelConstants.secondToShowBuyBtn {
+                        AdManager.shared.funnelProgress = .completedVideo1NoBuy
+                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo1NoBuy)
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
                         AdManager.shared.isBuyButtonShowing = true
-                        AdManager.shared.currentLessonIndex = 0
+                        AdManager.shared.currentVideoPosition = VideoPosition(baseID: K.FBConstants.baseCourseIDs[1], section: 0, row: 0)
                     }
-                case .completedVideo2NoBuy:
-                    if secs >= 15 && AdManager.shared.isBuyButtonShowing == false {
+                
+                case .completedVideo1NoBuy:
+                    if secs >= K.FunnelConstants.secondToShowBuyIfIntroSeen && AdManager.shared.isBuyButtonShowing == false {
                         AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
                         AdManager.shared.isBuyButtonShowing = true
                     }
-                    
-                    if av.popUpVideoName != .other {
-                        break
-                    }
-                    
-                    if let idx = AdManager.shared.currentLessonIndex {
-                        if let duration = av.player?.currentItem?.duration {
-                            let durationSecs = CMTimeGetSeconds(duration)
-                            if durationSecs - seconds <= 15 {
-                                if idx == 0 {
-                                    AdManager.shared.currentLessonIndex = idx + 1
-                                    AnalyticsManager.shared.logFinishedCourseVideo(videoIndex: 0)
-                                }
-                            }
-                        }
-                    }
+                    self.updateNextVideoIfNecessary(av, progressTime: seconds, currPosition: position, videoGroup: lesson)
+                
+                case .completedVideo1Bought:
+                    self.updateNextVideoIfNecessary(av, progressTime: seconds, currPosition: position, videoGroup: lesson)
+
                 default:
                     break
                 }
             })
-            
-            parentView?.present(av, animated: true) {
+            parentView!.present(av, animated: true) {
                 
                 av.player!.play()
+                if AdManager.shared.funnelProgress == .seenPartOfVideo1 && lesson.baseID == K.FBConstants.baseCourseIDs[0] {
+                    av.player!.seek(to: CMTime(seconds: AdManager.shared.introVideoTimeLeftAt, preferredTimescale: 1))
+                }
             }
         }
     }
-        
+    
+    func updateNextVideoIfNecessary(_ av: PUAVPlayerViewController, progressTime: Double, currPosition: VideoPosition, videoGroup: VideoGroup) {
+        if let duration = av.player?.currentItem?.duration {
+            let durationSecs = CMTimeGetSeconds(duration)
+            if durationSecs - progressTime <= Double(K.VideoConstants.secondsToMarkVideoFinished) {
+            
+                if currPosition.row < videoGroup.sections[currPosition.section].videos.count - 1 {
+                    let newPosition = VideoPosition(baseID: currPosition.baseID, section: currPosition.section, row: currPosition.row + 1)
+                    AdManager.shared.currentVideoPosition = newPosition
+                    AnalyticsManager.shared.logFinishedVideo(position: newPosition)
+                } else if currPosition.section < videoGroup.sections.count - 1 {
+                    let newPosition = VideoPosition(baseID: currPosition.baseID, section: currPosition.section + 1, row: 0)
+                    AdManager.shared.currentVideoPosition = newPosition
+                    AnalyticsManager.shared.logFinishedVideo(position: newPosition)
+                }
+            }
+        }
+    }
 }
 
-enum PopUpVideoName {
-    case secret1
-    case secret2
-    case other
-}
-
+// MARK: - Pop Up AV Player View Controller
 class PUAVPlayerViewController: AVPlayerViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         handleVideoCloseForCurrentState()
         player?.pause()
+        if let currentTime = player?.currentTime().seconds {
+            AdManager.shared.introVideoTimeLeftAt = currentTime - 5 >= 0  ? currentTime - 5 : 0
+        }
         player?.removeTimeObserver(timeObserver!)
         AdManager.shared.removeBuyButton()
     }
     
     var parentView: UIViewController?
-    var videoIdx: Int?
     var timeObserver: Any?
-    var popUpVideoName: PopUpVideoName?
+    var isIntro: Bool = false
     
     func handleVideoCloseForCurrentState() {
         
@@ -329,31 +343,25 @@ class PUAVPlayerViewController: AVPlayerViewController {
         }
     
         if let _ = parentView as? ResultsController {
-            if funnelProgress == .completedVideo2Bought {
+            if funnelProgress == .completedVideo1Bought {
                 parentView?.tabBarController?.selectedIndex = 4
             } else { return }
         }
         
         if let _ = parentView as? FlashCardController {
-            if funnelProgress == .completedVideo1 {
-                AdManager.shared.showAdPopUP(parentVC: parentView!)
-            } else if funnelProgress == .completedVideo2Bought {
+            if funnelProgress == .completedVideo1Bought {
                 parentView?.tabBarController?.selectedIndex = 4
             } else { return }
         }
         
         if let _ = parentView as? DeckSelectingController {
-            if funnelProgress == .completedVideo1 {
-                AdManager.shared.showAdPopUP(parentVC: parentView!)
-            } else if funnelProgress == .completedVideo2Bought {
+            if funnelProgress == .completedVideo1Bought {
                 parentView?.tabBarController?.selectedIndex = 4
             } else { return }
         }
         
         if let _ = parentView as? LessonsController {
-            if funnelProgress == .completedVideo1 {
-                AdManager.shared.showAdPopUP(parentVC: parentView!)
-            } else if funnelProgress == .completedVideo2Bought {
+            if funnelProgress == .completedVideo1Bought {
                 parentView?.tabBarController?.selectedIndex = 4
             } else { return }
         }

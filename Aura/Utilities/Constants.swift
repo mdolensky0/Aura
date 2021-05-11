@@ -13,10 +13,30 @@ struct K {
     struct FBConstants {
         static let dictionaryCollectionName = "Words"
         static let usersCollectionName = "Users"
-        static let lessonsCollectionName = "Lessons"
+        static let lessonsCollectionName = NSLocalizedString("lessonNameForRegion", comment: "")
         static let colorErrorsCollectionName = "Coloring_Error"
         static let translationErrorCollectionName = "Translation_Error"
         static let superUser = "4vCef03V7SMdjTDq5EyYYqCiLsk2"
+        static var baseCourseIDs: [String] {
+            return [RCManager.shared.value(forKey: RCConstants.introBaseID), "ehd_master_course"]
+        }
+    }
+    
+    struct RCConstants {
+        static let introBaseID = "intro_baseID"
+        static let minuteToShowBuyBtn = "min_show_buy_btn"
+        static let secondToShowBuyBtn = "sec_show_buy_btn"
+        static let minimumFetchTime = 43200.0
+    }
+    
+    struct FunnelConstants {
+        static let minuteToShowBuyBtn = RCManager.shared.value(forKey: RCConstants.minuteToShowBuyBtn).intValue
+        static let secondToShowBuyBtn = RCManager.shared.value(forKey: RCConstants.secondToShowBuyBtn).intValue
+        static let secondToShowBuyIfIntroSeen = 15
+    }
+    
+    struct VideoConstants {
+        static let secondsToMarkVideoFinished = 15
     }
     
     // English HD Colors
@@ -80,30 +100,14 @@ struct K {
         static let flashcardCell = "FlashcardCell"
     }
     
-// Language Codes For Translation
-//    struct LanguageCodes {
-//        
-//        static let languageDict =  ["en" : "English",     "en-GB" : "English",      "en-AU" : "English",
-//                                    "en-CA" : "English",  "en-IN" : "English",      "fr" : "Français",
-//                                    "fr-CA" : "Français",   "es" : "Español",           "es-MX" : "Español",
-//                                    "pt" : "Português",     "pt-BR" : "Português",      "it" : "Italiano",
-//                                    "de" : "Deutsch",      "zh-Hans" : "简体中文",        "zh-Hant" : "繁體中文",
-//                                    "zh-HK" : "繁體中文",      "ja" : "日本語",                "nl" : "Nederlands",
-//                                    "ko" : "한국어",           "vi" : "Tiếng Việt",       "ru" : "Pусский",
-//                                    "sv" : "Svenska",       "da" : "Dansk",               "fi" : "Suomi",
-//                                    "nb" : "Norsk",         "tr" : "Türkçe",                "el" : "Eλληνικά",
-//                                    "id" : "Indonesia",    "ms" : "Melayu",             "th" : "ภาษาไทย",
-//                                    "hi" : "हिंदी",              "hu" : "Magyar",             "pl" : "Polski",
-//                                    "cs" : "čeština",       "sk" : "Slovenčina",         "uk" : "українська",
-//                                    "ca" : "Català",      "ro" : "Română",             "hr" : "Hrvatski",
-//                                    "he" : "עברית",           "ar" : "العربية"]
-//        
-//        static let iosToGoogleLangCode = ["en-GB" : "en", "en-AU" : "en", "en-CA" : "en",
-//                                          "en-IN" : "en", "fr-CA" : "fr", "es-MX" : "es",
-//                                          "pt-BR" : "pt","zh-Hans" : "zh-CN", "zh-Hant" : "zh-TW",
-//                                          "zh-HK" : "zh-TW", "nb" : "no"]
-//    }
+    struct productIdentifiers {
+        static let ehdMasterCourse = "com.iai.Aura.EHDMasterCourse"
+    }
     
+    struct productNames {
+        static let ehdMasterCourse = "EHDMasterCourse"
+    }
+        
     // Key Data For Populating the Key Controller
     struct KeyInfo {
         
@@ -234,5 +238,29 @@ struct K {
         return dictionary
         
     }()
+    
+    // Language Codes For Translation
+    //    struct LanguageCodes {
+    //
+    //        static let languageDict =  ["en" : "English",     "en-GB" : "English",      "en-AU" : "English",
+    //                                    "en-CA" : "English",  "en-IN" : "English",      "fr" : "Français",
+    //                                    "fr-CA" : "Français",   "es" : "Español",           "es-MX" : "Español",
+    //                                    "pt" : "Português",     "pt-BR" : "Português",      "it" : "Italiano",
+    //                                    "de" : "Deutsch",      "zh-Hans" : "简体中文",        "zh-Hant" : "繁體中文",
+    //                                    "zh-HK" : "繁體中文",      "ja" : "日本語",                "nl" : "Nederlands",
+    //                                    "ko" : "한국어",           "vi" : "Tiếng Việt",       "ru" : "Pусский",
+    //                                    "sv" : "Svenska",       "da" : "Dansk",               "fi" : "Suomi",
+    //                                    "nb" : "Norsk",         "tr" : "Türkçe",                "el" : "Eλληνικά",
+    //                                    "id" : "Indonesia",    "ms" : "Melayu",             "th" : "ภาษาไทย",
+    //                                    "hi" : "हिंदी",              "hu" : "Magyar",             "pl" : "Polski",
+    //                                    "cs" : "čeština",       "sk" : "Slovenčina",         "uk" : "українська",
+    //                                    "ca" : "Català",      "ro" : "Română",             "hr" : "Hrvatski",
+    //                                    "he" : "עברית",           "ar" : "العربية"]
+    //
+    //        static let iosToGoogleLangCode = ["en-GB" : "en", "en-AU" : "en", "en-CA" : "en",
+    //                                          "en-IN" : "en", "fr-CA" : "fr", "es-MX" : "es",
+    //                                          "pt-BR" : "pt","zh-Hans" : "zh-CN", "zh-Hant" : "zh-TW",
+    //                                          "zh-HK" : "zh-TW", "nb" : "no"]
+    //    }
 }
 

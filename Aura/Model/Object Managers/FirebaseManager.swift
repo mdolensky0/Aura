@@ -166,7 +166,7 @@ class FirebaseManager {
     }
     
     func loadUserWhoPurchased() {
-        let docRef = db.collection(K.FBConstants.usersCollectionName).whereField("purchases", in: [["EHDMasterCourse":true]])
+        let docRef = db.collection(K.FBConstants.usersCollectionName).whereField("purchases", in: [[K.productNames.ehdMasterCourse:true]])
         
         docRef.getDocuments { (querySnapshot, error) in
             if let error = error {
@@ -282,11 +282,11 @@ class FirebaseManager {
     
     //MARK: - Lessons Data
     
-    func updateLesson(lesson: LessonModel) {
+    func updateLesson(videoGroup: VideoGroup) {
         
         do {
             
-            try self.db.collection(K.FBConstants.lessonsCollectionName).document(lesson.lessonTitle).setData(from: lesson)
+            try self.db.collection(K.FBConstants.lessonsCollectionName).document(videoGroup.id).setData(from: videoGroup)
             
         } catch let error {
             print("Error writing deck to Firestore: \(error)")
@@ -296,9 +296,11 @@ class FirebaseManager {
     
     func loadLessons() {
         
-        var lessons = [LessonModel]()
+        var videoGroup = [VideoGroup]()
         
-        db.collection(K.FBConstants.lessonsCollectionName).order(by: "lessonTitle", descending: false).addSnapshotListener { (querySnapshot, err) in
+        print(K.FBConstants.baseCourseIDs)
+        
+        db.collection(K.FBConstants.lessonsCollectionName).whereField("baseID", in: K.FBConstants.baseCourseIDs).addSnapshotListener { (querySnapshot, err) in
             
             if let err = err {
                 
@@ -309,19 +311,18 @@ class FirebaseManager {
             else {
                 
                 print(querySnapshot!.documents.count)
-                lessons = []
                 for document in querySnapshot!.documents {
                     
                     let result = Result {
-                        try document.data(as: LessonModel.self)
+                        try document.data(as: VideoGroup.self)
                     }
                     
                     switch result {
                         
-                    case .success(let lessonModel):
+                    case .success(let group):
                         
-                        if let lessonModel = lessonModel {
-                            lessons.append(lessonModel)
+                        if let group = group {
+                            videoGroup.append(group)
                         } else {
                             print("nil lessonModel")
                             break
@@ -333,7 +334,7 @@ class FirebaseManager {
                         
                     }
                 }
-                Utilities.shared.lessons = lessons
+                Utilities.shared.lessons = videoGroup
             }
         }
     }

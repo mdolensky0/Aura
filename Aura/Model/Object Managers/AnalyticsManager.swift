@@ -61,12 +61,12 @@ class AnalyticsManager {
         Analytics.logEvent("skipped_video_popup", parameters: ["pop_up_title" : videoTitle])
     }
     
-    func logStartedCourseVideo(videoIndex: Int) {
-        Analytics.logEvent("started_course_video", parameters: ["video_index" : videoIndex])
+    func logStartedVideo(position: VideoPosition) {
+        Analytics.logEvent("started_video", parameters: ["baseID" : position.baseID, "section" : position.section, "row": position.row])
     }
     
-    func logFinishedCourseVideo(videoIndex: Int) {
-        Analytics.logEvent("finished_course_video", parameters: ["video_index" : videoIndex])
+    func logFinishedVideo(position: VideoPosition) {
+        Analytics.logEvent("finished_video", parameters: ["baseID" : position.baseID, "section" : position.section, "row": position.row])
     }
     
     func logAddFlashcardPressed() {

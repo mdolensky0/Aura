@@ -323,18 +323,21 @@ class HomeController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        FirebaseManager.shared.loadLessons()
         setup()
+        resetDefaultsForAppUpdate1_18()
+        //populateLessonsDB()
         //getMatches(for: "ɪ", letterCombo: "oi")
         
-        // FOR TESTING
+//        FOR TESTING
 //        AdManager.shared.funnelProgress = .hasNotSeenVideo1
-//        AdManager.shared.currentLessonIndex = 0
 //        UserDefaults.standard.set(false, forKey: "hasLaunchedHome")
-//        UserDefaults.standard.setValue(5, forKey: "searchCount")
+//        UserDefaults.standard.setValue(0, forKey: "searchCount")
 //        UserDefaults.standard.setValue(false, forKey: "hasEnteredDeckController")
 //        UserDefaults.standard.set(false, forKey: "hasLaunchedFlashcards")
 //        UserDefaults.standard.set(false, forKey: "hasSeenDeckSelector")
 //        UserDefaults.standard.set(false, forKey: "hasClickedLock")
+//        UserDefaults.standard.removeObject(forKey: "currentVideoPosition")
 //        FirebaseManager.shared.loadUserWhoPurchased()
     }
     
@@ -374,6 +377,23 @@ class HomeController: UIViewController {
             AnalyticsManager.shared.logFunnelChange(funnelProgress: .hasNotSeenVideo1)
             AdManager.shared.showAdPopUP(parentVC: self)
             UserDefaults.standard.set(true, forKey: "hasLaunchedHome")
+        }
+    }
+    
+    func resetDefaultsForAppUpdate1_18() {
+        
+        if UserDefaults.standard.bool(forKey: "isFirstLaunchOfVersion1_18") {
+            return
+        } else {
+            AdManager.shared.funnelProgress = .hasNotSeenVideo1
+            UserDefaults.standard.set(false, forKey: "hasLaunchedHome")
+            UserDefaults.standard.setValue(0, forKey: "searchCount")
+            UserDefaults.standard.setValue(false, forKey: "hasEnteredDeckController")
+            UserDefaults.standard.set(false, forKey: "hasLaunchedFlashcards")
+            UserDefaults.standard.set(false, forKey: "hasSeenDeckSelector")
+            UserDefaults.standard.set(false, forKey: "hasClickedLock")
+            UserDefaults.standard.removeObject(forKey: "currentVideoPosition")
+            UserDefaults.standard.set(true, forKey: "isFirstLaunchOfVersion1_18")
         }
     }
     
@@ -536,54 +556,6 @@ class HomeController: UIViewController {
         
     }
     
-    func populateLessons() {
-        
-        var i = 0
-        for lesson in Utilities.shared.lessons! {
-            
-            let background = UIView()
-            
-            let container = CustomImageView()
-            container.backgroundColor = .white
-            container.roundCorners(cornerRadius: 10)
-            container.contentMode = .scaleAspectFill
-            container.loadImageUsingCacheWithURLString(urlString: lesson.lessonThumbnailURL)
-            
-            background.addSubview(container)
-            container.anchor(top: background.topAnchor,
-                             bottom: background.bottomAnchor,
-                             leading: background.leadingAnchor,
-                             trailing: background.trailingAnchor,
-                             height: nil,
-                             width: nil)
-            
-            background.translatesAutoresizingMaskIntoConstraints = false
-            background.widthAnchor.constraint(equalToConstant: 200).isActive = true
-            background.heightAnchor.constraint(equalToConstant: 100).isActive = true
-            
-            let b = AnimatedButton(frame: .zero)
-            b.index = i
-            b.addTarget(self, action: #selector(lessonPressed(_:)), for: .touchUpInside)
-            
-            background.addSubview(b)
-            b.anchor(top: background.topAnchor,
-                     bottom: background.bottomAnchor,
-                     leading: background.leadingAnchor,
-                     trailing: background.trailingAnchor,
-                     height: nil,
-                     width: nil)
-            
-            lessonsScrollView.stackView.addArrangedSubview(background)
-            i += 1
-        }
-        
-        if Utilities.shared.lessons!.count == 0 {
-            lessonsLabel.superview?.isHidden = true
-            lessonsScrollView.superview?.isHidden = true
-        }
-        
-    }
-    
     @objc func discoverPressed(_ sender: UIButton) {
         
         UIView.animate(withDuration: 0.2) {
@@ -613,22 +585,7 @@ class HomeController: UIViewController {
         }
          
     }
-    
-    @objc func lessonPressed(_ sender: UIButton) {
-        
-        UIView.animate(withDuration: 0.2) {
-            
-            sender.superview?.transform = .identity
-            sender.superview?.layer.shadowOpacity = 0.3
-            
-        } completion: { (_) in
-            
-            self.tabBarController?.selectedIndex = 4
-            
-        }
-        
-    }
-                
+                    
     @objc func settingsButtonTapped() {
     
         Utilities.shared.settingsLauncher.parentVC = self
@@ -824,7 +781,9 @@ extension HomeController {
 extension HomeController: AdManagerDelegate {
     
     func updateSecretsThumbnail() {
-        introImageView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState())
+        introImageView.loadImageUsingCacheWithURLString(
+            urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState()
+        )
         whereToStartLabel.text = AdManager.shared.getFunnelLabelTitleForCurrentUserState()
         
         if AdManager.shared.shouldVideoBeLocked() {
