@@ -26,7 +26,7 @@ struct K {
         static let introBaseID = "intro_baseID"
         static let minuteToShowBuyBtn = "min_show_buy_btn"
         static let secondToShowBuyBtn = "sec_show_buy_btn"
-        static let minimumFetchTime = 43200.0
+        static let minimumFetchTime = 60.0 * 60.0 * 4.0
     }
     
     struct FunnelConstants {
