@@ -395,6 +395,8 @@ class HomeController: UIViewController {
                 UserDefaults.standard.set(false, forKey: "hasClickedLock")
                 UserDefaults.standard.removeObject(forKey: "currentVideoPosition")
                 UserDefaults.standard.set(true, forKey: "isFirstLaunchOfVersion1_18")
+            } else {
+                AdManager.shared.funnelProgress = .completedVideo1Bought
             }
         }
     }
