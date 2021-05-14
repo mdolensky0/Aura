@@ -385,15 +385,17 @@ class HomeController: UIViewController {
         if UserDefaults.standard.bool(forKey: "isFirstLaunchOfVersion1_18") {
             return
         } else {
-            AdManager.shared.funnelProgress = .hasNotSeenVideo1
-            UserDefaults.standard.set(false, forKey: "hasLaunchedHome")
-            UserDefaults.standard.setValue(0, forKey: "searchCount")
-            UserDefaults.standard.setValue(false, forKey: "hasEnteredDeckController")
-            UserDefaults.standard.set(false, forKey: "hasLaunchedFlashcards")
-            UserDefaults.standard.set(false, forKey: "hasSeenDeckSelector")
-            UserDefaults.standard.set(false, forKey: "hasClickedLock")
-            UserDefaults.standard.removeObject(forKey: "currentVideoPosition")
-            UserDefaults.standard.set(true, forKey: "isFirstLaunchOfVersion1_18")
+            if !(Utilities.shared.user != nil && Utilities.shared.user!.purchases[K.productNames.ehdMasterCourse] == true) {
+                AdManager.shared.funnelProgress = .hasNotSeenVideo1
+                UserDefaults.standard.set(false, forKey: "hasLaunchedHome")
+                UserDefaults.standard.setValue(0, forKey: "searchCount")
+                UserDefaults.standard.setValue(false, forKey: "hasEnteredDeckController")
+                UserDefaults.standard.set(false, forKey: "hasLaunchedFlashcards")
+                UserDefaults.standard.set(false, forKey: "hasSeenDeckSelector")
+                UserDefaults.standard.set(false, forKey: "hasClickedLock")
+                UserDefaults.standard.removeObject(forKey: "currentVideoPosition")
+                UserDefaults.standard.set(true, forKey: "isFirstLaunchOfVersion1_18")
+            }
         }
     }
     
