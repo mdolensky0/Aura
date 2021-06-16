@@ -81,4 +81,12 @@ class AnalyticsManager {
         Analytics.logEvent("study_loop_pressed", parameters: nil)
     }
     
+    func logKYGPurchase() {
+        Analytics.logEvent("KYG_Course_Purchase", parameters: nil)
+    }
+    
+    func logBundlePressed() {
+        Analytics.logEvent("bundle_button_pressed", parameters: nil)
+    }
+    
 }

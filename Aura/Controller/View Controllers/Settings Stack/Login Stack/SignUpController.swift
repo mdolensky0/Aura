@@ -13,6 +13,7 @@ class SignUpController: UIViewController {
     
     var isModal = false
     var isForPurchase = false
+    var buyDelegate: BuyButtonPopUpView?
     var delegate: AddFlashcardDelegate?
     
     var titleLabel: UILabel = {
@@ -383,11 +384,7 @@ class SignUpController: UIViewController {
                     tabBarController.userSignedIn()
                     self.dismiss(animated: true, completion: nil)
                     if self.isForPurchase {
-                        if AdManager.shared.vcBuyPopUp.superview != nil {
-                            AdManager.shared.vcBuyPopUp.buyButton.sendActions(for: .touchUpInside)
-                        } else {
-                            AdManager.shared.videoBuyPopUp.buyButton.sendActions(for: .touchUpInside)
-                        }
+                        self.buyDelegate?.buyButton.sendActions(for: .touchUpInside)
                     } else {
                         self.delegate?.tapAddFlashcardButton()
                     }
@@ -398,11 +395,7 @@ class SignUpController: UIViewController {
                     tabBarController.userSignedIn()
                     self.dismiss(animated: true, completion: nil)
                     if self.isForPurchase {
-                        if AdManager.shared.vcBuyPopUp.superview != nil {
-                            AdManager.shared.vcBuyPopUp.buyButton.sendActions(for: .touchUpInside)
-                        } else {
-                            AdManager.shared.videoBuyPopUp.buyButton.sendActions(for: .touchUpInside)
-                        }
+                        self.buyDelegate?.buyButton.sendActions(for: .touchUpInside)
                     } else {
                         self.delegate?.tapAddFlashcardButton()
                     }

@@ -45,7 +45,6 @@ class RCManager {
     }
     
     func value(forKey key: String) -> String {
-        print("\n\(remoteConfig.configValue(forKey: key).stringValue!)\n")
         return remoteConfig.configValue(forKey: key).stringValue!
     }
     

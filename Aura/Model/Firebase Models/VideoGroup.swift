@@ -1081,6 +1081,10 @@ func populateLessonsDB() {
 //        purchaseIdentifier: "EHDMasterCourse"
 //    )
 //    FirebaseManager.shared.updateLesson(videoGroup: videoGroup)
+    
+// =================================================================================================
+// =================================================================================================
+    
 //
 //    let secretsVideo = Video(title: "Mastering English with Aura",
 //                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secret_1_Thumbnail.png?alt=media&token=9e8d1582-15f9-4b6a-848a-2d41c2858245",
@@ -1104,27 +1108,504 @@ func populateLessonsDB() {
 //    )
 //
 //    FirebaseManager.shared.updateLesson(videoGroup: secretsGroup)
+
+// =================================================================================================
+// =================================================================================================
     
-    let secretsMediumVideo = Video(title: "Mastering English with Aura",
-                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secret_1_Thumbnail.png?alt=media&token=9e8d1582-15f9-4b6a-848a-2d41c2858245",
-                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/aura_Intro_medium.mp4?alt=media&token=b34d450b-adcf-4e0a-aa4f-820b55ad8a0c",
-                            duration: "18 minutes, 23 seconds")
+//    let secretsMediumVideo = Video(title: "Mastering English with Aura",
+//                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/Secret_1_Thumbnail.png?alt=media&token=9e8d1582-15f9-4b6a-848a-2d41c2858245",
+//                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/aura_Intro_medium.mp4?alt=media&token=b34d450b-adcf-4e0a-aa4f-820b55ad8a0c",
+//                            duration: "18 minutes, 23 seconds")
+//
+//    let secretsMediumSection = Section(
+//        title: "3 Secrets",
+//        videos: [secretsMediumVideo]
+//    )
+//
+//    let secretsMediumGroup = VideoGroup(
+//        id: "ja_intro_medium",
+//        baseID: "intro_medium",
+//        thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/SecretsThumbnail.png?alt=media&token=07d430d1-5aa9-4756-b476-501e00d285b8",
+//        sections: [secretsMediumSection],
+//        requiresPurchase: false,
+//        sectionLockStarts: 100,
+//        rowLockStarts: 0,
+//        purchaseIdentifier: "intro"
+//    )
+//
+//    FirebaseManager.shared.updateLesson(videoGroup: secretsMediumGroup)
+
+// =================================================================================================
+// =================================================================================================
     
-    let secretsMediumSection = Section(
-        title: "3 Secrets",
-        videos: [secretsMediumVideo]
+    let kygVideo0 = Video(title: "Why This Course?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/0_kyg_sales_thumbnail.png?alt=media&token=402475ed-23ae-413c-a205-00e290daa6cf",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/0_kyg_sales_video_2.mp4?alt=media&token=ca4bd2c9-c210-48cb-a7d5-8fb44679d1e8",
+                            duration: "8 minutes 37 seconds")
+    
+    let kygVideo1_0 = Video(title: "Course Intro",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1_0_kyg_intro_thumbnail.png?alt=media&token=158453af-8617-4aa1-83eb-0895c738497c",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1_0_kyg_intro.mp4?alt=media&token=868591bb-15aa-4fc8-8633-f6e5bc323b6e",
+                            duration: "1 minute 10 seconds")
+    
+    let kygVideo1_1 = Video(title: "You & I",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/1_1_kyg_you_i_intro%20.mp3?alt=media&token=ca45a1b8-19ca-477b-bce4-1c5719144ce8",
+                            duration: "1 minute 46 seconds")
+    
+    let kygVideo2_0 = Video(title: "What are you?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_0_what_are_you_thumbnail.png?alt=media&token=9c9f11bd-38ea-48e4-b4ac-d293b298fddb",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_0_kyg_what_are_you.mp4?alt=media&token=ff32c6ea-a32c-4e32-be11-839aa6f30fd2",
+                            duration: "0 minutes 11 seconds")
+    
+    let kygVideo2_1 = Video(title: "Intro",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_1_now_intro.mp3?alt=media&token=c06b23d1-d5ca-40a2-ab65-e4c58c97e490",
+                            duration: "2 minutes 41 seconds")
+    
+    let kygVideo2_2 = Video(title: "Whudiya - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_2_whudiya_question.mp3?alt=media&token=6f38054f-6c1b-495e-ba8e-e10ae7d75056",
+                            duration: "2 minutes 14 seconds")
+    
+    let kygVideo2_3 = Video(title: "Whudiya - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_3_whudiya_answer.mp3?alt=media&token=d48e99a6-0908-4c06-8942-db2ff82c1db4",
+                            duration: "1 minute 55 seconds")
+    
+    let kygVideo2_4 = Video(title: "When are you?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_4_when_are_you_thumbnail.png?alt=media&token=4aa3a247-a7fd-4545-891f-786d7aa8200e",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_4_kyg_when_are_you.mp4?alt=media&token=7ba6ae86-60a5-4216-b9b5-12a217778ba4",
+                            duration: "0 minutes 11 seconds")
+    
+    let kygVideo2_5 = Video(title: "Wheniya - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_5_wheniya_question.mp3?alt=media&token=db2cc4bf-6e8f-4446-bfa8-b24cd9de5037",
+                            duration: "2 minutes 25 seconds")
+    
+    let kygVideo2_6 = Video(title: "Wheniya - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_6_wheniya_answer.mp3?alt=media&token=04c88af4-8a7b-475a-9fda-d1ec6c60f687",
+                            duration: "2 minutes 1 second")
+    
+    let kygVideo2_7 = Video(title: "Where are you?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_7_where_are_you_thumbnail.png?alt=media&token=84b77740-40dd-40a7-a0b0-92ed5cc5ea5d",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_7_kyg_where_are_you.mp4?alt=media&token=f27c3e57-208d-475d-a8db-959c2440ea77",
+                            duration: "0 minutes 11 seconds")
+    
+    let kygVideo2_8 = Video(title: "Wheriya - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_8_whereiya_question.mp3?alt=media&token=4f316c46-61a4-4d81-b5cb-f7f239a612ee",
+                            duration: "2 minutes 20 seconds")
+    
+    let kygVideo2_9 = Video(title: "Wheriya - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_9_wheriya_answer.mp3?alt=media&token=1bc34c58-f41f-4fba-8cb6-4e129035600c",
+                            duration: "1 minute 56 seconds")
+    
+    let kygVideo2_10 = Video(title: "Review",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_10_now_review.mp3?alt=media&token=88c07b68-9c3e-449e-bcf2-e42a340aa41e",
+                            duration: "2 minutes 48 seconds")
+    
+    let kygVideo2_11 = Video(title: "Who? Why? How?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_11_who_now_thumbnail.png?alt=media&token=57f2daf2-d6aa-4331-848d-00fac41f49e9",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/2_11_kyg_who_why_how_now.mp4?alt=media&token=55a29e9e-7d1f-46d4-be93-13e466f0dfd5",
+                            duration: "0 minutes 49 seconds")
+    
+    let kygVideo3_0 = Video(title: "What are you going to?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_0_what_are_you_going_to_thumbnail.png?alt=media&token=74debd3c-7080-4ad1-b4ca-f4782e220021",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_0_kyg_what_are_you_going_to.mp4?alt=media&token=2606b192-9894-40d9-9624-cca4d39653fd",
+                            duration: "0 minutes 12 seconds")
+    
+    let kygVideo3_1 = Video(title: "Intro",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_1_from_now_intro.mp3?alt=media&token=95617aa4-30e0-4f75-b0f4-408b3a0997a2",
+                            duration: "2 minutes 30 seconds")
+    
+    let kygVideo3_2 = Video(title: "Whadiya gonna - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_2_whadiya_gonna_question.mp3?alt=media&token=77ae40e5-20c5-4b03-9765-4242e81f07cd",
+                            duration: "2 minutes 28 seconds")
+    
+    let kygVideo3_3 = Video(title: "Whadiya gonna - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_3_whudiya_gonna_answer.mp3?alt=media&token=6bce0ec5-706e-432c-a8e2-8a5256e40886",
+                            duration: "2 minutes 16 seconds")
+    
+    let kygVideo3_4 = Video(title: "When are you going to?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_4_when_are_you_going_to_thumbnail.png?alt=media&token=92bcba40-02a3-42b5-afab-89c2712582fc",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_4_kyg_when_are_you_going_to.mp4?alt=media&token=32fe8828-ca8f-4d7a-9fbf-6350873e4f92",
+                            duration: "0 minutes 11 seconds")
+    
+    
+    let kygVideo3_5 = Video(title: "Wheniya gonna - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_5_wheniya_gonna_question.mp3?alt=media&token=6b8ceeba-839c-4739-8db5-44e68fc0413d",
+                            duration: "2 minutes 39 seconds")
+    
+    let kygVideo3_6 = Video(title: "Wheniya gonna - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_6_wheniya_gonna_answer.mp3?alt=media&token=cf96fc9e-d35f-43ee-af51-4d793b3db18f",
+                            duration: "2 minutes 13 seconds")
+    
+    let kygVideo3_7 = Video(title: "Where are you going to?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_7_where_are_you_going_to_thumbnail.png?alt=media&token=8428951a-fbca-45a7-adff-c63c3301ce1b",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_7_kyg_where_are_you_going_to.mp4?alt=media&token=e63457d3-21a6-4c3b-915a-08750de81f3c",
+                            duration: "0 minutes 14 seconds")
+    
+    let kygVideo3_8 = Video(title: "Wheriya gonna - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_8_wheriya_gonna_question.mp3?alt=media&token=aa727e55-01ee-4d93-952f-e6580e32823c",
+                            duration: "2 minutes 32 seconds")
+    
+    let kygVideo3_9 = Video(title: "Wheriya gonna - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_9_wheriya_gonna_answer.mp3?alt=media&token=fdca3fe9-9d04-456b-8ab0-036e56501e2a",
+                            duration: "2 minutes 14 seconds")
+    
+    let kygVideo3_10 = Video(title: "Review",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_10_from_now_review.mp3?alt=media&token=1fe4f1e2-aebd-437e-b4b1-7f4d77c07b91",
+                            duration: "2 minutes 51 seconds")
+    
+    let kygVideo3_11 = Video(title: "Who? Why? How?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_11_who_from_now_thumbnail.png?alt=media&token=bc6ffcb0-f408-45c2-a775-a5f48b92ede6",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/3_11_kyg_who_why_how_from_now.mp4?alt=media&token=e1c971cf-ed4b-455b-8a8c-01b3a9c4be40",
+                            duration: "0 minutes 56 seconds")
+    
+    let kygVideo4_0 = Video(title: "What did you?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_0_what_did_you_thumbnail.png?alt=media&token=433e658d-91b9-4860-815a-84e438087121",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_0_kyg_what_did_you.mp4?alt=media&token=f3f6581d-a5ed-422c-910d-6bf0744647b1",
+                            duration: "0 minutes 11 seconds")
+    
+    let kygVideo4_1 = Video(title: "Intro",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_1_until_now_intro.mp3?alt=media&token=2d48e952-a4e1-43aa-b428-d36bb73e84bf",
+                            duration: "2 minutes 21 seconds")
+    
+    let kygVideo4_2 = Video(title: "Whuja - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_2_whuja_question.mp3?alt=media&token=6775d98c-01af-4731-a176-97b228711e5f",
+                            duration: "2 minutes 2 seconds")
+    
+    let kygVideo4_3 = Video(title: "Whuja - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_3_whuja_answer.mp3?alt=media&token=10449001-9f46-44ab-b7bd-908493c04d00",
+                            duration: "1 minute 45 seconds")
+    
+    let kygVideo4_4 = Video(title: "When did you?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_4_when_did_you_thumbnail.png?alt=media&token=ac9e383c-53a3-4e87-8305-1b21baf0dcaa",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_4_kyg_when_did_you.mp4?alt=media&token=2ce1cb6e-5d9a-4391-929b-c9ec2e39b9cc",
+                            duration: "0 minutes 11 seconds")
+    
+    let kygVideo4_5 = Video(title: "Whenja - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_5_whenja_question.mp3?alt=media&token=d2b29396-84ce-4f28-bc30-31e0dea8455c",
+                            duration: "2 minutes 16 seconds")
+    
+    let kygVideo4_6 = Video(title: "Whenja - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_6_whenja_answer.mp3?alt=media&token=27c36cfd-a406-4f20-bf24-f102e24f9bdf",
+                            duration: "1 minute 58 seconds")
+    
+    let kygVideo4_7 = Video(title: "Where did you?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_7_where_did_you_thumbnail.png?alt=media&token=057d67a9-46a2-43c0-a859-bf39ee01c5e7",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_7_kyg_where_did_you.mp4?alt=media&token=63f879b0-3342-4519-8042-82e8a3d76227",
+                            duration: "0 minutes 11 seconds")
+    
+    let kygVideo4_8 = Video(title: "Wherja - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_8_wherja_question.mp3?alt=media&token=b162af74-ac75-44cc-a0db-d430d81c0497",
+                            duration: "2 minutes 2 seconds")
+    
+    let kygVideo4_9 = Video(title: "Wherja - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_9_wherja_answer.mp3?alt=media&token=4a58331b-277d-400d-b446-c704e5a26cd4",
+                            duration: "1 minute 56 seconds")
+    
+    let kygVideo4_10 = Video(title: "Review",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_10_until_now_review.mp3?alt=media&token=609fcbca-a496-4e2e-a824-968ebc3eeda8",
+                            duration: "2 minutes 44 seconds")
+    
+    let kygVideo4_11 = Video(title: "Who? Why? How?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_11_who_until_now_thumbnail.png?alt=media&token=ff359bf9-d1cc-4a51-8688-0fc59819cf55",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/4_11_kyg_who_why_how_until_now.mp4?alt=media&token=b8413e96-8574-44c8-b083-561e4b4a55d1",
+                            duration: "0 minutes 45 seconds")
+    
+    let kygVideo5_0 = Video(title: "What do you?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_0_what_do_you_thumbnail.png?alt=media&token=52f990b8-d01d-4069-9264-8c1aa59c903a",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_0_kyg_what_do_you.mp4?alt=media&token=dd199db3-0e37-4b71-ae67-ca344ac99486",
+                            duration: "0 minutes 10 seconds")
+    
+    let kygVideo5_1 = Video(title: "Intro",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_1_usually_intro.mp3?alt=media&token=c5864bd1-420a-4eac-92e6-31f4bc0c8180",
+                            duration: "3 minutes 33 seconds")
+    
+    let kygVideo5_2 = Video(title: "Whudoya - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_2_whuDOya_question.mp3?alt=media&token=aafc6e61-be0a-413c-bce1-10dcbe8e7845",
+                            duration: "2 minutes 22 seconds")
+    
+    let kygVideo5_3 = Video(title: "Whudoya - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_3_whuDOya_answer.mp3?alt=media&token=7e975fb2-ea2e-4ee7-af30-5f5ffbf6bc1b",
+                            duration: "1 minute 55 seconds")
+    
+    let kygVideo5_4 = Video(title: "When do you?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_4_when_do_you_thumbnail.png?alt=media&token=95f79300-d612-4911-b30a-3d52119e5144",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_4_kyg_when_do_you.mp4?alt=media&token=eb24aca8-ab20-4d49-9dcc-698fb22bebb6",
+                            duration: "0 minutes 8 seconds")
+    
+    let kygVideo5_5 = Video(title: "Whendiya - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_5_whendiya_question.mp3?alt=media&token=6a3c7766-8732-444f-adb6-a3540cf44d83",
+                            duration: "2 minutes 24 seconds")
+    
+    let kygVideo5_6 = Video(title: "Whendiya - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_6_whendiya_answer.mp3?alt=media&token=a27830ef-0380-4cd9-a97a-9ca307b54ded",
+                            duration: "2 minutes 0 seconds")
+    
+    let kygVideo5_7 = Video(title: "Where do you?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_7_where_do_you_thumbnail.png?alt=media&token=13ce5be3-42fa-49cf-bd6e-5cf6821c0821",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_7_kyg_where_do_you.mp4?alt=media&token=d2b5a287-a467-4aaa-9bb6-0934da9b4e0c",
+                            duration: "0 minutes 8 seconds")
+    
+    let kygVideo5_8 = Video(title: "Wherdiya - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_8_wherdiya_question.mp3?alt=media&token=d585cfcb-5a7c-4d41-b4a9-760fdd689bec",
+                            duration: "2 minutes 25 seconds")
+    
+    let kygVideo5_9 = Video(title: "Wherdiya - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_9_wherdiya_answer.mp3?alt=media&token=732dd5ac-6231-4127-9797-eabb3bb8efcd",
+                            duration: "2 minutes 10 seconds")
+    
+    let kygVideo5_10 = Video(title: "Review",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_10_usually_review.mp3?alt=media&token=e654051a-7c2b-44cf-8c10-028b2172bffa",
+                            duration: "2 minutes 43 seconds")
+    
+    let kygVideo5_11 = Video(title: "Who? Why? How?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_11_who_usually_thumbnail.png?alt=media&token=c7e967e6-5e7a-4351-9cd5-e17e1f00cffc",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/5_11_kyg_who_why_how_usually.mp4?alt=media&token=82e1e816-ee0a-4d9b-a1a2-9919d92ba97a",
+                            duration: "0 minutes 47 seconds")
+    
+    let kygVideo6_0 = Video(title: "What do you want to?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_0_what_do_you_want_to_thumbnail.png?alt=media&token=d0755843-4888-422a-96c9-c85df0a57b55",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_0_kyg_what_do_you_want_to.mp4?alt=media&token=0e1f1332-7dcb-485d-915e-2d7f11832ae3",
+                            duration: "0 minutes 12 seconds")
+    
+    let kygVideo6_1 = Video(title: "Intro",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_1_wanna_intro.mp3?alt=media&token=61b914b1-90de-4880-8e7d-5c68ba3fed81",
+                            duration: "2 minutes 23 seconds")
+    
+    let kygVideo6_2 = Video(title: "Whudiya wanna - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_2_whudiya_wanna_question.mp3?alt=media&token=2f579966-3587-42d5-aff6-ea8302bcf078",
+                            duration: "2 minutes 36 seconds")
+    
+    let kygVideo6_3 = Video(title: "Whudiya wanna - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_3_whudiya_wanna_answer.mp3?alt=media&token=0d580294-ec21-4b9b-8926-e1dfb85c89d5",
+                            duration: "2 minutes 19 seconds")
+    
+    let kygVideo6_4 = Video(title: "When do you want to?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_4_when_do_you_want_to_thumbnail.png?alt=media&token=eda49d85-9109-4968-9ca0-4c9071916898",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_4_kyg_when_do_you_want_to.mp4?alt=media&token=2defa923-fc88-4209-b675-0fde697e8cce",
+                            duration: "0 minutes 11 seconds")
+    
+    let kygVideo6_5 = Video(title: "Whendiya wanna - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_5_whendiya_wanna_question.mp3?alt=media&token=b8d00db4-6227-4220-a829-0b6388398fe4",
+                            duration: "2 minutes 23 seconds")
+    
+    let kygVideo6_6 = Video(title: "Whendiya wanna - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_6_whendiya_wanna_answer.mp3?alt=media&token=2eeef5b3-2123-410b-8a46-f10c8bf99e6d",
+                            duration: "2 minutes 14 seconds")
+    
+    let kygVideo6_7 = Video(title: "Where do you want to?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_7_where_do_you_want_to_thumbnail.png?alt=media&token=a43a0d19-5a4d-40c1-93b7-14cb7a60cd03",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_7_kyg_where_do_you_want_to.mp4?alt=media&token=a6e85f26-2e95-4a8c-8bf3-d1b5970a7da1",
+                            duration: "0 minutes 13 seconds")
+    
+    let kygVideo6_8 = Video(title: "Wherdiya wanna - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_8_wherdiya_wanna_question.mp3?alt=media&token=3b0fb978-7b35-41e7-aaea-02fa6ebf3c0a",
+                            duration: "2 minutes 21 seconds")
+    
+    let kygVideo6_9 = Video(title: "Wherdiya wanna - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_9_wherdiya_wanna_answer.mp3?alt=media&token=8166f254-fcee-438a-b8c7-c08816c0c93c",
+                            duration: "2 minutes 20 seconds")
+    
+    let kygVideo6_10 = Video(title: "Review",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_10_wanna_review.mp3?alt=media&token=0f1029cf-6c69-4e37-8be8-a51b865d2d05",
+                            duration: "2 minutes 45 seconds")
+    
+    let kygVideo6_11 = Video(title: "Who? Why? How?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_11_who_wanna_thumbnail.png?alt=media&token=04bebb07-80fc-43cc-85d0-5cc2fd8b5f2a",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/6_11_kyg_who_why_how_wanna.mp4?alt=media&token=950455d3-aa92-4775-8d58-ec95c49b33c5",
+                            duration: "0 minutes 54 seconds")
+    
+    let kygVideo7_0 = Video(title: "What do you got to?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_0_what_do_you_got_to_thumbnail.png?alt=media&token=7d4f9f2f-0984-4e9f-ad80-d6f7bbef0f57",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_0_kyg_what_do_you_got_to.mp4?alt=media&token=bb101530-85d1-411d-903f-65bd26458849",
+                            duration: "0 minutes 11 seconds")
+    
+    let kygVideo7_1 = Video(title: "Intro",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_1_gotta_intro.mp3?alt=media&token=a3d99f2c-a629-468e-b034-3f626618f95c",
+                            duration: "2 minutes 27 seconds")
+    
+    let kygVideo7_2 = Video(title: "Whudiya gotta - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_2_whudiya_gotta_question.mp3?alt=media&token=d1b7e7ca-5817-44c0-99ef-1d65b2b0571d",
+                            duration: "2 minutes 23 seconds")
+    
+    let kygVideo7_3 = Video(title: "Whudiya gotta - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_3_whudiya_gotta_answer.mp3?alt=media&token=bf84a1a2-9bf1-4125-9de6-c3c51bf55777",
+                            duration: "2 minutes 14 seconds")
+    
+    let kygVideo7_4 = Video(title: "When do you got to?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_4_when_do_you_got_to_thumbnail.png?alt=media&token=c5d0775f-7c68-49cb-9471-e95519a5aede",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_4_kyg_when_do_you_got_to.mp4?alt=media&token=7239ce9a-af08-4e75-92cb-7f40392f82ea",
+                            duration: "0 minutes 10 seconds")
+    
+    let kygVideo7_5 = Video(title: "Whendiya gotta - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_5_whendiya_gotta_question.mp3?alt=media&token=818ca422-68ab-4809-a226-6b145f0722dd",
+                            duration: "2 minutes 27 seconds")
+    
+    let kygVideo7_6 = Video(title: "Whendiya gotta - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_6_whendiya_gotta_answer.mp3?alt=media&token=4e2ab9fd-e589-493c-b24e-ec63beed9630",
+                            duration: "2 minutes 17 seconds")
+    
+    let kygVideo7_7 = Video(title: "Where do you got to?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_7_where_do_you_got_to_thumbnail.png?alt=media&token=dbb75061-5b25-4763-b766-286349bc01e8",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_7_kyg_where_do_you_got_to.mp4?alt=media&token=e4cbb1a1-b02c-470e-94a5-9d1f1007526b",
+                            duration: "0 minutes 11 seconds")
+    
+    let kygVideo7_8 = Video(title: "Wherdiya gotta - Question",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_8_wherdiya_gotta_question.mp3?alt=media&token=d02ec5bc-4755-4d66-b4f5-e783f96fabf1",
+                            duration: "2 minutes 17 seconds")
+    
+    let kygVideo7_9 = Video(title: "Wherdiya gotta - Answer",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_9_wherdiya_gotta_answer.mp3?alt=media&token=30dc679d-34f7-4a2d-9a70-5b6b923c13f9",
+                            duration: "2 minutes 34 seconds")
+    
+    let kygVideo7_10 = Video(title: "Review",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_10_gotta_review.mp3?alt=media&token=6232a45e-974e-49b1-8bb1-9ba26ca1d979",
+                            duration: "2 minutes 54 seconds")
+    
+    let kygVideo7_11 = Video(title: "Who? Why? How?",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_11_who_gotta_thumbnail.png?alt=media&token=bae3d89c-7251-449e-a8e3-9ec2ef4a1cd7",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/7_11_kyg_who_why_how_gotta.mp4?alt=media&token=ae29b438-f68c-4077-bbfc-88cdd080ffd4",
+                            duration: "0 minutes 53 seconds")
+    
+    let kygVideo8_0 = Video(title: "Answers Challenge",
+                            thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGAudioThumbnail.png?alt=media&token=b2e97edb-d44b-4eb5-944f-35d088058679",
+                            videoURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/8_0_bonus_answers_challenge.mp3?alt=media&token=62a79817-3ede-4dfa-bc09-5135019bd64b",
+                            duration: "1 minute 54 seconds")
+    
+    let kygSection1 = Section(
+        title: "Introduction",
+        videos: [
+            kygVideo0, kygVideo1_0, kygVideo1_1,
+        ]
     )
     
-    let secretsMediumGroup = VideoGroup(
-        id: "ja_intro_medium",
-        baseID: "intro_medium",
-        thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/SecretsThumbnail.png?alt=media&token=07d430d1-5aa9-4756-b476-501e00d285b8",
-        sections: [secretsMediumSection],
-        requiresPurchase: false,
-        sectionLockStarts: 100,
-        rowLockStarts: 0,
-        purchaseIdentifier: "intro"
+    let kygSection2 = Section(
+        title: "Present Progressive",
+        videos: [
+            kygVideo2_0, kygVideo2_1, kygVideo2_2,
+            kygVideo2_3, kygVideo2_4, kygVideo2_5,
+            kygVideo2_6, kygVideo2_7, kygVideo2_8,
+            kygVideo2_9, kygVideo2_10, kygVideo2_11
+        ]
     )
     
-    FirebaseManager.shared.updateLesson(videoGroup: secretsMediumGroup)
+    let kygSection3 = Section(
+        title: "Future",
+        videos: [
+            kygVideo3_0, kygVideo3_1, kygVideo3_2,
+            kygVideo3_3, kygVideo3_4, kygVideo3_5,
+            kygVideo3_6, kygVideo3_7, kygVideo3_8,
+            kygVideo3_9, kygVideo3_10, kygVideo3_11
+        ]
+    )
+    
+    let kygSection4 = Section(
+        title: "Past",
+        videos: [
+            kygVideo4_0, kygVideo4_1, kygVideo4_2,
+            kygVideo4_3, kygVideo4_4, kygVideo4_5,
+            kygVideo4_6, kygVideo4_7, kygVideo4_8,
+            kygVideo4_9, kygVideo4_10, kygVideo4_11
+        ]
+    )
+    
+    let kygSection5 = Section(
+        title: "Simple Present",
+        videos: [
+            kygVideo5_0, kygVideo5_1, kygVideo5_2,
+            kygVideo5_3, kygVideo5_4, kygVideo5_5,
+            kygVideo5_6, kygVideo5_7, kygVideo5_8,
+            kygVideo5_9, kygVideo5_10, kygVideo5_11
+        ]
+    )
+    
+    let kygSection6 = Section(
+        title: "Want to",
+        videos: [
+            kygVideo6_0, kygVideo6_1, kygVideo6_2,
+            kygVideo6_3, kygVideo6_4, kygVideo6_5,
+            kygVideo6_6, kygVideo6_7, kygVideo6_8,
+            kygVideo6_9, kygVideo6_10, kygVideo6_11
+        ]
+    )
+    
+    let kygSection7 = Section(
+        title: "Got to",
+        videos: [
+            kygVideo7_0, kygVideo7_1, kygVideo7_2,
+            kygVideo7_3, kygVideo7_4, kygVideo7_5,
+            kygVideo7_6, kygVideo7_7, kygVideo7_8,
+            kygVideo7_9, kygVideo7_10, kygVideo7_11
+        ]
+    )
+    
+    let kygSection8 = Section(
+        title: "Bonus",
+        videos: [kygVideo8_0]
+    )
+    
+    let kygGroup = VideoGroup(
+        id: "ja_kyg_course",
+        baseID: "kyg_course",
+        thumbnailURL: "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/KYGCourseThumbnail.png?alt=media&token=8890e67f-28eb-414f-afee-13240f7b1167",
+        sections: [
+            kygSection1, kygSection2, kygSection3,
+            kygSection4, kygSection5, kygSection6,
+            kygSection7, kygSection8
+        ],
+        requiresPurchase: true,
+        sectionLockStarts: 2,
+        rowLockStarts: 4,
+        purchaseIdentifier: "KYGCourse"
+    )
+    
+    FirebaseManager.shared.updateLesson(videoGroup: kygGroup)
+    
 }

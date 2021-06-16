@@ -18,7 +18,7 @@ struct K {
         static let translationErrorCollectionName = "Translation_Error"
         static let superUser = "4vCef03V7SMdjTDq5EyYYqCiLsk2"
         static var baseCourseIDs: [String] {
-            return [RCManager.shared.value(forKey: RCConstants.introBaseID), "ehd_master_course"]
+            return [RCManager.shared.value(forKey: RCConstants.introBaseID), "ehd_master_course", "kyg_course"]
         }
     }
     
@@ -33,6 +33,10 @@ struct K {
         static let minuteToShowBuyBtn = RCManager.shared.value(forKey: RCConstants.minuteToShowBuyBtn).intValue
         static let secondToShowBuyBtn = RCManager.shared.value(forKey: RCConstants.secondToShowBuyBtn).intValue
         static let secondToShowBuyIfIntroSeen = 15
+        static let minToShowKYGBuyBtnAfterPurchase = 7
+        static let secToShowKYGBuyBtnAfterPurchase = 5
+        static let minToShowKYGBuyBtn = 6
+        static let secToShowKYGBuyBtn = 57
     }
     
     struct VideoConstants {
@@ -102,10 +106,14 @@ struct K {
     
     struct productIdentifiers {
         static let ehdMasterCourse = "com.iai.Aura.EHDMasterCourse"
+        static let kygCourse = "kyg_course"
+        static let kygCourseNoDiscount = "kyg_course_no_discount"
+        static let EHD_KYG_Bundle = "ehd_kyg_bundle"
     }
     
     struct productNames {
         static let ehdMasterCourse = "EHDMasterCourse"
+        static let kygCourse = "KYGCourse"
     }
         
     // Key Data For Populating the Key Controller

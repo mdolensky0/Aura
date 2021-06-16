@@ -18,6 +18,7 @@ class LoginController: UIViewController {
     
     var isModal = false
     var isForPurchase = false
+    var buyDelegate: BuyButtonPopUpView?
     var delegate: AddFlashcardDelegate?
     
     var purchaseLabel: UILabel = {
@@ -201,6 +202,7 @@ class LoginController: UIViewController {
         let signUpVC = SignUpController()
         signUpVC.isModal = self.isModal
         signUpVC.isForPurchase = self.isForPurchase
+        signUpVC.buyDelegate = self.buyDelegate
         signUpVC.delegate = self.delegate
         self.navigationController?.pushViewController(signUpVC, animated: true)
         
@@ -223,6 +225,7 @@ class LoginController: UIViewController {
         let logInVC = SignInController()
         logInVC.isModal = self.isModal
         logInVC.isForPurchase = self.isForPurchase
+        logInVC.buyDelegate = self.buyDelegate
         logInVC.delegate = self.delegate
         self.navigationController?.pushViewController(logInVC, animated: true)
         

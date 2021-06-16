@@ -177,11 +177,13 @@ class SwipeTutorialPopUpManager: PopUpManager, SwipeTutorialDelegate {
     }
 }
 
-// MARK: - Secrets Video Pop Up Manager
-class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
+// MARK: - Video Pop Up Manager
+class VideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
     
     var popUpView = SecretsPopUpView()
     var parentView: UIViewController?
+    var isForKYGCourse = false
+    var isAfterEHDPurchase = false
     
     convenience init(title: String, info: String, thumbnailURL: String, buttonText: String) {
         self.init()
@@ -222,93 +224,61 @@ class SecretsVideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
         }
     }
     
+    func getURLForPopUP() -> String {
+        if isForKYGCourse {
+            if isAfterEHDPurchase {
+                return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/0_kyg_sales_after_purchase.mp4?alt=media&token=68a62274-6c75-44a9-b313-3a25a8662acf"
+            } else {
+                return "https://firebasestorage.googleapis.com/v0/b/simply-english-10f6f.appspot.com/o/0_kyg_sales.mp4?alt=media&token=29b8227c-3708-4324-a97a-d745ca9bc598"
+            }
+        } else {
+            return AdManager.shared.getVideoURLForCurrentUserState()
+        }
+    }
+    
+    func getVideoPosition() -> VideoPosition {
+        if isForKYGCourse {
+            return VideoPosition(baseID: K.FBConstants.baseCourseIDs[2], section: 0, row: 0)
+        } else {
+            return AdManager.shared.getPositionForCurrentUserState()
+        }
+    }
+    
+    func getObserverType() -> ObserverType {
+        if isForKYGCourse {
+            if isAfterEHDPurchase {
+                return .kygSalesAfterPurchaseObserver
+            } else {
+                return .kygSalesObserver
+            }
+        } else {
+            return .secretsObserver
+        }
+    }
+    
     func playVideo() {
         
         dismiss(didSkip: false)
-        
-        let av = PUAVPlayerViewController()
-        av.parentView = parentView
-        let urlString = AdManager.shared.getVideoURLForCurrentUserState()
-        
-        let position = AdManager.shared.getPositionForCurrentUserState()
         
         guard let videoGroups = Utilities.shared.lessons else {
             return
         }
         
-        guard let lesson = videoGroups.first(where: {$0.baseID == AdManager.shared.currentVideoPosition.baseID}) else {
+        let urlString = getURLForPopUP()
+        let position = getVideoPosition()
+        let observer = getObserverType()
+        
+        guard let lesson = videoGroups.first(where: {$0.baseID == position.baseID}) else {
             return
         }
-                
-        if let url = URL(string: urlString) {
-            
-            let player = AVPlayer(url: url)
-            av.player = player
-            av.player?.automaticallyWaitsToMinimizeStalling = true
-            
-            // Add Observer
-            let interval = CMTime(value: 1, timescale: 2)
-            av.timeObserver = av.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { (progressTime) in
-                
-                let seconds = CMTimeGetSeconds(progressTime)
-                let min = Int(seconds / 60)
-                let secs = Int(seconds) % 60
-                
-                switch AdManager.shared.funnelProgress {
-                
-                case .hasNotSeenVideo1 where lesson.baseID == K.FBConstants.baseCourseIDs[0]:
-                    AdManager.shared.funnelProgress = .seenPartOfVideo1
-                    AnalyticsManager.shared.logFunnelChange(funnelProgress: .seenPartOfVideo1)
-                
-                case .seenPartOfVideo1 where lesson.baseID == K.FBConstants.baseCourseIDs[0]:
-                    if min >= K.FunnelConstants.minuteToShowBuyBtn && secs >= K.FunnelConstants.secondToShowBuyBtn {
-                        AdManager.shared.funnelProgress = .completedVideo1NoBuy
-                        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo1NoBuy)
-                        AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
-                        AdManager.shared.isBuyButtonShowing = true
-                        AdManager.shared.currentVideoPosition = VideoPosition(baseID: K.FBConstants.baseCourseIDs[1], section: 0, row: 0)
-                    }
-                
-                case .completedVideo1NoBuy:
-                    if secs >= K.FunnelConstants.secondToShowBuyIfIntroSeen && AdManager.shared.isBuyButtonShowing == false {
-                        AdManager.shared.showBuyButton(videoVC: av, parentVC: nil)
-                        AdManager.shared.isBuyButtonShowing = true
-                    }
-                    self.updateNextVideoIfNecessary(av, progressTime: seconds, currPosition: position, videoGroup: lesson)
-                
-                case .completedVideo1Bought:
-                    self.updateNextVideoIfNecessary(av, progressTime: seconds, currPosition: position, videoGroup: lesson)
-
-                default:
-                    break
-                }
-            })
-            parentView!.present(av, animated: true) {
-                
-                av.player!.play()
-                if AdManager.shared.funnelProgress == .seenPartOfVideo1 && lesson.baseID == K.FBConstants.baseCourseIDs[0] {
-                    av.player!.seek(to: CMTime(seconds: AdManager.shared.introVideoTimeLeftAt, preferredTimescale: 1))
-                }
-            }
-        }
-    }
     
-    func updateNextVideoIfNecessary(_ av: PUAVPlayerViewController, progressTime: Double, currPosition: VideoPosition, videoGroup: VideoGroup) {
-        if let duration = av.player?.currentItem?.duration {
-            let durationSecs = CMTimeGetSeconds(duration)
-            if durationSecs - progressTime <= Double(K.VideoConstants.secondsToMarkVideoFinished) {
-            
-                if currPosition.row < videoGroup.sections[currPosition.section].videos.count - 1 {
-                    let newPosition = VideoPosition(baseID: currPosition.baseID, section: currPosition.section, row: currPosition.row + 1)
-                    AdManager.shared.currentVideoPosition = newPosition
-                    AnalyticsManager.shared.logFinishedVideo(position: newPosition)
-                } else if currPosition.section < videoGroup.sections.count - 1 {
-                    let newPosition = VideoPosition(baseID: currPosition.baseID, section: currPosition.section + 1, row: 0)
-                    AdManager.shared.currentVideoPosition = newPosition
-                    AnalyticsManager.shared.logFinishedVideo(position: newPosition)
-                }
-            }
-        }
+        VideoManager.shared.playVideo(
+            lesson: lesson,
+            position: position,
+            urlString: urlString,
+            observerType: observer,
+            presenter: self.parentView!
+        )
     }
 }
 
@@ -327,7 +297,6 @@ class PUAVPlayerViewController: AVPlayerViewController {
     
     var parentView: UIViewController?
     var timeObserver: Any?
-    var isIntro: Bool = false
     
     func handleVideoCloseForCurrentState() {
         
@@ -367,12 +336,13 @@ class PUAVPlayerViewController: AVPlayerViewController {
         }
     }
     
-    func goToLogin() {
+    func goToLogin(_ delegate: BuyButtonPopUpView) {
         
         let vc = UINavigationController(rootViewController: LoginController())
         let login = vc.viewControllers[0] as! LoginController
         login.isModal = true
         login.isForPurchase = true
+        login.buyDelegate = delegate
         self.present(vc, animated: true, completion: nil)
         
     }

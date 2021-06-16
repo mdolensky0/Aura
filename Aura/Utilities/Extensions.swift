@@ -158,11 +158,12 @@ func createButtons(_ attributedString: NSMutableAttributedString) -> [(color: UI
 //MARK:- UIViewController Extensions
 extension UIViewController {
     
-    func goToLoginForPurchase() {
+    func goToLoginForPurchase(_ delegate: BuyButtonPopUpView) {
         let vc = UINavigationController(rootViewController: LoginController())
         let login = vc.viewControllers[0] as! LoginController
         login.isModal = true
         login.isForPurchase = true
+        login.buyDelegate = delegate
         self.present(vc, animated: true, completion: nil)
     }
     

@@ -298,8 +298,6 @@ class FirebaseManager {
         
         var videoGroup = [VideoGroup]()
         
-        print(K.FBConstants.baseCourseIDs)
-        
         db.collection(K.FBConstants.lessonsCollectionName).whereField("baseID", in: K.FBConstants.baseCourseIDs).addSnapshotListener { (querySnapshot, err) in
             
             if let err = err {

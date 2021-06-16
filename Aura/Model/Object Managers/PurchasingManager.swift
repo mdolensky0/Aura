@@ -58,24 +58,54 @@ class PurchasingManager: NSObject {
         switch myProduct?.productIdentifier {
         
         case K.productIdentifiers.ehdMasterCourse:
-            AdManager.shared.funnelProgress = .completedVideo1Bought
-            AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo1Bought)
-            Utilities.shared.user?.purchases[K.productNames.ehdMasterCourse] = true
-            Utilities.shared.user?.purchaseIDs[K.productIdentifiers.ehdMasterCourse] = transactionID
-            
-            transferCourseDecksToUser()
-            
-            if let user = Utilities.shared.user {
-                FirebaseManager.shared.updateUser(user: user)
-            }
-            AdManager.shared.removeBuyButton()
-            if let window = UIApplication.shared.keyWindow {
-                window.displayCheck(text: NSLocalizedString("Success!", comment: "Success, whatever action you just performed worked successfully"))
-            }
+            unlockEHDCourse(transactionID, isBundle: false)
+            break
+        
+        case K.productIdentifiers.kygCourse, K.productIdentifiers.kygCourseNoDiscount:
+            unlockKYGCourse(transactionID)
+            break
+        
+        case K.productIdentifiers.EHD_KYG_Bundle:
+            unlockEHDCourse(transactionID, isBundle: true)
+            unlockKYGCourse(transactionID)
             break
         
         default:
             break
+        }
+    }
+    
+    func unlockEHDCourse(_ transactionID: String, isBundle: Bool) {
+        AdManager.shared.funnelProgress = .completedVideo1Bought
+        AnalyticsManager.shared.logFunnelChange(funnelProgress: .completedVideo1Bought)
+        Utilities.shared.user?.purchases[K.productNames.ehdMasterCourse] = true
+        Utilities.shared.user?.purchaseIDs[K.productIdentifiers.ehdMasterCourse] = transactionID
+        
+        transferCourseDecksToUser()
+        
+        if let user = Utilities.shared.user {
+            FirebaseManager.shared.updateUser(user: user)
+        }
+        AdManager.shared.removeBuyButton()
+        if let window = UIApplication.shared.keyWindow {
+            window.displayCheck(text: NSLocalizedString("Success!", comment: "Success, whatever action you just performed worked successfully"))
+            if !isBundle {
+                AdManager.shared.showKYGCoursePopUP(parentVC: window.rootViewController!, didJustPurchaseEHDCourse: true)
+            }
+        }
+    }
+    
+    func unlockKYGCourse(_ transactionID: String) {
+        AnalyticsManager.shared.logKYGPurchase()
+        Utilities.shared.user?.purchases[K.productNames.kygCourse] = true
+        Utilities.shared.user?.purchaseIDs[K.productIdentifiers.kygCourse] = transactionID
+        
+        if let user = Utilities.shared.user {
+            FirebaseManager.shared.updateUser(user: user)
+        }
+        AdManager.shared.removeBuyButton()
+        if let window = UIApplication.shared.keyWindow {
+            window.displayCheck(text: NSLocalizedString("Success!", comment: "Success, whatever action you just performed worked successfully"))
         }
     }
     

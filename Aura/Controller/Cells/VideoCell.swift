@@ -11,6 +11,7 @@ import UIKit
 class VideoCell: UICollectionViewCell {
     
     static let identifier = "VideoCell"
+    var courseType: CourseType = .EHDMasterCourse
     
     var playImageView: UIImageView = {
         let iv = UIImageView()

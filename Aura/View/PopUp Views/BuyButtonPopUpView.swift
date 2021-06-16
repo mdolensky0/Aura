@@ -14,6 +14,8 @@ class BuyButtonPopUpView: UIView {
     
     var isMinimized = false
     var isVideoPopUp = true
+    var isAfterEHDPurchase = false
+    var courseType: CourseType = .EHDMasterCourse
     var videoVC: PUAVPlayerViewController?
     var parentVC: UIViewController?
     
@@ -141,6 +143,19 @@ class BuyButtonPopUpView: UIView {
     
     let buttonBackground = UIView()
     
+    let bundleButton: AnimatedButton = {
+        
+        let b = AnimatedButton()
+        b.setTitle(NSLocalizedString("Purchase Bundle", comment: ""), for: .normal)
+        b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        b.tintColor = .white
+        b.backgroundColor = K.DesignColors.primary
+        return b
+        
+    }()
+    
+    let bundleBackground = UIView()
+    
     let closeButton: AnimatedButton = {
         let b = AnimatedButton()
         if #available(iOS 13.0, *) {
@@ -165,10 +180,13 @@ class BuyButtonPopUpView: UIView {
         super.init(frame: frame)
     }
     
-    convenience init(frame: CGRect, isVideoPopUp: Bool) {
+    convenience init(frame: CGRect, isVideoPopUp: Bool, courseType: CourseType = .EHDMasterCourse, isAfterEHDPurchase: Bool = false) {
         self.init(frame: frame)
         self.isVideoPopUp = isVideoPopUp
+        self.courseType = courseType
+        self.isAfterEHDPurchase = isAfterEHDPurchase
         setup()
+        setText()
     }
     
     required init?(coder: NSCoder) {
@@ -193,9 +211,14 @@ class BuyButtonPopUpView: UIView {
         container.addSubview(buttonBackground)
         self.addSubview(closeButtonBackground)
         
+
+        container.addSubview(bundleBackground)
+
+        
         setConstraints()
         
         buyButton.addTarget(self, action: #selector(buyPressed(_:)), for: .touchUpInside)
+        bundleButton.addTarget(self, action: #selector(bundlePressed(_:)), for: .touchUpInside)
         if isVideoPopUp {
             closeButton.addTarget(self, action: #selector(minimize(_:)), for: .touchUpInside)
         } else {
@@ -315,18 +338,40 @@ class BuyButtonPopUpView: UIView {
         buttonBackground.heightAnchor.constraint(equalToConstant: 40).isActive = true
         buttonBackground.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.6).isActive = true
         buttonBackground.topAnchor.constraint(greaterThanOrEqualTo: name2.bottomAnchor, constant: 15).isActive = true
-        buttonBackground.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -30).isActive = true
+        if isAfterEHDPurchase {
+            buttonBackground.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -30).isActive = true
+        }
+        
         buttonBackground.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 10)
+        
+        bundleBackground.translatesAutoresizingMaskIntoConstraints = false
+        bundleBackground.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        bundleBackground.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        bundleBackground.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.6).isActive = true
+        bundleBackground.topAnchor.constraint(greaterThanOrEqualTo: buttonBackground.bottomAnchor, constant: 8).isActive = true
+        bundleBackground.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -30).isActive = true
+        bundleBackground.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 10)
+        
         
         buttonBackground.addSubview(buyButton)
         buyButton.anchor(top: buttonBackground.topAnchor,
-                          bottom: buttonBackground.bottomAnchor,
-                          leading: buttonBackground.leadingAnchor,
-                          trailing: buttonBackground.trailingAnchor,
+                         bottom: buttonBackground.bottomAnchor,
+                         leading: buttonBackground.leadingAnchor,
+                         trailing: buttonBackground.trailingAnchor,
+                         height: nil,
+                         width: nil)
+        
+        buyButton.roundCorners(cornerRadius: 10)
+        
+        bundleBackground.addSubview(bundleButton)
+        bundleButton.anchor(top: bundleBackground.topAnchor,
+                          bottom: bundleBackground.bottomAnchor,
+                          leading: bundleBackground.leadingAnchor,
+                          trailing: bundleBackground.trailingAnchor,
                           height: nil,
                           width: nil)
         
-        buyButton.roundCorners(cornerRadius: 10)
+        bundleButton.roundCorners(cornerRadius: 10)
         
         closeButtonBackground.anchor(top: self.topAnchor,
                            bottom: nil,
@@ -345,6 +390,21 @@ class BuyButtonPopUpView: UIView {
                            width: nil)
         
         closeButtonBackground.setShadow(color: .black, opacity: 0.7, offset: CGSize(width: 2, height: 2), radius: 4, cornerRadius: 20)
+    }
+    
+    func setText() {
+        if courseType == .KYGCourse {
+            mainTitle.text = NSLocalizedString("Kalifornya Glamour Course", comment: "")
+            featuresHeader.text = NSLocalizedString("Features", comment: "")
+            feature1.text = NSLocalizedString("• Master spoken English Conversation", comment: "")
+            feature2.text = NSLocalizedString("• Learn Californian accent", comment: "")
+            feature3.text = NSLocalizedString("• 80+ video & listening lessons", comment: "")
+            reviewsHeader.text = NSLocalizedString("Reviews", comment: "")
+            review1.text = NSLocalizedString("I have TOEIC900 score, but I feel this lesson is one of the best that I have ever taken", comment: "")
+            review2.text = NSLocalizedString("I just finished the first week of your course but I already feel the difference when I hear people talk", comment: "")
+            name1.text = "- Hiroshi"
+            name2.text = "- Miyu"
+        }
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -399,6 +459,21 @@ class BuyButtonPopUpView: UIView {
             self.closeButton.setImage(#imageLiteral(resourceName: "downChevron"), for: .normal)
         }
     }
+    
+    func getProductID() -> String {
+        switch courseType {
+        case .EHDMasterCourse:
+            return K.productIdentifiers.ehdMasterCourse
+        case .KYGCourse:
+            if isAfterEHDPurchase {
+                return K.productIdentifiers.kygCourse
+            } else {
+                return K.productIdentifiers.kygCourseNoDiscount
+            }
+        case .Secrets:
+            return "not a product"
+        }
+    }
         
     @objc func minimize(_ sender: AnimatedButton) {
         
@@ -434,6 +509,59 @@ class BuyButtonPopUpView: UIView {
 
     }
     
+    @objc func bundlePressed(_ sender: AnimatedButton) {
+        AnalyticsManager.shared.logBundlePressed()
+        
+        UIView.animate(withDuration: 0.3) {
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+        } completion: { (_) in
+            
+            if self.isVideoPopUp {
+                self.videoVC?.player?.pause()
+                
+                if Utilities.shared.isUserSignedIn {
+                    if Utilities.shared.user?.purchases[CourseType.EHDMasterCourse.rawValue] == true || Utilities.shared.user?.purchases[CourseType.KYGCourse.rawValue] == true {
+                        let alert = UIAlertController(title: NSLocalizedString("You already have purchased one of these courses", comment: ""), message: nil, preferredStyle: .alert)
+                        let action = UIAlertAction(title: NSLocalizedString("Ok", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .cancel) { (action) in
+                            self.closeButton.sendActions(for: .touchUpInside)
+                        }
+                        alert.addAction(action)
+                        self.videoVC?.present(alert, animated: true, completion: nil)
+                    } else {
+                        // Handle Purchase
+                        let productID = K.productIdentifiers.EHD_KYG_Bundle
+                        PurchasingManager.shared.fetchProducts(productIdentifier: productID, parentVC: self.videoVC)
+                        self.videoVC?.startLoadingScreen()
+                    }
+                } else {
+                    // Sign In Then Handle Purchase
+                    self.videoVC?.goToLogin(self)
+                }
+            } else {
+                if Utilities.shared.isUserSignedIn {
+                    if Utilities.shared.user?.purchases[CourseType.EHDMasterCourse.rawValue] == true || Utilities.shared.user?.purchases[CourseType.KYGCourse.rawValue] == true {
+                        let alert = UIAlertController(title: NSLocalizedString("You already have purchased one of these courses", comment: ""), message: nil, preferredStyle: .alert)
+                        let action = UIAlertAction(title: NSLocalizedString("Ok", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .cancel) { (action) in
+                            self.closeButton.sendActions(for: .touchUpInside)
+                        }
+                        alert.addAction(action)
+                        self.parentVC?.present(alert, animated: true, completion: nil)
+                    } else {
+                        // Handle Purchase
+                        let productID = K.productIdentifiers.EHD_KYG_Bundle
+                        PurchasingManager.shared.fetchProducts(productIdentifier: productID, parentVC: self.parentVC)
+                        self.parentVC?.startLoadingScreen()
+                    }
+                } else {
+                    // Sign In Then Handle Purchase
+                    self.parentVC?.goToLoginForPurchase(self)
+                }
+            }
+
+        }
+    }
+    
     @objc func buyPressed(_ sender: AnimatedButton) {
         
         AnalyticsManager.shared.logBuyButtonPressed()
@@ -447,8 +575,8 @@ class BuyButtonPopUpView: UIView {
                 self.videoVC?.player?.pause()
                 
                 if Utilities.shared.isUserSignedIn {
-                    if Utilities.shared.user?.purchases[K.productNames.ehdMasterCourse] == true {
-                        let alert = UIAlertController(title: NSLocalizedString("You already have Purchased the English HD Master Course", comment: ""), message: nil, preferredStyle: .alert)
+                    if Utilities.shared.user?.purchases[self.courseType.rawValue] == true {
+                        let alert = UIAlertController(title: NSLocalizedString("You already have purchased this course", comment: ""), message: nil, preferredStyle: .alert)
                         let action = UIAlertAction(title: NSLocalizedString("Ok", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .cancel) { (action) in
                             self.closeButton.sendActions(for: .touchUpInside)
                         }
@@ -456,17 +584,18 @@ class BuyButtonPopUpView: UIView {
                         self.videoVC?.present(alert, animated: true, completion: nil)
                     } else {
                         // Handle Purchase
-                        PurchasingManager.shared.fetchProducts(productIdentifier: K.productIdentifiers.ehdMasterCourse, parentVC: self.videoVC)
+                        let productID = self.getProductID()
+                        PurchasingManager.shared.fetchProducts(productIdentifier: productID, parentVC: self.videoVC)
                         self.videoVC?.startLoadingScreen()
                     }
                 } else {
                     // Sign In Then Handle Purchase
-                    self.videoVC?.goToLogin()
+                    self.videoVC?.goToLogin(self)
                 }
             } else {
                 if Utilities.shared.isUserSignedIn {
-                    if Utilities.shared.user?.purchases[K.productNames.ehdMasterCourse] == true {
-                        let alert = UIAlertController(title: NSLocalizedString("You already have Purchased the English HD Master Course", comment: ""), message: nil, preferredStyle: .alert)
+                    if Utilities.shared.user?.purchases[self.courseType.rawValue] == true {
+                        let alert = UIAlertController(title: NSLocalizedString("You already have purchased this course", comment: ""), message: nil, preferredStyle: .alert)
                         let action = UIAlertAction(title: NSLocalizedString("Ok", comment: "ok, I acknowledge the action (for example successfully signing out) that just happened. When I press ok, the alert will go away and I can continue doing what I am doing in the app"), style: .cancel) { (action) in
                             self.closeButton.sendActions(for: .touchUpInside)
                         }
@@ -474,12 +603,13 @@ class BuyButtonPopUpView: UIView {
                         self.parentVC?.present(alert, animated: true, completion: nil)
                     } else {
                         // Handle Purchase
-                        PurchasingManager.shared.fetchProducts(productIdentifier: K.productIdentifiers.ehdMasterCourse, parentVC: self.parentVC)
+                        let productID = self.getProductID()
+                        PurchasingManager.shared.fetchProducts(productIdentifier: productID, parentVC: self.parentVC)
                         self.parentVC?.startLoadingScreen()
                     }
                 } else {
                     // Sign In Then Handle Purchase
-                    self.parentVC?.goToLoginForPurchase()
+                    self.parentVC?.goToLoginForPurchase(self)
                 }
             }
 

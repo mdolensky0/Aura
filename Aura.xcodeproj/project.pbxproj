@@ -46,6 +46,8 @@
 		1DB81F262644D53600505740 /* RCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB81F252644D53600505740 /* RCManager.swift */; };
 		1DD2BAF825322CD000811F89 /* AnimatedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2BAF725322CD000811F89 /* AnimatedButton.swift */; };
 		1DED0736255F274300AB45A7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DED0735255F274300AB45A7 /* StoreKit.framework */; };
+		1DF84968267179E400812CE9 /* CourseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF84967267179E400812CE9 /* CourseType.swift */; };
+		1DF8496A2673CAA600812CE9 /* VideoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF849692673CAA600812CE9 /* VideoManager.swift */; };
 		7D03998C252662690070DB8E /* UITextFieldPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998B252662680070DB8E /* UITextFieldPadding.swift */; };
 		7D0399902526AB8A0070DB8E /* ForgotPasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998F2526AB8A0070DB8E /* ForgotPasswordController.swift */; };
 		7D05654B25003C5900025467 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D05654A25003C5900025467 /* VideoCell.swift */; };
@@ -213,6 +215,8 @@
 		1DB81F252644D53600505740 /* RCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCManager.swift; sourceTree = "<group>"; };
 		1DD2BAF725322CD000811F89 /* AnimatedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedButton.swift; sourceTree = "<group>"; };
 		1DED0735255F274300AB45A7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		1DF84967267179E400812CE9 /* CourseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseType.swift; sourceTree = "<group>"; };
+		1DF849692673CAA600812CE9 /* VideoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoManager.swift; sourceTree = "<group>"; };
 		41B027E80BEA395A6BD67C90 /* Pods-Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.release.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.release.xcconfig"; sourceTree = "<group>"; };
 		7D03998B252662680070DB8E /* UITextFieldPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPadding.swift; sourceTree = "<group>"; };
 		7D03998F2526AB8A0070DB8E /* ForgotPasswordController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordController.swift; sourceTree = "<group>"; };
@@ -440,6 +444,7 @@
 			isa = PBXGroup;
 			children = (
 				7D15DB5A24C2A49F009ACDB4 /* FirebaseManager.swift */,
+				1DF849692673CAA600812CE9 /* VideoManager.swift */,
 				7D15DB5824C2A49B009ACDB4 /* RealmManager.swift */,
 				7D15DB5924C2A49D009ACDB4 /* WordColoringManager.swift */,
 				7D7ECFF52509A7B9008573A7 /* AzureTranslateManager.swift */,
@@ -448,6 +453,8 @@
 				1DB7431525F583AD00D69976 /* NetworkManager.swift */,
 				1D12E34D260D9B6600C55374 /* AnalyticsManager.swift */,
 				1DB81F252644D53600505740 /* RCManager.swift */,
+				1DA7B30D253DEF4A0068330B /* PopUpManager.swift */,
+				1D90A9B425CB2C5100802D3C /* AdManager.swift */,
 			);
 			path = "Object Managers";
 			sourceTree = "<group>";
@@ -759,9 +766,8 @@
 				7D15DB6424C2A70A009ACDB4 /* Firebase Models */,
 				7D15DB5424C29520009ACDB4 /* Realm Models */,
 				7D15DB6924C2A8A6009ACDB4 /* Coloring Models */,
-				1DA7B30D253DEF4A0068330B /* PopUpManager.swift */,
-				1D90A9B425CB2C5100802D3C /* AdManager.swift */,
 				1DB7430425F04B0500D69976 /* DeckCreater.swift */,
+				1DF84967267179E400812CE9 /* CourseType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1049,11 +1055,13 @@
 				1DA47CA325B8C84100B546B1 /* PurchasingManager.swift in Sources */,
 				1D999FA92543461A00A635DE /* Page7.swift in Sources */,
 				1D12E34E260D9B6600C55374 /* AnalyticsManager.swift in Sources */,
+				1DF8496A2673CAA600812CE9 /* VideoManager.swift in Sources */,
 				1DB0A70325EEC6230027A989 /* HeaderCollectionReusableView.swift in Sources */,
 				1D999FB92543ABAC00A635DE /* Page12.swift in Sources */,
 				7D600BF324D107DF002EA266 /* KeyCardView.swift in Sources */,
 				1D8D3DD0254C909800563D8C /* StudyResultPopUpView.swift in Sources */,
 				7D0C128F24DB4B230024FD31 /* DeckController.swift in Sources */,
+				1DF84968267179E400812CE9 /* CourseType.swift in Sources */,
 				7D0FCC7B2514205C00B11F5B /* AltTranslationsView.swift in Sources */,
 				7D66D89E24B424830019BFF0 /* KeyController.swift in Sources */,
 			);

@@ -339,6 +339,7 @@ class HomeController: UIViewController {
 //        UserDefaults.standard.set(false, forKey: "hasClickedLock")
 //        UserDefaults.standard.removeObject(forKey: "currentVideoPosition")
 //        FirebaseManager.shared.loadUserWhoPurchased()
+//        UserDefaults.standard.set(false, forKey: "hasClickedKYGLock")
     }
     
     override func viewDidLayoutSubviews() {
@@ -397,6 +398,7 @@ class HomeController: UIViewController {
                 UserDefaults.standard.set(true, forKey: "isFirstLaunchOfVersion1_18")
             } else {
                 AdManager.shared.funnelProgress = .completedVideo1Bought
+                UserDefaults.standard.set(true, forKey: "isFirstLaunchOfVersion1_18")
             }
         }
     }
