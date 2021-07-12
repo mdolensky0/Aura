@@ -235,10 +235,10 @@ class BuyButtonPopUpView: UIView {
         bundleButton.addTarget(self, action: #selector(bundlePressed(_:)), for: .touchUpInside)
         if isVideoPopUp {
             closeButton.addTarget(self, action: #selector(minimize(_:)), for: .touchUpInside)
-            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(minimize(_:)))
+            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(minimizeFromSwipe(_:)))
             swipeDown.direction = .down
             self.addGestureRecognizer(swipeDown)
-            let swipeUp = UISwipeGestureRecognizer(target: self, action:  #selector(minimize(_:)))
+            let swipeUp = UISwipeGestureRecognizer(target: self, action:  #selector(minimizeFromSwipe(_:)))
             swipeUp.direction = .up
             self.addGestureRecognizer(swipeUp)
         } else {
@@ -248,10 +248,10 @@ class BuyButtonPopUpView: UIView {
                 closeButton.setImage(#imageLiteral(resourceName: "xmark"), for: .normal)
             }
             closeButton.addTarget(self, action: #selector(dismiss(_:)), for: .touchUpInside)
-            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(dismiss(_:)))
+            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(dismissFromSwipe(_:)))
             swipeDown.direction = .down
             self.addGestureRecognizer(swipeDown)
-            let swipeUp = UISwipeGestureRecognizer(target: self, action:  #selector(dismiss(_:)))
+            let swipeUp = UISwipeGestureRecognizer(target: self, action:  #selector(dismissFromSwipe(_:)))
             swipeUp.direction = .up
             self.addGestureRecognizer(swipeUp)
         }
@@ -576,6 +576,40 @@ class BuyButtonPopUpView: UIView {
             self.removeFromSuperview()
         }
 
+    }
+    
+    @objc func minimizeFromSwipe(_ sender: UISwipeGestureRecognizer) {
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            if self.isMinimized && sender.direction == .up {
+                self.transform = .identity
+                self.isMinimized = false
+                if #available(iOS 13.0, *) {
+                    self.closeButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+                } else {
+                    self.closeButton.setImage(#imageLiteral(resourceName: "downChevron"), for: .normal)
+                }
+            } else if !self.isMinimized && sender.direction == .down {
+                self.transform = CGAffineTransform(translationX: 0, y: self.frame.height - 28)
+                self.isMinimized = true
+                if #available(iOS 13.0, *) {
+                    self.closeButton.setImage(UIImage(systemName: "chevron.up"), for: .normal)
+                } else {
+                    self.closeButton.setImage(#imageLiteral(resourceName: "upChevron"), for: .normal)
+                }
+            }
+        } completion: { (_) in
+            // Do nothing
+        }
+    }
+    
+    @objc func dismissFromSwipe(_ sender: UISwipeGestureRecognizer) {
+        if sender.direction == .down {
+            UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseIn) {
+                self.transform = CGAffineTransform(translationX: 0, y: self.frame.height + 50)
+            } completion: { (_) in
+                self.removeFromSuperview()
+            }
+        }
     }
     
     @objc func bundlePressed(_ sender: AnimatedButton) {
