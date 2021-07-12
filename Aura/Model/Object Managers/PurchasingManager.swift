@@ -8,6 +8,7 @@
 
 import UIKit
 import StoreKit
+import Firebase
 
 class PurchasingManager: NSObject {
     
@@ -16,7 +17,8 @@ class PurchasingManager: NSObject {
     static let shared = PurchasingManager()
     
     var myProduct: SKProduct?
-    var parentVC: UIViewController? 
+    var parentVC: UIViewController?
+    var creatorCode: String? 
     
     //MARK: - INIT
     override init() {
@@ -59,15 +61,18 @@ class PurchasingManager: NSObject {
         
         case K.productIdentifiers.ehdMasterCourse:
             unlockEHDCourse(transactionID, isBundle: false)
+            recordBoughtWithCreatorCode()
             break
         
         case K.productIdentifiers.kygCourse, K.productIdentifiers.kygCourseNoDiscount:
             unlockKYGCourse(transactionID)
+            recordBoughtWithCreatorCode()
             break
         
         case K.productIdentifiers.EHD_KYG_Bundle:
             unlockEHDCourse(transactionID, isBundle: true)
             unlockKYGCourse(transactionID)
+            recordBoughtWithCreatorCode()
             break
         
         default:
@@ -140,6 +145,34 @@ class PurchasingManager: NSObject {
         }
     }
     
+    func recordBoughtWithCreatorCode() {
+        guard let creatorCode = creatorCode else {
+            return
+        }
+        
+        if let product = myProduct {
+            let price = Double(truncating: product.price)
+            let courseName = product.productIdentifier
+            let calanderDate = Calendar.current.dateComponents([.day, .year, .month], from: Date())
+            
+            if let day = calanderDate.day,
+               let month = calanderDate.month,
+               let year = calanderDate.year {
+                
+                let newCCPurchase = CCPurchase(
+                    creatorCode: creatorCode,
+                    day: day,
+                    month: month,
+                    year: year,
+                    price: price,
+                    courseName: courseName,
+                    userEmail: Auth.auth().currentUser?.email ?? ""
+                )
+                
+                FirebaseManager.shared.markPurchaseWithCreatorCode(newCCPurchase)
+            }
+        }
+    }
 }
 
 //MARK: - Request Delegate

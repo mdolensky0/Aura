@@ -83,6 +83,8 @@ class Utilities {
         }
     }
     
+    var creatorCodes = Set<String>()
+    
     //MARK: - Sound Variables and Functions
     var soundItOutPlayer: AVAudioPlayer?
     var player : AVPlayer?

@@ -87,6 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseManager.shared.loadUser()
         FirebaseManager.shared.loadLessons()
         FirebaseManager.shared.loadSuperUser()
+        FirebaseManager.shared.loadCreatorCodes()
         print("foreground")
     }
 

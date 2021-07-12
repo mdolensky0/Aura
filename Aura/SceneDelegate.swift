@@ -58,6 +58,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         FirebaseManager.shared.loadUser()
         FirebaseManager.shared.loadLessons()
         FirebaseManager.shared.loadSuperUser()
+        FirebaseManager.shared.loadCreatorCodes()
         print("foreground")
     }
 

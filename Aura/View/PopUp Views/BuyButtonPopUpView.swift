@@ -18,6 +18,7 @@ class BuyButtonPopUpView: UIView {
     var courseType: CourseType = .EHDMasterCourse
     var videoVC: PUAVPlayerViewController?
     var parentVC: UIViewController?
+    var creatorCode: String?
     
     var mainTitleTop: NSLayoutConstraint?
     var featureHeaderTop: NSLayoutConstraint?
@@ -154,6 +155,18 @@ class BuyButtonPopUpView: UIView {
         
     }()
     
+    let creatorButton: AnimatedButton = {
+        
+        let b = AnimatedButton()
+        b.isFlat = true
+        b.setTitle(NSLocalizedString("Support a creator", comment: ""), for: .normal)
+        b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+        b.setTitleColor(K.DesignColors.primary, for: .normal)
+        b.backgroundColor = .white
+        return b
+        
+    }()
+    
     let bundleBackground = UIView()
     
     let closeButton: AnimatedButton = {
@@ -209,6 +222,7 @@ class BuyButtonPopUpView: UIView {
         container.addSubview(review2)
         container.addSubview(name2)
         container.addSubview(buttonBackground)
+        container.addSubview(creatorButton)
         self.addSubview(closeButtonBackground)
         
 
@@ -221,6 +235,12 @@ class BuyButtonPopUpView: UIView {
         bundleButton.addTarget(self, action: #selector(bundlePressed(_:)), for: .touchUpInside)
         if isVideoPopUp {
             closeButton.addTarget(self, action: #selector(minimize(_:)), for: .touchUpInside)
+            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(minimize(_:)))
+            swipeDown.direction = .down
+            self.addGestureRecognizer(swipeDown)
+            let swipeUp = UISwipeGestureRecognizer(target: self, action:  #selector(minimize(_:)))
+            swipeUp.direction = .up
+            self.addGestureRecognizer(swipeUp)
         } else {
             if #available(iOS 13.0, *) {
                 closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
@@ -228,7 +248,14 @@ class BuyButtonPopUpView: UIView {
                 closeButton.setImage(#imageLiteral(resourceName: "xmark"), for: .normal)
             }
             closeButton.addTarget(self, action: #selector(dismiss(_:)), for: .touchUpInside)
+            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(dismiss(_:)))
+            swipeDown.direction = .down
+            self.addGestureRecognizer(swipeDown)
+            let swipeUp = UISwipeGestureRecognizer(target: self, action:  #selector(dismiss(_:)))
+            swipeUp.direction = .up
+            self.addGestureRecognizer(swipeUp)
         }
+        creatorButton.addTarget(self, action: #selector(creatorButtonPressed(_:)), for: .touchUpInside)
             
     }
     
@@ -349,7 +376,6 @@ class BuyButtonPopUpView: UIView {
         bundleBackground.heightAnchor.constraint(equalToConstant: 40).isActive = true
         bundleBackground.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.6).isActive = true
         bundleBackground.topAnchor.constraint(greaterThanOrEqualTo: buttonBackground.bottomAnchor, constant: 8).isActive = true
-        bundleBackground.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -30).isActive = true
         bundleBackground.setShadow(color: .black, opacity: 0.5, offset: CGSize(width: 2, height: 2), radius: 3, cornerRadius: 10)
         
         
@@ -372,6 +398,13 @@ class BuyButtonPopUpView: UIView {
                           width: nil)
         
         bundleButton.roundCorners(cornerRadius: 10)
+        
+        creatorButton.translatesAutoresizingMaskIntoConstraints = false
+        creatorButton.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
+        creatorButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        creatorButton.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.6).isActive = true
+        creatorButton.topAnchor.constraint(greaterThanOrEqualTo: bundleBackground.bottomAnchor, constant: 8).isActive = true
+        creatorButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -30).isActive = true
         
         closeButtonBackground.anchor(top: self.topAnchor,
                            bottom: nil,
@@ -474,6 +507,42 @@ class BuyButtonPopUpView: UIView {
             return "not a product"
         }
     }
+    
+    func showCreatorCodePrompt() {
+        
+        var textField = UITextField()
+        let alert = ValidatingAlertController(
+            title: NSLocalizedString("Input Creator Code", comment: ""),
+            message: NSLocalizedString("Supporting a creator? Enter their code here.", comment: ""),
+            preferredStyle: .alert
+        )
+        
+        let submit = UIAlertAction(title: NSLocalizedString("Submit", comment: ""), style: .default) { (action) in
+            
+            guard let text = textField.text else {
+                return
+            }
+            
+            self.creatorCode = text
+            self.creatorButton.setTitle(NSLocalizedString("Supporting", comment: "") + " \(text)", for: .normal)
+        }
+        
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel) { (action) in
+            return
+        }
+        
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = NSLocalizedString("Creator Code", comment: "")
+            alertTextField.addTarget(alert, action: #selector(alert.textDidChange), for: .editingChanged)
+            textField = alertTextField
+        }
+        
+        alert.addAction(submit)
+        alert.addAction(cancel)
+        alert.actions[0].isEnabled = false
+        
+        parentVC?.present(alert, animated: true, completion: nil)
+    }
         
     @objc func minimize(_ sender: AnimatedButton) {
         
@@ -531,6 +600,7 @@ class BuyButtonPopUpView: UIView {
                     } else {
                         // Handle Purchase
                         let productID = K.productIdentifiers.EHD_KYG_Bundle
+                        PurchasingManager.shared.creatorCode = self.creatorCode
                         PurchasingManager.shared.fetchProducts(productIdentifier: productID, parentVC: self.videoVC)
                         self.videoVC?.startLoadingScreen()
                     }
@@ -550,6 +620,7 @@ class BuyButtonPopUpView: UIView {
                     } else {
                         // Handle Purchase
                         let productID = K.productIdentifiers.EHD_KYG_Bundle
+                        PurchasingManager.shared.creatorCode = self.creatorCode
                         PurchasingManager.shared.fetchProducts(productIdentifier: productID, parentVC: self.parentVC)
                         self.parentVC?.startLoadingScreen()
                     }
@@ -585,6 +656,7 @@ class BuyButtonPopUpView: UIView {
                     } else {
                         // Handle Purchase
                         let productID = self.getProductID()
+                        PurchasingManager.shared.creatorCode = self.creatorCode
                         PurchasingManager.shared.fetchProducts(productIdentifier: productID, parentVC: self.videoVC)
                         self.videoVC?.startLoadingScreen()
                     }
@@ -604,6 +676,7 @@ class BuyButtonPopUpView: UIView {
                     } else {
                         // Handle Purchase
                         let productID = self.getProductID()
+                        PurchasingManager.shared.creatorCode = self.creatorCode
                         PurchasingManager.shared.fetchProducts(productIdentifier: productID, parentVC: self.parentVC)
                         self.parentVC?.startLoadingScreen()
                     }
@@ -613,6 +686,15 @@ class BuyButtonPopUpView: UIView {
                 }
             }
 
+        }
+    }
+    
+    @objc func creatorButtonPressed(_ sender: AnimatedButton) {
+        UIView.animate(withDuration: 0.3) {
+            sender.superview?.transform = .identity
+            sender.superview?.layer.shadowOpacity = 0.3
+        } completion: { (_) in
+            self.showCreatorCodePrompt()
         }
     }
 }

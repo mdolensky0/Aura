@@ -133,6 +133,7 @@ class TabBarController: UITabBarController {
         
         FirebaseManager.shared.loadLessons()
         FirebaseManager.shared.loadSuperUser()
+        FirebaseManager.shared.loadCreatorCodes()
         
     }
 

@@ -13,6 +13,7 @@ struct K {
     struct FBConstants {
         static let dictionaryCollectionName = "Words"
         static let usersCollectionName = "Users"
+        static let ccPurchasesCollectionName = "CC_Purchases"
         static let lessonsCollectionName = NSLocalizedString("lessonNameForRegion", comment: "")
         static let colorErrorsCollectionName = "Coloring_Error"
         static let translationErrorCollectionName = "Translation_Error"

@@ -294,6 +294,56 @@ class FirebaseManager {
         
     }
     
+    func markPurchaseWithCreatorCode(_ newCCPurchase: CCPurchase) {
+        
+        let docRef = db.collection(K.FBConstants.ccPurchasesCollectionName).document(newCCPurchase.creatorCode)
+
+        docRef.getDocument { (document, error) in
+
+            let result = Result {
+                try document.flatMap {
+                    try $0.data(as: CCPurchases.self)
+                }
+            }
+            switch result {
+            case .success(let ccPurchases):
+                if var ccPurchases = ccPurchases {
+                    ccPurchases.ccPurchases.append(newCCPurchase)
+                    self.writeCCPurchase(ccPurchases: ccPurchases, docName: newCCPurchase.creatorCode)
+                } else {
+                    print("document with creator code not found")
+                }
+            case .failure(let error):
+                print("Error decoding: \(error)")
+            }
+        }
+    }
+    
+    func writeCCPurchase(ccPurchases: CCPurchases, docName: String) {
+        do {
+            try self.db.collection(K.FBConstants.ccPurchasesCollectionName).document(docName).setData(from: ccPurchases)
+        } catch let error {
+            print("Error writing ccPurchase to Firestore: \(error)")
+        }
+    }
+    
+    func loadCreatorCodes() {
+       
+        var creatorCodes = [String]()
+        
+        db.collection(K.FBConstants.ccPurchasesCollectionName).addSnapshotListener { querySnapshot, err in
+            if let err = err {
+                print("Error getting documents: \(err)")
+                Utilities.shared.creatorCodes = Set(creatorCodes)
+            } else {
+                for document in querySnapshot!.documents {
+                    creatorCodes.append(document.documentID)
+                }
+                Utilities.shared.creatorCodes = Set(creatorCodes)
+            }
+        }
+    }
+    
     func loadLessons() {
         
         var videoGroup = [VideoGroup]()
@@ -308,7 +358,6 @@ class FirebaseManager {
             
             else {
                 
-                print(querySnapshot!.documents.count)
                 for document in querySnapshot!.documents {
                     
                     let result = Result {
