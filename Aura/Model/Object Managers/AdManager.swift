@@ -267,7 +267,7 @@ class AdManager: NSObject {
         guard let funnelProgress = AdManager.shared.funnelProgress else { return }
         
         // If they have not finished video 1, don't start counting for video 2 ad
-        if funnelProgress == .completedVideo1Bought || funnelProgress == .completedVideo1NoBuy { return }
+        if funnelProgress == .completedVideo1Bought { return }
         
         guard let searchCount = UserDefaults.standard.object(forKey: "searchCount") else {
             UserDefaults.standard.setValue(1, forKey: "searchCount")
@@ -276,9 +276,9 @@ class AdManager: NSObject {
         
         guard let count = searchCount as? Int else { return }
         
-        if count > 7 {
-            return
-        } else if count < 7 {
+        if count > 10 {
+            UserDefaults.standard.setValue(0, forKey: "searchCount")
+        } else if count < 10 {
             UserDefaults.standard.setValue(count + 1, forKey: "searchCount")
         }
     }
@@ -290,11 +290,33 @@ class AdManager: NSObject {
         
         guard let count = searchCount as? Int else { return }
         
-        if count == 7 {
+        if count == 10 {
             guard let funnelProgress = AdManager.shared.funnelProgress else { return }
+            
             if funnelProgress == .hasNotSeenVideo1 || funnelProgress == .seenPartOfVideo1 {
                 UserDefaults.standard.setValue(count + 1, forKey: "searchCount")
-                showAdPopUP(parentVC: parentVC)
+                if let popCount = UserDefaults.standard.object(forKey: "numAdPopUps") as? Int {
+                    if popCount > 2 {
+                        showBuyButton(inVideo: false,
+                                      isForKYGCourse: false,
+                                      isAfterEHDPurchase: false,
+                                      videoVC: nil,
+                                      parentVC: parentVC)
+                    } else {
+                        UserDefaults.standard.setValue(count + 1, forKey: "numAdPopUps")
+                        showAdPopUP(parentVC: parentVC)
+                    }
+                } else {
+                    UserDefaults.standard.setValue(0, forKey: "numAdPopUps")
+                    showAdPopUP(parentVC: parentVC)
+                }
+            } else if funnelProgress == .completedVideo1NoBuy {
+                UserDefaults.standard.setValue(count + 1, forKey: "searchCount")
+                showBuyButton(inVideo: false,
+                              isForKYGCourse: false,
+                              isAfterEHDPurchase: false,
+                              videoVC: nil,
+                              parentVC: parentVC)
             }
         }
     }

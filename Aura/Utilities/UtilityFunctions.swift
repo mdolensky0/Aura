@@ -197,20 +197,11 @@ class Utilities {
                 
                 try Auth.auth().signOut()
                 
-                let signedOutAlert = UIAlertController(title: NSLocalizedString("Success", comment: "The action I just performed was a success (for example logging out)"), message: NSLocalizedString("Successfully signed out", comment: "I clicked the sign out button and I was successfully signed out"), preferredStyle: .alert)
-                
-                signedOutAlert.addAction(actionOk)
-                vc.present(signedOutAlert, animated: true, completion: nil)
-                
                 self.isUserSignedIn = false
                 self.user = nil
-                self.tabController?.isSignedIn = false
                 
-                self.tabController?.viewControllers = [self.tabController!.homeController,
-                                                       self.tabController!.searchController,
-                                                       self.tabController!.keyController,
-                                                       self.tabController!.loginController,
-                                                       self.tabController!.lessonsController]
+                let window = UIApplication.shared.keyWindow
+                window?.rootViewController = UINavigationController(rootViewController: LoginController()) 
             }
             
             catch let signOutError as NSError {

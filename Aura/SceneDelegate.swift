@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 @available(iOS 13.0, *)
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -22,7 +23,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = TabBarController()
+        if Auth.auth().currentUser != nil {
+            window?.rootViewController = TabBarController()
+        } else {
+            window?.rootViewController = UINavigationController(rootViewController: LoginController()) 
+        }
+        
         window?.makeKeyAndVisible()
         window?.overrideUserInterfaceStyle = .light
 

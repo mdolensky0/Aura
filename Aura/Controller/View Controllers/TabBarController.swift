@@ -11,8 +11,6 @@ import Firebase
 
 class TabBarController: UITabBarController {
 
-    var isSignedIn = false
-    
     var homeController: UINavigationController = {
         
         let vc = HomeController()
@@ -55,18 +53,6 @@ class TabBarController: UITabBarController {
         nc.navigationBar.barStyle = .black
         
         return nc
-    }()
-    
-    let loginController: UINavigationController = {
-        
-        let vc = LoginController()
-        
-        vc.tabBarItem = UITabBarItem(title: NSLocalizedString("Flashcards", comment: "flashcards for studying"),
-                                     image: UIImage(named: "Flashcard1"),
-                                     selectedImage: UIImage(contentsOfFile: "Flashcard1"))
-       
-        return UINavigationController(rootViewController: vc)
-        
     }()
     
     let flashCardController: UINavigationController = {
@@ -116,7 +102,6 @@ class TabBarController: UITabBarController {
         if Auth.auth().currentUser != nil {
             
             DispatchQueue.main.async {
-                self.isSignedIn = true
                 FirebaseManager.shared.loadUser()
                 if let _ = Auth.auth().currentUser?.uid {
                     Utilities.shared.isUserSignedIn = true
@@ -138,24 +123,7 @@ class TabBarController: UITabBarController {
     }
 
     func setupViewControllers() {
-        
-        if isSignedIn {
-            
-            self.viewControllers = [homeController, searchController, keyController, flashCardController, lessonsController]
-        }
-        
-        else {
-
-            self.viewControllers = [homeController, searchController, keyController, loginController, lessonsController]
-        }
-        
-    }
-    
-    func userSignedIn() {
-        
-        self.isSignedIn = true
         self.viewControllers = [homeController, searchController, keyController, flashCardController, lessonsController]
-        
     }
     
     func setupTabBarCustomizations() {

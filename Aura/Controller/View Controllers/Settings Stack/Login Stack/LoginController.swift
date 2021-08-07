@@ -23,12 +23,11 @@ class LoginController: UIViewController {
     
     var purchaseLabel: UILabel = {
         let l = UILabel()
-        l.text = NSLocalizedString("Before you purchase, create an account", comment: "")
+        l.text = NSLocalizedString("The only place to learn English HD!", comment: "")
         l.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        l.numberOfLines = 1
+        l.numberOfLines = 0
         l.adjustsFontSizeToFitWidth = true
         l.textAlignment = .center
-        l.isHidden = true
         return l
     }()
     
@@ -86,14 +85,6 @@ class LoginController: UIViewController {
         
         AnalyticsManager.shared.logLoginImpression()
         
-        if isForPurchase { return }
-        
-        if UserDefaults.standard.bool(forKey: "hasLaunchedFlashcards") {
-            return
-        } else {
-            showPopUp()
-            UserDefaults.standard.set(true, forKey: "hasLaunchedFlashcards")
-        }
     }
     
     func setup() {
@@ -107,24 +98,6 @@ class LoginController: UIViewController {
         
         signUpButton.addTarget(self, action: #selector(signUpPressed(_:)), for: .touchUpInside)
         logInButton.addTarget(self, action: #selector(logInPressed(_:)), for: .touchUpInside)
-        
-        if isModal {
-            
-            // Add cancel button
-            if #available(iOS 13.0, *) {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"),
-                                                                         style: .plain,
-                                                                         target: self,
-                                                                         action: #selector(cancelButtonTapped))
-            } else {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "multiply").withRenderingMode(.alwaysTemplate),
-                                                                         style: .plain,
-                                                                         target: self,
-                                                                         action: #selector(cancelButtonTapped))
-            }
-            
-        }
-        
         
         let container = UIView()
         
@@ -172,17 +145,6 @@ class LoginController: UIViewController {
         container.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -80).isActive = true
         container.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -60).isActive = true
         
-        
-        if isForPurchase {
-            purchaseLabel.isHidden = false
-            purchaseLabel.numberOfLines = 1
-        } else if !isModal {
-            purchaseLabel.isHidden = false
-            purchaseLabel.text = NSLocalizedString("Create a free account to make your own personalized English HD Flashcard Decks", comment: "")
-            purchaseLabel.numberOfLines = 0
-        } else {
-            purchaseLabel.isHidden = true
-        }
     }
     
     @objc func signUpPressed(_ sender: UIButton) {

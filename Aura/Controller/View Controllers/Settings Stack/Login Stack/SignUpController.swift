@@ -375,42 +375,13 @@ class SignUpController: UIViewController {
             
             FirebaseManager.shared.createUser()
             
-            if self.isModal {
-                
-                if let tabBarController = self.presentingViewController as? TabBarController {
-                    DispatchQueue.main.async {
-                        self.endLoadingScreen()
-                    }
-                    tabBarController.userSignedIn()
-                    self.dismiss(animated: true, completion: nil)
-                    if self.isForPurchase {
-                        self.buyDelegate?.buyButton.sendActions(for: .touchUpInside)
-                    } else {
-                        self.delegate?.tapAddFlashcardButton()
-                    }
-                } else if let tabBarController = self.presentingViewController?.presentingViewController as? TabBarController {
-                    DispatchQueue.main.async {
-                        self.endLoadingScreen()
-                    }
-                    tabBarController.userSignedIn()
-                    self.dismiss(animated: true, completion: nil)
-                    if self.isForPurchase {
-                        self.buyDelegate?.buyButton.sendActions(for: .touchUpInside)
-                    } else {
-                        self.delegate?.tapAddFlashcardButton()
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.endLoadingScreen()
-                    }
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.endLoadingScreen()
-                }
-                guard let tabBarController = self.tabBarController as? TabBarController else { return }
-                tabBarController.userSignedIn()
+            DispatchQueue.main.async {
+                self.endLoadingScreen()
             }
+            
+            let window = UIApplication.shared.keyWindow
+            window?.rootViewController = TabBarController()
+            
         }
     }
     
