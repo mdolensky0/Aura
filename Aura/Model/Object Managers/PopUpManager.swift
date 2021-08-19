@@ -338,7 +338,7 @@ class PUAVPlayerViewController: AVPlayerViewController {
     
     func goToLogin(_ delegate: BuyButtonPopUpView) {
         
-        let vc = UINavigationController(rootViewController: LoginController())
+        let vc = Utilities.shared.getLoginVC()
         let login = vc.viewControllers[0] as! LoginController
         login.isModal = true
         login.isForPurchase = true

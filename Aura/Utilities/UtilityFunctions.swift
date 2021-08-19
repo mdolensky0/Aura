@@ -201,7 +201,7 @@ class Utilities {
                 self.user = nil
                 
                 let window = UIApplication.shared.keyWindow
-                window?.rootViewController = UINavigationController(rootViewController: LoginController()) 
+                window?.rootViewController = Utilities.shared.getLoginVC()
             }
             
             catch let signOutError as NSError {
@@ -219,6 +219,22 @@ class Utilities {
         
         vc.present(alert, animated: true, completion: nil)
         
+    }
+    
+    func getLoginVC() -> UINavigationController {
+        if #available(iOS 13.0, *) {
+            return  (UIApplication.shared.windows.first?.windowScene?.delegate as! SceneDelegate).loginNav
+        } else {
+            return (UIApplication.shared.delegate as! AppDelegate).loginNav
+        }
+    }
+    
+    func getTabVC() -> TabBarController {
+        if #available(iOS 13.0, *) {
+            return  (UIApplication.shared.windows.first?.windowScene?.delegate as! SceneDelegate).tabVC
+        } else {
+            return (UIApplication.shared.delegate as! AppDelegate).tabVC!
+        }
     }
 
     //MARK: - Add New Deck Function

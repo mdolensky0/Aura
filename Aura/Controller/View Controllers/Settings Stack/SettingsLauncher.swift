@@ -560,7 +560,7 @@ class SettingsLauncher: NSObject {
                 else {
                     
                     self.handleDismiss()
-                    let vc = UINavigationController(rootViewController: LoginController())
+                    let vc = Utilities.shared.getLoginVC()
                     let login = vc.viewControllers[0] as! LoginController
                     login.isModal = true
                     self.parentVC!.present(vc, animated: true, completion: nil)

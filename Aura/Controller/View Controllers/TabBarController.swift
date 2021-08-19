@@ -85,12 +85,17 @@ class TabBarController: UITabBarController {
         
     }()
     
+    var idx: Int?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         Utilities.shared.tabController = self
         Utilities.shared.settingsLauncher.tabBarVC = self
         setupTabBar()
+        print("==================\n\n\n")
+        print(idx)
+        print("\n\n\n==================")
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -98,27 +103,9 @@ class TabBarController: UITabBarController {
     }
     
     func setupTabBar() {
-        
-        if Auth.auth().currentUser != nil {
-            
-            DispatchQueue.main.async {
-                FirebaseManager.shared.loadUser()
-                if let _ = Auth.auth().currentUser?.uid {
-                    Utilities.shared.isUserSignedIn = true
-                }
-                self.setupViewControllers()
-                self.setupTabBarCustomizations()
-            }
-        }
-                    
-        else {
-            setupViewControllers()
-            setupTabBarCustomizations()
-        }
-        
-        FirebaseManager.shared.loadLessons()
-        FirebaseManager.shared.loadSuperUser()
-        FirebaseManager.shared.loadCreatorCodes()
+
+        setupViewControllers()
+        setupTabBarCustomizations()
         
     }
 

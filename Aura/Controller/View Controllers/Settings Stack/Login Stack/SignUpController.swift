@@ -15,6 +15,7 @@ class SignUpController: UIViewController {
     var isForPurchase = false
     var buyDelegate: BuyButtonPopUpView?
     var delegate: AddFlashcardDelegate?
+    var selectedTabAfterLogin = 0
     
     var titleLabel: UILabel = {
         
@@ -379,8 +380,22 @@ class SignUpController: UIViewController {
                 self.endLoadingScreen()
             }
             
+            let tabVC = Utilities.shared.getTabVC()
+            tabVC.selectedIndex = self.selectedTabAfterLogin
+            
             let window = UIApplication.shared.keyWindow
-            window?.rootViewController = TabBarController()
+            window?.rootViewController = tabVC
+            
+            if self.selectedTabAfterLogin == 4 {
+                AdManager.shared.showBuyButton(inVideo: false,
+                                               isForKYGCourse: false,
+                                               isAfterEHDPurchase: false,
+                                               videoVC: nil,
+                                               parentVC: tabVC.children[4]
+                )
+            }
+            
+            self.selectedTabAfterLogin = 0
             
         }
     }

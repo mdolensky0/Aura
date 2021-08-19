@@ -13,6 +13,8 @@ import Firebase
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    let loginNav = UINavigationController(rootViewController: LoginController())
+    let tabVC = TabBarController()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -24,9 +26,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         if Auth.auth().currentUser != nil {
-            window?.rootViewController = TabBarController()
+            window?.rootViewController = tabVC
         } else {
-            window?.rootViewController = UINavigationController(rootViewController: LoginController()) 
+            window?.rootViewController = loginNav
         }
         
         window?.makeKeyAndVisible()
@@ -72,6 +74,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        
+        guard let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true),
+              let host = components.host else { return }
+        
+        if host == "ehdmastercourse" {
+            
+            if Auth.auth().currentUser != nil {
+                tabVC.selectedIndex = 4
+                AdManager.shared.showBuyButton(inVideo: false,
+                                               isForKYGCourse: false,
+                                               isAfterEHDPurchase: false,
+                                               videoVC: nil,
+                                               parentVC: tabVC.children[4]
+                )
+            } else {
+                (loginNav.viewControllers.first as! LoginController).selectedTabAfterLogin = 4
+            }
+           
+        }
     }
 
 

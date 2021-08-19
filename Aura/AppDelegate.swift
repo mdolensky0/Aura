@@ -15,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var hasAlreadyLaunched :Bool!
     var window : UIWindow?
+    let loginNav = UINavigationController(rootViewController: LoginController())
+    var tabVC: TabBarController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -24,6 +26,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         _ = Firestore.firestore()
         _ = Storage.storage()
+        
+        FirebaseManager.shared.loadLessons()
+        FirebaseManager.shared.loadSuperUser()
+        FirebaseManager.shared.loadCreatorCodes()
+        
+        if Auth.auth().currentUser != nil {
+            FirebaseManager.shared.loadUser()
+            Utilities.shared.isUserSignedIn = true
+        }
+        
         
         // print(db, "\n")
         // print(storage, "\n")
@@ -63,7 +75,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         else {
             
             window = UIWindow()
-            window?.rootViewController = TabBarController()
+            if Auth.auth().currentUser != nil {
+                tabVC = TabBarController()
+                window?.rootViewController = tabVC
+            } else {
+                window?.rootViewController = loginNav
+            }
             window?.makeKeyAndVisible()
                         
         }
@@ -89,6 +106,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseManager.shared.loadSuperUser()
         FirebaseManager.shared.loadCreatorCodes()
         print("foreground")
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        guard let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true),
+              let host = components.host else {
+            return false
+        }
+        
+        if host == "ehdmastercourse" {
+            if let tc = window?.rootViewController?.children[0] as? TabBarController {
+                tc.selectedIndex = 3
+            }
+        }
+        
+        return true
     }
 
     // MARK: UISceneSession Lifecycle

@@ -701,7 +701,7 @@ extension LearnMoreController: ResultCardDelegate {
     
     func goToLogin() {
         
-        let vc = UINavigationController(rootViewController: LoginController())
+        let vc = Utilities.shared.getLoginVC()
         let login = vc.viewControllers[0] as! LoginController
         login.isModal = true
         login.delegate = self
