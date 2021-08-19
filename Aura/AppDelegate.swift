@@ -74,9 +74,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         else {
             
+            tabVC = TabBarController()
+            
             window = UIWindow()
             if Auth.auth().currentUser != nil {
-                tabVC = TabBarController()
                 window?.rootViewController = tabVC
             } else {
                 window?.rootViewController = loginNav
@@ -116,9 +117,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         if host == "ehdmastercourse" {
-            if let tc = window?.rootViewController?.children[0] as? TabBarController {
-                tc.selectedIndex = 3
+            
+            if Auth.auth().currentUser != nil {
+                tabVC!.selectedIndex = 4
+                AdManager.shared.showBuyButton(inVideo: false,
+                                               isForKYGCourse: false,
+                                               isAfterEHDPurchase: false,
+                                               videoVC: nil,
+                                               parentVC: tabVC!.children[4]
+                )
+            } else {
+                (loginNav.viewControllers.first as! LoginController).selectedTabAfterLogin = 4
             }
+           
         }
         
         return true

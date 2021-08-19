@@ -554,6 +554,7 @@ class SettingsLauncher: NSObject {
                 // Run Sign In / Sign Out Process
                 if Utilities.shared.isUserSignedIn {
                     
+                    self.handleDismiss()
                     Utilities.shared.signUserOut(alertIn: self.parentVC!)
                 }
                     
