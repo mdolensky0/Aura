@@ -48,6 +48,7 @@
 		1DC19C8E268D29ED00C9822F /* ValidatingAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC19C8D268D29ED00C9822F /* ValidatingAlertController.swift */; };
 		1DD2BAF825322CD000811F89 /* AnimatedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2BAF725322CD000811F89 /* AnimatedButton.swift */; };
 		1DED0736255F274300AB45A7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DED0735255F274300AB45A7 /* StoreKit.framework */; };
+		1DEF6FE1278D300100B98FFB /* SeminarPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEF6FE0278D300100B98FFB /* SeminarPopUp.swift */; };
 		1DF84968267179E400812CE9 /* CourseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF84967267179E400812CE9 /* CourseType.swift */; };
 		1DF8496A2673CAA600812CE9 /* VideoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF849692673CAA600812CE9 /* VideoManager.swift */; };
 		7D03998C252662690070DB8E /* UITextFieldPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D03998B252662680070DB8E /* UITextFieldPadding.swift */; };
@@ -219,6 +220,7 @@
 		1DC19C8D268D29ED00C9822F /* ValidatingAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingAlertController.swift; sourceTree = "<group>"; };
 		1DD2BAF725322CD000811F89 /* AnimatedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedButton.swift; sourceTree = "<group>"; };
 		1DED0735255F274300AB45A7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		1DEF6FE0278D300100B98FFB /* SeminarPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeminarPopUp.swift; sourceTree = "<group>"; };
 		1DF84967267179E400812CE9 /* CourseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseType.swift; sourceTree = "<group>"; };
 		1DF849692673CAA600812CE9 /* VideoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoManager.swift; sourceTree = "<group>"; };
 		41B027E80BEA395A6BD67C90 /* Pods-Aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Aura.release.xcconfig"; path = "Target Support Files/Pods-Aura/Pods-Aura.release.xcconfig"; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 				1D8D3DD2254CB7CC00563D8C /* SwipeTutorialView.swift */,
 				1D90A9B725CB315400802D3C /* SecretsPopUpView.swift */,
 				1D90A9BA25D73AC500802D3C /* BuyButtonPopUpView.swift */,
+				1DEF6FE0278D300100B98FFB /* SeminarPopUp.swift */,
 			);
 			path = "PopUp Views";
 			sourceTree = "<group>";
@@ -1030,6 +1033,7 @@
 				7DBB68A825279CE00008EA37 /* SpeechToTextController.swift in Sources */,
 				1D3D21212640F21C0012A26B /* VideoGroup.swift in Sources */,
 				1D999FB32543A7B800A635DE /* Page10.swift in Sources */,
+				1DEF6FE1278D300100B98FFB /* SeminarPopUp.swift in Sources */,
 				7D66D8A024B4249B0019BFF0 /* LoginController.swift in Sources */,
 				7D530E3324E3841000C0C209 /* FlashcardDetailsView.swift in Sources */,
 				7D66D8A424B424C20019BFF0 /* LessonsController.swift in Sources */,
@@ -1233,7 +1237,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.23;
+				MARKETING_VERSION = 1.24;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1257,7 +1261,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.23;
+				MARKETING_VERSION = 1.24;
 				PRODUCT_BUNDLE_IDENTIFIER = com.iai.Aura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

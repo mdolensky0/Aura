@@ -177,6 +177,30 @@ class SwipeTutorialPopUpManager: PopUpManager, SwipeTutorialDelegate {
     }
 }
 
+// MARK: - Seminar Pop Up Class
+class SeminarPopUpManager: PopUpManager, SeminarPopUpDelegate {
+    
+    lazy var popUpView: SeminarPopUpView = {
+        let v = SeminarPopUpView()
+        v.delegate = self
+        return v
+    }()
+    
+    override func showPopUpFadingIn() {
+        showPopUpFadingIn(v: popUpView)
+    }
+    
+    func dismiss() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.blackView.alpha = 0
+            self.popUpView.alpha = 0
+        }) { (_) in
+            self.blackView.removeFromSuperview()
+            self.popUpView.removeFromSuperview()
+        }
+    }
+}
+
 // MARK: - Video Pop Up Manager
 class VideoPopUpManager: PopUpManager, SecretsTutorialDelegate {
     

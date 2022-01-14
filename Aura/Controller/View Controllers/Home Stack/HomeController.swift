@@ -374,9 +374,8 @@ class HomeController: UIViewController {
         if UserDefaults.standard.bool(forKey: "hasLaunchedHome") {
             return
         } else {
-            AdManager.shared.funnelProgress = .hasNotSeenVideo1
-            AnalyticsManager.shared.logFunnelChange(funnelProgress: .hasNotSeenVideo1)
-            AdManager.shared.showAdPopUP(parentVC: self)
+            let popUpManager = SeminarPopUpManager()
+            popUpManager.showPopUpFadingIn()
             UserDefaults.standard.set(true, forKey: "hasLaunchedHome")
         }
     }
@@ -478,8 +477,6 @@ class HomeController: UIViewController {
         
         mainScrollView.stackView.addArrangedSubview(discoverEHDView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         mainScrollView.stackView.addArrangedSubview(searchView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
-        mainScrollView.stackView.addArrangedSubview(whereToStartLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
-        mainScrollView.stackView.addArrangedSubview(introVideoView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         mainScrollView.stackView.addArrangedSubview(popularFlashcardLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         mainScrollView.stackView.addArrangedSubview(popularFlashcardScrollView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
         mainScrollView.stackView.addArrangedSubview(lessonsLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))

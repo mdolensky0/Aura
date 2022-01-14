@@ -12,6 +12,8 @@ import AVKit
 
 class LessonsController: UIViewController {
     
+    let popUpManager = SeminarPopUpManager()
+    
     var noNetworkConnectionView: UIView = {
         let v = UIView()
         v.backgroundColor = .white
@@ -479,22 +481,22 @@ extension LessonsController: UICollectionViewDelegate {
         if cell.courseType == .EHDMasterCourse {
             if !cell.playView.isHidden {
                 if !UserDefaults.standard.bool(forKey: "hasClickedLock") {
-                    AdManager.shared.showAdPopUP(parentVC: self)
+                    popUpManager.showPopUpFadingIn()
                     UserDefaults.standard.set(true, forKey: "hasClickedLock")
                     return
                 } else {
-                    AdManager.shared.showBuyButton(inVideo: false, videoVC: nil, parentVC: self)
+                    popUpManager.showPopUpFadingIn()
                     return
                 }
             }
         } else if cell.courseType == .KYGCourse {
             if !cell.playView.isHidden {
                 if !UserDefaults.standard.bool(forKey: "hasClickedKYGLock") {
-                    AdManager.shared.showKYGCoursePopUP(parentVC: self, didJustPurchaseEHDCourse: false)
+                    popUpManager.showPopUpFadingIn()
                     UserDefaults.standard.set(true, forKey: "hasClickedKYGLock")
                     return
                 } else {
-                    AdManager.shared.showBuyButton(inVideo: false, isForKYGCourse: true, videoVC: nil, parentVC: self)
+                    popUpManager.showPopUpFadingIn()
                     return
                 }
             }

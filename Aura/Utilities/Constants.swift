@@ -19,7 +19,7 @@ struct K {
         static let translationErrorCollectionName = "Translation_Error"
         static let superUser = "4vCef03V7SMdjTDq5EyYYqCiLsk2"
         static var baseCourseIDs: [String] {
-            return [RCManager.shared.value(forKey: RCConstants.introBaseID), "ehd_master_course", "kyg_course"]
+            return ["ehd_master_course", "kyg_course"]
         }
     }
     

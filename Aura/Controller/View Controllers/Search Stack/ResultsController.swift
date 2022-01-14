@@ -788,9 +788,6 @@ extension ResultsController {
         // Setup Learn More Scroll View
         setupLearnMoreScrollView()
                 
-        // Setup Lessons UpSaleButton
-        setupLessonsButton()
-        
         // Setup FlashCard UpSaleButton
         setupMyFlashcards()
     
@@ -941,34 +938,7 @@ extension ResultsController {
             myDecksLabel.superview?.isHidden = true
         }
     }
-    
-    func setupLessonsButton() {
         
-        introImageView.loadImageUsingCacheWithURLString(urlString: AdManager.shared.getFunnelThumbnailURLForCurrentUserState())
-        whereToStartLabel.text = AdManager.shared.getFunnelLabelTitleForCurrentUserState()
-        
-        if AdManager.shared.shouldVideoBeLocked() {
-            if #available(iOS 13, *) {
-                playImageView.image = UIImage(systemName: "lock.fill")
-            } else {
-                playImageView.image = #imageLiteral(resourceName: "lock.fill").withRenderingMode(.alwaysTemplate)
-            }
-        } else {
-            if #available(iOS 13, *) {
-                playImageView.image = UIImage(systemName: "play.fill")
-            } else {
-                playImageView.image = #imageLiteral(resourceName: "play.fill").withRenderingMode(.alwaysTemplate)
-            }
-        }
-        
-        introVideoView.translatesAutoresizingMaskIntoConstraints = false
-        introVideoView.heightAnchor.constraint(equalToConstant: 175).isActive = true
-        
-        mainStackView.addArrangedSubview(whereToStartLabel, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
-        mainStackView.addArrangedSubview(introVideoView, withMargin: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -20))
-        
-    }
-    
     func showRatingIfNeccessary() {
                 
         if let numSearchesForRating = UserDefaults.standard.object(forKey: "numSearchesForRating") as? Int {
