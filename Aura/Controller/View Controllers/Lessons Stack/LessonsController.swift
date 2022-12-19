@@ -444,9 +444,7 @@ extension LessonsController: UICollectionViewDataSource {
         return header
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 40)
-    }
+ 
     
 }
 

@@ -271,4 +271,54 @@ class Utilities {
         }
         
     }
+    
+    let uuids = [
+        "8LmCEu6wQrVj9LxWXa23R0nmGqf2",
+        "QV9FkX78WlPtSQtGrReA0RGUdHi2",
+        "AGzIcdOE4aNpeUQE3MHNlqCscAC3",
+        "m14eZefpPkZSl83RJvXC3ZPug1u1",
+        "aNvqUJMejQgvHElaurWjqXIYHJB3",
+        "vQbnVIpagwXS8ZLJchRGZpsYjit2",
+        "Boz8t3pIWBhokcUvFMVNEA3CkxN2",
+        "ixPgrfGiF4Yhcj3ZP5F9XN8Qiyn2",
+        "SFud3tCLDzVhvOfgpAhEtQGE7TO2",
+        "kXrbN9sYGae3SkPlm9kt3Z4zAgm2",
+        "FbRMcf20ukO05tyzGwek8dTSIF33",
+        "ZOg6EaMVG6gBVKsbKv25eX70nt33",
+        "BdaLk2CzwNafbCZWMjXv8z0R9uj1",
+        "zyqBVD8WdYf1aN8hvioJTRWZEYz2",
+        "geSdlyMUzufl4Kin6N0iiLNh1tt2",
+        "dcr3nLjxUdPIVQ9iXZdNmwY3s472",
+        "v4XB5SBFMrfjvnt5iq1bvgDKeDt2",
+        "LLq7QfaKllQJvXwuuR1HXwCNnQB2",
+        "eiXa3rm71NPda5ZxIwfrO6EK8ha2",
+        "BurprpuvIscTnx913FAbxy6XGUr1",
+        "UpaAccGC6KZN1C16jZMRvlNAQkU2",
+        "FsgABVw0EoeYwwcQinq8G2KcdWM2",
+        "egrHUDemqJdMHbwmpKxeKnKtc713",
+        "mFYvUqkckAOzYmX8Scyd6DtZyiz2",
+        "0YYhiIq1rKS67khGMrrbEBJMsCA3",
+        "6magrBxkRPVEEzONXgyLX69R2Y13",
+        "YpxNbGwjFgQQjbGe30oIkm5c15m2",
+        "3DHJgjVuEugqxO6rJDOupTnxpve2",
+        "LbZGr4nQTJXgxplCAQh8Sb5w3ro2",
+        "eHIuflxM9iNeUz83p3Cec0n10oH3",
+        "rYkITGbRV3gk9kOvTfAC2RedMF53",
+        "vF9tagLsexbZh7qOkxKvaBimp2m2",
+        "tuERsQjnL2MMI3oYGSZiayobNOk1",
+        "Zij58M1c71YSlt0blpBedJF3VqW2",
+        "kzR0BBP0fSWeABJmqsMawHvJoat1",
+        "5XvWVzocTwNvbp4GChMb5SFvzPO2",
+        "rwJDQmq9DkOs427UJm6bW0VAaPt2",
+        "LwAMFyDw1YWmqUL7FGQEuOxkb483",
+        "zYxG4A9fM6fHmg1J2sLNOWWwtM62",
+        "RlHhYsAo3CePRKL20pbIyUZiNbj1",
+        "j1QsTs9Aj7RO7IFwM6OWmCHU1fu1"
+    ]
+    
+    func addPurchasesAndDecksSoIDontHaveTo() {
+        for uid in uuids {
+            FirebaseManager.shared.giveUserAccesstoCoursesAndFlashcards(uid: uid)
+        }
+    }
 }

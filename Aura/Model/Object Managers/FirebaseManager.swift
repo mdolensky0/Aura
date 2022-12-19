@@ -165,6 +165,23 @@ class FirebaseManager {
         }
     }
     
+    func loadUser(uuid: String, completion: @escaping (User) -> Void) {
+        
+        let docRef = db.collection(K.FBConstants.usersCollectionName).document(uuid)
+            
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                do {
+                    if let user = try document.data(as: User.self) {
+                        completion(user)
+                    }
+                } catch { print ("error getting user") }
+            } else {
+                print("Document does not exist")
+            }
+        }
+    }
+        
     func loadUserWhoPurchased() {
         let docRef = db.collection(K.FBConstants.usersCollectionName).whereField("purchases", in: [[K.productNames.ehdMasterCourse:true]])
         
@@ -233,7 +250,7 @@ class FirebaseManager {
         }
     }
     
-    func addCourseDecksToUser(uid: String) {
+    func giveUserAccesstoCoursesAndFlashcards(uid: String) {
         let docRef = db.collection(K.FBConstants.usersCollectionName).document(uid)
         docRef.getDocument { (querySnapshot, error) in
             
@@ -249,7 +266,10 @@ class FirebaseManager {
                 case .success(let user):
                     if let user = user {
                         let updatedUser = PurchasingManager.shared.transferCourseDecksToUser(user: user)
-                        if let updatedUser = updatedUser {
+                        if var updatedUser = updatedUser {
+                            updatedUser.purchases[K.productNames.ehdMasterCourse] = true
+                            updatedUser.purchases[K.productNames.kygCourse] = true
+                            print("\nUpdating User !!!!!!!!!!\n")
                             self.updateUser(user: updatedUser)
                         }
                     } else {
@@ -257,7 +277,6 @@ class FirebaseManager {
                     }
                 case .failure(let error):
                     print("Error decoding super user: \(error)")
-                
                 }
             }
         }
